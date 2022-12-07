@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/cm
+      - gem-cache:/gems
+    env_file:
+      - .env/development/web
+      - .env/development/database
+  
+  # # redis:
+  #   image: redis
+    
+  database:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    env_file:
+      - .env/development/database
+      
+volumes:
+  db-data:
+  gem-cache:
