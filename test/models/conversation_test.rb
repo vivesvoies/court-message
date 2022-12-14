@@ -18,7 +18,10 @@
 require "test_helper"
 
 class ConversationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "the truth" do
+    convo = conversations(:one)
+    msgs = convo.messages
+    
+    assert(msgs.count == 2)
+  end
 end

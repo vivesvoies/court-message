@@ -9,10 +9,10 @@
 #  updated_at :datetime         not null
 #
 
-one:
-  email: MyString
-  name: MyString
+agent:
+  email: "agent@conseiller-numerique.fr"
+  name: "Olaf"
 
-two:
-  email: MyString
-  name: MyString
+admin:
+  email: "admin@court-message.fr"
+  name: "Equipe CM"

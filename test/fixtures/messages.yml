@@ -22,15 +22,15 @@
 #
 
 one:
-  content: MyString
-  provider_info: 
+  content: "Bonjour"
+  provider_info: '{ "message_uuid": "9be8317d-dace-465f-853c-834e515df5cd"}'
   conversation: one
-  sender: one
+  sender: alice
   sender_type: Sender
 
 two:
-  content: MyString
+  content: "Bonjour bonjour"
   provider_info: 
-  conversation: two
-  sender: two
-  sender_type: Sender
+  conversation: one
+  sender: agent
+  sender_type: User
