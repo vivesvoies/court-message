@@ -1,6 +1,6 @@
 FROM ruby:3.1.3
 
-LABEL maintener="ljt@meidosem.com"
+LABEL maintainer="ljt@meidosem.com"
 
 RUN apt-get update -yqq && \
     apt-get install -yqq --no-install-recommends \
@@ -14,4 +14,6 @@ RUN bundle install
 
 COPY . /usr/src/cm/
 
-CMD ["bin/rails", "s", "-b", "0.0.0.0"]
+ENTRYPOINT ["./bin/docker-entrypoint"]
+
+CMD ["bin/run"]

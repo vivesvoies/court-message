@@ -5,6 +5,7 @@ services:
     build: .
     ports:
       - "3000:3000"
+      - "4000:4000"
     volumes:
       - .:/usr/src/cm
       - gem-cache:/gems
@@ -22,6 +23,13 @@ services:
     env_file:
       - .env/development/database
       
+  selenium-chrome:
+    image: selenium/standalone-chrome-debug
+    logging:
+      driver: none
+    ports:
+      - "5900:5900"
+  
 volumes:
   db-data:
   gem-cache:

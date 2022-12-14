@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -f /.dockerenv ]; then
+  echo "[ bin/ci ] Running unit tests"
+  bin/rails test
+  
+  echo "[ bin/ci ] Running system tests"
+  bin/rails test:system
+  
+  echo "[ bin/ci ] Analyzing code for security vulnerabilities."
+  echo "[ bin/ci ] Output will be in tmp/brakeman.html, which"
+  echo "[ bin/ci ] can be opened in the browser."
+  bundle exec brakeman -q -o tmp/brakeman.html
+  
+  echo "[ bin/ci ] Analyzing Ruby gems for"
+  echo "[ bin/ci ] security vulnerabilities"
+  # otherwise the audit check complains
+  git config --global pull.rebase false
+  bundle exec bundle audit check --update
+  
+  echo "[ bin/ci ] Done"
+else
+  echo "[ bin/ci ] This must be run from inside a container."
+fi
+

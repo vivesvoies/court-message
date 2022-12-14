@@ -1,0 +1,12 @@
+require:
+  - rubocop-rails
+  - rubocop-minitest
+  
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
