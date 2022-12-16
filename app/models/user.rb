@@ -9,6 +9,8 @@
 #  updated_at :datetime         not null
 #
 class User < ApplicationRecord
+  include Conversationalist
+
   has_many :messages, as: :sender
   has_and_belongs_to_many :conversations
 end

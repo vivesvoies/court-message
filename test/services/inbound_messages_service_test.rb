@@ -7,8 +7,10 @@ class InboundMessagesServiceTest
       params = { to: "our phone number", from: contact.phone, text: "Hello" }
 
       message = InboundMessagesService.new(params).message
-      assert(message.valid?)
-      assert(message.conversation == contact.conversation)
+
+      message.save
+      assert(message.persisted?)
+      assert_equal(message.conversation, contact.conversation)
     end
   end
 
@@ -19,10 +21,11 @@ class InboundMessagesServiceTest
       message = InboundMessagesService.new(params).message
       contact = message.sender
 
-      assert(message.valid?)
-      assert(message.sender_type == "Contact")
-      assert(contact.valid?)
-      assert(message.conversation == contact.conversation)
+      message.save
+      assert(message.persisted?)
+      assert(contact.persisted?)
+      assert_equal(message.sender_type, "Contact")
+      assert_equal(message.conversation, contact.conversation)
     end
   end
 end

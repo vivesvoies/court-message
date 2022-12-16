@@ -18,10 +18,17 @@
 require "test_helper"
 
 class ConversationTest < ActiveSupport::TestCase
-  test "the truth" do
-    convo = conversations(:one)
-    msgs = convo.messages
-    
-    assert(msgs.count == 2)
+  def test_title_shows_name_if_present
+    @contact = create(:contact)
+    @conversation = @contact.create_conversation
+
+    assert_equal(@conversation.title, @contact.name)
+  end
+
+  def test_title_shows_phone_when_no_name
+    @contact = create(:contact, name: "")
+    @conversation = @contact.create_conversation
+
+    assert_equal(@conversation.title, @contact.phone)
   end
 end

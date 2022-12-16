@@ -3,6 +3,12 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Enable local webhooks
+  config.hosts << "home.ljt.cat"
+
+  # Enable better_errors from Docker
+  BetterErrors::Middleware.allow_ip! '172.21.0.1/16'
+
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.

@@ -1,0 +1,14 @@
+<%# Locals: wrap_in: tag to wrap the message into. Defaults to :li. Could be :div. %>
+<% tag = (defined?(wrap_in) && wrap_in.present?) ? wrap_in : :li %>
+
+<%= content_tag tag, id: dom_id(message), class: "Message" do %>
+  <div class="Message__content">
+    <%= message.content %>
+  </div>
+  <div class="Message__sender">
+    <%= message.sender.name_or_phone %>
+  </div>
+  <div class="Message_timestamp">
+    <%= message.created_at %>
+  </div>
+<% end %>

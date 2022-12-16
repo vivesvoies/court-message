@@ -1,0 +1,13 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Conversations</h1>
+<div id="conversations">
+  <% @conversations.each do |conversation| %>
+    <p>
+      <%= link_to conversation.contact.phone, conversation %>
+    </p>
+  <% end %>
+</div>
+
+
+<%#= link_to "New conversation", new_conversation_path %>

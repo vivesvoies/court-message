@@ -9,7 +9,13 @@ class InboundMessagesController < ApplicationController
 
   def create
     authenticate_message!
-    log_params
+    service = InboundMessagesService.new(vonage_params)
+    @message = service.message
+    if @message.save
+      head :created
+    else
+      head :bad_request
+    end
   end
 
   private

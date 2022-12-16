@@ -44,7 +44,9 @@ group :development do
   gem "rubocop"
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
-  gem "web-console"
+  # gem "web-console"
+  gem "better_errors"
+  gem "binding_of_caller"
 end
 
 group :test do

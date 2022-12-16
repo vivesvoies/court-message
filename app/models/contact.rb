@@ -10,6 +10,8 @@
 #  updated_at :datetime         not null
 #
 class Contact < ApplicationRecord
-  has_one :conversation
-  has_many :messages, as: :sender
+  include Conversationalist
+
+  has_one :conversation, dependent: :destroy
+  has_many :messages, as: :sender, dependent: nil # let the Conversation model delete the messages
 end

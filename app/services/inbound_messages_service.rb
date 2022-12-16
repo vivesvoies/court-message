@@ -5,10 +5,10 @@ class InboundMessagesService
   attr_reader :message
 
   def initialize(params)
-    sender = Contact.find_or_create_by(phone: params[:from])
+    sender = Contact.find_or_initialize_by(phone: params[:from])
     conversation = sender.conversation || sender.build_conversation
     content = params[:text]
 
-    @message = Message.create!(sender:, conversation:, content:)
+    @message = Message.new(sender:, conversation:, content:)
   end
 end

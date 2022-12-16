@@ -23,4 +23,6 @@
 class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :sender, polymorphic: true
+
+  broadcasts_to :conversation
 end

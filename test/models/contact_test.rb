@@ -12,7 +12,15 @@
 require "test_helper"
 
 class ContactTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def test_destruction
+    @contact = create(:contact)
+    @conversation = @contact.create_conversation
+    @message = create(:message, sender: @contact, conversation: @contact.conversation)
+
+    @contact.destroy
+
+    assert_nil Contact.find_by(id: @contact.id)
+    assert_nil Conversation.find_by(id: @conversation.id)
+    assert_nil Message.find_by(id: @message.id)
+  end
 end
