@@ -44,3 +44,5 @@
 
 .DS_Store
 .nova
+/doc
+/.yardoc
