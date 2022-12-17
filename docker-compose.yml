@@ -13,8 +13,8 @@ services:
       - .env/development/web
       - .env/development/database
   
-  # # redis:
-  #   image: redis
+  redis:
+    image: redis
     
   database:
     image: postgres

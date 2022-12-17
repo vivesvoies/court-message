@@ -7,6 +7,7 @@ gem "rails", "~> 7.0.4"
 
 gem "pg", "~> 1.4"
 gem "puma", "~> 5.0"
+gem "redis", "~> 4.0"
 gem "sprockets-rails"
 
 gem "bootsnap", require: false
@@ -63,9 +64,7 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
-# Use Redis adapter to run Action Cable in production
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "redis", "~> 4.0"
 # gem "kredis"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

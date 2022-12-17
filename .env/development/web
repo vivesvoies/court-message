@@ -1,2 +1,3 @@
 POSTGRES_HOST=database
 LOGRAGE_IN_DEVELOPMENT=false
+REDIS_URL=redis://redis:6379/1
