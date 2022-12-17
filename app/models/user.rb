@@ -11,6 +11,7 @@
 class User < ApplicationRecord
   include Conversationalist
 
-  has_many :messages, as: :sender
+  # WARN - make it clear that deleting a user deletes their messages.
+  has_many :messages, as: :sender, dependent: :destroy
   has_and_belongs_to_many :conversations
 end
