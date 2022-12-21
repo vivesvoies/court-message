@@ -16,7 +16,7 @@ class InboundMessagesServiceTest
 
   class UnknownContact < ActiveSupport::TestCase
     def test_creates_message_contact_convo
-      params = { to: "our phone number", from: Faker::PhoneNumber.cell_phone_in_e164, text: "Coucou" }
+      params = { to: "our phone number", from: fake_number, text: "Coucou" }
 
       message = InboundMessagesService.new(params).message
       contact = message.sender

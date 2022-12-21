@@ -13,5 +13,5 @@ class ActiveSupport::TestCase
   fixtures :all
   Faker::Config.locale = "fr"
 
-  # Add more helper methods to be used by all tests here...
+  def fake_number = Faker::PhoneNumber.cell_phone_in_e164
 end
