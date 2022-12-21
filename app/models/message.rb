@@ -6,6 +6,7 @@
 #  content         :string
 #  provider_info   :jsonb
 #  sender_type     :string           not null
+#  status          :enum             default(NULL), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  conversation_id :bigint           not null
@@ -21,6 +22,15 @@
 #  fk_rails_...  (conversation_id => conversations.id)
 #
 class Message < ApplicationRecord
+  enum :status, {
+    inbound: "inbound",
+    unsent: "unsent",
+    submitted: "submitted",
+    delivered: "delivered",
+    rejected: "rejected",
+    undeliverable: "undeliverable"
+  }, suffix: true
+
   belongs_to :conversation
   belongs_to :sender, polymorphic: true
 

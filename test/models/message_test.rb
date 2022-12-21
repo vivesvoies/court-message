@@ -6,6 +6,7 @@
 #  content         :string
 #  provider_info   :jsonb
 #  sender_type     :string           not null
+#  status          :enum             default(NULL), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  conversation_id :bigint           not null
@@ -22,8 +23,11 @@
 #
 require "test_helper"
 
-class MessageTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+class MessageTest
+  class MessageStatus < ActiveSupport::TestCase
+    def test_default_status
+      m = create(:message)
+      assert(m.unsent_status?)
+    end
+  end
 end
