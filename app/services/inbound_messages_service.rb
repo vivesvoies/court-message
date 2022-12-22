@@ -10,6 +10,6 @@ class InboundMessagesService
     conversation = sender.conversation || sender.build_conversation
     content = params[:text]
 
-    @message = Message.new(sender:, conversation:, content:, provider_info: params)
+    @message = Message.new(sender:, conversation:, content:, provider_info: params, status: :inbound)
   end
 end
