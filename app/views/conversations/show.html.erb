@@ -6,7 +6,7 @@
 
 <%= @conversation.title %>
 
-<ol id="messages">
+<ol id="messages" class="MessagesList">
   <%= render partial: "messages/message", collection: @conversation.messages %>
 </ol>
 
