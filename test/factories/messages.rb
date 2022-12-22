@@ -4,9 +4,10 @@
 #
 #  id              :bigint           not null, primary key
 #  content         :string
+#  outbound_uuid   :uuid
 #  provider_info   :jsonb
 #  sender_type     :string           not null
-#  status          :enum             default(NULL), not null
+#  status          :enum             default("unsent"), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  conversation_id :bigint           not null
@@ -15,6 +16,7 @@
 # Indexes
 #
 #  index_messages_on_conversation_id  (conversation_id)
+#  index_messages_on_outbound_uuid    (outbound_uuid)
 #  index_messages_on_sender           (sender_type,sender_id)
 #
 # Foreign Keys
