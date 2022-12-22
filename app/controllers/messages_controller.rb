@@ -7,19 +7,28 @@ class MessagesController < ApplicationController
   def create
     @message = Message.new(message_params)
     @message.sender = Current.user
+    outbound = OutboundMessagesService.new(@message)
 
-    if @message.save
+    @message.save
+    if !@message.persisted?
+      # TODO: renders only the `new` frame
+      render :new, status: :unprocessable_entity and return
+    end
+
+    if outbound.submit!
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to @message.conversation }
       end
     else
+      # TODO: probably a different kind of error
       render :new, status: :unprocessable_entity
     end
   end
 
   private
-    def message_params
-      params.fetch(:message).permit(:conversation_id, :content)
-    end
+
+  def message_params
+    params.fetch(:message).permit(:conversation_id, :content)
+  end
 end
