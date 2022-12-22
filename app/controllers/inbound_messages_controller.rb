@@ -36,49 +36,4 @@ class InboundMessagesController < ApplicationController
       ]
     )
   end
-
-  def log_params
-    Rails.logger.info "✉️  PARAMS"
-    Rails.logger.info vonage_params
-    # Rails.logger.info "✉️  HEADERS"
-    # request.headers.each do |h|
-      # Rails.logger.info h
-    # end
-    Rails.logger.info "✉️  END MESSAGE"
-  end
 end
-
-__END__
-# Model from Vonage
-{
-  "to"=>"33644639777",
-  "from"=>"33645505205",
-  "channel"=>"sms",
-  "message_uuid"=>"ba081bbd-da9a-49e6-b845-9a22fa4b5c76",
-  "timestamp"=>"2022-12-14T13:11:17Z",
-  "usage"=>{
-      "price"=>"0.0200",
-      "currency"=>"EUR"
-  },
-  "message_type"=>"text",
-  "text"=>"Bonjour bonjour.",
-  "sms"=>{
-      "num_messages"=>"1"
-  },
-  "inbound_message"=>{
-      "to"=>"33644639777",
-      "from"=>"33645505205",
-      "channel"=>"sms",
-      "message_uuid"=>"ba081bbd-da9a-49e6-b845-9a22fa4b5c76",
-      "timestamp"=>"2022-12-14T13:11:17Z",
-      "usage"=>{
-          "price"=>"0.0200",
-          "currency"=>"EUR"
-      },
-      "message_type"=>"text",
-      "text"=>"Bonjour bonjour.",
-      "sms"=>{
-          "num_messages"=>"1"
-      }
-  }
-}
