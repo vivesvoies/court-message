@@ -13,9 +13,9 @@ gem "sprockets-rails"
 gem "bootsnap", require: false
 
 gem "importmap-rails", "~> 1.1"
+gem "sass-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
-# gem "sassc-rails"
 
 gem "bcrypt", "~> 3.1.7"
 
