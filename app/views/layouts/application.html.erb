@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" data-fr-scheme="system">
   <head>
-    <title>CourtMessage</title>
+    <title>Court-message</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <link href="/dsfr/dsfr.css" rel="stylesheet">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
   </head>
