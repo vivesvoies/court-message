@@ -24,9 +24,16 @@
 #  fk_rails_...  (conversation_id => conversations.id)
 #
 FactoryBot.define do
-  factory :message do
+  factory :inbound_message, class: "Message" do
     sender { create(:contact) }
     conversation { sender.build_conversation }
+    content { Faker::TvShows::BojackHorseman.tongue_twister }
+    status { :inbound }
+  end
+
+  factory :outbound_message, class: "Message" do
+    sender { create(:user) }
+    conversation
     content { Faker::TvShows::BojackHorseman.tongue_twister }
   end
 end

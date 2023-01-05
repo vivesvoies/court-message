@@ -37,4 +37,8 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true
 
   broadcasts_to :conversation
+
+  def direction
+    inbound_status? ? :inbound : :outbound
+  end
 end

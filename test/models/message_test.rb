@@ -28,8 +28,16 @@ require "test_helper"
 class MessageTest
   class MessageStatus < ActiveSupport::TestCase
     def test_default_status
-      m = create(:message)
+      m = Message.new
       assert(m.unsent_status?)
+    end
+
+    def test_direction
+      message_from_user = create(:outbound_message)
+      message_from_contact = create(:inbound_message)
+
+      assert_equal(message_from_user.direction, :outbound)
+      assert_equal(message_from_contact.direction, :inbound)
     end
   end
 end
