@@ -1,13 +1,9 @@
-<p style="color: green"><%= notice %></p>
+<%= render "flash" %>
 
-<h1>Conversations</h1>
-<div id="conversations">
-  <% @conversations.each do |conversation| %>
-    <p>
-      <%= link_to conversation.contact.phone, conversation %>
-    </p>
-  <% end %>
+<div class="Viewer">
+  <div id="conversations" class="ConversationList">
+    <%= render @conversations %>
+  </div>
 </div>
-
 
 <%#= link_to "New conversation", new_conversation_path %>

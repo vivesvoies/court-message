@@ -1,16 +1,34 @@
-.MessagesList {
-  max-width: 30rem;
+// DEBUG
+// .ConversationDetail {
+//   background: lightblue;
+// }
+// .MessageList {
+//   background: gray;
+// }
+// .Message {
+//   border: 1px solid purple;
+// }
+
+///
+/// Message list and message bubbles.
+///
+.MessageList {
+  width: 100%;
+  flex: 1;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  overflow: scroll;
 }
 
 .Message {
-  max-width: 15rem;
+  max-width: 66%;
   list-style: none;
   margin: .5rem 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .Message__content {
@@ -19,6 +37,7 @@
   padding: .5rem;
   margin: .25rem 0;
   background: white;
+  // width: auto;
 }
 .Message__sender,
 .Message__metadata {
@@ -32,8 +51,23 @@
 }
 .Message--inbound {
   align-self: flex-start;
+  align-items: flex-start;
 }
 .Message--inbound .Message__sender,
 .Message--inbound .Message__metadata {
   text-align: left;
+}
+
+///
+/// New message form
+///
+.MessageForm {}
+.MessageForm__input-group {
+  display: flex;
+}
+.MessageForm__field {
+  flex: 1;
+}
+.MessageForm__button {
+  
 }
