@@ -15,7 +15,7 @@ class ContactTest < ActiveSupport::TestCase
   def test_destruction
     @contact = create(:contact)
     @conversation = @contact.create_conversation
-    @message = create(:message, sender: @contact, conversation: @contact.conversation)
+    @message = create(:outbound_message, sender: @contact, conversation: @contact.conversation)
 
     @contact.destroy
 

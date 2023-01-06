@@ -36,6 +36,8 @@ class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :sender, polymorphic: true
 
+  validates_presence_of :content
+
   broadcasts_to :conversation
 
   def direction
