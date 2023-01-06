@@ -1,24 +1,29 @@
 <%= turbo_frame_tag "new_message", target: "_top" do %>
-  <%= form_with(model: @message,
+  <%= form_with(model: @message, class: "MessageForm",
     data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" }
   ) do |form| %>
+    
+    <div class="MessageForm__input-group">
+      <div class="MessageForm__field fr-input-group <%= "fr-input-group--error" if @message.errors.any? %>">
+        <%= form.text_field :content, class: "fr-input #{"fr-input--error" if @message.errors.any?}", placeholder: "Message SMS" %>  
+        <%= form.hidden_field :conversation_id %>  
+      </div>
+      <div class="MessageForm__button">
+        <%= form.submit "Envoyer", class: "fr-btn" %>
+      </div>
+    </div>
+    
     <% if @message.errors.any? %>
-      <div style="color: red">
-        <h2><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</h2>
-  
-        <ul>
+      <div class="FormErrors">
+        <p class="fr-error-text"><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</p>
+    
+        <ul class="">
           <% @message.errors.each do |error| %>
             <li><%= error.full_message %></li>
           <% end %>
         </ul>
       </div>
     <% end %>
-  
-    <%= form.text_field :content %>  
-    <%= form.hidden_field :conversation_id %>  
-  
-    <div>
-      <%= form.submit %>
-    </div>
+
   <% end %>
 <% end %>

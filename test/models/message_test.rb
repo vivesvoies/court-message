@@ -40,4 +40,14 @@ class MessageTest
       assert_equal(message_from_contact.direction, :inbound)
     end
   end
+  
+  class MessageValidations < ActiveSupport::TestCase
+    def test_content
+      m = create(:outbound_message)
+      assert(m.valid?)
+      
+      m.content = "       " # tabs, spaces, nbsps
+      assert(!m.valid?)
+    end      
+  end
 end

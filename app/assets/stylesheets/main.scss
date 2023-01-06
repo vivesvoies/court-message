@@ -1,1 +1,11 @@
-@import "_messages";
+.Notice {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 66%;
+  padding: .5rem;
+  background: var(--background-contrast-info);
+  border-radius: .25rem;
+  box-shadow: var(--overlap-shadow);
+}

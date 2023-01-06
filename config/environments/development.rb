@@ -5,6 +5,7 @@ Rails.application.configure do
 
   # Enable local webhooks
   config.hosts << "home.ljt.cat"
+  config.hosts << "f81f-80-215-47-237.eu.ngrok.io"
 
   # Enable better_errors from Docker
   BetterErrors::Middleware.allow_ip! '172.21.0.1/16'
