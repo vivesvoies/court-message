@@ -8,6 +8,7 @@
     <%= csp_meta_tag %>
 
     <link href="/dsfr/dsfr.css" rel="stylesheet">
+    <link href="/dsfr/utility/utility.css" rel="stylesheet">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     
     <%= javascript_importmap_tags %>
@@ -15,6 +16,9 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="Header"></header>
+    <main class="Main">
+      <%= yield %>
+    </main>
   </body>
 </html>
