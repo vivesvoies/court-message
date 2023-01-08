@@ -4,6 +4,7 @@
   <div id="conversations" class="ConversationList">
     <%= render @conversations %>
   </div>
+  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" %>
 </div>
 
 <%#= link_to "New conversation", new_conversation_path %>
