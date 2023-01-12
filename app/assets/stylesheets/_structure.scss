@@ -1,8 +1,15 @@
+:root {
+  --size-header: 3rem;
+  --size-viewer: calc(100vh - var(--size-header));
+  --size-viewer: calc(100dvh - var(--size-header));
+}
+
 body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--background-default-grey);
 }
 .Header,

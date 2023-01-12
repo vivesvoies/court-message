@@ -1,0 +1,34 @@
+.Header {
+  display: grid;
+  grid-template-areas: "left center right";
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  align-items: center;
+  background: var(--background-raised-grey);
+  filter: drop-shadow(var(--raised-shadow));
+  height: 3rem;
+}
+.Header__title {
+  grid-area: center;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin: 0;
+  @media (min-width: 30rem) {
+    font-size: 1.25rem;
+  }
+}
+.Header__menu {
+  grid-area: right;
+  margin: 0 1rem;
+}
+.Header__menu-items {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+}
+.Header__menu-item {
+  padding: 0;
+  line-height: 1.5rem;
+}
