@@ -15,5 +15,7 @@
     <%= render partial: "messages/message", collection: @conversation.messages %>
   </ol>
   
-  <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: @conversation.id), target: "_top" %>
+  <footer class="ConversationDetail__footer">
+    <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: @conversation.id), target: "_top" %>
+  </footer>
 <% end %>

@@ -5,7 +5,7 @@
     
     <div class="MessageForm__input-group">
       <div class="MessageForm__field fr-input-group <%= "fr-input-group--error" if @message.errors.any? %>">
-        <%= form.text_field :content, class: "fr-input #{"fr-input--error" if @message.errors.any?}", placeholder: "Message SMS" %>  
+        <%= form.text_area :content, class: "fr-input #{"fr-input--error" if @message.errors.any?}", placeholder: "Message SMS" %>  
         <%= form.hidden_field :conversation_id %>  
       </div>
       <div class="MessageForm__button">

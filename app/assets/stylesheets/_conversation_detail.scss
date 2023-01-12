@@ -1,3 +1,5 @@
+@import "settings";
+
 ///
 /// Conversation detail view
 ///
@@ -6,9 +8,9 @@
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
-  max-width: 30rem;
+  // max-width: 30rem;
   max-height: 100vh;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .ConversationDetail__header {
@@ -21,4 +23,26 @@
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
+}
+
+.ConversationDetail__footer {
+  // background: var(--background-contrast-blue-france);
+  border-top: 1px solid var(--border-default-grey);
+  padding: 2rem;
+}
+
+///
+/// New message form
+///
+.MessageForm {}
+.MessageForm__input-group {
+  display: flex;
+  align-items: flex-end;
+}
+.MessageForm__input-group .MessageForm__field {
+  flex: 1;
+  margin-bottom: 0;
+}
+.MessageForm__button {
+  margin-left: 1rem;
 }
