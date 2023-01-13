@@ -2,38 +2,32 @@ require "application_system_test_case"
 
 class ConversationsTest < ApplicationSystemTestCase
   setup do
-    @conversation = conversations(:one)
+    @conversation = create(:conversation)
+    @message = create(:inbound_message, conversation: @conversation)
+    @conversation.messages << @message
   end
 
   test "visiting the index" do
     visit conversations_url
-    assert_selector "h1", text: "Conversations"
+    assert_selector ".Conversation__contact", text: @conversation.contact.name_or_phone
   end
 
-  test "should create conversation" do
+  test "opening a conversation" do
     visit conversations_url
-    click_on "New conversation"
-
-    click_on "Create Conversation"
-
-    assert_text "Conversation was successfully created"
-    click_on "Back"
+    click_on @conversation.contact.name_or_phone, match: :first
+    assert_selector ".Message", text: @message.content
   end
 
-  test "should update Conversation" do
-    visit conversation_url(@conversation)
-    click_on "Edit this conversation", match: :first
+  test "being responsive" do
+    resize_to_mobile
 
-    click_on "Update Conversation"
+    visit conversations_url
+    click_on @conversation.contact.name_or_phone, match: :first
+    assert_selector ".Conversation__contact", text: @conversation.contact.name_or_phone, visible: :hidden
+    assert_selector ".Message__content", text: @message.content, visible: true
 
-    assert_text "Conversation was successfully updated"
-    click_on "Back"
-  end
-
-  test "should destroy Conversation" do
-    visit conversation_url(@conversation)
-    click_on "Destroy this conversation", match: :first
-
-    assert_text "Conversation was successfully destroyed"
+    resize_to_desktop
+    assert_selector ".Conversation__contact", visible: true
+    assert_selector ".Message__content", text: @message.content, visible: true
   end
 end
