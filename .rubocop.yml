@@ -1,6 +1,9 @@
 require:
   - rubocop-rails
   - rubocop-minitest
+
+AllCops:
+  NewCops: enable
   
 Style/StringLiterals:
   EnforcedStyle: double_quotes
