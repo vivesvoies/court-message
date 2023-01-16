@@ -4,16 +4,22 @@
 /// Conversation detail view
 ///
 .ConversationDetail {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
+  display: grid;
+  grid-template-areas:
+    "header   header"
+    "messages contact"
+    "input    contact";
+  
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr auto;
   // max-width: 30rem;
   max-height: var(--size-viewer);
   margin: 0;
 }
 
 .ConversationDetail__header {
+  grid-area: header;
+  
   background: var(--background-contrast-grey);
   padding: 1rem;
   display: grid;
@@ -26,9 +32,19 @@
 }
 
 .ConversationDetail__footer {
+  grid-area: input;
+  
   // background: var(--background-contrast-blue-france);
   border-top: 1px solid var(--border-default-grey);
   padding: 2rem;
+}
+
+.MessageList {
+  grid-area: messages;
+}
+
+.ContactDetail {
+  grid-area: contact;
 }
 
 ///

@@ -1,0 +1,35 @@
+<%= turbo_frame_tag @contact, class: "ContactDetail" do %>
+  <%= form_with(model: contact) do |form| %>
+    <% if contact.errors.any? %>
+      <div style="color: red">
+        <h2><%= pluralize(contact.errors.count, "error") %> prohibited this contact from being saved:</h2>
+  
+        <ul>
+          <% contact.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+  
+    <div class="fr-input-group">
+      <%= form.label :name, "Nom", class: "Contact__label-name fr-label" %>
+      <%= form.text_field :name, class: "fr-input" %>
+    </div>
+    
+    <div class="fr-input-group">
+      <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone fr-label" %>
+      <%= form.text_field :phone, class: "fr-input" %>
+    </div>
+    
+    <div class="fr-input-group">
+      <%= form.label :email, "Adresse email", class: "Contact__label-email fr-label" %>
+      <%= form.text_field :email, class: "fr-input" %>
+    </div>
+  
+    <div>
+      <%= form.submit t(".update"), class: "fr-btn" %>
+    </div>
+  <% end %>
+<% end %>

@@ -18,4 +18,6 @@
   <footer class="ConversationDetail__footer">
     <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: @conversation.id), target: "_top" %>
   </footer>
+  
+  <%= turbo_frame_tag @conversation.contact, class: "ContactDetail", loading: :lazy, src: contact_path(@conversation.contact) %>
 <% end %>

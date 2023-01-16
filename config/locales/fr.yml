@@ -1,3 +1,17 @@
 fr:
   hello: "Salut salut"
   missing_value: "Non renseigné"
+  
+  contacts:
+    contact:
+      missing_name: "Nom non renseigné"
+      missing_phone: "Numéro de téléphone non renseigné"
+      missing_email: "Adresse email non renseignée"
+    show:
+      edit: "Modifier la fiche"
+      confirm_destroy: "Supprimer la conversation et tous les messages ?\nCette opération ne pourra pas être annulée."
+      destroy: "Supprimer la conversation"
+    form:
+      update: "Mettre à jour la fiche"
+    update:
+      success: "Fiche mise à jour."
