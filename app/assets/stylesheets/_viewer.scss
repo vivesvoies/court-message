@@ -1,0 +1,12 @@
+
+.Viewer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: var(--size-viewer);
+}
+.Viewer:has(.ConversationDetail[src]) {
+  grid-template-columns: 0 1fr;
+  @media (min-width: 40rem) {
+    grid-template-columns: auto 1fr;
+  }
+}
