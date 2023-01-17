@@ -27,7 +27,21 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".Message__content", text: @message.content, visible: true
 
     resize_to_desktop
+    sleep 0.5
     assert_selector ".Conversation__contact", visible: true
     assert_selector ".Message__content", text: @message.content, visible: true
+  end
+
+  test "streaming a new message" do
+    visit conversation_url(@conversation)
+
+    @message.content = "New content!"
+    @message.save
+
+    assert_selector ".Message__content", text: "New content!"
+  end
+
+  teardown do
+    @conversation.contact.destroy
   end
 end

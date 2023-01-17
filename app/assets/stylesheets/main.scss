@@ -1,7 +1,12 @@
 :root {
   --size-header: 3rem;
   --size-viewer: calc(100vh - var(--size-header));
-  --size-viewer: calc(100dvh - var(--size-header));
+}
+
+@supports (height: 100dvh) {
+  :root {
+    --size-viewer: calc(100dvh - var(--size-header));
+  }
 }
 
 body {

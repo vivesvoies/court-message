@@ -1,5 +1,6 @@
 
 .Viewer {
+  flex: 1;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: var(--size-viewer);
