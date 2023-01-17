@@ -1,7 +1,7 @@
 <div class="Conversation">
   <%= link_to conversation, class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance" } do %>
     <div class="Conversation__contact">
-      <%= conversation.contact.name_or_phone %>
+      <%= conversation.title %>
     </div>
     <div class="Conversation__latest">
       <%= time_ago_in_words conversation.updated_at %>
