@@ -31,4 +31,14 @@ class ConversationTest < ActiveSupport::TestCase
 
     assert_equal(@conversation.title, @contact.phone)
   end
+
+  def test_messages_ordering
+    @conversation = create(:conversation) do |conversation|
+      create_list(:inbound_message, 10, conversation:)
+    end
+
+    m = @conversation.messages.third
+    m.update(created_at: Date.yesterday)
+    assert_equal(m, @conversation.messages.first)
+  end
 end

@@ -17,7 +17,7 @@
 #
 class Conversation < ApplicationRecord
   belongs_to :contact
-  has_many :messages, dependent: :destroy
+  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy
   has_and_belongs_to_many :agents, class_name: "User"
 
   def title
