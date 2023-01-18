@@ -43,10 +43,11 @@ class ConversationsTest < ApplicationSystemTestCase
 
   test "streaming a new message" do
     visit conversation_url(@conversation)
-
-    @message.content = "New content!"
-    @message.save
-    sleep 0.25
+    sleep 0.5
+    @message.update(content: "New content!")
+    @message.broadcast_update
+    sleep 0.5
+    find ".Message__content"
     assert_selector ".Message__content", text: "New content!"
   end
 

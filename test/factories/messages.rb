@@ -27,13 +27,13 @@ FactoryBot.define do
   factory :inbound_message, class: "Message" do
     sender { create(:contact) }
     conversation { sender.build_conversation }
-    content { Faker::TvShows::BojackHorseman.tongue_twister }
+    content { Faker::TvShows::BojackHorseman.tongue_twister.strip }
     status { :inbound }
   end
 
   factory :outbound_message, class: "Message" do
     sender { create(:user) }
     conversation
-    content { Faker::TvShows::BojackHorseman.tongue_twister }
+    content { Faker::TvShows::BojackHorseman.tongue_twister.strip }
   end
 end

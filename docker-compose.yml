@@ -24,7 +24,7 @@ services:
       - .env/development/database
       
   selenium-chrome:
-    image: selenium/standalone-chrome-debug
+    image: selenium/standalone-chrome
     logging:
       driver: none
     ports:
