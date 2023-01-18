@@ -2,8 +2,13 @@
 .Viewer {
   flex: 1;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr auto;
   grid-template-rows: var(--size-viewer);
+  @media (min-width: 40rem) {
+    .ConversationList {
+      border-right-width: 1px;
+    }
+  }
 }
 .Viewer:has(.ConversationDetail[src]) {
   grid-template-columns: 0 1fr;
