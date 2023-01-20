@@ -1,6 +1,24 @@
 fr:
-  hello: "Salut salut"
   missing_value: "Non renseigné"
+
+  sign_out: "Déconnexion"
+  
+  devise:
+    shared:
+      links:
+        sign_up: "Créer un compte"
+      forms:
+        identifier: "Identifiant"
+        id_hint: "Format attendu : nom@domaine.fr"
+    registrations:
+      new:
+        sign_up: "Se créer un compte"
+        min_char: "caractères au minimum"
+        confirm: "Valider"
+    sessions:
+      new:
+        sign_in: "Connexion à Court‑message"
+        no_account: "Vous n’avez pas de compte ?"
   
   contacts:
     contact:
@@ -15,3 +33,8 @@ fr:
       update: "Mettre à jour la fiche"
     update:
       success: "Fiche mise à jour."
+
+  activerecord:
+    attributes:
+      user:
+        remember_me: Se souvenir de moi

@@ -26,15 +26,25 @@ body {
   display: flex;
   flex-direction: column;
 }
+.Page {}
 
-.Notice {
+.FlashContainer {
   position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+.Flash {
   width: 66%;
   padding: .5rem;
-  background: var(--background-contrast-info);
   border-radius: .25rem;
   box-shadow: var(--overlap-shadow);
+  margin: 1rem auto;
+}
+.Flash__notice {
+  background: var(--background-contrast-info);
+}
+.Flash__alert {
+  background: var(--background-contrast-warning);
 }

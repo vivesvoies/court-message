@@ -12,28 +12,22 @@ gem "sprockets-rails"
 
 gem "bootsnap", require: false
 
+gem "hotwire-livereload", "~> 1.2"
 gem "importmap-rails", "~> 1.1"
 gem "sass-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
 gem "bcrypt", "~> 3.1.7"
-
-# Specify a precise version because
-# the bundled one had vulnerabilities.
-gem "nokogiri", "~> 1.13.10"
-
-# Look for security vulnerabilities
-gem "brakeman"
-
-# Check dependencies for vulnerabilities
-gem "bundler-audit"
-
-# lograge changes Rails' logging to a more
-# traditional one-line-per-event format
-gem "lograge"
-
+gem "brakeman" # Look for security vulnerabilities
+gem "bundler-audit" # Check dependencies for vulnerabilities
+gem "devise", "~> 4.8"
+gem "devise-i18n"
+gem "lograge" # One-line-per-event format logs
+gem "nokogiri", "~> 1.13.10" # Specify a precise version because the bundled one had vulnerabilities.
 gem "rails-i18n", "~> 7.0.6"
+
+gem "vonage", "~> 7.8"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
@@ -76,7 +70,3 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
 # gem "jsbundling-rails"
 # gem "cssbundling-rails"
-
-gem "vonage", "~> 7.8"
-
-gem "hotwire-livereload", "~> 1.2"

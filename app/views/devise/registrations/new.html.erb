@@ -1,0 +1,41 @@
+<div class="Page Page__sign-up">
+  <div class="Block Block__sign-up">
+    <h1><%= t(".sign_up") %></h1>
+    
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      
+      <fieldset class="fr-fieldset">
+        <%= render "devise/shared/error_messages", resource: resource %>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :email, class: "fr-label" do %>
+            <%= t("devise.shared.forms.identifier") %>
+            <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
+          <% end %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>        
+        </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password, class: "fr-label" %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+          <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %> <%= t(".min_char") %>)</em>
+          <% end %>
+        </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password_confirmation, class: "fr-label" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+        </div>
+      </fieldset>
+      
+      <fieldset class="fr-fieldset">
+        <div class="fr-fieldset__element fr-btns-group fr-btns-group--right fr-btns-group--inline">
+          <%= f.submit t(".confirm"), class: "fr-btn" %>
+        </div>
+      </fieldset>
+    <% end %>
+    
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

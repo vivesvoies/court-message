@@ -5,6 +5,9 @@ class ConversationsTest < ApplicationSystemTestCase
     @conversation = create(:conversation)
     @message = create(:inbound_message, conversation: @conversation)
     @conversation.messages << @message
+
+    @user = create(:user)
+    sign_in @user
   end
 
   test "visiting the index" do

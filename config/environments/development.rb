@@ -10,6 +10,9 @@ Rails.application.configure do
   # Enable better_errors from Docker
   BetterErrors::Middleware.allow_ip! '172.21.0.1/16'
 
+  # Devise needs this
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.

@@ -1,3 +1,7 @@
 <% if !flash.empty? %>
-  <div class="Notice"><%= notice %></div>
+  <div class="FlashContainer">
+    <% flash.each do |type, message| %>
+      <div class="Flash Flash__<%= type %>"><%= message %></div>
+    <% end %>
+  </div>
 <% end %>

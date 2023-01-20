@@ -1,5 +1,10 @@
 require "test_helper"
 class ConversationsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = create(:user)
+    sign_in @user
+  end
+
   test "should get index" do
     @conversation = create(:conversation)
 

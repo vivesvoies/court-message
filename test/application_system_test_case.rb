@@ -1,6 +1,8 @@
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
+  include Devise::Test::IntegrationHelpers
+
   if ENV["HEADLESS_CHROME"] != "true"
     driven_by :selenium_chrome_in_container
   else

@@ -27,3 +27,7 @@ class ActiveSupport::TestCase
     DatabaseCleaner.clean
   end
 end
+
+class ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+end

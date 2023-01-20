@@ -4,6 +4,9 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @contact = create(:contact)
     @temp = build(:contact)
+    @user = create(:user)
+
+    sign_in(@user)
   end
 
   test "should get index" do
