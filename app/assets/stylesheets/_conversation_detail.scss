@@ -7,14 +7,28 @@
   display: grid;
   grid-template-areas:
     "header   header"
-    "messages contact"
-    "input    contact";
+    "messages messages"
+    "input    input";
   
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto 1fr auto;
   // max-width: 30rem;
   max-height: var(--size-viewer);
   margin: 0;
+}
+
+.ContactDetail {
+  display: none;
+}
+
+.ConversationDetail:has([name="show_contact"]:checked) {
+  grid-template-areas:
+    "header   header"
+    "messages contact"
+    "input    contact";
+    .ContactDetail {
+      display: flex;
+    }
 }
 
 .ConversationDetail__header {
