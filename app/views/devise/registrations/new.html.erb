@@ -12,14 +12,14 @@
             <%= t("devise.shared.forms.identifier") %>
             <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>        
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>
         </div>
       
         <div class="fr-fieldset__element fr-input-group">
           <%= f.label :password, class: "fr-label" %>
           <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
           <% if @minimum_password_length %>
-            <em>(<%= @minimum_password_length %> <%= t(".min_char") %>)</em>
+            <em>(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</em>
           <% end %>
         </div>
       

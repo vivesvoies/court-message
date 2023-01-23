@@ -3,16 +3,23 @@
     <h1><%= t(".resend_confirmation_instructions") %></h1>
     
     <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+      <fieldset class="fr-fieldset">
+        <%= render "devise/shared/error_messages", resource: resource %>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :email, class: "fr-label" do %>
+            <%= t("devise.shared.forms.identifier") %>
+            <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
+          <% end %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), aria_required: true, class: "fr-input" %>
+        </div>
+      </fieldset>
     
-      <div class="field">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
-      </div>
-    
-      <div class="actions">
-        <%= f.submit "Resend confirmation instructions" %>
-      </div>
+      <fieldset class="fr-fieldset">
+        <div class="fr-fieldset__element fr-btns-group">
+          <%= f.submit t(".resend_confirmation_instructions"), class: "fr-btn" %>
+        </div>
+      </fieldset>
     <% end %>
     
     <%= render "devise/shared/links" %>

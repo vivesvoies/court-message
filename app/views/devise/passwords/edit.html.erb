@@ -3,25 +3,30 @@
     <h1><%= t(".change_your_password") %></h1>
     
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-      <%= f.hidden_field :reset_password_token %>
     
-      <div class="field">
-        <%= f.label :password, "New password" %><br />
-        <% if @minimum_password_length %>
-          <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-        <% end %>
-        <%= f.password_field :password, autofocus: true, autocomplete: "new-password" %>
-      </div>
+      <fieldset class="fr-fieldset">
+        <%= render "devise/shared/error_messages", resource: resource %>
+        <%= f.hidden_field :reset_password_token %>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password, t(".new_password"), class: "fr-label" %>
+          <% if @minimum_password_length %>
+            <span class="fr-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+        </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password_confirmation, class: "fr-label" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+        </div>
+      </fieldset>
     
-      <div class="field">
-        <%= f.label :password_confirmation, "Confirm new password" %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
-    
-      <div class="actions">
-        <%= f.submit "Change my password" %>
-      </div>
+      <fieldset class="fr-fieldset">
+        <div class="fr-fieldset__element fr-btns-group">
+          <%= f.submit t(".change_my_password"), class: "fr-btn" %>
+        </div>
+      </fieldset>
     <% end %>
     
     <%= render "devise/shared/links" %>

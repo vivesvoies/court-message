@@ -10,11 +10,20 @@ fr:
       forms:
         identifier: "Identifiant"
         id_hint: "Format attendu : nom@domaine.fr"
+        min_char: "caractères au minimum"
+    passwords:
+      new:
+        send_me_reset_password_instructions: "Réinitialisation du mot de passe"
+      edit:
+        change_your_password: Changer votre mot de passe
     registrations:
       new:
         sign_up: "Se créer un compte"
-        min_char: "caractères au minimum"
         confirm: "Valider"
+      edit:
+        cancel_account: "Suppression définitive du compte"
+        are_you_sure: "Êtes-vous sûr ?\nCette opération ne pourra pas être annulée."
+        back: "Retour"
     sessions:
       new:
         sign_in: "Connexion à Court‑message"

@@ -3,45 +3,58 @@
     <h1><%= t(".title", resource: resource_name) %></h1>
     
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
     
-      <div class="field">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-      </div>
-    
-      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-        <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-      <% end %>
-    
-      <div class="field">
-        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-        <%= f.password_field :password, autocomplete: "new-password" %>
-        <% if @minimum_password_length %>
-          <br />
-          <em><%= @minimum_password_length %> characters minimum</em>
+      <fieldset class="fr-fieldset">
+        <%= render "devise/shared/error_messages", resource: resource %>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :email, class: "fr-label" do %>
+            <%= t("devise.shared.forms.identifier") %>
+            <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
+          <% end %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>        
+        </div>
+      
+        <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+          <div><%= t(".currently_waiting_confirmation_for_email", email: resource.unconfirmed_email) %></div>
         <% end %>
-      </div>
-    
-      <div class="field">
-        <%= f.label :password_confirmation %><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
-    
-      <div class="field">
-        <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-        <%= f.password_field :current_password, autocomplete: "current-password" %>
-      </div>
-    
-      <div class="actions">
-        <%= f.submit "Update" %>
-      </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password %>
+          <span class="fr-hint-text"><%= t(".leave_blank_if_you_don_t_want_to_change_it") %></span>
+          <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+          <% if @minimum_password_length %>
+            <span class="fr-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
+          <% end %>
+        </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :password_confirmation, class: "fr-label" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+        </div>
+      
+        <div class="fr-fieldset__element fr-input-group">
+          <%= f.label :current_password %>
+          <span class="fr-hint-text"><%= t(".we_need_your_current_password_to_confirm_your_changes") %></span>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "fr-input fr-password__input", aria_required: true %>
+        </div>
+      </fieldset>
+      <fieldset class="fr-fieldset">
+        <div class="fr-fieldset__element fr-btns-group fr-btns-group--right fr-btns-group--inline">
+          <%= f.submit t(".update"), class: "fr-btn" %>
+        </div>
+      </fieldset>
     <% end %>
     
-    <h3>Cancel my account</h3>
-    
-    <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-    
-    <%= link_to "Back", :back %>
+    <% if false and "accounts are cancellabled" %>
+      <hr>
+      <h3><%= t(".cancel_my_account") %></h3>
+      
+      <p>
+        <%= button_to t(".cancel_account"), registration_path(resource_name), data: { confirm: t(".are_you_sure"), turbo_confirm: t(".are_you_sure") }, method: :delete, class: "fr-btn fr-btn--secondary" %>
+      </p>
+      
+    <% end %>
+    <%= link_to t(".back"), :back %>
   </div>
 </div>
