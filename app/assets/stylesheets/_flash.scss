@@ -1,0 +1,39 @@
+.FlashContainer {
+  position: fixed;
+  top: var(--size-header);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  pointer-events: none;
+}
+.Flash {
+  min-width: Min(20rem, 90%);
+  width: 50%;
+  max-width: 33rem;
+  display: block;
+  border-radius: .25rem;
+  box-shadow: var(--overlap-shadow);
+  margin: 1rem 1rem 1rem auto;
+  pointer-events: auto;
+  opacity: 90%;
+  background: var(--background-default-grey);
+}
+.Flash:hover, .Flash:focus {
+  opacity: 100%;
+  animation: none;
+}
+.Flash--notice {
+  // background: var(--background-contrast-info);
+  animation: disappear 5s ease forwards;
+}
+.Flash--alert {
+  // background: var(--background-contrast-warning);
+}
+.FlashContainer :checked + .Flash { display: none; }
+@keyframes disappear {
+  0%   { opacity: 0; }
+  10%  { opacity: 85%; }
+  90%  { opacity: 85%; }
+  99%  { opacity: 0; height: auto; margin: 1rem 1rem 1rem auto; }
+  100% { opacity: 0; height: 0; margin: 0; }
+}

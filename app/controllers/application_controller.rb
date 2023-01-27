@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
-  before_action :set_current
+  include FlashHelper
+
   before_action :authenticate_user!
+  before_action :set_current
 
   private
 

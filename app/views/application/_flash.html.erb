@@ -1,7 +1,16 @@
 <% if !flash.empty? %>
   <div class="FlashContainer">
     <% flash.each do |type, message| %>
-      <div class="Flash Flash__<%= type %>"><%= message %></div>
+      <% id = flash_id(type, message) %>
+      <input type="checkbox" hidden id="<%= id %>">
+      <label class="Flash Flash--<%= type %>" for="<%= id %>">
+        <div class="fr-alert fr-alert--sm <%= flash_dsfr_class(type) %>">
+          <p>
+            <%= message %>
+            <i class="fr-btn--close"></i>
+          </p>
+        </div>
+      </label>
     <% end %>
   </div>
 <% end %>
