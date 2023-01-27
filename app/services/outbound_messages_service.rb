@@ -20,12 +20,6 @@ class OutboundMessagesService
     @message.outbound_uuid = result.message_uuid
     @message.save
 
-    Rails.logger.info "*************"
-    Rails.logger.info "UUID"
-    Rails.logger.info @message.outbound_uuid
-    Rails.logger.info result.inspect
-    Rails.logger.info "*************"
-
     true
   end
 

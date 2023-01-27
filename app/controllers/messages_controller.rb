@@ -5,13 +5,16 @@ class MessagesController < ApplicationController
   end
 
   def create
+    # Should preload conversation in order to get contact's phone number.
     @message = Message.new(message_params)
-    @message.sender = Current.user
+    @message.sender = current_user
     outbound = OutboundMessagesService.new(@message)
 
     @message.save
     if !@message.persisted?
       # TODO: renders only the `new` frame
+      # Instead show an error message.
+      # See https://github.com/louije/court-message/issues/15
       render :new, status: :unprocessable_entity and return
     end
 
@@ -22,6 +25,7 @@ class MessagesController < ApplicationController
       end
     else
       # TODO: probably a different kind of error
+      # See https://github.com/louije/court-message/issues/13
       render :new, status: :unprocessable_entity
     end
   end
