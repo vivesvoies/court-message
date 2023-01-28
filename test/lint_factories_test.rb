@@ -1,5 +1,7 @@
 require "test_helper"
 
 class LintFactoriesTest < ActiveSupport::TestCase
-  FactoryBot.lint traits: true
+  def test_factories
+    FactoryBot.lint traits: true
+  end
 end
