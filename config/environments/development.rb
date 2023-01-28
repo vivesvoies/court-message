@@ -8,7 +8,7 @@ Rails.application.configure do
   config.hosts << "web"
 
   # Enable better_errors from Docker
-  BetterErrors::Middleware.allow_ip! '172.21.0.1/16'
+  BetterErrors::Middleware.allow_ip! '172.0.0.0/8'
 
   # Devise needs this
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
