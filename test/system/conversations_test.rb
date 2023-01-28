@@ -21,6 +21,21 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".Message__content", text: @message.content
   end
 
+  test "creating a new conversation" do
+    contact = build(:contact)
+
+    visit conversations_url
+    click_on "Nouvelle conversation"
+    fill_in "contact_name", with: contact.name
+    fill_in "contact_phone", with: contact.phone
+    fill_in "contact_email", with: contact.email
+    click_on "Créer la fiche"
+
+    visit conversations_url
+
+    assert_selector ".Conversation__contact", text: contact.name
+  end
+
   test "being responsive" do
     resize_to_mobile
 

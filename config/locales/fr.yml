@@ -29,6 +29,11 @@ fr:
         sign_in: "Connexion à Court‑message"
         no_account: "Vous n’avez pas de compte ?"
   
+  conversations:
+    conversation_list_header:
+      new: "Nouvelle conversation"
+      search: "Rechercher"
+  
   contacts:
     contact:
       missing_name: "Nom non renseigné"
@@ -38,8 +43,11 @@ fr:
       edit: "Modifier la fiche"
       confirm_destroy: "Supprimer la conversation et tous les messages ?\nCette opération ne pourra pas être annulée."
       destroy: "Supprimer la conversation"
+    new:
+      new_contact: "Nouvelle fiche"
     form:
       update: "Mettre à jour la fiche"
+      create: "Créer la fiche"
     update:
       success: "Fiche mise à jour."
 

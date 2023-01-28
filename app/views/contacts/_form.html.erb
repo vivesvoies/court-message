@@ -12,24 +12,29 @@
       </div>
     <% end %>
   
+    <%= hidden_field_tag :create_conversation, @create_conversation %>
   
-    <div class="fr-input-group">
-      <%= form.label :name, "Nom", class: "Contact__label-name fr-label" %>
-      <%= form.text_field :name, class: "fr-input" %>
-    </div>
-    
-    <div class="fr-input-group">
-      <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone fr-label" %>
-      <%= form.text_field :phone, class: "fr-input" %>
-    </div>
-    
-    <div class="fr-input-group">
-      <%= form.label :email, "Adresse email", class: "Contact__label-email fr-label" %>
-      <%= form.text_field :email, class: "fr-input" %>
-    </div>
+    <fieldset class="fr-fieldset">
+      <div class="fr-fieldset__element fr-input-group">
+        <%= form.label :name, "Nom", class: "Contact__label-name fr-label" %>
+        <%= form.text_field :name, class: "fr-input" %>
+      </div>
+      
+      <div class="fr-fieldset__element fr-input-group">
+        <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone fr-label" %>
+        <%= form.text_field :phone, class: "fr-input" %>
+      </div>
+      
+      <div class="fr-fieldset__element fr-input-group">
+        <%= form.label :email, "Adresse email", class: "Contact__label-email fr-label" %>
+        <%= form.text_field :email, class: "fr-input" %>
+      </div>
+    </fieldset>
   
-    <div>
-      <%= form.submit t(".update"), class: "fr-btn" %>
-    </div>
+    <fieldset class="fr-fieldset">
+      <div class="fr-fieldset__element fr-btns-group">
+        <%= form.submit contact.new_record? ? t(".create") : t(".update"), class: "fr-btn" %>
+      </div>
+    </fieldset>
   <% end %>
 <% end %>

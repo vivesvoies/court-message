@@ -1,0 +1,10 @@
+<header class="ConversationHeader">
+  <div class="ConversationHeader__actions">
+    <%= link_to t(".new"), new_contact_path(create_conversation: true), class: "fr-btn fr-icon-edit-box-line fr-btn--icon-left fr-btn--tertiary-no-outline", title: t(".new") %>
+  </div>
+  
+  <div class="ConversationHeader__search fr-search-bar" role="search">
+    <%= text_field_tag :search_query, nil, placeholder: t(".search"), class: "fr-input", type: :search %>
+    <%= button_tag t(".search"), title: t(".search"), class: "fr-btn fr-btn--tertiary-no-outline" %>
+  </div>
+</header>

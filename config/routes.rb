@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :contacts
+  resources :contacts, only: [:show, :new, :edit, :create, :update, :destroy]
   resources :conversations, only: [:index, :show]
   resources :messages, only: [:new, :create]
   resources :inbound_messages, only: [:create]

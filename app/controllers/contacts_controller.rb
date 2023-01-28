@@ -12,6 +12,7 @@ class ContactsController < ApplicationController
 
   # GET /contacts/new
   def new
+    @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
     @contact = Contact.new
   end
 
@@ -22,6 +23,9 @@ class ContactsController < ApplicationController
   # POST /contacts
   def create
     @contact = Contact.new(contact_params)
+    if params[:create_conversation]
+      @contact.build_conversation
+    end
 
     if @contact.save
       redirect_to @contact, notice: "Contact was successfully created."

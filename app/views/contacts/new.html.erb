@@ -1,9 +1,6 @@
-<h1>New contact</h1>
-
-<%= render "form", contact: @contact %>
-
-<br>
-
-<div>
-  <%= link_to "Back to contacts", contacts_path %>
+<div class="Page Page__show-contact">
+  <div class="Block Block__show-contact">
+    <h1><%= t(".new_contact") %></h1>
+    <%= render "form", contact: @contact %>
+  </div>
 </div>

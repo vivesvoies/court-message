@@ -2,9 +2,11 @@
   <h1 class="Header__title">Court-message</h1>
   <nav class="Header__menu">
     <ul class="Header__menu-items">
-      <li class="Header__menu-item">
-        <%= button_to t(:sign_out), destroy_user_session_path, method: :delete %>
-      </li>
+      <% if user_signed_in? %>
+        <li class="Header__menu-item">
+          <%= button_to t(:sign_out), destroy_user_session_path, method: :delete %>
+        </li>
+      <% end %>
     </ul>
   </nav>
 </header>

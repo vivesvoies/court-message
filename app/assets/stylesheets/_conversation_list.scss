@@ -20,6 +20,24 @@
 }
 
 ///
+/// Conversation list header
+///
+
+.ConversationHeader__actions {
+  display: flex;
+  // justify-content: flex-end;
+  margin: .5rem 0;
+}
+
+.ConversationHeader__search {
+    margin-bottom: .5rem;
+}
+.ConversationHeader__search button {
+  background-color: var(--background-contrast-grey);
+  box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
+}
+
+///
 /// Conversation list items
 ///
 

@@ -1,5 +1,6 @@
 <div class="Viewer">
   <div id="conversations" class="ConversationList">
+    <%= render partial: "conversation_list_header" %>
     <%= render @conversations %>
   </div>
   <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" %>

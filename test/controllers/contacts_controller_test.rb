@@ -9,9 +9,10 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     sign_in(@user)
   end
 
-  test "should get index" do
-    get contacts_url
-    assert_response :success
+  test "should not get index" do
+    assert_raises(ActionController::RoutingError) {
+      get contacts_url
+    }
   end
 
   test "should get new" do
@@ -19,9 +20,18 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create contact" do
-    assert_difference("Contact.count") do
+  test "should create contact and no conversation" do
+    assert_difference -> { Contact.count } => 1, -> { Conversation.count } => 0 do
       post contacts_url, params: { contact: { name: @temp.name, email: @temp.email, phone: @temp.phone } }
+    end
+
+    assert_redirected_to contact_url(Contact.last)
+  end
+
+  test "should create conversation when flag is set" do
+    assert_difference(["Contact.count", "Conversation.count"]) do
+      post contacts_url,
+           params: { contact: { name: @temp.name, email: @temp.email, phone: @temp.phone }, create_conversation: true }
     end
 
     assert_redirected_to contact_url(Contact.last)
