@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render layout: "modal" do %>
+    <div class="Block Block__new-conversation">
+      <h1><%= t("conversations.new.new_conversation") %></h1>
+      <%= render partial: "contacts/form", locals: { contact: @contact } %>
+    </div>
+  <% end %>
+<% end %>

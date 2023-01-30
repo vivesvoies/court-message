@@ -1,0 +1,11 @@
+<%# locals: (title:, content:) -%>
+
+<dialog aria-labelledby="cm-modal-title" id="cm-modal" class="Modal fr-modal fr-modal--opened" role="dialog"
+        data-controller="modal" data-action="turbo:submit-end->modal#submitted click->modal#clicked">
+  <div class="Modal__body">
+    <div class="fr-modal__header">
+      <button class="fr-link--close fr-link" aria-controls="fr-modal-2" data-action="click->modal#close"><%= t(".close") %></button>
+    </div>
+    <%= yield %>
+  </div>
+</dialog>

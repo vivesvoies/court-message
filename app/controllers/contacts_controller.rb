@@ -14,6 +14,9 @@ class ContactsController < ApplicationController
   def new
     @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
     @contact = Contact.new
+    if params[:modal]
+      render "conversations/new" and return
+    end
   end
 
   # GET /contacts/1/edit
@@ -28,7 +31,13 @@ class ContactsController < ApplicationController
     end
 
     if @contact.save
-      redirect_to @contact, notice: "Contact was successfully created."
+      respond_to do |format|
+        format.html { redirect_to @contact, notice: "Contact was successfully created." }
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.prepend("conversations", partial: "conversations/conversation",
+                                                                     locals: { conversation: @contact.conversation })
+        }
+      end
     else
       render :new, status: :unprocessable_entity
     end

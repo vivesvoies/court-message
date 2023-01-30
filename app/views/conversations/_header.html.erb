@@ -1,6 +1,10 @@
 <header class="ConversationHeader">
   <div class="ConversationHeader__actions">
-    <%= link_to t(".new"), new_contact_path(create_conversation: true), class: "fr-btn fr-icon-edit-box-line fr-btn--icon-left fr-btn--tertiary-no-outline", title: t(".new") %>
+    <%=
+      link_to t(".new"), new_contact_path(create_conversation: true, modal: true),
+              class: "fr-btn fr-icon-edit-box-line fr-btn--icon-left fr-btn--tertiary-no-outline", title: t(".new"),
+              data: { turbo_frame: "modal" }
+    %>
   </div>
   
   <div class="ConversationHeader__search fr-search-bar" role="search">

@@ -1,6 +1,6 @@
-<div class="Page Page__show-contact">
-  <div class="Block Block__show-contact">
+<div class="Page Page__new-contact">
+  <div class="Block Block__new-contact">
     <h1><%= t(".new_contact") %></h1>
-    <%= render "form", contact: @contact %>
+    <%= render partial: "contacts/form", locals: { contact: @contact } %>
   </div>
 </div>

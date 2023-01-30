@@ -1,0 +1,22 @@
+@import "settings";
+
+.Page {
+  margin: 2.5rem auto;
+  @media (min-width: 48rem) {
+    margin: 3.5rem auto;
+  }
+}
+
+.Block {
+  background: var(--background-alt-grey);
+  width: 100%;
+  padding: 3rem;
+  @include container;
+}
+.Modal .Block {
+  max-width: 100%;
+}
+
+.Modal__body:has(.Block) {
+  background: var(--background-alt-grey);
+}

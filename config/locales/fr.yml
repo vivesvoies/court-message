@@ -3,6 +3,10 @@ fr:
 
   sign_out: "Déconnexion"
   
+  application:
+    modal:
+      close: "Fermer"
+  
   devise:
     shared:
       links:
@@ -30,9 +34,11 @@ fr:
         no_account: "Vous n’avez pas de compte ?"
   
   conversations:
-    conversation_list_header:
+    header:
       new: "Nouvelle conversation"
       search: "Rechercher"
+    new:
+      new_conversation: "Nouvelle conversation"
   
   contacts:
     contact:

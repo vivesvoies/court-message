@@ -1,0 +1,12 @@
+@import "settings";
+
+.Modal {
+  width: 100%; 
+}
+.Modal__body {
+  @include container;
+  margin: 0 auto;
+}
+.Modal .fr-link--close {
+  align-items: center;
+}
