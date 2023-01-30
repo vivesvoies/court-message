@@ -14,6 +14,9 @@ FactoryBot.define do
     email { Faker::Internet.email }
     name { Faker::Name.name }
     phone { Faker::PhoneNumber.cell_phone_in_e164 }
-    # conversation
+
+    trait :with_conversation do
+      conversation
+    end
   end
 end

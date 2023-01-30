@@ -33,7 +33,7 @@ class Message < ApplicationRecord
     undeliverable: "undeliverable"
   }, suffix: true
 
-  belongs_to :conversation
+  belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
 
   validates_presence_of :content

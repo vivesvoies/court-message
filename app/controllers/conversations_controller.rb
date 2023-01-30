@@ -3,7 +3,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations
   def index
-    @conversations = Conversation.all
+    @conversations = Conversation.all.order(updated_at: :desc)
   end
 
   # GET /conversations/1

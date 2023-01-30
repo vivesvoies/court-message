@@ -14,6 +14,25 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation__contact", text: @conversation.title
   end
 
+  test "should show conversations in order" do
+    @contact_1 = create(:contact, :with_conversation, name: "Name 1")
+    @contact_2 = create(:contact, :with_conversation, name: "Name 2")
+    @contact_3 = create(:contact, :with_conversation, name: "Name 3")
+
+    get conversations_url
+    assert_select ".Conversation", count: 3
+    assert_select ".Conversation:nth-of-type(1) .Conversation__contact", text: "Name 3"
+    assert_select ".Conversation:nth-of-type(2) .Conversation__contact", text: "Name 2"
+    assert_select ".Conversation:nth-of-type(3) .Conversation__contact", text: "Name 1"
+
+    @contact_2.messages << create(:inbound_message, sender: @contact_2)
+    get conversations_url
+    assert_select ".Conversation", count: 3
+    assert_select ".Conversation:nth-of-type(1) .Conversation__contact", text: "Name 2"
+    assert_select ".Conversation:nth-of-type(2) .Conversation__contact", text: "Name 3"
+    assert_select ".Conversation:nth-of-type(3) .Conversation__contact", text: "Name 1"
+  end
+
   test "should show conversation" do
     @conversation = create(:conversation)
 

@@ -41,4 +41,11 @@ class ConversationTest < ActiveSupport::TestCase
     m.update(created_at: Date.yesterday)
     assert_equal(m, @conversation.messages.first)
   end
+
+  def test_updates_upon_new_message
+    @conversation = create(:conversation)
+    assert_changes "@conversation.updated_at" do
+      @conversation.messages << create(:inbound_message)
+    end
+  end
 end
