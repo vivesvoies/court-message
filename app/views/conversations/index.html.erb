@@ -1,7 +1,9 @@
-<div class="Viewer">
-  <div id="conversations" class="ConversationList">
+<div class="Viewer" id="viewer">
+  <div id="conversation_master" class="ConversationMaster">
     <%= render partial: "conversation_list_header" %>
-    <%= render @conversations %>
+    <ol id="conversations" class="ConversationList">
+      <%= render @conversations %>
+    </ol>
   </div>
   <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" %>
 </div>

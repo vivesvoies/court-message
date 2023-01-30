@@ -18,7 +18,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   def resize_to_desktop
-    resize_window_to(1360, 1024)
+    resize_window_to(1080, 1024)
   end
 
   private

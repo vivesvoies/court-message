@@ -8,6 +8,8 @@ class ConversationsTest < ApplicationSystemTestCase
 
     @user = create(:user)
     sign_in @user
+
+    resize_to_desktop
   end
 
   test "visiting the index" do
@@ -40,23 +42,23 @@ class ConversationsTest < ApplicationSystemTestCase
     resize_to_mobile
 
     visit conversations_url
-    body_width = page.evaluate_script('document.body.getBoundingClientRect().width')
-    list_width = page.evaluate_script('document.getElementById("conversations").getBoundingClientRect().width')
-    assert_equal(list_width, body_width)
+    viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
+    list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
+    assert_equal(list_width, viewer_width)
 
     click_on @conversation.contact.name_or_phone, match: :first
-    list_width = page.evaluate_script('document.getElementById("conversations").getBoundingClientRect().width')
+    list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
     conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
     assert_equal(list_width, 0)
-    assert_equal(conv_width, body_width)
+    assert_equal(conv_width, viewer_width)
 
     resize_to_desktop
-    body_width = page.evaluate_script('document.body.getBoundingClientRect().width')
-    list_width = page.evaluate_script('document.getElementById("conversations").getBoundingClientRect().width')
+    viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
+    list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
     conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
     assert(list_width > 0)
     assert(conv_width > 0)
-    assert_equal(conv_width + list_width, body_width)
+    assert_equal(conv_width + list_width, viewer_width)
   end
 
   test "streaming a new message" do

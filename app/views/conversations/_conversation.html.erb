@@ -1,4 +1,4 @@
-<div class="Conversation">
+<li class="Conversation">
   <%= link_to conversation, class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance" } do %>
     <div class="Conversation__contact">
       <%= conversation.title %>
@@ -10,4 +10,4 @@
       <%= last_message_extract_for conversation %>
     </div>
   <% end %>
-</div>
+</li>

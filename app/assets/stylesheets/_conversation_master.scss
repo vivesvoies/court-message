@@ -1,10 +1,10 @@
 @import "settings";
 
 ///
-/// Conversation list
+/// Conversation left-pane
 ///
 
-.ConversationList {
+.ConversationMaster {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -14,7 +14,7 @@
 }
 
 @media (min-width: 40rem) {
-  .ConversationList {
+  .ConversationMaster {
     width: 25rem;
   }
 }
@@ -43,6 +43,7 @@
 
 .Conversation {
   border-bottom: 1px solid var(--border-default-grey);
+  padding: 0; // override dsfr style for <li>
 }
 .Conversation__link {
   padding: .5rem;
