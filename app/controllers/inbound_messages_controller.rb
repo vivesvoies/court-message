@@ -1,6 +1,8 @@
 # Provide a webhook for inbound SMS and messages services.
 class InboundMessagesController < ApplicationController
   skip_before_action :verify_authenticity_token
+  skip_before_action :authenticate_user!
+
   wrap_parameters false
 
   # TODO
