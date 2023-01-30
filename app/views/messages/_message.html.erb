@@ -3,7 +3,7 @@
 
 <%= content_tag tag, id: dom_id(message), class: "Message Message--#{message.status}" do %>
   <div class="Message__sender">
-    <%= message.sender.name_or_phone %>
+    <%= message.sender %>
   </div>
   <div class="Message__content">
     <%= message.content %>

@@ -14,12 +14,12 @@ class ConversationsTest < ApplicationSystemTestCase
 
   test "visiting the index" do
     visit conversations_url
-    assert_selector ".Conversation__contact", text: @conversation.contact.name_or_phone
+    assert_selector ".Conversation__contact", text: @conversation.contact.to_s
   end
 
   test "opening a conversation" do
     visit conversations_url
-    click_on @conversation.contact.name_or_phone, match: :first
+    click_on @conversation.contact.to_s, match: :first
     assert_selector ".Message__content", text: @message.content
   end
 
@@ -46,7 +46,7 @@ class ConversationsTest < ApplicationSystemTestCase
     list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
     assert_equal(list_width, viewer_width)
 
-    click_on @conversation.contact.name_or_phone, match: :first
+    click_on @conversation.contact.to_s, match: :first
     list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
     conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
     assert_equal(list_width, 0)

@@ -21,6 +21,6 @@ class Conversation < ApplicationRecord
   has_and_belongs_to_many :agents, class_name: "User"
 
   def title
-    contact.name_or_phone
+    contact.to_s
   end
 end

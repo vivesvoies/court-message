@@ -2,7 +2,9 @@
 module Conversationalist
   extend ActiveSupport::Concern
 
-  def name_or_phone
-    name.presence || phone
+  def identifier
+    name.presence || (respond_to?(:phone) ? phone.presence : nil) || email
   end
+
+  def to_s = identifier
 end
