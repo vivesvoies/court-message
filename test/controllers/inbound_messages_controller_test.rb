@@ -8,7 +8,7 @@ class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
 
   test "should accept POST requests" do
     assert_difference(["Conversation.count", "Message.count", "Contact.count"]) do
-      post inbound_messages_path, params: { to: fake_number, from: "12345", text: "abc" }
+      post inbound_messages_path, params: { to: fake_number, from: fake_number, text: "abc" }
     end
 
     assert_response :success
