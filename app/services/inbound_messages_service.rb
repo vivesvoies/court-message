@@ -6,7 +6,8 @@ class InboundMessagesService
   attr_reader :message
 
   def initialize(params)
-    sender = Contact.find_or_initialize_by(phone: params[:from])
+    phone = PhonyRails.normalize_number(params[:from])
+    sender = Contact.find_or_initialize_by(phone:)
     conversation = sender.conversation || sender.build_conversation
     content = params[:text]
 
