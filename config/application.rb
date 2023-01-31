@@ -20,6 +20,7 @@ module CourtMessage
 
     config.i18n.default_locale = :fr
     config.time_zone = "Europe/Paris"
+    PhonyRails.default_country_code = "FR"
 
     config.eager_load_paths << Rails.root.join("app", "providers")
 

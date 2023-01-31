@@ -25,6 +25,7 @@ gem "devise", "~> 4.8"
 gem "devise-i18n"
 gem "lograge" # One-line-per-event format logs
 gem "nokogiri", "~> 1.13.10" # Specify a precise version because the bundled one had vulnerabilities.
+gem "phony_rails"
 gem "rails-i18n", "~> 7.0.6"
 
 gem "vonage", "~> 7.8"
