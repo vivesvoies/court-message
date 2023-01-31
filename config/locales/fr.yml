@@ -1,12 +1,23 @@
 fr:
   missing_value: "Non renseigné"
-
   sign_out: "Déconnexion"
   
   application:
     modal:
       close: "Fermer"
-  
+
+  activerecord:
+    models:
+    attributes:
+      user:
+        remember_me: Se souvenir de moi
+      contact:
+        phone: Le numéro de téléphone
+      
+  errors:
+    messages:
+      improbable_phone: "ne ressemble pas à un numéro valide"
+
   devise:
     shared:
       links:
@@ -54,10 +65,6 @@ fr:
     form:
       update: "Mettre à jour la fiche"
       create: "Créer la fiche"
+      save_error: "La fiche n’a pas pu être enregistrée."
     update:
       success: "Fiche mise à jour."
-
-  activerecord:
-    attributes:
-      user:
-        remember_me: Se souvenir de moi
