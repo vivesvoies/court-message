@@ -34,6 +34,7 @@ class ContactsController < ApplicationController
       respond_to do |format|
         format.html { redirect_to @contact, notice: "Contact was successfully created." }
         format.turbo_stream {
+          flash.now[:notice] = "Contact was successfully created."
           render turbo_stream: turbo_stream.prepend("conversations", partial: "conversations/conversation",
                                                                      locals: { conversation: @contact.conversation })
         }
