@@ -13,10 +13,14 @@ fr:
         remember_me: Se souvenir de moi
       contact:
         phone: Le numéro de téléphone
+      message:
+        content: Le contenu du message
       
   errors:
     messages:
       improbable_phone: "ne ressemble pas à un numéro valide"
+      blank: "ne peut être vide"
+      empty: "ne peut être vide"
 
   devise:
     shared:
