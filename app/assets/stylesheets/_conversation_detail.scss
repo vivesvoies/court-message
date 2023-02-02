@@ -52,7 +52,7 @@
   
   // background: var(--background-contrast-blue-france);
   border-top: 1px solid var(--border-default-grey);
-  padding: 2rem;
+  padding: 2rem 2rem 1rem 2rem;
 }
 
 .MessageList {
@@ -61,20 +61,4 @@
 
 .ContactDetail {
   grid-area: contact;
-}
-
-///
-/// New message form
-///
-.MessageForm {}
-.MessageForm__input-group {
-  display: flex;
-  align-items: flex-end;
-}
-.MessageForm__input-group .MessageForm__field {
-  flex: 1;
-  margin-bottom: 0;
-}
-.MessageForm__button {
-  margin-left: 1rem;
 }
