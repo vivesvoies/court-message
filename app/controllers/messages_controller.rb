@@ -15,7 +15,13 @@ class MessagesController < ApplicationController
       # TODO: renders only the `new` frame
       # Instead show an error message.
       # See https://github.com/louije/court-message/issues/15
-      render :new, status: :unprocessable_entity and return
+      respond_to do |format|
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream {
+          flash[:error] = @message.errors.full_messages.join(", ")
+        }
+      end
+      return
     end
 
     if outbound.submit!

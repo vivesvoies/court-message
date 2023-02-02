@@ -4,8 +4,9 @@ class FlashHelperTest < ActiveSupport::TestCase
   include FlashHelper
   def test_flash_id
     type = "alert"
-    message = "0123456789azertyuiop"
-    assert_equal(flash_id(type, message), "alert-0123456789")
+    message = "01234567890123456789012345678901234567890123456789azerty"
+    e = "alert-01234567890123456789012345678901234567890123456789"
+    assert_equal(flash_id(type, message), e)
   end
 
   def test_flash_dsrf_class

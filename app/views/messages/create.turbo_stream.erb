@@ -1,2 +1,3 @@
-<%#= Handled by broadcast_append_to in Message model. %>
-<%#= turbo_stream.append "messages", @message %>
+<% if @message.invalid? %>
+  <%= render "turbo_flash" %>
+<% end %>

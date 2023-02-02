@@ -1,5 +1,5 @@
 <% flash.each do |type, message| %>
-  <div class="Flash Flash--<%= type %>" data-controller="auto-remove">
+  <div class="Flash Flash--<%= type %>" data-controller="auto-remove" id="<%= flash_id(type, message) %>">
     <div class="fr-alert fr-alert--sm <%= flash_dsfr_class(type) %>">
       <p>
         <%= message %>

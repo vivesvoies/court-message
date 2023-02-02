@@ -1,0 +1,5 @@
+<% unless flash.empty? %>
+  <%= turbo_stream.prepend "flash" do %>
+    <%= render partial: "flash" %>
+  <% end %>
+<% end %>

@@ -1,5 +1,5 @@
 module FlashHelper
-  def flash_id(type, message) = [type, message[0, 10]].join("-").parameterize
+  def flash_id(type, message) = [type, message[0, 50]].join("-").parameterize
 
   def flash_dsfr_class(type)
     case type
