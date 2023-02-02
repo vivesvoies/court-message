@@ -26,6 +26,24 @@ class ActiveSupport::TestCase
     super
     DatabaseCleaner.clean
   end
+
+  def count_queries &block
+    count = 0
+
+    counter_f = ->(name, started, finished, unique_id, payload) {
+      unless %w[ CACHE SCHEMA ].include?(payload[:name])
+        count += 1
+      end
+    }
+
+    ActiveSupport::Notifications.subscribed(
+      counter_f,
+      "sql.active_record",
+      &block
+    )
+
+    count
+  end
 end
 
 class ActionDispatch::IntegrationTest
