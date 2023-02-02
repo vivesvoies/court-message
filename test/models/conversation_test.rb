@@ -25,11 +25,11 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal(@conversation.title, @contact.name)
   end
 
-  def test_title_shows_phone_when_no_name
+  def test_title_shows_formatted_phone_when_no_name
     @contact = create(:contact, name: "")
     @conversation = @contact.create_conversation
 
-    assert_equal(@conversation.title, @contact.phone)
+    assert_equal(@contact.to_s, @conversation.title)
   end
 
   def test_messages_ordering

@@ -16,4 +16,8 @@ class Contact < ApplicationRecord
 
   phony_normalize :phone
   validates_plausible_phone :phone, presence: true
+
+  def formatted_phone
+    phone.phony_formatted(format: :national)
+  end
 end

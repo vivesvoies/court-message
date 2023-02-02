@@ -3,7 +3,16 @@ module Conversationalist
   extend ActiveSupport::Concern
 
   def identifier
-    name.presence || (respond_to?(:phone) ? phone.presence : nil) || email
+    case
+    when name.present?
+      name
+    when respond_to?(:phone) && phone.present?
+      formatted_phone
+    when email.present?
+      email
+    else
+      "#<#{self.class} id=#{self.id}>"
+    end
   end
 
   def to_s = identifier
