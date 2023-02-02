@@ -17,7 +17,7 @@
 
   <body>
     <%= turbo_frame_tag "modal" %>
-    <%= render "flash" %>
+    <div class="FlashContainer" id="flash"><%= render "flash" %></div>
     <%= render "application/header" %>
     <main class="Main">
       <%= yield %>

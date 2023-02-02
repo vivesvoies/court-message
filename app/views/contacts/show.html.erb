@@ -1,6 +1,7 @@
 <div class="Page Page__show-contact">
   <div class="Block Block__show-contact">
     <%= turbo_frame_tag @contact, class: "ContactDetail" do %>
+      <%= render "turbo_flash" %>
       <%= render @contact %>
       <ul class="ContactDetail__actions fr-btns-group fr-btns-group--icon-left">
         <li>

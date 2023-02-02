@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" do %>
+  <%= render "turbo_flash" %>
   <%= turbo_stream_from @conversation %>
   <header class="ConversationDetail__header">
     <nav>
