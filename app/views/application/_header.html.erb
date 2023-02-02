@@ -1,5 +1,7 @@
 <header class="Header">
-  <h1 class="Header__title">Court-message</h1>
+  <h1 class="Header__title">
+    <%= link_to "Court-message", root_path %>
+  </h1>
   <nav class="Header__menu">
     <ul class="Header__menu-items">
       <% if user_signed_in? %>
