@@ -57,6 +57,6 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
       delete contact_url(@contact)
     end
 
-    assert_redirected_to contacts_url
+    assert_redirected_to root_url
   end
 end
