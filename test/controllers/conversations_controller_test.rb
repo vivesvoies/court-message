@@ -33,11 +33,21 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation:nth-of-type(3) .Conversation__contact", text: "Name 1"
   end
 
-  test "should show conversation" do
+  test "should show conversation and sidebar" do
     @conversation = create(:conversation)
 
     get conversation_url(@conversation)
     assert_response :success
-    assert_select ".ConversationDetail__title", text: @conversation.title
+    assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
+    assert_select "#conversation_master .Conversation__contact", text: @conversation.title
+  end
+
+  test "should show conversation detail without sidebar" do
+    @conversation = create(:conversation)
+
+    get detail_conversation_url(@conversation)
+    assert_response :success
+    assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
+    assert_select "#conversation_master .Conversation__contact", false
   end
 end

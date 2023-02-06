@@ -5,7 +5,9 @@
       <%= render @conversations %>
     </ol>
   </div>
-  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" %>
+  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" do %>
+    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
+  <% end %>
 </div>
 
 <%#= link_to "New conversation", new_conversation_path %>

@@ -3,18 +3,26 @@ class ConversationsController < ApplicationController
 
   # GET /conversations
   def index
+    all_conversations
+    set_conversation if params[:id]
+  end
+
+  # GET /conversations/1
+  def show
+    all_conversations
+    unless params[:detail]
+      render :index
+    end
+  end
+
+  private
+
+  def all_conversations
     # TODO: eager loading EVERY MESSAGE, this is overkill. Should create a last_message_id column.
     # See https://github.com/louije/court-message/issues/47
     @conversations = Conversation.all.includes(:contact, :messages).order(updated_at: :desc)
   end
 
-  # GET /conversations/1
-  def show
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints between actions.
   def set_conversation
     @conversation = Conversation.includes({ messages: :sender }, :contact, :agents).find(params[:id])
   end

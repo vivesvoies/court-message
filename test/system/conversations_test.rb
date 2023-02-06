@@ -23,6 +23,17 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".Message__content", text: @message.content
   end
 
+  test "loading conversation path shows sidebar" do
+    visit conversations_url
+    click_on @conversation.contact.to_s, match: :first
+    sleep 0.5
+    assert_equal conversation_url(@conversation), current_url
+
+    visit current_url
+    assert_selector ".Message__content", text: @message.content
+    assert_selector ".Conversation__contact", text: @conversation.contact.to_s
+  end
+
   test "creating a new conversation" do
     contact = build(:contact)
 

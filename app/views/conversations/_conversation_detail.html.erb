@@ -1,0 +1,23 @@
+<%= render "turbo_flash" %>
+<%= turbo_stream_from conversation %>
+<header class="ConversationDetail__header">
+  <nav>
+    <%= link_to "Retour", conversations_path, data: { turbo_frame: "_top" }, class: "ConversationDetail__back fr-btn fr-icon-arrow-left-line fr-btn--icon-left" %>
+  </nav>
+  <h2 class="ConversationDetail__title fr-icon-information-fill">
+    <%= check_box_tag :show_contact, nil, false, hidden: "hidden" %>
+    <%= label_tag :show_contact do %>
+      <%= conversation.title %>
+    <% end %>
+  </h2>
+</header>
+
+<ol id="messages" class="MessageList">
+  <%= render partial: "messages/message", collection: conversation.messages %>
+</ol>
+
+<footer class="ConversationDetail__footer">
+  <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: conversation.id), target: "_top" %>
+</footer>
+
+<%= turbo_frame_tag conversation.contact, class: "ContactDetail", loading: :lazy, src: contact_path(conversation.contact) %>
