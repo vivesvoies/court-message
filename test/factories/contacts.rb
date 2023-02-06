@@ -9,6 +9,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_contacts_on_phone  (phone) UNIQUE
+#
 FactoryBot.define do
   factory :contact do
     email { Faker::Internet.email }

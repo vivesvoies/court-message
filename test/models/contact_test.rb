@@ -9,6 +9,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_contacts_on_phone  (phone) UNIQUE
+#
 require "test_helper"
 
 class ContactTest < ActiveSupport::TestCase
@@ -24,7 +28,44 @@ class ContactTest < ActiveSupport::TestCase
     assert_nil Message.find_by(id: @message.id)
   end
 
-  def test_phone_number_validation_and_normalization
+  def test_email_validations
+    @contact = create(:contact)
+
+    assert_raises(ActiveRecord::RecordInvalid) {
+      create(:contact, email: @contact.email)
+    }
+
+    @contact_no_email = create(:contact, email: nil)
+    assert(@contact_no_email.valid?)
+
+    @contact_no_email_2 = create(:contact, email: nil)
+    assert(@contact_no_email_2.valid?)
+
+    @contact_blank_email = create(:contact, email: "")
+    assert(@contact_blank_email.valid?)
+
+    @contact_blank_email_2 = create(:contact, email: "")
+    assert(@contact_blank_email_2.valid?)
+  end
+
+  def test_phone_validations
+    @contact = create(:contact)
+    assert(@contact.valid?)
+
+    assert_raises(ActiveRecord::RecordInvalid) {
+      create(:contact, phone: @contact.phone)
+    }
+
+    assert_raises(ActiveRecord::RecordInvalid) {
+      create(:contact, phone: " ")
+    }
+
+    assert_raises(ActiveRecord::RecordInvalid) {
+      create(:contact, phone: nil)
+    }
+  end
+
+  def test_phone_number_plausibility_and_normalization
     @contact = build(:contact)
 
     # Vonage format
