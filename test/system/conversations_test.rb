@@ -55,13 +55,14 @@ class ConversationsTest < ApplicationSystemTestCase
     visit conversations_url
     viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
     list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
-    assert_equal(list_width, viewer_width)
+    assert_equal(viewer_width, list_width)
 
     click_on @conversation.contact.to_s, match: :first
+    sleep 0.5
     list_width = page.evaluate_script('document.getElementById("conversation_master").getBoundingClientRect().width')
     conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
-    assert_equal(list_width, 0)
-    assert_equal(conv_width, viewer_width)
+    assert_equal(0, list_width)
+    assert_equal(viewer_width, conv_width)
 
     resize_to_desktop
     viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
@@ -69,7 +70,7 @@ class ConversationsTest < ApplicationSystemTestCase
     conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
     assert(list_width > 0)
     assert(conv_width > 0)
-    assert_equal(conv_width + list_width, viewer_width)
+    assert_equal(viewer_width, conv_width + list_width)
   end
 
   test "streaming a new message" do

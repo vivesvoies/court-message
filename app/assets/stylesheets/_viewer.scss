@@ -10,7 +10,7 @@
     }
   }
 }
-.Viewer:has(.ConversationDetail > *) {
+.Viewer--detail-visible {
   grid-template-columns: 0 1fr;
   @media (min-width: 40rem) {
     grid-template-columns: auto 1fr;

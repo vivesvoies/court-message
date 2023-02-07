@@ -1,13 +1,9 @@
-<div class="Viewer" id="viewer">
+<div class="Viewer" id="viewer" data-controller="viewer">
   <div id="conversation_master" class="ConversationMaster">
     <%= render partial: "conversations/header" %>
     <ol id="conversations" class="ConversationList">
       <%= render @conversations %>
     </ol>
   </div>
-  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" do %>
-    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
-  <% end %>
+  <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
 </div>
-
-<%#= link_to "New conversation", new_conversation_path %>
