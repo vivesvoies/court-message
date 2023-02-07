@@ -1,6 +1,7 @@
 fr:
   missing_value: "Non renseigné"
   sign_out: "Déconnexion"
+  back: "Retour"
   
   application:
     modal:
@@ -54,6 +55,8 @@ fr:
       search: "Rechercher"
     new:
       new_conversation: "Nouvelle conversation"
+    conversation_detail:
+      profile: "Profil et notes"
   
   contacts:
     contact:

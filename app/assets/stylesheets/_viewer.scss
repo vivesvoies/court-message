@@ -10,9 +10,17 @@
     }
   }
 }
-.Viewer--detail-visible {
+
+@mixin show-detail {
   grid-template-columns: 0 1fr;
   @media (min-width: 40rem) {
     grid-template-columns: auto 1fr;
-  }
+  }    
+}
+// Not JS dependent, but low browser support
+.Viewer:has(.ConversationDetail > *) {
+  @include show-detail();
+}
+.Viewer--detail-visible {
+  @include show-detail();
 }

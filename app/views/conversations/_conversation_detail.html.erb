@@ -1,17 +1,20 @@
-<%= turbo_frame_tag "conversation_detail", class: "ConversationDetail" do %>
-  <% if !conversation.nil? %>
+<%= turbo_frame_tag "conversation_detail", class: "ConversationDetail", data: { controller: "conversation-detail" } do %>
+  <% if conversation %>
     <%= render "turbo_flash" %>
     <%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
+
     <header class="ConversationDetail__header">
-      <nav>
-        <%= link_to "Retour", conversations_path, data: { turbo_frame: "_top" }, class: "ConversationDetail__back fr-btn fr-icon-arrow-left-line fr-btn--icon-left" %>
+      <nav class="ConversationDetail__main-nav">
+        <%= link_to t(:back), conversations_path, data: { turbo_frame: "_top" }, class: "ConversationDetail__back fr-btn fr-icon-arrow-left-line fr-btn--icon-left" %>
       </nav>
-      <h2 class="ConversationDetail__title fr-icon-information-fill">
-        <%= check_box_tag :show_contact, nil, false, hidden: "hidden" %>
-        <%= label_tag :show_contact do %>
-          <%= conversation.title %>
-        <% end %>
+      <h2 class="ConversationDetail__title">
+        <%= conversation.title %>
       </h2>
+      <nav class="ConversationDetail__side-nav">
+        <%= link_to t(".profile"), contact_path(conversation.contact),
+                    data: { turbo_frame: dom_id(conversation.contact), action: "click->conversation-detail#toggleContact" },
+                    class: "ConversationDetail__show-contact fr-btn fr-btn--secondary fr-icon-information-fill fr-btn--icon-left" %>
+      </nav>
     </header>
     
     <ol id="messages" class="MessageList" data-controller="message-list">
@@ -22,6 +25,6 @@
       <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: conversation.id), target: "_top" %>
     </footer>
     
-    <%= turbo_frame_tag conversation.contact, class: "ContactDetail", loading: :lazy, src: contact_path(conversation.contact) %>
+    <%= turbo_frame_tag conversation.contact, class: "ContactDetail", data: { conversation_detail_target: "contactFrame" } %>
   <% end %>
 <% end %>
