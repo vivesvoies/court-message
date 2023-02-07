@@ -12,7 +12,7 @@
   </h2>
 </header>
 
-<ol id="messages" class="MessageList">
+<ol id="messages" class="MessageList" data-controller="message-list">
   <%= render partial: "messages/message", collection: conversation.messages %>
 </ol>
 

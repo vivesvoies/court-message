@@ -1,6 +1,7 @@
 :root {
   --size-header: 3rem;
   --size-viewer: calc(100vh - var(--size-header));
+  --size-message-box: 8rem;
 }
 
 @supports (height: 100dvh) {
