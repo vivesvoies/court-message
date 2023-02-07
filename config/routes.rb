@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root "conversations#index"
+  root to: redirect("/conversations")
 
   devise_for :users
 
