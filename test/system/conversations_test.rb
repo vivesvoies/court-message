@@ -73,6 +73,19 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_equal(viewer_width, conv_width + list_width)
   end
 
+  test "selecting current conversation" do
+    @conversations = create_list(:conversation, 5)
+    first = @conversations.first
+    last = @conversations.last
+
+    visit conversations_url
+
+    click_on first.title
+    assert_selector ".Conversation--active .Conversation__contact", text: first.title
+    click_on last.title
+    assert_selector ".Conversation--active .Conversation__contact", text: last.title
+  end
+
   test "streaming a new message" do
     visit conversation_url(@conversation)
     sleep 0.5

@@ -58,6 +58,17 @@
     background: unset;
   }
 }
+
+.Conversation .Conversation__link:active {
+  background: var(--background-alt-blue-cumulus);
+}
+.Conversation--active .Conversation__link:hover,
+.Conversation--active .Conversation__link:active,
+.Conversation--active .Conversation__link {
+  background: var(--background-action-low-blue-cumulus);
+  color: var(--text-label-blue-cumulus);
+}
+
 .Conversation__contact {
   grid-area: name;
   font-weight: bold;
