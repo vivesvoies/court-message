@@ -24,3 +24,13 @@ class MessagesTest < ApplicationSystemTestCase
     assert_selector ".Message__content", text: "New content!"
   end
 
+  test "anchoring the message list" do
+    visit conversation_url(@conversation)
+
+    current_scroll = page.evaluate_script('document.getElementById("messages").scrollTop')
+    @message = create(:inbound_message, conversation: @conversation)
+    sleep 0.5
+    new_scroll = page.evaluate_script('document.getElementById("messages").scrollTop')
+    assert(new_scroll > current_scroll)
+  end
+end
