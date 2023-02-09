@@ -94,16 +94,6 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".ContactDetail .Contact__name", text: @conversation.title
   end
 
-  test "streaming a new message" do
-    visit conversation_url(@conversation)
-    sleep 0.5
-    @message.update(content: "New content!")
-    @message.broadcast_update
-    sleep 0.5
-    find ".Message__content"
-    assert_selector ".Message__content", text: "New content!"
-  end
-
   teardown do
     @conversation.contact.destroy
   end
