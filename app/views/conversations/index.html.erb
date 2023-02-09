@@ -1,6 +1,9 @@
 <div class="Viewer" id="viewer" data-controller="viewer">
-    <%= render partial: "conversations/header" %>
   <div id="conversation_sidebar" class="ConversationSidebar">
+    <%= turbo_frame_tag "conversation_header", class: "ConversationHeader" do %>
+      <%= render partial: "conversations/header" %>
+    <% end %>
+    
     <ol id="conversations" class="ConversationList">
       <%= render @conversations %>
     </ol>
