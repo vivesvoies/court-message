@@ -4,7 +4,7 @@
 /// Conversation left-pane
 ///
 
-.ConversationMaster {
+.ConversationSidebar {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -14,7 +14,7 @@
 }
 
 @media (min-width: 40rem) {
-  .ConversationMaster {
+  .ConversationSidebar {
     width: 25rem;
   }
 }
@@ -30,7 +30,7 @@
 }
 
 .ConversationHeader__search {
-    margin-bottom: .5rem;
+  max-height: 2.5rem; // Gecko visual bug: 1 more pixel on <input> than on <button>
 }
 .ConversationHeader__search button {
   background-color: var(--background-contrast-grey);

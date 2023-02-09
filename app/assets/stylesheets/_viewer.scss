@@ -5,7 +5,7 @@
   grid-template-columns: 1fr auto;
   grid-template-rows: var(--size-viewer);
   @media (min-width: 40rem) {
-    .ConversationMaster {
+    .ConversationSidebar {
       border-right-width: 1px;
     }
   }

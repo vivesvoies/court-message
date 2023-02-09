@@ -39,7 +39,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     get conversation_url(@conversation)
     assert_response :success
     assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
-    assert_select "#conversation_master .Conversation__contact", text: @conversation.title
+    assert_select "#conversation_sidebar .Conversation__contact", text: @conversation.title
   end
 
   test "should show conversation detail without sidebar" do
@@ -48,6 +48,6 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     get detail_conversation_url(@conversation)
     assert_response :success
     assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
-    assert_select "#conversation_master .Conversation__contact", false
+    assert_select "#conversation_sidebar .Conversation__contact", false
   end
 end
