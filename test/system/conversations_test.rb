@@ -86,6 +86,14 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".Conversation--active .Conversation__contact", text: last.title
   end
 
+  test "showing the contact info pane" do
+    visit conversation_url(@conversation)
+    assert_selector ".ContactDetail:not([src])", visible: :all
+    click_on "Profil et notes"
+    assert_selector ".ContactDetail[src]"
+    assert_selector ".ContactDetail .Contact__name", text: @conversation.title
+  end
+
   test "streaming a new message" do
     visit conversation_url(@conversation)
     sleep 0.5
