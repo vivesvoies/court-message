@@ -9,9 +9,8 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     driven_by :headless_selenium_chrome_in_container
   end
 
-  Capybara.server_host = "0.0.0.0"
-  Capybara.server_port = 4000
-  Capybara.app_host = "http://web:4000"
+  Capybara.server_host = "web"
+  Capybara.always_include_port = true
 
   def resize_to_mobile
     resize_window_to(428, 926)

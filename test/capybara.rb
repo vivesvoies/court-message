@@ -2,7 +2,7 @@ Capybara.register_driver :selenium_chrome_in_container do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :remote,
-    url: "http://selenium-chrome:4444/wd/hub",
+    url: "http://selenium-hub:4444/wd/hub",
     capabilities: :chrome
   )
 end
@@ -15,7 +15,7 @@ Capybara.register_driver :headless_selenium_chrome_in_container do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :remote,
-    url: "http://selenium-chrome:4444/wd/hub",
+    url: "http://selenium-hub:4444/wd/hub",
     capabilities: chrome_options
   )
 end
