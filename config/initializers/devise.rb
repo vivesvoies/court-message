@@ -1,26 +1,5 @@
 # frozen_string_literal: true
 
-# This code was copy-pasted (:sigh:) from https://gorails.com/episodes/devise-hotwire-turbo.
-# Other instructions found at https://betterprogramming.pub/devise-auth-setup-in-rails-7-44240aaed4be.
-# Will probably become obsolete in a future Devise update.
-#
-# See https://github.com/heartcombo/devise/issues/5446
-# and https://github.com/heartcombo/devise/pull/5545
-
-class TurboFailureApp < Devise::FailureApp
-  def respond
-    if request_format == :turbo_stream
-      redirect
-    else
-      super
-    end
-  end
-
-  def skip_format?
-    %w(html turbo_stream */*).include? request_format.to_s
-  end
-end
-
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
@@ -30,6 +9,10 @@ end
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
+  # Additional config for Turbo (see: https://github.com/heartcombo/devise/wiki/How-To:-Upgrade-to-Devise-4.9.0-%5BHotwire-Turbo-integration%5D)
+  config.responder.error_status = :unprocessable_entity
+  config.responder.redirect_status = :see_other
+
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
@@ -39,7 +22,6 @@ Devise.setup do |config|
 
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
-  config.parent_controller = 'TurboDeviseController'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -299,7 +281,6 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
 
   config.warden do |manager|
-    manager.failure_app = TurboFailureApp
     # manager.intercept_401 = false
     # manager.default_strategies(scope: :user).unshift :some_external_strategy
   end
