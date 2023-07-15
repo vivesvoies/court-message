@@ -40,14 +40,22 @@ class MessageTest
       assert_equal(message_from_contact.direction, :inbound)
     end
   end
-  
+
   class MessageValidations < ActiveSupport::TestCase
     def test_content
       m = create(:outbound_message)
       assert(m.valid?)
-      
+
       m.content = "       " # tabs, spaces, nbsps
       assert(!m.valid?)
-    end      
+    end
+
+    def test_content_size
+      content = "This is a long message " * 50
+      m = create(:outbound_message, content: content)
+
+      assert(m.valid?)
+      assert(m.content == content)
+    end
   end
 end

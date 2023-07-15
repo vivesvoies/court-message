@@ -27,4 +27,12 @@ class UserTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
+
+  def test_memberships
+    teams = create_list(:team, 3)
+    user = create(:user, teams:)
+
+    assert(user.valid?)
+    assert_equal(user.teams.count, 3)
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_092732) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_14_172848) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,6 +41,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_092732) do
     t.index ["user_id", "conversation_id"], name: "index_conversations_users_on_user_id_and_conversation_id", unique: true
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.bigint "team_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id", "user_id"], name: "index_memberships_on_team_id_and_user_id", unique: true
+    t.index ["team_id"], name: "index_memberships_on_team_id"
+    t.index ["user_id"], name: "index_memberships_on_user_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "content"
     t.jsonb "provider_info"
@@ -54,6 +64,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_092732) do
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.text "name", null: false
+    t.text "slug", null: false
+    t.text "address"
+    t.text "desc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_teams_on_name", unique: true
+    t.index ["slug"], name: "index_teams_on_slug", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -74,5 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_092732) do
   end
 
   add_foreign_key "conversations", "contacts"
+  add_foreign_key "memberships", "teams"
+  add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
 end

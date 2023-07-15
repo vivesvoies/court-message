@@ -33,4 +33,7 @@ class User < ApplicationRecord
   # WARN / TODO - make it clear that deleting a user deletes their messages.
   has_many :messages, as: :sender, dependent: :destroy
   has_and_belongs_to_many :conversations
+
+  has_many :memberships
+  has_many :teams, through: :memberships
 end
