@@ -1,0 +1,13 @@
+<%#
+Locals: model (the model object that has failed validations)
+        message (what's displayed above the errors)
+%>
+<%= error_text = defined?(message) ? message : t(".save_error") %>
+<div id="error_explanation" class="fr-fieldset__element FormErrors">
+  <p class="fr-error-text"><%= error_text %></p>
+  <ul>
+    <% model.errors.each do |error| %>
+      <li><%= error.full_message %></li>
+    <% end %>
+  </ul>
+</div>

@@ -1,14 +1,7 @@
 <%= turbo_frame_tag @contact, class: "ContactDetail" do %>
   <%= form_with(model: contact) do |form| %>
     <% if contact.errors.any? %>
-      <div id="error_explanation" class="fr-fieldset__element FormErrors">
-        <p class="fr-error-text"><%= t(".save_error") %></p>
-        <ul>
-          <% contact.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
-      </div>
+      <%= render partial: "model_errors", locals: { model: contact, message: t(".save_error") } %>
     <% end %>
   
     <%= hidden_field_tag :create_conversation, @create_conversation %>

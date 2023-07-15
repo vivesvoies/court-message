@@ -4,6 +4,8 @@ fr:
   back: "Retour"
   
   application:
+    model_errors:
+      save_error: "Impossible d’enregistrer."
     modal:
       close: "Fermer"
 
