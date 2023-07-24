@@ -23,6 +23,14 @@ class TeamTest < ActiveSupport::TestCase
     assert(t.valid?)
   end
 
+  def test_name_required
+    name = ""
+    t = build(:team, name:)
+    assert_raise(ActiveRecord::RecordInvalid) {
+      t.save!
+    }
+  end
+
   def test_auto_slug
     name = "My Team"
     t = create(:team, name:)
@@ -32,9 +40,9 @@ class TeamTest < ActiveSupport::TestCase
   def test_slugs_and_names_uniqueness
     name = "My Team"
     t = create(:team, name:)
-    t2 = build(:team, name:)
-
-    assert(!t2.valid?)
+    assert_raise(ActiveRecord::RecordInvalid) {
+      t2 = create(:team, name:)
+    }
   end
 
   def test_team_has_members

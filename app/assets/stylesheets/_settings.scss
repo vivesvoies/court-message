@@ -4,15 +4,11 @@ $fs-normal: 1rem;
 
 
 @mixin container {
-  @media (min-width: 48rem) {
-    max-width: calc(100% * 2/3);
-  }
   @media (min-width: 62rem) {
-    max-width: calc(100% / 2);
+    max-width: 42rem;
   }
   @media (min-width: 72rem) {
-    // reproduce fr-container
-    max-width: calc(75rem / 2);
+    max-width: 54rem;
   }
 }
 

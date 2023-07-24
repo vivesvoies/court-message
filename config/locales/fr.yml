@@ -11,6 +11,9 @@ fr:
 
   activerecord:
     models:
+      user:
+        one: "L’utilisateur"
+        other: "Les utilisateurs"
     attributes:
       user:
         remember_me: Se souvenir de moi
@@ -18,6 +21,20 @@ fr:
         phone: Le numéro de téléphone
       message:
         content: Le contenu du message
+      team:
+        name: "Le nom de l’équipe"
+        slug: "L’identifiant unique de l’équipe"
+        address: "L’adresse de l’équipe"
+      membership:
+        user:
+          one: "L’utilisateur"
+          other: "Les utilisateurs"
+    errors:
+      models:
+        membership:
+          attributes:
+            user:
+              required: "n’a pas été sélectionné"
       
   errors:
     messages:
@@ -77,3 +94,43 @@ fr:
       save_error: "La fiche n’a pas pu être enregistrée."
     update:
       success: "Fiche mise à jour."
+
+  memberships:
+    membership:
+      remove_member: "Retirer de l’équipe"
+    destroy:
+      destroyed: "Le membre a été retiré de l’équipe."
+
+  teams:
+    team:
+      members:
+        zero: "L’équipe ne comporte aucun membre"
+        one: "L’équipe comporte un membre"
+        other: "L’équipe comporte %{count} membres"
+      edit: "Modifier"
+    team_details:
+      add_member: "Ajouter un membre"
+      members:
+        zero: "Aucun membre actif"
+        one: "Un membre actif"
+        other: "%{count} membres actifs"
+    index:
+      teams: "Équipes"
+      new_team: "Ajouter une équipe"
+    new:
+      new_team: "Ajouter une équipe"
+      create_then_add: "Vous devez enregistrer votre équipe avant d’y ajouter des membres."
+    form:
+      update: "Mettre à jour l’équipe"
+      create: "Créer l’équipe"
+      save_error: "L’équipe n’a pas pu être enregistrée."
+    edit:
+      edit: "Réglages de l’équipe"
+    show:
+      edit: "Modifier la fiche"
+      confirm_destroy: "Supprimer l’équipe ?"
+      destroy: "Supprimer la conversation"
+      create_membership: "Ajouter"
+    update:
+      success: "Équipe mise à jour."
+

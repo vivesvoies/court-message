@@ -22,7 +22,8 @@
 require "test_helper"
 
 class MembershipTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  def test_delegation
+    m = create(:membership)
+    assert_equal(m.user.identifier, m.identifier)
+  end
 end

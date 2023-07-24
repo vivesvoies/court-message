@@ -1,0 +1,24 @@
+<%= turbo_frame_tag "modal" do %>
+  <%= render layout: "modal" do %>
+    <div class="Block">
+      <h1>Ajouter un membre à l’équipe</h1>
+      <%= form_with(model: @membership, data: { turbo: false }) do |f| %>
+        <%= f.hidden_field :team_id %>
+  
+        <fieldset class="fr-fieldset">
+          <div class="fr-fieldset__element fr-select-group">
+            <%= f.label :user, "Utilisateurs de la plate-forme", class: "fr-label" %>
+            <%= f.collection_select :user_id, @users, :id, :identifier, {}, class: "fr-select" %>
+          </div>
+        </fieldset>
+        
+        <fieldset class="fr-fieldset">
+          <div class="fr-fieldset__element fr-btns-group">
+            <%= f.submit t("teams.show.create_membership"), class: "fr-btn" %>
+          </div>
+        </fieldset>
+  
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

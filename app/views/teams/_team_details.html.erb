@@ -1,0 +1,14 @@
+<header class="TeamDetails__header">
+  <h4>
+    <%= t(".members", count: @team.memberships.count) %>
+  </h4>
+  <%=
+    link_to t(".add_member"), new_membership_path(team_id: @team.id),
+            class: "fr-btn fr-icon-user-add-line fr-btn--icon-left fr-btn--secondary", title: t(".add_member"),
+            data: { turbo_frame: "modal" }
+  %>
+</header>
+
+<div class="Team__members-list">
+  <%= render @team.memberships %>
+</div>

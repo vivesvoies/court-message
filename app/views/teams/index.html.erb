@@ -1,0 +1,16 @@
+<div class="Page Page__index-team">
+  <div class="Block Block__index-team">
+    <header class="Teams__header">
+      <h1><%= t(".teams") %></h1>
+    </header>
+    
+    <div class="Teams__list">
+      <%= render collection: @teams, partial: "team" %>
+    </div>
+    
+    <div class="Teams__actions">
+      <%= link_to t(".new_team"), new_team_path, class: "fr-btn fr-btn--primary" %>
+    </div>
+  </div>
+</div>
+

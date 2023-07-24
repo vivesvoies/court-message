@@ -1,0 +1,24 @@
+<%= form_with(model: team) do |form| %>
+  <% if team.errors.any? %>
+    <%= render partial: "model_errors", locals: { model: team } %>
+  <% end %>
+
+  <fieldset class="fr-fieldset">
+    <div class="fr-fieldset__element fr-input-group">
+      <%= form.label :name, class: "fr-label" %>
+      <%= form.text_field :name, class: "fr-input" %>
+    </div>
+
+    <div class="fr-fieldset__element fr-input-group">
+      <%= form.label :address, class: "fr-label" %>
+      <%= form.text_area :address, class: "fr-input", rows: 4 %>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="fr-fieldset">
+    <div class="fr-fieldset__element fr-btns-group">
+      <%= form.submit team.new_record? ? t(".create") : t(".update"), class: "fr-btn" %>
+    </div>
+  </fieldset>
+<% end %>

@@ -1,0 +1,37 @@
+.Block__index-team {
+  
+}
+.Block__edit-team + .Block__team-members {
+  flex: .5;
+}
+
+.Teams__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.Teams__actions {
+  margin-top: 2rem;
+}
+
+.Team__name {
+  font-weight: bold;
+}
+
+.TeamDetails__header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.Team__members-list {
+}
+
+.Membership {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
