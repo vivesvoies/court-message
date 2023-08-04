@@ -26,4 +26,13 @@ class MembershipTest < ActiveSupport::TestCase
     m = create(:membership)
     assert_equal(m.user.identifier, m.identifier)
   end
+
+  def test_uniqueness_constraint
+    user = create(:user)
+    team = create(:team)
+    m = create(:membership, team:, user:)
+    assert_raise(ActiveRecord::RecordNotUnique) {
+      create(:membership, team:, user:)
+    }
+  end
 end
