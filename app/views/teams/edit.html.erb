@@ -7,7 +7,7 @@
   </div>
 
   <div class="Block Block__team-members">
-    <%= turbo_frame_tag "team_members", src: team_path(@team, detail: true) do %>
+    <%= turbo_frame_tag "team_members" do %>
       <%= render partial: "team_details" %>
     <% end %>
   </div>

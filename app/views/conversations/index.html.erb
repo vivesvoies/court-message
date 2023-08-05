@@ -1,7 +1,7 @@
 <div class="Viewer" id="viewer" data-controller="viewer">
   <div id="conversation_sidebar" class="ConversationSidebar">
     <%= turbo_frame_tag "conversation_header", class: "ConversationHeader" do %>
-      <%= render partial: "conversations/header" %>
+      <%= render partial: "conversations/header", locals: { team: @team } %>
     <% end %>
     
     <ol id="conversations" class="ConversationList" data-controller="conversation-list" data-conversation-list-item-class="Conversation" data-conversation-list-active-class="Conversation--active">

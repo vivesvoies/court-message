@@ -3,15 +3,21 @@ require "test_helper"
 class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = create(:user)
+    @contact = create(:contact)
     sign_in @user
   end
 
   test "should accept POST requests" do
-    assert_difference(["Conversation.count", "Message.count", "Contact.count"]) do
-      post inbound_messages_path, params: { to: fake_number, from: fake_number, text: "abc" }
+    assert_difference(["Message.count"]) do
+      post inbound_messages_path, params: { to: fake_number, from: @contact.phone, text: "abc" }
     end
 
     assert_response :success
+  end
+
+  test "should refuse POST requests from unknown numbers" do
+    post inbound_messages_path, params: { to: fake_number, from: fake_number, text: "abc" }
+    assert_response :bad_request
   end
 
   test "should refuse POST requests without required params" do

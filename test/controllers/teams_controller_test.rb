@@ -25,9 +25,9 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to team_url(Team.last)
   end
 
-  test "should show edit team on GET /team/:id" do
+  test "should show conversations on GET /team/:id" do
     get team_url(@team)
-    assert_redirected_to edit_team_url(@team)
+    assert_redirected_to team_conversations_url(@team)
   end
 
   test "should get edit" do

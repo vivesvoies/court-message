@@ -8,9 +8,7 @@ class TeamsController < ApplicationController
 
   # GET /teams/1
   def show
-    unless params[:detail]
-      redirect_to edit_team_path(@team)
-    end
+    redirect_to team_conversations_path(@team)
   end
 
   # GET /teams/new
@@ -52,7 +50,7 @@ class TeamsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_team
-    @team = Team.find(params[:id])
+    @team = Team.find_by(slug: params[:id])
   end
 
   # Only allow a list of trusted parameters through.

@@ -15,14 +15,22 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test "should get new" do
-    get new_contact_url
+  test "should not get new without a team_id param" do
+    assert_raises(ActiveRecord::RecordNotFound) {
+      get new_contact_url
+    }
+  end
+
+  test "should get new with a team_id param" do
+    get new_contact_url(team_id: @user.teams.first.id)
     assert_response :success
   end
 
   test "should create contact and no conversation" do
     assert_difference -> { Contact.count } => 1, -> { Conversation.count } => 0 do
-      post contacts_url, params: { contact: { name: @temp.name, email: @temp.email, phone: @temp.phone } }
+      post contacts_url,
+           params: { contact: { name: @temp.name, email: @temp.email, phone: @temp.phone,
+                                team_id: @user.teams.first.id } }
     end
 
     assert_redirected_to contact_url(Contact.last)
@@ -31,7 +39,10 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should create conversation when flag is set" do
     assert_difference(["Contact.count", "Conversation.count"]) do
       post contacts_url,
-           params: { contact: { name: @temp.name, email: @temp.email, phone: @temp.phone }, create_conversation: true }
+           params: {
+             contact: { name: @temp.name, email: @temp.email, phone: @temp.phone,
+                        team_id: @user.teams.first.id }, create_conversation: true
+           }
     end
 
     assert_redirected_to contact_url(Contact.last)
@@ -52,11 +63,24 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to contact_url(@contact)
   end
 
+  test "should not update contact team" do
+    @initial_team = @contact.team
+    @new_team = create(:team)
+
+    patch contact_url(@contact), params: { contact: { name: "Other name", team_id: @new_team.id } }
+    assert_redirected_to contact_url(@contact)
+    @contact.reload
+
+    assert_equal(@initial_team, @contact.team)
+  end
+
   test "should destroy contact" do
+    team = @contact.team
+
     assert_difference("Contact.count", -1) do
       delete contact_url(@contact)
     end
 
-    assert_redirected_to root_url
+    assert_redirected_to team_conversations_url(team)
   end
 end

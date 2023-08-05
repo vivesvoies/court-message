@@ -94,6 +94,8 @@ fr:
       save_error: "La fiche n’a pas pu être enregistrée."
     update:
       success: "Fiche mise à jour."
+    destroy:
+      success: "Conversation et fiche contact supprimées."
 
   memberships:
     membership:

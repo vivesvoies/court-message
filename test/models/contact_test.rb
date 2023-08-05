@@ -8,10 +8,17 @@
 #  phone      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  team_id    :bigint           default(2), not null
 #
 # Indexes
 #
-#  index_contacts_on_phone  (phone) UNIQUE
+#  index_contacts_on_phone              (phone)
+#  index_contacts_on_team_id            (team_id)
+#  index_contacts_on_team_id_and_phone  (team_id,phone) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (team_id => teams.id)
 #
 require "test_helper"
 
@@ -32,8 +39,11 @@ class ContactTest < ActiveSupport::TestCase
     @contact = create(:contact)
 
     assert_raises(ActiveRecord::RecordInvalid) {
-      create(:contact, email: @contact.email)
+      create(:contact, email: @contact.email, team: @contact.team)
     }
+
+    @contact_same_email_diff_team = create(:contact, email: @contact.email)
+    assert(@contact_same_email_diff_team.valid?)
 
     @contact_no_email = create(:contact, email: nil)
     assert(@contact_no_email.valid?)
@@ -53,8 +63,11 @@ class ContactTest < ActiveSupport::TestCase
     assert(@contact.valid?)
 
     assert_raises(ActiveRecord::RecordInvalid) {
-      create(:contact, phone: @contact.phone)
+      create(:contact, phone: @contact.phone, team: @contact.team)
     }
+
+    @contact_same_phone_diff_team = create(:contact, phone: @contact.phone)
+    assert(@contact_same_phone_diff_team.valid?)
 
     assert_raises(ActiveRecord::RecordInvalid) {
       create(:contact, phone: " ")

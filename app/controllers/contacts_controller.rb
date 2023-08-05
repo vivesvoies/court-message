@@ -1,5 +1,6 @@
 class ContactsController < ApplicationController
   before_action :set_contact, only: %i[ show edit update destroy ]
+  before_action :set_team, only: %i[ new ]
 
   # GET /contacts
   def index
@@ -13,7 +14,7 @@ class ContactsController < ApplicationController
   # GET /contacts/new
   def new
     @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
-    @contact = Contact.new
+    @contact = Contact.new(team_id: @team.id)
     if params[:modal]
       render "conversations/new" and return
     end
@@ -25,10 +26,12 @@ class ContactsController < ApplicationController
 
   # POST /contacts
   def create
-    @contact = Contact.new(contact_params)
+    @contact = Contact.new(new_contact_params)
     if params[:create_conversation]
       @contact.build_conversation
     end
+
+    @team = @contact.team
 
     if @contact.save
       respond_to do |format|
@@ -55,8 +58,16 @@ class ContactsController < ApplicationController
 
   # DELETE /contacts/1
   def destroy
+    @team = @contact.team
+    @conversation = @contact.conversation
+
     @contact.destroy
-    redirect_to root_url, notice: "Contact was successfully destroyed."
+    respond_to do |format|
+      format.html { redirect_to team_conversations_path(@team), notice: I18n.t(".contacts.destroy.success") }
+      format.turbo_stream {
+        flash.now[:notice] = I18n.t(".contacts.destroy.success")
+      }
+    end
   end
 
   private
@@ -66,8 +77,16 @@ class ContactsController < ApplicationController
     @contact = Contact.find(params[:id])
   end
 
+  def set_team
+    @team = Team.find(params[:team_id])
+  end
+
   # Only allow a list of trusted parameters through.
   def contact_params
     params.fetch(:contact, {}).permit(:name, :email, :phone)
+  end
+
+  def new_contact_params
+    params.fetch(:contact, {}).permit(:name, :email, :phone, :team_id)
   end
 end

@@ -1,17 +1,18 @@
 require "test_helper"
 class ApplicationControllerTest < ActionDispatch::IntegrationTest
   test "should redirect to sign in when signed out" do
-    get conversations_url
+    t = create(:team)
+    get team_conversations_path(t)
     assert_redirected_to(user_session_path)
   end
 
-  test "should redirect to conversations path when signed in" do
+  test "should redirect to team picker path when signed in" do
     @user = create(:user)
     sign_in(@user)
     get root_url
-    assert_redirected_to(conversations_path)
+    assert_redirected_to(teams_path)
 
-    get conversations_url
+    get teams_path
     assert_response :success
   end
 end

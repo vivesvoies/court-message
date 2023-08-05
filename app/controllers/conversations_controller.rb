@@ -1,5 +1,6 @@
 class ConversationsController < ApplicationController
-  before_action :set_conversation, only: %i[ show edit update destroy ]
+  before_action :set_conversation, only: %i[ show ]
+  before_action :set_team, only: %i[ index show ]
 
   # GET /conversations
   def index
@@ -25,6 +26,10 @@ class ConversationsController < ApplicationController
 
   def set_conversation
     @conversation = Conversation.includes({ messages: :sender }, :contact, :agents).find(params[:id])
+  end
+
+  def set_team
+    @team = Team.find_by(slug: params[:team_id])
   end
 
   # # Only allow a list of trusted parameters through.

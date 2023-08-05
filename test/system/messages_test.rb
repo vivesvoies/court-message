@@ -3,6 +3,7 @@ require "application_system_test_case"
 class MessagesTest < ApplicationSystemTestCase
   setup do
     @user = create(:user)
+    @team = @user.teams.first
     @conversation = create(:conversation)
     10.times do
       create(:inbound_message, conversation: @conversation, sender: @conversation.contact)
@@ -17,7 +18,7 @@ class MessagesTest < ApplicationSystemTestCase
   test "streaming a new message" do
     @message = create(:inbound_message, conversation: @conversation)
 
-    visit conversation_url(@conversation)
+    visit team_conversation_url(@team, @conversation)
     sleep 0.5
     @message.update(content: "New content!")
     sleep 0.5
@@ -25,7 +26,7 @@ class MessagesTest < ApplicationSystemTestCase
   end
 
   test "anchoring the message list" do
-    visit conversation_url(@conversation)
+    visit team_conversation_url(@team, @conversation)
 
     current_scroll = page.evaluate_script('document.getElementById("messages").scrollTop')
     @message = create(:inbound_message, conversation: @conversation)

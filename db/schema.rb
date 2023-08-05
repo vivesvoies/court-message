@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_14_172848) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_05_150318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,7 +24,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_172848) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["phone"], name: "index_contacts_on_phone", unique: true
+    t.bigint "team_id", default: 2, null: false
+    t.index ["phone"], name: "index_contacts_on_phone"
+    t.index ["team_id", "phone"], name: "index_contacts_on_team_id_and_phone", unique: true
+    t.index ["team_id"], name: "index_contacts_on_team_id"
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -37,8 +40,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_172848) do
   create_table "conversations_users", id: false, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "conversation_id", null: false
-    t.index ["conversation_id", "user_id"], name: "index_conversations_users_on_conversation_id_and_user_id", unique: true
-    t.index ["user_id", "conversation_id"], name: "index_conversations_users_on_user_id_and_conversation_id", unique: true
+    t.index ["conversation_id", "user_id"], name: "index_conversations_users_on_conversation_id_and_user_id",
+                                            unique: true
+    t.index ["user_id", "conversation_id"], name: "index_conversations_users_on_user_id_and_conversation_id",
+                                            unique: true
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -94,6 +99,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_172848) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "contacts", "teams"
   add_foreign_key "conversations", "contacts"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"

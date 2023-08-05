@@ -11,16 +11,16 @@ class MembershipsController < ApplicationController
     @membership = Membership.new(membership_params)
     @team = @membership.team
     if @membership.save
-      redirect_to @team # , notice: "Membre ajouté à l’équipe."
+      redirect_to edit_team_path(@team) # , notice: "Membre ajouté à l’équipe."
     else
-      redirect_to @team, alert: @membership.errors.full_messages.join(", ")
+      redirect_to edit_team_path(@team), alert: @membership.errors.full_messages.join(", ")
     end
   end
 
   def destroy
     @team = @membership.team
     @membership.destroy
-    redirect_to @team, status: :see_other # , notice: t("memberships.destroy.destroyed")
+    redirect_to edit_team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
   end
 
   private

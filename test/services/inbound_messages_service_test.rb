@@ -15,15 +15,13 @@ class InboundMessagesServiceTest < ActiveSupport::TestCase
 
   def test_creates_message_contact_and_convo
     params = { to: "our phone number", from: fake_number, text: "Coucou" }
-
     message = InboundMessagesService.new(params).message
+
     contact = message.sender
+    assert_nil(contact)
 
     message.save
-    assert(message.persisted?)
-    assert(contact.persisted?)
-    assert_equal(message.sender_type, "Contact")
-    assert_equal(message.conversation, contact.conversation)
+    refute(message.persisted?)
   end
 
   def test_finds_the_correct_contact

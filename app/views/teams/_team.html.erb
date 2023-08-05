@@ -1,7 +1,7 @@
 <div class="fr-tile fr-enlarge-link fr-tile--horizontal" id="<%= dom_id team %>">
   <div class="fr-tile__body">
     <h4 class="fr-tile__title Team__name">
-      <%= link_to team.name, edit_team_path(team), class: "fr-tile__link" %>
+      <%= link_to team.name, team_path(team), class: "fr-tile__link" %>
     </h4>
     <div class="fr-tile__desc">
       <p><%= team.address %></p>
