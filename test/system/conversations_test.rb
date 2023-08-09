@@ -79,9 +79,10 @@ class ConversationsTest < ApplicationSystemTestCase
   end
 
   test "selecting current conversation" do
-    @conversations = create_list(:conversation, 5)
-    first = @conversations.first
-    last = @conversations.last
+    @contacts = create_list(:contact, 3, :with_conversation, team: @team)
+
+    first = @contacts.first.conversation
+    last = @contacts.last.conversation
 
     visit team_conversations_url(@team)
 
