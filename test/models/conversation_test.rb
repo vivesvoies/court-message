@@ -48,4 +48,26 @@ class ConversationTest < ActiveSupport::TestCase
       @conversation.messages << create(:inbound_message)
     end
   end
+
+  def test_team_scope
+    teams = create_list(:team, 2) do |team|
+      create_list(:conversation, 3, team:)
+    end
+    team_1 = teams[0]
+    team_1_convos = team_1.conversations
+    assert_equal(team_1_convos.sort, Conversation.for_team(team_1).sort)
+  end
+
+  def test_preloading_query
+    c = create(:conversation) do |conversation|
+      create_list(:inbound_message, 10, conversation:)
+      conversation.agents << create(:user)
+    end
+
+    preloaded = Conversation.find_preloaded(c.id)
+
+    assert_equal(0, count_queries { preloaded.messages.first.content })
+    assert_equal(0, count_queries { preloaded.agents.first.identifier })
+    assert_equal(0, count_queries { preloaded.contact.name })
+  end
 end

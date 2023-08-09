@@ -19,6 +19,7 @@ class Team < ApplicationRecord
   has_many :memberships
   has_many :users, through: :memberships
   has_many :contacts
+  has_many :conversations, through: :contacts
 
   before_validation :set_slug, if: -> { slug.blank? }
   validates :name, uniqueness: true, presence: true
