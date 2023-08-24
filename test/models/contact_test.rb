@@ -123,4 +123,14 @@ class ContactTest < ActiveSupport::TestCase
     @contact.phone = "330612345678"
     assert @contact.invalid?
   end
+
+  def test_having_same_contact_multiple_teams
+    contact = create(:contact)
+    team = contact.team
+    other_team = create(:team)
+
+    other_contact = build(:contact, email: contact.email, name: contact.name, phone: contact.phone, team: other_team)
+    assert other_contact.valid?
+    assert_nothing_raised { other_contact.save }
+  end
 end
