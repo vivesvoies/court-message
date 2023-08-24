@@ -13,3 +13,7 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Minitest/ManyAssertions:
+  Enabled: false
+  
