@@ -12,6 +12,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  role                   :enum             default("user"), not null
 #  unconfirmed_email      :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
@@ -22,6 +23,13 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
+  enum :role, {
+    user: "user",
+    team_admin: "team_admin",
+    site_admin: "site_admin",
+    super_admin: "super_admin",
+  }, suffix: true
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -39,9 +47,5 @@ class User < ApplicationRecord
 
   def is_in? team
     team.in? teams
-  end
-
-  def admin?
-    false
   end
 end
