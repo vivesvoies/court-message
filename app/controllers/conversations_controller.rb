@@ -1,5 +1,6 @@
 class ConversationsController < ApplicationController
   before_action :set_team, only: %i[ index show ]
+  before_action :team_member!
   before_action :all_conversations, only: %i[ index show ]
   before_action :set_conversation, only: %i[ show ]
 
@@ -26,7 +27,7 @@ class ConversationsController < ApplicationController
   end
 
   def set_team
-    @team = Team.find_by(slug: params[:team_id])
+    @team = Current.team || Team.find_by(slug: params[:team_id])
   end
 
   # # Only allow a list of trusted parameters through.

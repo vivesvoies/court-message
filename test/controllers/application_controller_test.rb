@@ -6,13 +6,11 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to(user_session_path)
   end
 
-  test "should redirect to team picker path when signed in" do
+  test "should redirect to team picker when signed in" do
     @user = create(:user)
     sign_in(@user)
     get root_url
-    assert_redirected_to(teams_path)
 
-    get teams_path
-    assert_response :success
+    assert_redirected_to(teams_path)
   end
 end

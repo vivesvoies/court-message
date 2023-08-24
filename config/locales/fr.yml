@@ -119,6 +119,7 @@ fr:
     index:
       teams: "Équipes"
       new_team: "Ajouter une équipe"
+      no_team: "Vous ne faites encore partie d’aucune équipe. Demandez une invitation."
     new:
       new_team: "Ajouter une équipe"
       create_then_add: "Vous devez enregistrer votre équipe avant d’y ajouter des membres."

@@ -1,4 +1,3 @@
-# == Schema Information
 #
 # Table name: users
 #
@@ -24,10 +23,6 @@
 require "test_helper"
 
 class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-
   def test_memberships
     teams = create_list(:team, 3)
     user = create(:user, teams:)
@@ -35,4 +30,12 @@ class UserTest < ActiveSupport::TestCase
     assert(user.valid?)
     assert_equal(user.teams.count, 3)
   end
+
+  def test_is_in
+    team = create(:team)
+    user = create(:user)
+    user.teams << team
+
+    assert(user.is_in?(team))
+  end 
 end

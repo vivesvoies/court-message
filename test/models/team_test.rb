@@ -53,4 +53,13 @@ class TeamTest < ActiveSupport::TestCase
 
     assert_equal(3, t.users.count)
   end
+
+  def test_team_destroys_memberships
+    users = create_list(:user, 3)
+    t = create(:team, users:)
+
+    assert_difference "Membership.count", -3 do
+      t.destroy
+    end
+  end
 end

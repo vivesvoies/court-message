@@ -6,10 +6,15 @@
     
     <div class="Teams__list">
       <%= render collection: @teams, partial: "team" %>
+      <% if @teams.count == 0 %>
+        <p><%= t(".no_team") %></p>
+      <% end %>
     </div>
     
     <div class="Teams__actions">
-      <%= link_to t(".new_team"), new_team_path, class: "fr-btn fr-btn--primary" %>
+      <% if Current.user.admin? %>
+        <%= link_to t(".new_team"), new_team_path, class: "fr-btn fr-btn--primary" %>
+      <% end %>
     </div>
   </div>
 </div>

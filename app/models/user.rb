@@ -36,4 +36,12 @@ class User < ApplicationRecord
 
   has_many :memberships
   has_many :teams, through: :memberships
+
+  def is_in? team
+    team.in? teams
+  end
+
+  def admin?
+    false
+  end
 end

@@ -2,14 +2,38 @@ require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @user = create(:user)
+    @teams = create_list(:team, 3)
+    @user = create(:user, teams: @teams)
+    @team = @user.teams.first
     sign_in @user
-    @team = create(:team)
   end
 
   test "should get index" do
     get teams_url
     assert_response :success
+  end
+
+  test "should not display new team button to non-admins" do
+    get teams_url
+    assert_select "[href=\"#{new_team_path}\"]", count: 0
+  end
+
+  test "should redirect normal users to their team if team.count is 1" do
+    user = create(:user)
+    assert_equal(1, user.teams.count)
+
+    sign_in user
+    get teams_url
+    assert_redirected_to(team_conversations_url(user.teams.first))
+  end
+
+  test "should show a message to teamless users" do
+    user = create(:user, teams: [])
+    assert_equal(0, user.teams.count)
+
+    sign_in user
+    get teams_url
+    assert_select "p", text: I18n.t("teams.index.no_team")
   end
 
   test "should get new" do

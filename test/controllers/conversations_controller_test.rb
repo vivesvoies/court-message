@@ -60,7 +60,6 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
     assert_select "#conversation_sidebar .Conversation__contact", false
   end
-
   test "should not get conversations that belong to another team" do
     @conversation = create(:conversation, contact: @contact)
     @other_conversation = create(:conversation)
@@ -68,5 +67,18 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     get team_conversations_url(@team)
     assert_select ".Conversation__contact", text: @conversation.title, count: 1
     assert_select ".Conversation__contact", text: @other_conversation.title, count: 0
+  end
+
+  test "should not access the conversations of other teams" do
+    @other_team = create(:team)
+    @other_contact = create(:contact, :with_conversation, team: @other_team)
+
+    get team_conversations_url(@other_team)
+    assert_response :forbidden
+
+    get team_conversation_url(@other_team, @other_contact.conversation)
+    assert_response :forbidden
+
+    assert_select ".Conversation__contact", text: @other_contact.identifier, count: 0
   end
 end

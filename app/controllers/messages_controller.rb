@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
   def create
     # Should preload conversation in order to get contact's phone number.
     @message = Message.new(message_params)
-    @message.sender = current_user
+    @message.sender = Current.user
     outbound = OutboundMessagesService.new(@message)
 
     @message.save
