@@ -9,5 +9,9 @@ class ApplicationController < ActionController::Base
   def set_current
     Current.user = current_user
     Current.phone_number = "33644639777"
+
+    slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
+    Current.team = Team.find_by(slug:) if slug
+  end
   end
 end

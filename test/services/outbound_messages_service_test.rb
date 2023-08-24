@@ -2,11 +2,11 @@ require "test_helper"
 
 class OutboundMessagesServiceTest < ActiveSupport::TestCase
   def setup
+    Current.user = create(:user)
     Current.phone_number = fake_number
-    current_user = create(:user)
 
     c = create(:conversation)
-    message = Message.new({ content: "Lorem Ipsum", conversation_id: c.id, sender: current_user })
+    message = Message.new({ content: "Lorem Ipsum", conversation_id: c.id, sender: Current.user })
     @contact = c.contact
     @provider = Minitest::Mock.new
     @outbound_message = OutboundMessagesService.new(message, @provider)
