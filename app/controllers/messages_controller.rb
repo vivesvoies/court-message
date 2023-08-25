@@ -1,12 +1,17 @@
 class MessagesController < ApplicationController
+  authorize_resource
+
   def new
     @message = Message.new
     @message.conversation = Conversation.find(params[:conversation_id])
+    authorize! :new, @message
   end
 
   def create
     # Should preload conversation in order to get contact's phone number.
     @message = Message.new(message_params)
+    authorize! :create, @message
+
     @message.sender = Current.user
     outbound = OutboundMessagesService.new(@message)
 
@@ -27,7 +32,7 @@ class MessagesController < ApplicationController
     if outbound.submit!
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to @message.conversation }
+        format.html { redirect_to [@message.conversation.team, @message.conversation] }
       end
     else
       # TODO: probably a different kind of error
