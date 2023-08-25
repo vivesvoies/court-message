@@ -1,11 +1,14 @@
-<div class="fr-tile fr-enlarge-link fr-tile--horizontal" id="<%= dom_id team %>">
-  <div class="fr-tile__body">
+<div class="TeamTile fr-tile fr-enlarge-link fr-tile--horizontal" id="<%= dom_id team %>">
+  <div class="TeamTile__body fr-tile__body">
     <h4 class="fr-tile__title Team__name">
       <%= link_to team.name, team_path(team), class: "fr-tile__link" %>
     </h4>
     <div class="fr-tile__desc">
-      <p><%= team.address %></p>
+      <p><%= simple_format team.address %></p>
       <p><%= t(".members", count: team.memberships.count) %></p>
+    </div>
+    <div class="TeamTile__actions fr-card__footer">
+      <%= link_to "Configurer l’équipe", edit_team_path(team), class: "fr-btn fr-btn--sm" %>
     </div>
   </div>
 </div>

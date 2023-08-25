@@ -35,3 +35,28 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.TeamTile {
+  box-sizing: border-box;
+  &.fr-enlarge-link {
+    .fr-btn:hover,
+    .fr-btn:active {
+      background: var(--hover-tint);
+    }
+    .fr-btn::before {
+      content: none;
+    }
+  }
+}
+
+.TeamTile .TeamTile__body {
+  height: 100%;
+  padding-block: 2rem;
+}
+
+.TeamTile__actions {
+  position: relative;
+  z-index: 1;
+  margin: auto 0 0 0;
+  padding: 0; 
+}
