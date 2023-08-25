@@ -1,0 +1,67 @@
+///
+/// Team Picker
+/// 
+
+.Menu[open] {
+  padding-bottom: .75rem;
+}
+
+.MenuItem {
+  padding-inline: 1.5rem;
+  display: flex;
+  > .fr-btn,
+  > form.button_to {
+    flex: 1;
+  }
+  > form.button_to {
+    display: flex;
+    > .fr-btn {
+      flex: 1;
+    } 
+  }
+}
+
+.Menu hr {
+  margin: 0 1.5rem;
+  background-position: center;
+}
+
+.TeamPicker {
+  &[open] .TeamPicker__disclose-indicator {
+    &::before, &::after {
+      transform: rotate(180deg);
+    }
+  }
+}
+.TeamPicker__disclose {
+  width: 100%;
+  list-style: none;
+  box-sizing: border-box;
+  height: var(--size-header);
+  &::-webkit-details-marker,
+  &::marker {
+    display: none;
+  }
+}
+.TeamPicker__name {
+  padding-left: .75rem;
+  [open] & {
+    font-weight: 700;
+  }
+}
+
+.TeamPicker__disclose-indicator {
+  margin-left: auto;
+}
+
+.TeamPicker__info {
+  // summary padding, icon margin, icon size, icon margin, name padding
+  margin-left: calc(0rem - 0.1875rem + 1.5rem + .5rem + .75rem);
+  :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.TeamPicker__sign-out button {
+  color: var(--text-action-high-red-marianne);
+}

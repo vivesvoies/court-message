@@ -28,6 +28,15 @@ class TeamsControllerTest
       assert_redirected_to(team_conversations_url(user.teams.first))
     end
 
+    test "should show picker when param is set" do
+      user = create(:user)
+      assert_equal(1, user.teams.count)
+
+      sign_in user
+      get teams_url(picker: "show")
+      assert_response :success
+    end
+
     test "should show a message to teamless users" do
       user = create(:user, teams: [])
       assert_equal(0, user.teams.count)

@@ -25,8 +25,16 @@
 
 .ConversationHeader__actions {
   display: flex;
-  // justify-content: flex-end;
-  margin: .5rem 0;
+  // margin: .5rem 0;
+}
+
+.ConversationHeader__new {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-weight: 700;
+  min-height: var(--size-header);
+  background: var(--border-action-low-blue-france);
 }
 
 .ConversationHeader__search {

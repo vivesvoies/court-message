@@ -5,7 +5,7 @@ class TeamsController < ApplicationController
   # GET /teams
   def index
     @teams = Current.user.teams
-    redirect_to team_conversations_path(@teams.first) if @teams.count == 1 && cannot?(:create, Team)
+    redirect_to team_conversations_path(@teams.first) unless show_picker?
   end
 
   # GET /teams/1
@@ -49,6 +49,10 @@ class TeamsController < ApplicationController
   end
 
   private
+
+  def show_picker?
+    params[:picker] == "show" || @teams.count != 1 || can?(:create, Team)
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_team

@@ -1,0 +1,20 @@
+<div class="ConversationHeader__team-picker">
+  <details class="Menu TeamPicker">
+    <summary class="MenuItem TeamPicker__disclose fr-btn fr-btn--lg fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-home-4-line">
+      <span class="TeamPicker__name"><%= team.name %></span>
+      <span class="TeamPicker__disclose-indicator fr-icon-arrow-down-s-line"></span>
+    </summary>
+
+    <div class="MenuItem TeamPicker__info">
+      <div class="TeamPicker__info-address fr-text--sm"><%= team.address %></div>
+    </div>
+    <hr>
+    <div class="MenuItem TeamPicker__switch">
+      <%= link_to t(".switch_team"), teams_path(picker: "show"), class: "fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-team-line", data: { turbo_frame: "_top" } %>
+    </div>
+    <hr>
+    <div class="MenuItem TeamPicker__sign-out">
+      <%= button_to t(:sign_out), destroy_user_session_path, method: :delete, class: "fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-logout-box-r-line", data: { turbo_frame: "_top" } %>
+    </div>
+  </details>
+</div>

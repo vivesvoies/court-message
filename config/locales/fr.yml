@@ -72,6 +72,8 @@ fr:
     header:
       new: "Nouvelle conversation"
       search: "Rechercher"
+    team_picker:
+      switch_team: "Changer d’équipe"
     new:
       new_conversation: "Nouvelle conversation"
     conversation_detail:

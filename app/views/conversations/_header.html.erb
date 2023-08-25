@@ -1,10 +1,12 @@
 <div class="ConversationHeader__actions">
   <%=
     link_to t(".new"), new_contact_path(create_conversation: true, team_id: team.id, modal: true),
-            class: "fr-btn fr-icon-edit-box-line fr-btn--icon-left fr-btn--tertiary-no-outline", title: t(".new"),
+            class: "fr-btn fr-btn--lg fr-icon-edit-box-line fr-btn--icon-right fr-btn--tertiary-no-outline ConversationHeader__new", title: t(".new"),
             data: { turbo_frame: "modal" }
   %>
 </div>
+
+<%= render partial: "team_picker", locals: { team: } %>
 
 <div class="ConversationHeader__search fr-search-bar" role="search">
   <%= text_field_tag :search_query, nil, placeholder: t(".search"), class: "fr-input", type: :search %>
