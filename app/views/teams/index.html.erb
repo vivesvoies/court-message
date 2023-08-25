@@ -12,7 +12,7 @@
     </div>
     
     <div class="Teams__actions">
-      <% if Current.user.admin? %>
+      <% if can? :create, Team %>
         <%= link_to t(".new_team"), new_team_path, class: "fr-btn fr-btn--primary" %>
       <% end %>
     </div>

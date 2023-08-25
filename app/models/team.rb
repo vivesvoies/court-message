@@ -20,6 +20,7 @@ class Team < ApplicationRecord
   has_many :users, through: :memberships
   has_many :contacts
   has_many :conversations, through: :contacts
+  delegate :include?, to: :users
 
   before_validation :set_slug, if: -> { slug.blank? }
   validates :name, uniqueness: true, presence: true
@@ -28,6 +29,9 @@ class Team < ApplicationRecord
   def to_param
     slug
   end
+
+  # Sugar for CanCanCan
+  def team = self
 
   private
 

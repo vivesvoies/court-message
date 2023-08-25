@@ -87,6 +87,7 @@ GEM
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
+    cancancan (3.5.0)
     capybara (3.39.2)
       addressable
       matrix
@@ -338,6 +339,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   bundler-audit
+  cancancan
   capybara
   database_cleaner-active_record
   debug

@@ -35,6 +35,7 @@ class Message < ApplicationRecord
 
   belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
+  delegate :team, to: :conversation
 
   validates_presence_of :content
 

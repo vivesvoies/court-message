@@ -21,6 +21,7 @@ gem "turbo-rails"
 gem "bcrypt", "~> 3.1.7"
 gem "brakeman" # Look for security vulnerabilities
 gem "bundler-audit" # Check dependencies for vulnerabilities
+gem "cancancan"
 gem "devise", "~> 4.8"
 gem "devise-i18n"
 gem "lograge" # One-line-per-event format logs

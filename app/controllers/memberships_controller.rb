@@ -1,6 +1,8 @@
 class MembershipsController < ApplicationController
   before_action :set_membership, only: %i[ destroy ]
   before_action :set_team, only: %i[ new ]
+  authorize_resource :team
+  authorize_resource
 
   def new
     @users = User.where.not(id: @team.memberships.pluck(:user_id))
@@ -10,6 +12,8 @@ class MembershipsController < ApplicationController
   def create
     @membership = Membership.new(membership_params)
     @team = @membership.team
+
+    authorize! :create, @membership
     if @membership.save
       redirect_to edit_team_path(@team) # , notice: "Membre ajouté à l’équipe."
     else
@@ -19,6 +23,7 @@ class MembershipsController < ApplicationController
 
   def destroy
     @team = @membership.team
+    authorize! :destroy, @membership
     @membership.destroy
     redirect_to edit_team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
   end

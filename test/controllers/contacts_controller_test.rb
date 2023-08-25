@@ -4,7 +4,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @contact = create(:contact)
     @temp = build(:contact)
-    @user = create(:user)
+    @user = create(:user, teams: [@contact.team])
 
     sign_in(@user)
   end
@@ -24,6 +24,12 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should get new with a team_id param" do
     get new_contact_url(team_id: @user.teams.first.id)
     assert_response :success
+  end
+
+  test "should not get new with a wrong team_id param" do
+    other_team = create(:team)
+    get new_contact_url(team_id: other_team.id)
+    assert_response :forbidden
   end
 
   test "should create contact and no conversation" do
@@ -51,6 +57,12 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should show contact" do
     get contact_url(@contact)
     assert_response :success
+  end
+
+  test "should not show contact from another team" do
+    other_contact = create(:contact)
+    get contact_url(other_contact)
+    assert_response :forbidden
   end
 
   test "should get edit" do

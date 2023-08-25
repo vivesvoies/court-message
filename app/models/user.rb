@@ -23,12 +23,13 @@
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 class User < ApplicationRecord
-  enum :role, {
-    user: "user",
-    team_admin: "team_admin",
-    site_admin: "site_admin",
-    super_admin: "super_admin",
-  }, suffix: true
+  ROLES = %w[
+    user
+    team_admin
+    site_admin
+    super_admin
+  ].freeze
+  enum :role, ROLES.map { |role| [role.to_sym, role] }.to_h, suffix: true
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
@@ -45,7 +46,7 @@ class User < ApplicationRecord
   has_many :memberships
   has_many :teams, through: :memberships
 
-  def is_in? team
-    team.in? teams
+  def at_least?(role)
+    ROLES.index(role.to_s) <= ROLES.index(self.role)
   end
 end

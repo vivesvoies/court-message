@@ -1,6 +1,9 @@
 class OutboundMessagesController < ApplicationController
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_user!
+  skip_before_action :set_current
+  skip_authorization_check
+
   wrap_parameters false
 
   def create

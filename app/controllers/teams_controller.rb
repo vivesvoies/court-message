@@ -1,12 +1,11 @@
 class TeamsController < ApplicationController
-  before_action :team_member!, only: %i[ show ]
-  # before_action :admin_user!, except: %i[ index show ]
   before_action :set_team, only: %i[ show edit update destroy ]
+  authorize_resource
 
   # GET /teams
   def index
     @teams = Current.user.teams
-    redirect_to team_conversations_path(@teams.first) if @teams.count == 1
+    redirect_to team_conversations_path(@teams.first) if @teams.count == 1 && cannot?(:create, Team)
   end
 
   # GET /teams/1

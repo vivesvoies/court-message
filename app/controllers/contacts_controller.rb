@@ -1,6 +1,8 @@
 class ContactsController < ApplicationController
   before_action :set_contact, only: %i[ show edit update destroy ]
   before_action :set_team, only: %i[ new ]
+  authorize_resource :team
+  authorize_resource
 
   # GET /contacts
   def index

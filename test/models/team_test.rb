@@ -62,4 +62,15 @@ class TeamTest < ActiveSupport::TestCase
       t.destroy
     end
   end
+
+  def test_delegates_include_to_users
+    user = create(:user)
+    other_user = create(:user)
+    team = user.teams.first
+
+    assert(user.in? team)
+    assert(team.include? user)
+    refute(other_user.in? team)
+    refute(team.include? other_user)
+  end
 end

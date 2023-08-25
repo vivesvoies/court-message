@@ -33,11 +33,29 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(user.teams.count, 3)
   end
 
-  def test_is_in
-    team = create(:team)
+  def test_at_least
     user = create(:user)
-    user.teams << team
+    assert(user.at_least?(:user))
+    refute(user.at_least?(:team_admin))
+    refute(user.at_least?(:site_admin))
+    refute(user.at_least?(:super_admin))
 
-    assert(user.is_in?(team))
-  end 
+    team_admin = create(:user, role: :team_admin)
+    assert(team_admin.at_least?(:user))
+    assert(team_admin.at_least?(:team_admin))
+    refute(team_admin.at_least?(:site_admin))
+    refute(team_admin.at_least?(:super_admin))
+
+    site_admin = create(:user, role: :site_admin)
+    assert(site_admin.at_least?(:user))
+    assert(site_admin.at_least?(:team_admin))
+    assert(site_admin.at_least?(:site_admin))
+    refute(site_admin.at_least?(:super_admin))
+
+    super_admin = create(:user, role: :super_admin)
+    assert(super_admin.at_least?(:user))
+    assert(super_admin.at_least?(:team_admin))
+    assert(super_admin.at_least?(:site_admin))
+    assert(super_admin.at_least?(:super_admin))
+  end
 end
