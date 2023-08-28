@@ -7,8 +7,11 @@
       <p><%= simple_format team.address %></p>
       <p><%= t(".members", count: team.memberships.count) %></p>
     </div>
-    <div class="TeamTile__actions fr-card__footer">
-      <%= link_to "Configurer l’équipe", edit_team_path(team), class: "fr-btn fr-btn--sm" %>
-    </div>
+
+    <% if can? :edit, team %>
+      <div class="TeamTile__actions fr-card__footer">
+        <%= link_to "Configurer l’équipe", edit_team_path(team), class: "fr-btn fr-btn--sm" %>
+      </div>
+    <% end %>
   </div>
 </div>
