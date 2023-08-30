@@ -151,6 +151,16 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should not allow removing self from team" do
+    with_team_admin
+    other_user = create(:user, teams: [@team])
+        
+    get edit_team_url(@team)
+
+    assert_select "[action=\"#{membership_path(other_user.memberships.first)}\"] input[value=delete]", count: 1
+    assert_select "[action=\"#{membership_path(@user.memberships.first)}\"]      input[value=delete]", count: 0
+  end
+
   test "should update team" do
     with_team_admin
     patch team_url(@team), params: { team: {} }

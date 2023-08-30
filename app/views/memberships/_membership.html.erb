@@ -2,5 +2,9 @@
   <span class="Membership__identifier">
     <%= membership.identifier %>
   </span>
-  <%= button_to t(".remove_member"), membership, method: :delete, class: "Membership__remove fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-btn--icon-left", form: { data: { turbo: false } } %>
+  <%=
+    button_to t(".remove_member"), membership,
+              method: :delete, class: "Membership__remove fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-close-circle-line fr-btn--icon-left",
+              form: { data: { turbo: false } } unless membership.user == Current.user
+  %>
 </div>
