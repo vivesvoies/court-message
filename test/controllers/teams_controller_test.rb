@@ -14,6 +14,12 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
+  def with_site_admin
+    @user = create(:user, role: :site_admin)
+    @team = @user.teams.first
+    sign_in @user
+  end
+
   ### Normal users
 
   test "should show picker on index" do
@@ -124,6 +130,30 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_select "[href=\"#{new_team_path}\"]", count: 1
   end
 
+  test "should show every team to site admins" do
+    with_site_admin
+    other_teams = create_list(:team, 3)
+
+    get teams_url
+
+    assert_select "[href=\"#{team_path(other_teams.first)}\"]", count: 1
+    assert_select "[href=\"#{team_path(other_teams.second)}\"]", count: 1
+    assert_select "[href=\"#{team_path(other_teams.last)}\"]", count: 1
+  end
+
+  test "should not how every team to team admins" do
+    user = create(:user, role: :team_admin)
+    team = user.teams.first
+    other_teams = create_list(:team, 3)
+    sign_in user
+
+    get teams_url
+
+    assert_select "[href=\"#{team_path(other_teams.first)}\"]", count: 0
+    assert_select "[href=\"#{team_path(other_teams.second)}\"]", count: 0
+    assert_select "[href=\"#{team_path(other_teams.last)}\"]", count: 0
+  end
+
   test "should get new" do
     with_team_admin
     get new_team_url
@@ -167,8 +197,15 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to team_url(@team)
   end
 
-  test "should destroy team" do
+  test "team admins should not destroy team" do
     with_team_admin
+    delete team_url(@team)
+
+    assert_response :forbidden
+  end
+
+  test "site admins should destroy team" do
+    with_site_admin
     assert_difference("Team.count", -1) do
       delete team_url(@team)
     end
@@ -176,15 +213,15 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to teams_url
   end
 
-  test "should not destroy other team" do
-    with_team_admin
+  test "site admins should destroy any team" do
+    with_site_admin
     other_team = create(:team)
     
-    assert_no_difference("Team.count") do
+    assert_difference("Team.count", -1) do
       delete team_url(other_team)
     end
 
-    assert_response :forbidden
+    assert_redirected_to teams_url
   end
 
 end

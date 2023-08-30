@@ -6,6 +6,10 @@ class TeamsController < ApplicationController
   def index
     @teams = Current.user.teams
     redirect_to team_conversations_path(@teams.first) unless show_picker?
+
+    if can?(:manage, Team)
+      @all_teams = Team.all - @teams
+    end
   end
 
   # GET /teams/1

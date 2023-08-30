@@ -11,8 +11,22 @@
   gap: 1rem;
 }
 
+.Teams__list--mini .TeamTile {
+  .TeamTile__body {
+    padding: 0;
+  }
+  .TeamTile__info {
+    display: none;
+  }
+  .TeamTile__actions {
+    margin-top: 1rem;
+  }
+}
+
 .Teams__actions {
-  margin-top: 2rem;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .Team__name {

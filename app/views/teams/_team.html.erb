@@ -3,7 +3,7 @@
     <h4 class="fr-tile__title Team__name">
       <%= link_to team.name, team_path(team), class: "fr-tile__link" %>
     </h4>
-    <div class="fr-tile__desc">
+    <div class="TeamTile__info fr-tile__desc">
       <p><%= simple_format team.address %></p>
       <p><%= t(".members", count: team.memberships.count) %></p>
     </div>

@@ -119,7 +119,8 @@ fr:
         one: "Un membre actif"
         other: "%{count} membres actifs"
     index:
-      teams: "Équipes"
+      all_teams: "Toutes les autres équipes"
+      teams_for: "Équipes de %{name}"
       new_team: "Ajouter une équipe"
       no_team: "Vous ne faites encore partie d’aucune équipe. Demandez une invitation."
     new:

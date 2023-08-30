@@ -1,7 +1,7 @@
 <div class="Page Page__index-team">
   <div class="Block Block__index-team">
     <header class="Teams__header">
-      <h1><%= t(".teams") %></h1>
+      <h1><%= t(".teams_for", name: Current.user.identifier) %></h1>
     </header>
     
     <div class="Teams__list">
@@ -10,12 +10,21 @@
         <p><%= t(".no_team") %></p>
       <% end %>
     </div>
-    
+
     <div class="Teams__actions">
       <% if can? :create, Team %>
         <%= link_to t(".new_team"), new_team_path, class: "fr-btn fr-btn--primary" %>
       <% end %>
     </div>
+
+    <% if @all_teams && @all_teams.length > 0 %>
+      <hr>
+
+      <h2><%= t(".all_teams") %></h1>
+      <div class="Teams__list Teams__list--mini">
+        <%= render collection: @all_teams, partial: "team" %>
+      </div>
+    <% end %>
   </div>
 </div>
 
