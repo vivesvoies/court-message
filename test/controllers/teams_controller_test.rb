@@ -1,14 +1,14 @@
 require "test_helper"
 
 class TeamsControllerTest < ActionDispatch::IntegrationTest
-  def setupNormalUser
+  def with_normal_user
     @teams = create_list(:team, 3)
     @user = create(:user, teams: @teams)
     @team = @user.teams.first
     sign_in @user
   end
 
-  def setupTeamAdmin
+  def with_team_admin
     @user = create(:user, role: :team_admin)
     @team = @user.teams.first
     sign_in @user
@@ -17,19 +17,19 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   ### Normal users
 
   test "should show picker on index" do
-    setupNormalUser
+    with_normal_user
     get teams_url
     assert_response :success
   end
 
   test "should not show edit buttons on picker" do
-    setupNormalUser
+    with_normal_user
     get teams_url
     assert_select "[href=\"#{edit_team_path(@team)}\"]", count: 0
   end
 
   test "should not display new team button to non-admins" do
-    setupNormalUser
+    with_normal_user
     get teams_url
     assert_select "[href=\"#{new_team_path}\"]", count: 0
   end
@@ -62,13 +62,13 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not get new" do
-    setupNormalUser
+    with_normal_user
     get new_team_url
     assert_response :forbidden
   end
 
   test "should create not team" do
-    setupNormalUser
+    with_normal_user
     assert_no_difference("Team.count") do
       post teams_url, params: { team: { name: "Team Name" } }
     end
@@ -77,25 +77,25 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show conversations on GET /team/:id" do
-    setupNormalUser
+    with_normal_user
     get team_url(@team)
     assert_redirected_to team_conversations_url(@team)
   end
 
   test "should not get edit" do
-    setupNormalUser
+    with_normal_user
     get edit_team_url(@team)
     assert_response :forbidden
   end
 
   test "should not update team" do
-    setupNormalUser
+    with_normal_user
     patch team_url(@team), params: { team: {} }
     assert_response :forbidden
   end
 
   test "should not destroy team" do
-    setupNormalUser
+    with_normal_user
     assert_no_difference("Team.count") do
       delete team_url(@team)
     end
@@ -105,7 +105,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   ### Admins
 
   test "should get index even with only one team" do
-    setupTeamAdmin
+    with_team_admin
     assert_equal(1, @user.teams.count)
 
     get teams_url
@@ -113,25 +113,25 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show edit buttons on picker" do
-    setupTeamAdmin
+    with_team_admin
     get teams_url
     assert_select "[href=\"#{edit_team_path(@team)}\"]", count: 1
   end
 
   test "should display new team button to admins" do
-    setupTeamAdmin
+    with_team_admin
     get teams_url
     assert_select "[href=\"#{new_team_path}\"]", count: 1
   end
 
   test "should get new" do
-    setupTeamAdmin
+    with_team_admin
     get new_team_url
     assert_response :success
   end
 
   test "should create team" do
-    setupTeamAdmin
+    with_team_admin
     assert_difference("Team.count") do
       post teams_url, params: { team: { name: "Team Name" } }
     end
@@ -140,19 +140,19 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get edit" do
-    setupTeamAdmin
+    with_team_admin
     get edit_team_url(@team)
     assert_response :success
   end
 
   test "should update team" do
-    setupTeamAdmin
+    with_team_admin
     patch team_url(@team), params: { team: {} }
     assert_redirected_to team_url(@team)
   end
 
   test "should destroy team" do
-    setupTeamAdmin
+    with_team_admin
     assert_difference("Team.count", -1) do
       delete team_url(@team)
     end
@@ -161,7 +161,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy other team" do
-    setupTeamAdmin
+    with_team_admin
     other_team = create(:team)
     
     assert_no_difference("Team.count") do

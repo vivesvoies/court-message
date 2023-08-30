@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   end
   resources :memberships, only: [:new, :create, :destroy]
 
+  scope :admin do
+    resources :users, only: [:index]
+  end
+
   # Messaging services routes
   resources :inbound_messages, only: [:create]
   resources :outbound_messages, only: [:create]

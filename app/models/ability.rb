@@ -19,6 +19,8 @@ class Ability
     can :manage, Membership, belongs_to_team
 
     return unless user.at_least?(:site_admin)
+    can [:read, :update], User
+
     return unless user.at_least?(:super_admin)
     can :manage, :all
   end

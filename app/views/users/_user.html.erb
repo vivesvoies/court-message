@@ -1,12 +1,20 @@
-<div id="<%= dom_id user %>">
-  <p>
-    <strong>name:</strong>
+<tr id="<%= dom_id user %>" class="UserRow">
+  <td class="UserRow__name">
     <%= user.name %>
-  </p>
+  </td>
 
-  <p>
-    <strong>email:</strong>
+  <td class="UserRow__email">
     <%= user.email %>
-  </p>
+  </td>
 
-</div>
+  <td class="UserRow__teams">
+    <% user.teams.each do |team| %>
+      <%= link_to team.name, team %>
+    <% end %>
+  </td>
+
+  <td class="UserRow__roles">
+    <%= user.role %>
+  </td>
+
+</tr>
