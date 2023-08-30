@@ -139,6 +139,12 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to team_url(Team.last)
   end
 
+  test "should be team member after creation" do
+    with_team_admin
+    post teams_url, params: { team: { name: "Team Name" } }
+    assert Team.last.users.include?(@user)
+  end
+
   test "should get edit" do
     with_team_admin
     get edit_team_url(@team)
