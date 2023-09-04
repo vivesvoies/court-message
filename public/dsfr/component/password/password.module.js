@@ -1,10 +1,10 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 const config = {
   prefix: 'fr',
   namespace: 'dsfr',
   organisation: '@gouvfr',
-  version: '1.8.5'
+  version: '1.10.0'
 };
 
 const api = window[config.namespace];
@@ -20,7 +20,7 @@ class PasswordToggle extends api.core.Instance {
   }
 
   init () {
-    this.listen('click', this.toggle.bind(this));
+    this.listenClick();
     this.ascend(PasswordEmission.ADJUST, this.width);
     this.isSwappingFont = true;
     this._isChecked = this.isChecked;
@@ -40,9 +40,8 @@ class PasswordToggle extends api.core.Instance {
     this.ascend(PasswordEmission.TOGGLE, value);
   }
 
-  toggle () {
+  handleClick () {
     this.isChecked = !this._isChecked;
-    // this.node.checked = this.isChecked;
   }
 
   swapFont (families) {
@@ -98,6 +97,7 @@ class PasswordInput extends api.core.Instance {
   }
 
   capslock (event) {
+    if (event && typeof event.getModifierState !== 'function') return;
     if (event.getModifierState('CapsLock')) {
       this.node.parentNode.setAttribute(api.internals.ns.attr('capslock'), '');
     } else {

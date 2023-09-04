@@ -1,10 +1,10 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 const config = {
   prefix: 'fr',
   namespace: 'dsfr',
   organisation: '@gouvfr',
-  version: '1.8.5'
+  version: '1.10.0'
 };
 
 const api = window[config.namespace];
@@ -31,7 +31,7 @@ class HeaderLinks extends api.core.Instance {
     const toolsHtml = this.toolsLinks.innerHTML.replace(/  +/g, ' ');
     const menuHtml = this.menuLinks.innerHTML.replace(/  +/g, ' ');
     // Pour éviter de dupliquer des id, on ajoute un suffixe aux id et aria-controls duppliqués.
-    let toolsHtmlDuplicateId = toolsHtml.replace(/(<nav[.\s\S]*-translate [.\s\S]*) id="(.*?)"([.\s\S]*<\/nav>)/gm, '$1 id="$2' + copySuffix + '"$3');
+    let toolsHtmlDuplicateId = toolsHtml.replace(/id="(.*?)"/gm, 'id="$1' + copySuffix + '"');
     toolsHtmlDuplicateId = toolsHtmlDuplicateId.replace(/(<nav[.\s\S]*-translate [.\s\S]*) aria-controls="(.*?)"([.\s\S]*<\/nav>)/gm, '$1 aria-controls="$2' + copySuffix + '"$3');
 
     if (toolsHtmlDuplicateId === menuHtml) return;
@@ -40,7 +40,7 @@ class HeaderLinks extends api.core.Instance {
       case api.Modes.ANGULAR:
       case api.Modes.REACT:
       case api.Modes.VUE:
-        api.inspector.warn(`header__tools-links content is different from header__menu-links content.
+        this.warn(`header__tools-links content is different from header__menu-links content.
 As you're using a dynamic framework, you should handle duplication of this content yourself, please refer to documentation:
 ${api.header.doc}`);
         break;
@@ -52,6 +52,11 @@ ${api.header.doc}`);
 }
 
 class HeaderModal extends api.core.Instance {
+  constructor () {
+    super();
+    this._clickHandling = this.clickHandler.bind(this);
+  }
+
   static get instanceClassName () {
     return 'HeaderModal';
   }
@@ -61,28 +66,30 @@ class HeaderModal extends api.core.Instance {
   }
 
   resize () {
-    if (this.isBreakpoint(api.core.Breakpoints.LG)) this.unqualify();
-    else this.qualify();
+    if (this.isBreakpoint(api.core.Breakpoints.LG)) this.deactivateModal();
+    else this.activateModal();
   }
 
-  qualify () {
-    this.setAttribute('role', 'dialog');
+  activateModal () {
     const modal = this.element.getInstance('Modal');
     if (!modal) return;
-    const buttons = modal.buttons;
-    let id = '';
-    for (const button of buttons) {
-      id = button.id || id;
-      if (button.isPrimary && id) break;
-    }
-    this.setAttribute('aria-labelledby', id);
+    modal.isEnabled = true;
+    this.listen('click', this._clickHandling, { capture: true });
   }
 
-  unqualify () {
+  deactivateModal () {
     const modal = this.element.getInstance('Modal');
-    if (modal) modal.conceal();
-    this.removeAttribute('role');
-    this.removeAttribute('aria-labelledby');
+    if (!modal) return;
+    modal.conceal();
+    modal.isEnabled = false;
+    this.unlisten('click', this._clickHandling, { capture: true });
+  }
+
+  clickHandler (e) {
+    if (e.target.matches('a, button') && !e.target.matches('[aria-controls]') && !e.target.matches(api.core.DisclosureSelector.PREVENT_CONCEAL)) {
+      const modal = this.element.getInstance('Modal');
+      modal.conceal();
+    }
   }
 }
 
@@ -93,6 +100,6 @@ api.header = {
   doc: 'https://www.systeme-de-design.gouv.fr/elements-d-interface/composants/en-tete'
 };
 
-api.internals.register(api.header.HeaderSelector.BUTTONS, api.header.HeaderLinks);
+api.internals.register(api.header.HeaderSelector.TOOLS_LINKS, api.header.HeaderLinks);
 api.internals.register(api.header.HeaderSelector.MODALS, api.header.HeaderModal);
 //# sourceMappingURL=header.module.js.map

@@ -1,4 +1,4 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 class State {
   constructor () {
@@ -59,7 +59,7 @@ const config = {
   prefix: 'fr',
   namespace: 'dsfr',
   organisation: '@gouvfr',
-  version: '1.8.5'
+  version: '1.10.0'
 };
 
 class LogLevel {
@@ -130,7 +130,7 @@ class Message {
 }
 
 const LEVELS = {
-  trace: new LogLevel(0, '#616161', '#989898'),
+  log: new LogLevel(0, '#616161', '#989898'),
   debug: new LogLevel(1, '#000091', '#8B8BFF'),
   info: new LogLevel(2, '#007c3b', '#00ed70'),
   warn: new LogLevel(3, '#ba4500', '#fa5c00', 'warn'),
@@ -153,7 +153,7 @@ class Inspector {
   state () {
     const message = new Message();
     message.add(state);
-    this.trace.print(message);
+    this.log.print(message);
   }
 
   tree () {
@@ -161,7 +161,7 @@ class Inspector {
     if (!stage) return;
     const message = new Message();
     this._branch(stage.root, 0, message);
-    this.trace.print(message);
+    this.log.print(message);
   }
 
   _branch (element, space, message) {
@@ -210,9 +210,27 @@ class Options {
     this.preventManipulation = false;
   }
 
-  configure (settings = {}, start) {
+  configure (settings = {}, start, query) {
     this.startCallback = start;
-    if (settings.verbose === true) inspector.level = 0;
+    const isProduction = settings.production && (!query || query.production !== 'false');
+    switch (true) {
+      case query && !isNaN(query.level):
+        inspector.level = Number(query.level);
+        break;
+
+      case query && query.verbose && (query.verbose === 'true' || query.verbose === 1):
+        inspector.level = 0;
+        break;
+
+      case isProduction:
+        inspector.level = 999;
+        break;
+
+      case settings.verbose:
+        inspector.level = 0;
+        break;
+    }
+    inspector.info(`version ${config.version}`);
     this.mode = settings.mode || Modes.AUTO;
   }
 
@@ -634,7 +652,10 @@ class Element {
   }
 
   dispose () {
-    for (const instance of this.instances) instance._dispose();
+    for (let i = this.instances.length - 1; i >= 0; i--) {
+      const instance = this.instances[i];
+      if (instance) instance._dispose();
+    }
     this.instances.length = 0;
     state.remove('stage', this);
     this.parent.removeChild(this);
@@ -653,16 +674,75 @@ class Element {
   }
 }
 
+const RootEmission = {
+  CLICK: ns.emission('root', 'click'),
+  KEYDOWN: ns.emission('root', 'keydown'),
+  KEYUP: ns.emission('root', 'keyup')
+};
+
+const KeyCodes = {
+  TAB: {
+    id: 'tab',
+    value: 9
+  },
+  ESCAPE: {
+    id: 'escape',
+    value: 27
+  },
+  END: {
+    id: 'end',
+    value: 35
+  },
+  HOME: {
+    id: 'home',
+    value: 36
+  },
+  LEFT: {
+    id: 'left',
+    value: 37
+  },
+  UP: {
+    id: 'up',
+    value: 38
+  },
+  RIGHT: {
+    id: 'right',
+    value: 39
+  },
+  DOWN: {
+    id: 'down',
+    value: 40
+  }
+};
+
+const getKeyCode = (keyCode) => Object.values(KeyCodes).filter(entry => entry.value === keyCode)[0];
+
 class Root extends Element {
   constructor () {
     super(document.documentElement, 'root');
     this.node.setAttribute(ns.attr('js'), true);
+    this.listen();
+  }
+
+  listen () {
+    // TODO v2 => listener au niveau des éléments qui redistribuent aux instances.
+    document.documentElement.addEventListener('click', this.click.bind(this), { capture: true });
+    document.documentElement.addEventListener('keydown', this.keydown.bind(this), { capture: true });
+    document.documentElement.addEventListener('keyup', this.keyup.bind(this), { capture: true });
+  }
+
+  click (e) {
+    this.emit(RootEmission.CLICK, e.target);
+  }
+
+  keydown (e) {
+    this.emit(RootEmission.KEYDOWN, getKeyCode(e.keyCode));
+  }
+
+  keyup (e) {
+    this.emit(RootEmission.KEYUP, getKeyCode(e.keyCode));
   }
 }
-
-const RootSelector = {
-  ROOT: ':root'
-};
 
 class Stage extends Module {
   constructor () {
@@ -865,9 +945,14 @@ class ScrollLocker extends Module {
     if (!this._isLocked) {
       this._isLocked = true;
       this._scrollY = window.scrollY;
-      if (this.isLegacy) document.body.style.top = this._scrollY * -1 + 'px';
-      else document.body.style.setProperty('--scroll-top', this._scrollY * -1 + 'px');
+      const scrollBarGap = window.innerWidth - document.documentElement.clientWidth;
       document.documentElement.setAttribute(ns.attr('scrolling'), 'false');
+      document.body.style.top = `${-this._scrollY}px`;
+      this.behavior = getComputedStyle(document.documentElement).getPropertyValue('scroll-behavior');
+      if (this.behavior === 'smooth') document.documentElement.style.scrollBehavior = 'auto';
+      if (scrollBarGap > 0) {
+        document.documentElement.style.setProperty('--scrollbar-width', `${scrollBarGap}px`);
+      }
     }
   }
 
@@ -875,9 +960,19 @@ class ScrollLocker extends Module {
     if (this._isLocked) {
       this._isLocked = false;
       document.documentElement.removeAttribute(ns.attr('scrolling'));
-      if (this.isLegacy) document.body.style.top = '';
-      else document.body.style.removeProperty('--scroll-top');
-      window.scroll(0, this._scrollY);
+      document.body.style.top = '';
+      window.scrollTo(0, this._scrollY);
+      if (this.behavior === 'smooth') document.documentElement.style.removeProperty('scroll-behavior');
+      document.documentElement.style.removeProperty('--scrollbar-width');
+    }
+  }
+
+  move (value) {
+    if (this._isLocked) {
+      this._scrollY += value;
+      document.body.style.top = `${-this._scrollY}px`;
+    } else {
+      window.scrollTo(0, window.scrollY + value);
     }
   }
 }
@@ -958,6 +1053,46 @@ class MouseMove extends Module {
   }
 }
 
+class Hash extends Module {
+  constructor () {
+    super('hash');
+    this.handling = this.handle.bind(this);
+    this.getLocationHash();
+  }
+
+  activate () {
+    window.addEventListener('hashchange', this.handling);
+  }
+
+  deactivate () {
+    window.removeEventListener('hashchange', this.handling);
+  }
+
+  _sanitize (hash) {
+    if (hash.charAt(0) === '#') return hash.substring(1);
+    return hash;
+  }
+
+  set hash (value) {
+    const hash = this._sanitize(value);
+    if (this._hash !== hash) window.location.hash = hash;
+  }
+
+  get hash () {
+    return this._hash;
+  }
+
+  getLocationHash () {
+    const hash = window.location.hash;
+    this._hash = this._sanitize(hash);
+  }
+
+  handle (e) {
+    this.getLocationHash();
+    this.forEach((instance) => instance.handleHash(this._hash, e));
+  }
+}
+
 class Engine {
   constructor () {
     state.create(Register);
@@ -968,6 +1103,7 @@ class Engine {
     state.create(Load);
     state.create(FontSwap);
     state.create(MouseMove);
+    state.create(Hash);
 
     const registerModule = state.getModule('register');
     this.register = registerModule.register.bind(registerModule);
@@ -1052,6 +1188,20 @@ const queryActions = (element) => {
   return element.querySelectorAll(ACTIONS_SELECTOR);
 };
 
+let counter = 0;
+
+const uniqueId = (id) => {
+  if (!document.getElementById(id)) return id;
+  let element = true;
+  const base = id;
+  while (element) {
+    counter++;
+    id = `${base}-${counter}`;
+    element = document.getElementById(id);
+  }
+  return id;
+};
+
 const dom = {};
 
 dom.addClass = addClass;
@@ -1060,6 +1210,7 @@ dom.removeClass = removeClass;
 dom.queryParentSelector = queryParentSelector;
 dom.querySelectorAllArray = querySelectorAllArray;
 dom.queryActions = queryActions;
+dom.uniqueId = uniqueId;
 
 const supportLocalStorage = () => {
   try {
@@ -1133,6 +1284,24 @@ const property = {};
 
 property.completeAssign = completeAssign;
 
+/**
+ * Return an object of query params or null
+ *
+ * @method
+ * @name searchParams
+ * @param {string} url - an url
+ * @returns {Object} object of query params or null
+ */
+
+const searchParams = (url) => {
+  if (url && url.search) {
+    const params = new URLSearchParams(window.location.search);
+    const entries = params.entries();
+    return Object.fromEntries(entries);
+  }
+  return null;
+};
+
 const internals = {};
 const legacy = {};
 
@@ -1152,6 +1321,7 @@ internals.property = property;
 internals.ns = ns;
 internals.register = engine.register;
 internals.state = state;
+internals.query = searchParams(window.location);
 
 Object.defineProperty(internals, 'preventManipulation', {
   get: () => options.preventManipulation
@@ -1160,13 +1330,14 @@ Object.defineProperty(internals, 'stage', {
   get: () => state.getModule('stage')
 });
 
-inspector.info(`version ${config.version}`);
-
 const api$1 = (node) => {
   const stage = state.getModule('stage');
   return stage.getProxy(node);
 };
 
+api$1.version = config.version;
+api$1.prefix = config.prefix;
+api$1.organisation = config.organisation;
 api$1.Modes = Modes;
 
 Object.defineProperty(api$1, 'mode', {
@@ -1175,6 +1346,7 @@ Object.defineProperty(api$1, 'mode', {
 });
 
 api$1.internals = internals;
+api$1.version = config.version;
 
 api$1.start = engine.start;
 api$1.stop = engine.stop;
@@ -1182,7 +1354,10 @@ api$1.stop = engine.stop;
 api$1.inspector = inspector;
 api$1.colors = colors;
 
-options.configure(window[config.namespace], api$1.start);
+const configuration = window[config.namespace];
+api$1.internals.configuration = configuration;
+
+options.configure(configuration, api$1.start, api$1.internals.query);
 
 window[config.namespace] = api$1;
 
@@ -1245,7 +1420,12 @@ class Instance {
     this._isScrollLocked = false;
     this._isLoading = false;
     this._isSwappingFont = false;
+    this._isEnabled = true;
+    this._isDisposed = false;
     this._listeners = {};
+    this.handlingClick = this.handleClick.bind(this);
+    this._hashes = [];
+    this._hash = '';
     this._keyListenerTypes = [];
     this._keys = [];
     this.handlingKey = this.handleKey.bind(this);
@@ -1273,10 +1453,49 @@ class Instance {
 
   get proxy () {
     const scope = this;
-    return {
+    const proxy = {
       render: () => scope.render(),
       resize: () => scope.resize()
     };
+
+    const proxyAccessors = {
+      get node () {
+        return this.node;
+      },
+      get isEnabled () {
+        return scope.isEnabled;
+      },
+      set isEnabled (value) {
+        scope.isEnabled = value;
+      }
+    };
+
+    return completeAssign(proxy, proxyAccessors);
+  }
+
+  log (...values) {
+    values.unshift(`${this.registration.instanceClassName} #${this.id} - `);
+    inspector.log.apply(inspector, values);
+  }
+
+  debug (...values) {
+    values.unshift(`${this.registration.instanceClassName} #${this.id} - `);
+    inspector.debug.apply(inspector, values);
+  }
+
+  info (...values) {
+    values.unshift(`${this.registration.instanceClassName} #${this.id} - `);
+    inspector.info.apply(inspector, values);
+  }
+
+  warn (...values) {
+    values.unshift(`${this.registration.instanceClassName} #${this.id} - `);
+    inspector.warn.apply(inspector, values);
+  }
+
+  error (...values) {
+    values.unshift(`${this.registration.instanceClassName} #${this.id} - `);
+    inspector.error.apply(inspector, values);
   }
 
   register (selector, InstanceClass) {
@@ -1294,35 +1513,77 @@ class Instance {
     this.node.dispatchEvent(event);
   }
 
+  // TODO v2 => listener au niveau des éléments qui redistribuent aux instances.
   listen (type, closure, options) {
     if (!this._listeners[type]) this._listeners[type] = [];
-    if (this._listeners[type].indexOf(closure) > -1) return;
-    this._listeners[type].push(closure);
-    this.node.addEventListener(type, closure, options);
+    const listeners = this._listeners[type];
+    // if (listeners.some(listener => listener.closure === closure)) return;
+    const listener = new Listener(this.node, type, closure, options);
+    listeners.push(listener);
+    listener.listen();
   }
 
-  unlisten (type, closure) {
+  unlisten (type, closure, options) {
     if (!type) {
       for (const type in this._listeners) this.unlisten(type);
-    } else if (!closure) {
-      if (!this._listeners[type]) return;
-      for (const closure of this._listeners[type]) this.node.removeEventListener(type, closure);
-      this._listeners[type].length = 0;
-    } else {
-      if (!this._listeners[type]) return;
-      const index = this._listeners[type].indexOf(closure);
-      if (index > -1) this._listeners[type].splice(index, 1);
-      this.node.removeEventListener(type, closure);
+      return;
     }
+
+    const listeners = this._listeners[type];
+
+    if (!listeners) return;
+
+    if (!closure) {
+      listeners.forEach(listener => this.unlisten(type, listener.closure));
+      return;
+    }
+
+    const removal = listeners.filter(listener => listener.closure === closure && listener.matchOptions(options));
+    removal.forEach(listener => listener.unlisten());
+    this._listeners[type] = listeners.filter(listener => removal.indexOf(listener) === -1);
   }
 
-  listenKey (code, closure, preventDefault = false, stopPropagation = false, type = 'down') {
+  listenClick (options) {
+    this.listen('click', this.handlingClick, options);
+  }
+
+  unlistenClick (options) {
+    this.unlisten('click', this.handlingClick, options);
+  }
+
+  handleClick (e) {}
+
+  set hash (value) {
+    state.getModule('hash').hash = value;
+  }
+
+  get hash () {
+    return state.getModule('hash').hash;
+  }
+
+  listenHash (hash, add) {
+    if (this._hashes.length === 0) state.add('hash', this);
+    const action = new HashAction(hash, add);
+    this._hashes = this._hashes.filter(action => action.hash !== hash);
+    this._hashes.push(action);
+  }
+
+  unlistenHash (hash) {
+    this._hashes = this._hashes.filter(action => action.hash !== hash);
+    if (this._hashes.length === 0) state.remove('hash', this);
+  }
+
+  handleHash (hash, e) {
+    for (const action of this._hashes) action.handle(hash, e);
+  }
+
+  listenKey (keyCode, closure, preventDefault = false, stopPropagation = false, type = 'down') {
     if (this._keyListenerTypes.indexOf(type) === -1) {
       this.listen(`key${type}`, this.handlingKey);
       this._keyListenerTypes.push(type);
     }
 
-    this._keys.push(new KeyAction(type, code, closure, preventDefault, stopPropagation));
+    this._keys.push(new KeyAction(type, keyCode, closure, preventDefault, stopPropagation));
   }
 
   unlistenKey (code, closure) {
@@ -1335,6 +1596,12 @@ class Instance {
 
   handleKey (e) {
     for (const key of this._keys) key.handle(e);
+  }
+
+  get isEnabled () { return this._isEnabled; }
+
+  set isEnabled (value) {
+    this._isEnabled = value;
   }
 
   get isRendering () { return this._isRendering; }
@@ -1444,10 +1711,23 @@ class Instance {
 
   mutate (attributeNames) {}
 
+  retrieveNodeId (node, append) {
+    if (node.id) return node.id;
+    const id = uniqueId(`${this.id}-${append}`);
+    this.warn(`add id '${id}' to ${append}`);
+    node.setAttribute('id', id);
+    return id;
+  }
+
+  get isDisposed () {
+    return this._isDisposed;
+  }
+
   _dispose () {
-    inspector.debug(`dispose instance of ${this.registration.instanceClassName} on element [${this.element.id}]`);
+    this.debug(`dispose instance of ${this.registration.instanceClassName} on element [${this.element.id}]`);
     this.removeAttribute(this.registration.attribute);
     this.unlisten();
+    this._hashes = null;
     this._keys = null;
     this.isRendering = false;
     this.isResizing = false;
@@ -1466,6 +1746,7 @@ class Instance {
     for (const registration of this._registrations) state.remove('register', registration);
     this._registrations = null;
     this.registration.remove(this);
+    this._isDisposed = true;
     this.dispose();
   }
 
@@ -1559,6 +1840,10 @@ class Instance {
     this.node.focus();
   }
 
+  blur () {
+    this.node.blur();
+  }
+
   focusClosest () {
     const closest = this._focusClosest(this.node.parentNode);
     if (closest) closest.focus();
@@ -1579,6 +1864,20 @@ class Instance {
     return this.node === document.activeElement;
   }
 
+  scrollIntoView () {
+    const rect = this.getRect();
+
+    const scroll = state.getModule('lock');
+
+    if (rect.top < 0) {
+      scroll.move(rect.top - 50);
+    }
+
+    if (rect.bottom > window.innerHeight) {
+      scroll.move(rect.bottom - window.innerHeight + 50);
+    }
+  }
+
   matches (selectors) {
     return this.node.matches(selectors);
   }
@@ -1596,7 +1895,10 @@ class Instance {
   }
 
   getRect () {
-    return this.node.getBoundingClientRect();
+    const rect = this.node.getBoundingClientRect();
+    rect.center = rect.left + rect.width * 0.5;
+    rect.middle = rect.top + rect.height * 0.5;
+    return rect;
   }
 
   get isLegacy () {
@@ -1605,10 +1907,10 @@ class Instance {
 }
 
 class KeyAction {
-  constructor (type, code, closure, preventDefault, stopPropagation) {
+  constructor (type, keyCode, closure, preventDefault, stopPropagation) {
     this.type = type;
     this.eventType = `key${type}`;
-    this.code = code;
+    this.keyCode = keyCode;
     this.closure = closure;
     this.preventDefault = preventDefault === true;
     this.stopPropagation = stopPropagation === true;
@@ -1616,7 +1918,7 @@ class KeyAction {
 
   handle (e) {
     if (e.type !== this.eventType) return;
-    if (e.keyCode === this.code) {
+    if (e.keyCode === this.keyCode.value) {
       this.closure(e);
       if (this.preventDefault) {
         e.preventDefault();
@@ -1628,16 +1930,53 @@ class KeyAction {
   }
 }
 
-const KeyCodes = {
-  TAB: 9,
-  ESCAPE: 27,
-  END: 35,
-  HOME: 36,
-  LEFT: 37,
-  UP: 38,
-  RIGHT: 39,
-  DOWN: 40
-};
+class Listener {
+  constructor (node, type, closure, options) {
+    this._node = node;
+    this._type = type;
+    this._closure = closure;
+    this._options = options;
+  }
+
+  get closure () {
+    return this._closure;
+  }
+
+  listen () {
+    this._node.addEventListener(this._type, this._closure, this._options);
+  }
+
+  matchOptions (options = null) {
+    switch (true) {
+      case options === null:
+      case typeof this._options === 'boolean' && typeof options === 'boolean' && this._options === options:
+        return true;
+
+      case Object.keys(this._options).length !== Object.keys(options).length:
+        return false;
+
+      case Object.keys(options).every(key => this._options[key] === options[key]):
+        return true;
+    }
+
+    return false;
+  }
+
+  unlisten () {
+    this._node.removeEventListener(this._type, this._closure, this._options);
+  }
+}
+
+class HashAction {
+  constructor (hash, add) {
+    this.hash = hash;
+    this.add = add;
+  }
+
+  handle (hash, e) {
+    if (this.hash === hash) this.add(e);
+  }
+}
 
 const DisclosureEvent = {
   DISCLOSE: ns.event('disclose'),
@@ -1647,9 +1986,11 @@ const DisclosureEvent = {
 const DisclosureEmission = {
   RESET: ns.emission('disclosure', 'reset'),
   ADDED: ns.emission('disclosure', 'added'),
+  RETRIEVE: ns.emission('disclosure', 'retrieve'),
   REMOVED: ns.emission('disclosure', 'removed'),
   GROUP: ns.emission('disclosure', 'group'),
-  UNGROUP: ns.emission('disclosure', 'ungroup')
+  UNGROUP: ns.emission('disclosure', 'ungroup'),
+  SPOTLIGHT: ns.emission('disclosure', 'spotlight')
 };
 
 class Disclosure extends Instance {
@@ -1660,7 +2001,10 @@ class Disclosure extends Instance {
     this.DisclosureButtonInstanceClass = DisclosureButtonInstanceClass;
     this.disclosuresGroupInstanceClassName = disclosuresGroupInstanceClassName;
     this.modifier = this._selector + '--' + this.type.id;
-    this.pristine = true;
+    this._isPristine = true;
+    this._isRetrievingPrimaries = false;
+    this._hasRetrieved = false;
+    this._primaryButtons = [];
   }
 
   static get instanceClassName () {
@@ -1671,9 +2015,24 @@ class Disclosure extends Instance {
     this.addDescent(DisclosureEmission.RESET, this.reset.bind(this));
     this.addDescent(DisclosureEmission.GROUP, this.update.bind(this));
     this.addDescent(DisclosureEmission.UNGROUP, this.update.bind(this));
+    this.addAscent(DisclosureEmission.SPOTLIGHT, this.disclose.bind(this));
     this.register(`[aria-controls="${this.id}"]`, this.DisclosureButtonInstanceClass);
     this.ascend(DisclosureEmission.ADDED);
+    this.listenHash(this.id, this._spotlight.bind(this));
     this.update();
+  }
+
+  get isEnabled () { return super.isEnabled; }
+
+  set isEnabled (value) {
+    if (this.isEnabled === value) return;
+    super.isEnabled = value;
+    if (value) this.ascend(DisclosureEmission.ADDED);
+    else this.ascend(DisclosureEmission.REMOVED);
+  }
+
+  get isPristine () {
+    return this._isPristine;
   }
 
   get proxy () {
@@ -1692,6 +2051,9 @@ class Disclosure extends Instance {
       get group () {
         const group = scope.group;
         return group ? group.proxy : null;
+      },
+      get isDisclosed () {
+        return scope.isDisclosed;
       }
     };
 
@@ -1704,6 +2066,7 @@ class Disclosure extends Instance {
 
   update () {
     this.getGroup();
+    this.retrievePrimaries();
   }
 
   getGroup () {
@@ -1726,46 +2089,53 @@ class Disclosure extends Instance {
   }
 
   disclose (withhold) {
-    if (this.disclosed) return false;
-    this.pristine = false;
-    this.disclosed = true;
+    if (this.isDisclosed === true || !this.isEnabled) return false;
+    this._isPristine = false;
+    this.isDisclosed = true;
     if (!withhold && this.group) this.group.current = this;
     return true;
   }
 
-  conceal (withhold, preventFocus) {
-    if (!this.disclosed) return false;
+  conceal (withhold, preventFocus = true) {
+    if (this.isDisclosed === false) return false;
     if (!this.type.canConceal && this.group && this.group.current === this) return false;
-    this.pristine = false;
-    this.disclosed = false;
+    this.isDisclosed = false;
     if (!withhold && this.group && this.group.current === this) this.group.current = null;
     if (!preventFocus) this.focus();
-    this.descend(DisclosureEmission.RESET);
+    if (!this._isPristine) this.descend(DisclosureEmission.RESET);
     return true;
   }
 
-  get disclosed () {
-    return this._disclosed;
+  get isDisclosed () {
+    return this._isDisclosed;
   }
 
-  set disclosed (value) {
-    if (this._disclosed === value) return;
+  set isDisclosed (value) {
+    if (this._isDisclosed === value || (!this.isEnabled && value === true)) return;
     this.dispatch(value ? DisclosureEvent.DISCLOSE : DisclosureEvent.CONCEAL, this.type);
-    this._disclosed = value;
+    this._isDisclosed = value;
     if (value) this.addClass(this.modifier);
     else this.removeClass(this.modifier);
     for (let i = 0; i < this.buttons.length; i++) this.buttons[i].apply(value);
   }
 
+  get isInitiallyDisclosed () {
+    return this.primaryButtons.some(button => button.isInitiallyDisclosed);
+  }
+
+  hasRetrieved () {
+    return this._hasRetrieved;
+  }
+
   reset () {}
 
-  toggle (isPrimary) {
+  toggle (canDisclose) {
     if (!this.type.canConceal) this.disclose();
     else {
       switch (true) {
-        case !isPrimary:
-        case this.disclosed:
-          this.conceal();
+        case !canDisclose:
+        case this.isDisclosed:
+          this.conceal(false, false);
           break;
 
         default:
@@ -1775,8 +2145,7 @@ class Disclosure extends Instance {
   }
 
   get buttonHasFocus () {
-    if (this.buttons.some((button) => { return button.hasFocus; })) return true;
-    return false;
+    return this.buttons.some((button) => { return button.hasFocus; });
   }
 
   get hasFocus () {
@@ -1786,17 +2155,83 @@ class Disclosure extends Instance {
   }
 
   focus () {
-    for (let i = 0; i < this.buttons.length; i++) {
-      const button = this.buttons[i];
-      if (button.isPrimary) {
-        button.focus();
-        return;
+    if (this._primaryButtons.length > 0) this._primaryButtons[0].focus();
+  }
+
+  get primaryButtons () {
+    return this._primaryButtons;
+  }
+
+  retrievePrimaries () {
+    if (this._isRetrievingPrimaries) return;
+    this._isRetrievingPrimaries = true;
+    this.request(this._retrievePrimaries.bind(this));
+  }
+
+  _retrievePrimaries () {
+    this._isRetrievingPrimaries = false;
+    this._primaryButtons = this._electPrimaries(this.buttons);
+
+    if (this._hasRetrieved || this._primaryButtons.length === 0) return;
+    this.retrieved();
+    this._hasRetrieved = true;
+
+    this.applyAbility(true);
+
+    if (this.group) {
+      this.group.retrieve();
+      return;
+    }
+
+    if (this._isPristine && this.isEnabled && !this.group) {
+      switch (true) {
+        case this.hash === this.id:
+          this._spotlight();
+          break;
+
+        case this.isInitiallyDisclosed:
+          this.disclose();
+          break;
+      }
+    }
+  }
+
+  retrieved () {}
+
+  _spotlight () {
+    this.disclose();
+    this.request(() => { this.ascend(DisclosureEmission.SPOTLIGHT); });
+  }
+
+  _electPrimaries (candidates) {
+    return candidates.filter(button => button.canDisclose && !this.node.contains(button.node));
+  }
+
+  applyAbility (withhold = false) {
+    const isEnabled = !this._primaryButtons.every(button => button.isDisabled);
+
+    if (this.isEnabled === isEnabled) return;
+
+    this.isEnabled = isEnabled;
+
+    if (withhold) return;
+
+    if (!this.isEnabled && this.isDisclosed) {
+      if (this.group) this.ascend(DisclosureEmission.REMOVED);
+      else if (this.type.canConceal) this.conceal();
+    }
+
+    if (this.isEnabled) {
+      if (this.group) this.ascend(DisclosureEmission.ADDED);
+      if (this.hash === this.id) {
+        this._spotlight();
       }
     }
   }
 
   dispose () {
     this._group = null;
+    this._primaryButtons = null;
     super.dispose();
     this.ascend(DisclosureEmission.REMOVED);
   }
@@ -1807,17 +2242,32 @@ class DisclosureButton extends Instance {
     super();
     this.type = type;
     this.attributeName = type.ariaState ? 'aria-' + type.id : ns.attr(type.id);
+    this._canDisclose = false;
   }
 
   static get instanceClassName () {
     return 'DisclosureButton';
   }
 
+  get isPrimary () {
+    return this.registration.creator.primaryButtons.includes(this);
+  }
+
+  get canDisclose () {
+    return this._canDisclose;
+  }
+
+  get isDisabled () {
+    return this.type.canDisable && this.hasAttribute('disabled');
+  }
+
   init () {
+    this._canDisclose = this.hasAttribute(this.attributeName);
+    this._isInitiallyDisclosed = this.isDisclosed;
+    this._isContained = this.registration.creator.node.contains(this.node);
     this.controlsId = this.getAttribute('aria-controls');
-    this.isPrimary = this.hasAttribute(this.attributeName);
-    if (this.isPrimary && this.disclosed && this.registration.creator.pristine) this.registration.creator.disclose();
-    this.listen('click', this.click.bind(this));
+    this.registration.creator.retrievePrimaries();
+    this.listenClick();
   }
 
   get proxy () {
@@ -1827,24 +2277,51 @@ class DisclosureButton extends Instance {
     });
   }
 
-  click (e) {
-    if (this.registration.creator) this.registration.creator.toggle(this.isPrimary);
+  handleClick (e) {
+    if (this.registration.creator) this.registration.creator.toggle(this.canDisclose);
   }
 
   mutate (attributeNames) {
-    if (this.isPrimary && attributeNames.indexOf(this.attributeName) > -1 && this.registration.creator) {
-      if (this.disclosed) this.registration.creator.disclose();
+    this._canDisclose = this.hasAttribute(this.attributeName);
+    this.registration.creator.applyAbility();
+    if (!this._isApplying && this.isPrimary && attributeNames.indexOf(this.attributeName) > -1 && this.registration.creator) {
+      if (this.isDisclosed) this.registration.creator.disclose();
       else if (this.type.canConceal) this.registration.creator.conceal();
     }
   }
 
   apply (value) {
-    if (!this.isPrimary) return;
+    if (!this.canDisclose) return;
+    this._isApplying = true;
     this.setAttribute(this.attributeName, value);
+    this.request(() => { this._isApplying = false; });
   }
 
-  get disclosed () {
+  get isDisclosed () {
     return this.getAttribute(this.attributeName) === 'true';
+  }
+
+  get isInitiallyDisclosed () {
+    return this._isInitiallyDisclosed;
+  }
+
+  focus () {
+    super.focus();
+    this.scrollIntoView();
+  }
+
+  measure (rect) {
+    const buttonRect = this.rect;
+    this._dx = rect.x - buttonRect.x;
+    this._dy = rect.y - buttonRect.y;
+  }
+
+  get dx () {
+    return this._dx;
+  }
+
+  get dy () {
+    return this._dy;
   }
 }
 
@@ -1852,7 +2329,10 @@ class DisclosuresGroup extends Instance {
   constructor (disclosureInstanceClassName, jsAttribute) {
     super(jsAttribute);
     this.disclosureInstanceClassName = disclosureInstanceClassName;
+    this._members = [];
     this._index = -1;
+    this._isRetrieving = false;
+    this._hasRetrieved = false;
   }
 
   static get instanceClassName () {
@@ -1861,6 +2341,7 @@ class DisclosuresGroup extends Instance {
 
   init () {
     this.addAscent(DisclosureEmission.ADDED, this.update.bind(this));
+    this.addAscent(DisclosureEmission.RETRIEVE, this.retrieve.bind(this));
     this.addAscent(DisclosureEmission.REMOVED, this.update.bind(this));
     this.descend(DisclosureEmission.GROUP);
     this.update();
@@ -1900,12 +2381,46 @@ class DisclosuresGroup extends Instance {
 
   getMembers () {
     const members = this.element.getDescendantInstances(this.disclosureInstanceClassName, this.constructor.instanceClassName, true);
-    this._members = members.filter(this.validate.bind(this));
+    this._members = members.filter(this.validate.bind(this)).filter(member => member.isEnabled);
+    const invalids = members.filter(member => !this._members.includes(member));
+    invalids.forEach(invalid => invalid.conceal());
+  }
+
+  retrieve (bypassPrevention = false) {
+    if (this._isRetrieving || (this._hasRetrieved && !bypassPrevention)) return;
+    this._isRetrieving = true;
+    this.request(this._retrieve.bind(this));
+  }
+
+  _retrieve () {
+    this.getMembers();
+    this._isRetrieving = false;
+    this._hasRetrieved = true;
+    if (this.hash) {
+      for (let i = 0; i < this.length; i++) {
+        const member = this.members[i];
+        if (this.hash === member.id) {
+          this.index = i;
+          this.request(() => { this.ascend(DisclosureEmission.SPOTLIGHT); });
+          return i;
+        }
+      }
+    }
+
+    for (let i = 0; i < this.length; i++) {
+      const member = this.members[i];
+      if (member.isInitiallyDisclosed) {
+        this.index = i;
+        return i;
+      }
+    }
+
+    return this.getIndex();
   }
 
   update () {
     this.getMembers();
-    this.getIndex();
+    if (this._hasRetrieved) this.getIndex();
   }
 
   get members () {
@@ -1916,14 +2431,18 @@ class DisclosuresGroup extends Instance {
     return this.members ? this.members.length : 0;
   }
 
-  getIndex () {
-    this._index = -1;
+  getIndex (defaultIndex = -1) {
+    this._index = undefined;
+    let index = defaultIndex;
     for (let i = 0; i < this.length; i++) {
-      if (this.index > -1) this.members[i].conceal(true, true);
-      else if (this.members[i].disclosed) {
-        this.index = i;
+      if (this.members[i].isDisclosed) {
+        index = i;
+        break;
       }
     }
+
+    this.index = index;
+    return index;
   }
 
   get index () {
@@ -1936,16 +2455,17 @@ class DisclosuresGroup extends Instance {
     for (let i = 0; i < this.length; i++) {
       const member = this.members[i];
       if (value === i) {
-        member.disclose(true);
+        if (!member.isDisclosed) member.disclose(true);
       } else {
-        member.conceal(true, true);
+        if (member.isDisclosed) member.conceal(true);
       }
     }
     this.apply();
   }
 
   get current () {
-    return this._index === -1 ? null : this.members[this._index];
+    if (this._index === -1 || isNaN(this._index)) return null;
+    return this._members[this._index] || null;
   }
 
   set current (member) {
@@ -1972,20 +2492,27 @@ const DisclosureType = {
     id: 'expanded',
     ariaState: true,
     ariaControls: true,
-    canConceal: true
+    canConceal: true,
+    canDisable: true
   },
   SELECT: {
     id: 'selected',
     ariaState: true,
     ariaControls: true,
-    canConceal: false
+    canConceal: false,
+    canDisable: true
   },
   OPENED: {
     id: 'opened',
     ariaState: false,
     ariaControls: true,
-    canConceal: true
+    canConceal: true,
+    canDisable: false
   }
+};
+
+const DisclosureSelector = {
+  PREVENT_CONCEAL: ns.attr.selector('prevent-conceal')
 };
 
 class CollapseButton extends DisclosureButton {
@@ -2024,7 +2551,7 @@ class Collapse extends Disclosure {
 
   transitionend (e) {
     this.removeClass(CollapseSelector.COLLAPSING);
-    if (!this.disclosed) {
+    if (!this.isDisclosed) {
       if (this.isLegacy) this.style.maxHeight = '';
       else this.style.removeProperty('--collapse-max-height');
     }
@@ -2036,7 +2563,7 @@ class Collapse extends Disclosure {
   }
 
   disclose (withhold) {
-    if (this.disclosed) return;
+    if (this.isDisclosed === true || !this.isEnabled) return false;
     this.unbound();
     this.request(() => {
       this.addClass(CollapseSelector.COLLAPSING);
@@ -2048,7 +2575,7 @@ class Collapse extends Disclosure {
   }
 
   conceal (withhold, preventFocus) {
-    if (!this.disclosed) return;
+    if (this.isDisclosed === false) return false;
     this.request(() => {
       this.addClass(CollapseSelector.COLLAPSING);
       this.adjust();
@@ -2066,7 +2593,23 @@ class Collapse extends Disclosure {
   }
 
   reset () {
-    if (!this.pristine) this.disclosed = false;
+    if (!this.isPristine) this.isDisclosed = false;
+  }
+
+  _electPrimaries (candidates) {
+    const primary = this.element.parent.instances.map(instance => instance.collapsePrimary).filter(button => button !== undefined && candidates.indexOf(button) > -1);
+    if (primary.length === 1) return primary;
+    candidates = super._electPrimaries(candidates);
+    if (candidates.length === 1) return candidates;
+    const before = candidates.filter(candidate => candidate.dy >= 0);
+    if (before.length > 0) candidates = before;
+    if (candidates.length === 1) return candidates;
+    const min = Math.min(...candidates.map(candidate => candidate.dy));
+    const mins = candidates.filter(candidate => candidate.dy === min);
+    if (mins.length > 0) candidates = mins;
+    if (candidates.length === 1) return candidates;
+    candidates.sort((a, b) => Math.abs(b.dx) - Math.abs(a.dx));
+    return candidates;
   }
 }
 
@@ -2143,7 +2686,11 @@ class Toggle extends Instance {
 
   init () {
     this.pressed = this.pressed === 'true';
-    this.listen('click', this.toggle.bind(this));
+    this.listenClick();
+  }
+
+  handleClick () {
+    this.toggle();
   }
 
   toggle () {
@@ -2177,6 +2724,10 @@ class Toggle extends Instance {
     return completeAssign(proxy, proxyAccessors);
   }
 }
+
+const RootSelector = {
+  ROOT: ':root'
+};
 
 const setAttributes = (el, attrs) => {
   Object.keys(attrs).forEach(key => el.setAttribute(key, attrs[key]));
@@ -2294,7 +2845,7 @@ class Artwork extends Instance {
   }
 
   fetch () {
-    this.xlink = this.node.getAttribute('xlink:href');
+    this.xlink = this.node.getAttribute('href');
     const splitUrl = this.xlink.split('#');
     this.svgUrl = splitUrl[0];
     this.svgName = splitUrl[1];
@@ -2327,6 +2878,144 @@ class Artwork extends Instance {
 const ArtworkSelector = {
   ARTWORK_USE: `${ns.selector('artwork')} use`
 };
+
+const AssessSelector = {
+  ASSESS_FILE: `${ns.attr.selector('assess-file')}`,
+  DETAIL: `${ns.attr.selector('assess-file')} [class$="__detail"], ${ns.attr.selector('assess-file')} [class*="__detail "]`
+};
+
+const AssessEmission = {
+  UPDATE: ns.emission('assess', 'update'),
+  ADDED: ns.emission('assess', 'added')
+};
+
+class AssessFile extends Instance {
+  static get instanceClassName () {
+    return 'AssessFile';
+  }
+
+  init () {
+    this.lang = this.getLang(this.node);
+    this.href = this.getAttribute('href');
+    this.hreflang = this.getAttribute('hreflang');
+    this.file = {};
+    this.gather();
+    this.addAscent(AssessEmission.ADDED, this.update.bind(this));
+    this.addDescent(AssessEmission.ADDED, this.update.bind(this));
+  }
+
+  getFileLength () {
+    if (this.href === undefined) {
+      this.length = -1;
+      return;
+    }
+
+    fetch(this.href, { method: 'HEAD', mode: 'cors' }).then(response => {
+      this.length = response.headers.get('content-length') || -1;
+      if (this.length === -1) {
+        inspector.warn('File size unknown: ' + this.href + '\nUnable to get HTTP header: "content-length"');
+      }
+      this.gather();
+    });
+  }
+
+  mutate (attributeNames) {
+    if (attributeNames.indexOf('href') !== -1) {
+      this.href = this.getAttribute('href');
+      this.getFileLength();
+    }
+
+    if (attributeNames.indexOf('hreflang') !== -1) {
+      this.hreflang = this.getAttribute('hreflang');
+      this.gather();
+    }
+  }
+
+  gather () {
+    // TODO V2: implémenter async
+    if (this.isLegacy) this.length = -1;
+
+    if (!this.length) {
+      this.getFileLength();
+      return;
+    }
+
+    this.details = [];
+
+    if (this.href) {
+      const extension = this.parseExtension(this.href);
+      if (extension) this.details.push(extension.toUpperCase());
+    }
+
+    if (this.length !== -1) {
+      this.details.push(this.bytesToSize(this.length));
+    }
+
+    if (this.hreflang) {
+      this.details.push(this.getLangDisplayName(this.hreflang));
+    }
+
+    this.update();
+  }
+
+  update () {
+    if (!this.details) return;
+    this.descend(AssessEmission.UPDATE, this.details);
+    this.ascend(AssessEmission.UPDATE, this.details);
+  }
+
+  getLang (elem) {
+    // todo: ajouter un listener global de changement de langue
+    if (elem.lang) return elem.lang;
+    if (document.documentElement === elem) return window.navigator.language;
+    return this.getLang(elem.parentElement);
+  }
+
+  parseExtension (url) {
+    const regexExtension = /\.(\w{1,9})(?:$|[?#])/;
+    return url.match(regexExtension)[0].replace('.', '');
+  }
+
+  getLangDisplayName (locale) {
+    if (this.isLegacy) return locale;
+    const displayNames = new Intl.DisplayNames([this.lang], { type: 'language' });
+    const name = displayNames.of(locale);
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
+  bytesToSize (bytes) {
+    if (bytes === -1) return null;
+
+    let sizeUnits = ['octets', 'ko', 'Mo', 'Go', 'To'];
+    if (this.getAttribute(ns.attr('assess-file')) === 'bytes') {
+      sizeUnits = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+    }
+
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1000)), 10);
+    if (i === 0) return `${bytes} ${sizeUnits[i]}`;
+
+    const size = bytes / (1000 ** i);
+    const roundedSize = Math.round((size + Number.EPSILON) * 100) / 100; // arrondi a 2 décimal
+    const stringSize = String(roundedSize).replace('.', ',');
+
+    return `${stringSize} ${sizeUnits[i]}`;
+  }
+}
+
+class AssessDetail extends Instance {
+  static get instanceClassName () {
+    return 'AssessDetail';
+  }
+
+  init () {
+    this.addDescent(AssessEmission.UPDATE, this.update.bind(this));
+    this.ascend(AssessEmission.ADDED);
+  }
+
+  update (details) {
+    this.node.innerHTML = details.join(' - ');
+  }
+}
 
 const ratiosImg = ['32x9', '16x9', '3x2', '4x3', '1x1', '3x4', '2x3'];
 const ratiosVid = ['16x9', '4x3', '1x1'];
@@ -2375,6 +3064,402 @@ class Ratio extends Instance {
   }
 }
 
+const PlaceSelector = {
+  TOP: ns.selector('placement--top'),
+  RIGHT: ns.selector('placement--right'),
+  BOTTOM: ns.selector('placement--bottom'),
+  LEFT: ns.selector('placement--left')
+};
+
+const AlignSelector = {
+  START: ns.selector('placement--start'),
+  CENTER: ns.selector('placement--center'),
+  END: ns.selector('placement--end')
+};
+
+const PlacementPosition = {
+  TOP: 'place_top',
+  RIGHT: 'place_right',
+  BOTTOM: 'place_bottom',
+  LEFT: 'place_left'
+};
+
+const PlacementAlign = {
+  START: 'align_start',
+  CENTER: 'align_center',
+  END: 'align_end'
+};
+
+const PlacementMode = {
+  AUTO: 'placement_auto',
+  MANUAL: 'placement_manual'
+};
+
+class Placement extends Instance {
+  constructor (mode = PlacementMode.AUTO, places = [PlacementPosition.BOTTOM, PlacementPosition.TOP, PlacementPosition.LEFT, PlacementPosition.RIGHT], aligns = [PlacementAlign.CENTER, PlacementAlign.START, PlacementAlign.END], safeAreaMargin = 16) {
+    super();
+    this._mode = mode;
+    this._places = places;
+    this._aligns = aligns;
+    this._safeAreaMargin = safeAreaMargin;
+    this._isShown = false;
+  }
+
+  static get instanceClassName () {
+    return 'Placement';
+  }
+
+  init () {
+    this.isResizing = true;
+  }
+
+  get proxy () {
+    const scope = this;
+    const proxy = Object.assign(super.proxy, {
+      show: scope.show.bind(scope),
+      hide: scope.hide.bind(scope)
+    });
+
+    const proxyAccessors = {
+      get mode () {
+        return scope.mode;
+      },
+      set mode (value) {
+        scope.mode = value;
+      },
+      get place () {
+        return scope.place;
+      },
+      set place (value) {
+        scope.place = value;
+      },
+      get align () {
+        return scope.align;
+      },
+      set align (value) {
+        scope.align = value;
+      },
+      get isShown () {
+        return scope.isShown;
+      },
+      set isShown (value) {
+        scope.isShown = value;
+      }
+    };
+
+    return completeAssign(proxy, proxyAccessors);
+  }
+
+  get mode () {
+    return this._mode;
+  }
+
+  set mode (value) {
+    this._mode = value;
+  }
+
+  get place () {
+    return this._place;
+  }
+
+  set place (value) {
+    if (this._place === value) return;
+    switch (this._place) {
+      case PlacementPosition.TOP:
+        this.removeClass(PlaceSelector.TOP);
+        break;
+
+      case PlacementPosition.RIGHT:
+        this.removeClass(PlaceSelector.RIGHT);
+        break;
+
+      case PlacementPosition.BOTTOM:
+        this.removeClass(PlaceSelector.BOTTOM);
+        break;
+
+      case PlacementPosition.LEFT:
+        this.removeClass(PlaceSelector.LEFT);
+        break;
+    }
+    this._place = value;
+    switch (this._place) {
+      case PlacementPosition.TOP:
+        this.addClass(PlaceSelector.TOP);
+        break;
+
+      case PlacementPosition.RIGHT:
+        this.addClass(PlaceSelector.RIGHT);
+        break;
+
+      case PlacementPosition.BOTTOM:
+        this.addClass(PlaceSelector.BOTTOM);
+        break;
+
+      case PlacementPosition.LEFT:
+        this.addClass(PlaceSelector.LEFT);
+        break;
+    }
+  }
+
+  get align () {
+    return this._align;
+  }
+
+  set align (value) {
+    if (this._align === value) return;
+    switch (this._align) {
+      case PlacementAlign.START:
+        this.removeClass(AlignSelector.START);
+        break;
+
+      case PlacementAlign.CENTER:
+        this.removeClass(AlignSelector.CENTER);
+        break;
+
+      case PlacementAlign.END:
+        this.removeClass(AlignSelector.END);
+        break;
+    }
+    this._align = value;
+    switch (this._align) {
+      case PlacementAlign.START:
+        this.addClass(AlignSelector.START);
+        break;
+
+      case PlacementAlign.CENTER:
+        this.addClass(AlignSelector.CENTER);
+        break;
+
+      case PlacementAlign.END:
+        this.addClass(AlignSelector.END);
+        break;
+    }
+  }
+
+  show () {
+    this.isShown = true;
+  }
+
+  hide () {
+    this.isShown = false;
+  }
+
+  get isShown () {
+    return this._isShown;
+  }
+
+  set isShown (value) {
+    if (this._isShown === value || !this.isEnabled) return;
+    this.isRendering = value;
+    this._isShown = value;
+  }
+
+  setReferent (referent) {
+    this._referent = referent;
+  }
+
+  resize () {
+    this.safeArea = {
+      top: this._safeAreaMargin,
+      right: window.innerWidth - this._safeAreaMargin,
+      bottom: window.innerHeight - this._safeAreaMargin,
+      left: this._safeAreaMargin,
+      center: window.innerWidth * 0.5,
+      middle: window.innerHeight * 0.5
+    };
+  }
+
+  render () {
+    if (!this._referent) return;
+    this.rect = this.getRect();
+    this.referentRect = this._referent.getRect();
+
+    if (this.mode === PlacementMode.AUTO) {
+      this.place = this.getPlace();
+      switch (this.place) {
+        case PlacementPosition.TOP:
+        case PlacementPosition.BOTTOM:
+          this.align = this.getHorizontalAlign();
+          break;
+
+        case PlacementPosition.LEFT:
+        case PlacementPosition.RIGHT:
+          this.align = this.getVerticalAlign();
+      }
+    }
+
+    let x, y;
+
+    switch (this.place) {
+      case PlacementPosition.TOP:
+        y = this.referentRect.top - this.rect.height;
+        break;
+
+      case PlacementPosition.RIGHT:
+        x = this.referentRect.right;
+        break;
+
+      case PlacementPosition.BOTTOM:
+        y = this.referentRect.bottom;
+        break;
+
+      case PlacementPosition.LEFT:
+        x = this.referentRect.left - this.rect.width;
+        break;
+    }
+
+    switch (this.place) {
+      case PlacementPosition.TOP:
+      case PlacementPosition.BOTTOM:
+        switch (this.align) {
+          case PlacementAlign.CENTER:
+            x = this.referentRect.center - this.rect.width * 0.5;
+            break;
+
+          case PlacementAlign.START:
+            x = this.referentRect.left;
+            break;
+
+          case PlacementAlign.END:
+            x = this.referentRect.right - this.rect.width;
+            break;
+        }
+        break;
+
+      case PlacementPosition.RIGHT:
+      case PlacementPosition.LEFT:
+        switch (this.align) {
+          case PlacementAlign.CENTER:
+            y = this.referentRect.middle - this.rect.height * 0.5;
+            break;
+
+          case PlacementAlign.START:
+            y = this.referentRect.top;
+            break;
+
+          case PlacementAlign.END:
+            y = this.referentRect.bottom - this.rect.height;
+            break;
+        }
+        break;
+    }
+
+    if (this._x !== x || this._y !== y) {
+      this._x = (x + 0.5) | 0;
+      this._y = (y + 0.5) | 0;
+      this.node.style.transform = `translate(${this._x}px,${this._y}px)`;
+    }
+  }
+
+  getPlace () {
+    for (const place of this._places) {
+      switch (place) {
+        case PlacementPosition.TOP:
+          if (this.referentRect.top - this.rect.height > this.safeArea.top) return PlacementPosition.TOP;
+          break;
+
+        case PlacementPosition.RIGHT:
+          if (this.referentRect.right + this.rect.width < this.safeArea.right) return PlacementPosition.RIGHT;
+          break;
+
+        case PlacementPosition.BOTTOM:
+          if (this.referentRect.bottom + this.rect.height < this.safeArea.bottom) return PlacementPosition.BOTTOM;
+          break;
+
+        case PlacementPosition.LEFT:
+          if (this.referentRect.left - this.rect.width > this.safeArea.left) return PlacementPosition.LEFT;
+          break;
+      }
+    }
+
+    return this._places[0];
+  }
+
+  getHorizontalAlign () {
+    for (const align of this._aligns) {
+      switch (align) {
+        case PlacementAlign.CENTER:
+          if (this.referentRect.center - this.rect.width * 0.5 > this.safeArea.left && this.referentRect.center + this.rect.width * 0.5 < this.safeArea.right) return PlacementAlign.CENTER;
+          break;
+
+        case PlacementAlign.START:
+          if (this.referentRect.left + this.rect.width < this.safeArea.right) return PlacementAlign.START;
+          break;
+
+        case PlacementAlign.END:
+          if (this.referentRect.right - this.rect.width > this.safeArea.left) return PlacementAlign.END;
+          break;
+      }
+    }
+
+    return this._aligns[0];
+  }
+
+  getVerticalAlign () {
+    for (const align of this._aligns) {
+      switch (align) {
+        case PlacementAlign.CENTER:
+          if (this.referentRect.middle - this.rect.height * 0.5 > this.safeArea.top && this.referentRect.middle + this.rect.height * 0.5 < this.safeArea.bottom) return PlacementAlign.CENTER;
+          break;
+
+        case PlacementAlign.START:
+          if (this.referentRect.top + this.rect.height < this.safeArea.bottom) return PlacementAlign.START;
+          break;
+
+        case PlacementAlign.END:
+          if (this.referentRect.bottom - this.rect.height > this.safeArea.top) return PlacementAlign.END;
+          break;
+      }
+    }
+
+    return this._aligns[0];
+  }
+
+  dispose () {
+    this._referent = null;
+    super.dispose();
+  }
+}
+
+class PlacementReferent extends Instance {
+  constructor () {
+    super();
+    this._isShown = false;
+  }
+
+  static get instanceClassName () {
+    return 'PlacementReferent';
+  }
+
+  init () {
+    this.registration.creator.setReferent(this);
+    this._placement = this.registration.creator;
+  }
+
+  get placement () {
+    return this._placement;
+  }
+
+  get isShown () {
+    return this._isShown;
+  }
+
+  set isShown (value) {
+    if (this._isShown === value || !this.isEnabled) return;
+    this._isShown = value;
+    if (value) this.registration.creator.show();
+    else this.registration.creator.hide();
+  }
+
+  show () {
+    this.isShown = true;
+  }
+
+  hide () {
+    this.isShown = false;
+  }
+}
+
 api$1.core = {
   Instance: Instance,
   Breakpoints: Breakpoints,
@@ -2384,12 +3469,14 @@ api$1.core = {
   DisclosuresGroup: DisclosuresGroup,
   DisclosureType: DisclosureType,
   DisclosureEvent: DisclosureEvent,
+  DisclosureSelector: DisclosureSelector,
   DisclosureEmission: DisclosureEmission,
   Collapse: Collapse,
   CollapseButton: CollapseButton,
   CollapsesGroup: CollapsesGroup,
   CollapseSelector: CollapseSelector,
   RootSelector: RootSelector,
+  RootEmission: RootEmission,
   Equisized: Equisized,
   EquisizedEmission: EquisizedEmission,
   Toggle: Toggle,
@@ -2398,11 +3485,22 @@ api$1.core = {
   InjectSvgSelector: InjectSvgSelector,
   Artwork: Artwork,
   ArtworkSelector: ArtworkSelector,
+  AssessFile: AssessFile,
+  AssessDetail: AssessDetail,
+  AssessEmission: AssessEmission,
+  AssessSelector: AssessSelector,
   Ratio: Ratio,
-  RatioSelector: RatioSelector
+  RatioSelector: RatioSelector,
+  Placement: Placement,
+  PlacementReferent: PlacementReferent,
+  PlacementAlign: PlacementAlign,
+  PlacementPosition: PlacementPosition,
+  PlacementMode: PlacementMode
 };
 
 api$1.internals.register(api$1.core.CollapseSelector.COLLAPSE, api$1.core.Collapse);
 api$1.internals.register(api$1.core.InjectSvgSelector.INJECT_SVG, api$1.core.InjectSvg);
 api$1.internals.register(api$1.core.RatioSelector.RATIO, api$1.core.Ratio);
+api$1.internals.register(api$1.core.AssessSelector.ASSESS_FILE, api$1.core.AssessFile);
+api$1.internals.register(api$1.core.AssessSelector.DETAIL, api$1.core.AssessDetail);
 //# sourceMappingURL=core.module.js.map

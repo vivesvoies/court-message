@@ -1,4 +1,4 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 (function () {
   'use strict';
@@ -7,17 +7,23 @@
     prefix: 'fr',
     namespace: 'dsfr',
     organisation: '@gouvfr',
-    version: '1.8.5'
+    version: '1.10.0'
   };
 
   var api = window[config.namespace];
 
+  var ITEM = api.internals.ns.selector('nav__item');
+  var COLLAPSE = api.internals.ns.selector('collapse');
+
   var NavigationSelector = {
     NAVIGATION: api.internals.ns.selector('nav'),
-    COLLAPSE: ((api.internals.ns.selector('nav__item')) + " > " + (api.internals.ns.selector('collapse'))),
-    ITEM: api.internals.ns.selector('nav__item'),
-    ITEM_RIGHT: api.internals.ns('nav__item--align-right'),
-    MENU: api.internals.ns.selector('menu')
+    COLLAPSE: (ITEM + " > " + COLLAPSE + ", " + ITEM + " > *:not(" + ITEM + ", " + COLLAPSE + ") > " + COLLAPSE + ", " + ITEM + " > *:not(" + ITEM + ", " + COLLAPSE + ") > *:not(" + ITEM + ", " + COLLAPSE + ") > " + COLLAPSE),
+    COLLAPSE_LEGACY: (ITEM + " " + COLLAPSE),
+    ITEM: ITEM,
+    ITEM_RIGHT: (ITEM + "--align-right"),
+    MENU: api.internals.ns.selector('menu'),
+    BUTTON: api.internals.ns.selector('nav__btn'),
+    TRANSLATE_BUTTON: api.internals.ns.selector('translate__btn')
   };
 
   var NavigationItem = /*@__PURE__*/(function (superclass) {
@@ -30,7 +36,7 @@
     NavigationItem.prototype = Object.create( superclass && superclass.prototype );
     NavigationItem.prototype.constructor = NavigationItem;
 
-    var prototypeAccessors = { isRightAligned: { configurable: true } };
+    var prototypeAccessors = { isRightAligned: { configurable: true },collapsePrimary: { configurable: true } };
     var staticAccessors = { instanceClassName: { configurable: true } };
 
     staticAccessors.instanceClassName.get = function () {
@@ -69,6 +75,11 @@
       else { api.internals.dom.removeClass(this.element.node, NavigationSelector.ITEM_RIGHT); }
     };
 
+    prototypeAccessors.collapsePrimary.get = function () {
+      var buttons = this.element.children.map(function (child) { return child.getInstance('CollapseButton'); }).filter(function (button) { return button !== null && (button.hasClass(NavigationSelector.BUTTON) || button.hasClass(NavigationSelector.TRANSLATE_BUTTON)); });
+      return buttons[0];
+    };
+
     Object.defineProperties( NavigationItem.prototype, prototypeAccessors );
     Object.defineProperties( NavigationItem, staticAccessors );
 
@@ -101,21 +112,26 @@
       superclass.prototype.init.call(this);
       this.clicked = false;
       this.out = false;
-      this.listen('focusout', this.focusOut.bind(this));
-      this.listen('mousedown', this.down.bind(this));
+      this.listen('focusout', this.focusOutHandler.bind(this));
+      this.listen('mousedown', this.mouseDownHandler.bind(this));
+      this.listenClick({ capture: true });
     };
 
     Navigation.prototype.validate = function validate (member) {
-      return member.element.node.matches(NavigationSelector.COLLAPSE);
+      return superclass.prototype.validate.call(this, member) && member.element.node.matches(api.internals.legacy.isLegacy ? NavigationSelector.COLLAPSE_LEGACY : NavigationSelector.COLLAPSE);
     };
 
-    Navigation.prototype.down = function down (e) {
+    Navigation.prototype.mouseDownHandler = function mouseDownHandler (e) {
       if (!this.isBreakpoint(api.core.Breakpoints.LG) || this.index === -1 || !this.current) { return; }
       this.position = this.current.node.contains(e.target) ? NavigationMousePosition.INSIDE : NavigationMousePosition.OUTSIDE;
       this.requestPosition();
     };
 
-    Navigation.prototype.focusOut = function focusOut (e) {
+    Navigation.prototype.clickHandler = function clickHandler (e) {
+      if (e.target.matches('a, button') && !e.target.matches('[aria-controls]') && !e.target.matches(api.core.DisclosureSelector.PREVENT_CONCEAL)) { this.index = -1; }
+    };
+
+    Navigation.prototype.focusOutHandler = function focusOutHandler (e) {
       if (!this.isBreakpoint(api.core.Breakpoints.LG)) { return; }
       this.out = true;
       this.requestPosition();
@@ -155,7 +171,7 @@
     prototypeAccessors.index.get = function () { return superclass.prototype.index; };
 
     prototypeAccessors.index.set = function (value) {
-      if (value === -1 && this.current !== null && this.current.hasFocus) { this.current.focus(); }
+      if (value === -1 && this.current && this.current.hasFocus) { this.current.focus(); }
       superclass.prototype.index = value;
     };
 

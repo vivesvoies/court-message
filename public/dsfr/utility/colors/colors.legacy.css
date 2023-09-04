@@ -1,5 +1,5 @@
 /*!
- * DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
+ * DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
  */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   .fr-background-default--grey {
@@ -544,6 +544,82 @@
 
   .fr-background-flat--grey {
     background-color: #3a3a3a !important;
+  }
+
+  .fr-background-flat--blue-france {
+    background-color: #000091 !important;
+  }
+
+  .fr-background-flat--red-marianne {
+    background-color: #c9191e !important;
+  }
+
+  .fr-background-flat--green-tilleul-verveine {
+    background-color: #66673d !important;
+  }
+
+  .fr-background-flat--green-bourgeon {
+    background-color: #447049 !important;
+  }
+
+  .fr-background-flat--green-emeraude {
+    background-color: #297254 !important;
+  }
+
+  .fr-background-flat--green-menthe {
+    background-color: #37635f !important;
+  }
+
+  .fr-background-flat--green-archipel {
+    background-color: #006a6f !important;
+  }
+
+  .fr-background-flat--blue-ecume {
+    background-color: #2f4077 !important;
+  }
+
+  .fr-background-flat--blue-cumulus {
+    background-color: #3558a2 !important;
+  }
+
+  .fr-background-flat--purple-glycine {
+    background-color: #6e445a !important;
+  }
+
+  .fr-background-flat--pink-macaron {
+    background-color: #8d533e !important;
+  }
+
+  .fr-background-flat--pink-tuile {
+    background-color: #a94645 !important;
+  }
+
+  .fr-background-flat--yellow-tournesol {
+    background-color: #716043 !important;
+  }
+
+  .fr-background-flat--yellow-moutarde {
+    background-color: #695240 !important;
+  }
+
+  .fr-background-flat--orange-terre-battue {
+    background-color: #755348 !important;
+  }
+
+  .fr-background-flat--brown-cafe-creme {
+    background-color: #685c48 !important;
+  }
+
+  .fr-background-flat--brown-caramel {
+    background-color: #845d48 !important;
+  }
+
+  .fr-background-flat--brown-opera {
+    background-color: #745b47 !important;
+  }
+
+  .fr-background-flat--beige-gris-galet {
+    background-color: #6a6156 !important;
   }
 
   .fr-background-flat--info {
@@ -1510,6 +1586,10 @@
     fill: #aea397 !important;
   }
 
+  .fr-artwork-decorative--grey {
+    fill: #eee !important;
+  }
+
   .fr-artwork-decorative--blue-france {
     fill: #ececfe !important;
   }
@@ -1518,11 +1598,231 @@
     fill: #fee9e9 !important;
   }
 
+  .fr-artwork-decorative--green-tilleul-verveine {
+    fill: #fceeac !important;
+  }
+
+  .fr-artwork-decorative--green-bourgeon {
+    fill: #c9fcac !important;
+  }
+
+  .fr-artwork-decorative--green-emeraude {
+    fill: #c3fad5 !important;
+  }
+
+  .fr-artwork-decorative--green-menthe {
+    fill: #bafaee !important;
+  }
+
+  .fr-artwork-decorative--green-archipel {
+    fill: #c7f6fc !important;
+  }
+
+  .fr-artwork-decorative--blue-ecume {
+    fill: #e9edfe !important;
+  }
+
+  .fr-artwork-decorative--blue-cumulus {
+    fill: #e6eefe !important;
+  }
+
+  .fr-artwork-decorative--purple-glycine {
+    fill: #fee7fc !important;
+  }
+
+  .fr-artwork-decorative--pink-macaron {
+    fill: #fee9e6 !important;
+  }
+
+  .fr-artwork-decorative--pink-tuile {
+    fill: #fee9e7 !important;
+  }
+
+  .fr-artwork-decorative--yellow-tournesol {
+    fill: #feecc2 !important;
+  }
+
+  .fr-artwork-decorative--yellow-moutarde {
+    fill: #feebd0 !important;
+  }
+
+  .fr-artwork-decorative--orange-terre-battue {
+    fill: #fee9e5 !important;
+  }
+
+  .fr-artwork-decorative--brown-cafe-creme {
+    fill: #f7ecdb !important;
+  }
+
+  .fr-artwork-decorative--brown-caramel {
+    fill: #f7ebe5 !important;
+  }
+
+  .fr-artwork-decorative--brown-opera {
+    fill: #f7ece4 !important;
+  }
+
+  .fr-artwork-decorative--beige-gris-galet {
+    fill: #f3ede5 !important;
+  }
+
   .fr-artwork-background--grey {
     fill: #f6f6f6 !important;
   }
 
+  .fr-artwork-background--blue-france {
+    fill: #f5f5fe !important;
+  }
+
+  .fr-artwork-background--red-marianne {
+    fill: #fef4f4 !important;
+  }
+
+  .fr-artwork-background--green-tilleul-verveine {
+    fill: #fef7da !important;
+  }
+
+  .fr-artwork-background--green-bourgeon {
+    fill: #e6feda !important;
+  }
+
+  .fr-artwork-background--green-emeraude {
+    fill: #e3fdeb !important;
+  }
+
+  .fr-artwork-background--green-menthe {
+    fill: #dffdf7 !important;
+  }
+
+  .fr-artwork-background--green-archipel {
+    fill: #e5fbfd !important;
+  }
+
+  .fr-artwork-background--blue-ecume {
+    fill: #f4f6fe !important;
+  }
+
+  .fr-artwork-background--blue-cumulus {
+    fill: #f3f6fe !important;
+  }
+
+  .fr-artwork-background--purple-glycine {
+    fill: #fef3fd !important;
+  }
+
+  .fr-artwork-background--pink-macaron {
+    fill: #fef4f2 !important;
+  }
+
+  .fr-artwork-background--pink-tuile {
+    fill: #fef4f3 !important;
+  }
+
+  .fr-artwork-background--yellow-tournesol {
+    fill: #fef6e3 !important;
+  }
+
+  .fr-artwork-background--yellow-moutarde {
+    fill: #fef5e8 !important;
+  }
+
+  .fr-artwork-background--orange-terre-battue {
+    fill: #fef4f2 !important;
+  }
+
+  .fr-artwork-background--brown-cafe-creme {
+    fill: #fbf6ed !important;
+  }
+
+  .fr-artwork-background--brown-caramel {
+    fill: #fbf5f2 !important;
+  }
+
+  .fr-artwork-background--brown-opera {
+    fill: #fbf5f2 !important;
+  }
+
+  .fr-artwork-background--beige-gris-galet {
+    fill: #f9f6f2 !important;
+  }
+
   .fr-artwork-motif--grey {
     fill: #e5e5e5 !important;
+  }
+
+  .fr-artwork-motif--blue-france {
+    fill: #e3e3fd !important;
+  }
+
+  .fr-artwork-motif--red-marianne {
+    fill: #fddede !important;
+  }
+
+  .fr-artwork-motif--green-tilleul-verveine {
+    fill: #fbe769 !important;
+  }
+
+  .fr-artwork-motif--green-bourgeon {
+    fill: #a9fb68 !important;
+  }
+
+  .fr-artwork-motif--green-emeraude {
+    fill: #9ef9be !important;
+  }
+
+  .fr-artwork-motif--green-menthe {
+    fill: #8bf8e7 !important;
+  }
+
+  .fr-artwork-motif--green-archipel {
+    fill: #a6f2fa !important;
+  }
+
+  .fr-artwork-motif--blue-ecume {
+    fill: #dee5fd !important;
+  }
+
+  .fr-artwork-motif--blue-cumulus {
+    fill: #dae6fd !important;
+  }
+
+  .fr-artwork-motif--purple-glycine {
+    fill: #fddbfa !important;
+  }
+
+  .fr-artwork-motif--pink-macaron {
+    fill: #fddfda !important;
+  }
+
+  .fr-artwork-motif--pink-tuile {
+    fill: #fddfdb !important;
+  }
+
+  .fr-artwork-motif--yellow-tournesol {
+    fill: #fde39c !important;
+  }
+
+  .fr-artwork-motif--yellow-moutarde {
+    fill: #fde2b5 !important;
+  }
+
+  .fr-artwork-motif--orange-terre-battue {
+    fill: #fddfd8 !important;
+  }
+
+  .fr-artwork-motif--brown-cafe-creme {
+    fill: #f4e3c7 !important;
+  }
+
+  .fr-artwork-motif--brown-caramel {
+    fill: #f3e2d9 !important;
+  }
+
+  .fr-artwork-motif--brown-opera {
+    fill: #f3e2d7 !important;
+  }
+
+  .fr-artwork-motif--beige-gris-galet {
+    fill: #eee4d9 !important;
   }
 }

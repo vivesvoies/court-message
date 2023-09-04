@@ -1,20 +1,26 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 const config = {
   prefix: 'fr',
   namespace: 'dsfr',
   organisation: '@gouvfr',
-  version: '1.8.5'
+  version: '1.10.0'
 };
 
 const api = window[config.namespace];
 
+const ITEM = api.internals.ns.selector('nav__item');
+const COLLAPSE = api.internals.ns.selector('collapse');
+
 const NavigationSelector = {
   NAVIGATION: api.internals.ns.selector('nav'),
-  COLLAPSE: `${api.internals.ns.selector('nav__item')} > ${api.internals.ns.selector('collapse')}`,
-  ITEM: api.internals.ns.selector('nav__item'),
-  ITEM_RIGHT: api.internals.ns('nav__item--align-right'),
-  MENU: api.internals.ns.selector('menu')
+  COLLAPSE: `${ITEM} > ${COLLAPSE}, ${ITEM} > *:not(${ITEM}, ${COLLAPSE}) > ${COLLAPSE}, ${ITEM} > *:not(${ITEM}, ${COLLAPSE}) > *:not(${ITEM}, ${COLLAPSE}) > ${COLLAPSE}`,
+  COLLAPSE_LEGACY: `${ITEM} ${COLLAPSE}`,
+  ITEM: ITEM,
+  ITEM_RIGHT: `${ITEM}--align-right`,
+  MENU: api.internals.ns.selector('menu'),
+  BUTTON: api.internals.ns.selector('nav__btn'),
+  TRANSLATE_BUTTON: api.internals.ns.selector('translate__btn')
 };
 
 class NavigationItem extends api.core.Instance {
@@ -58,6 +64,11 @@ class NavigationItem extends api.core.Instance {
     if (value) api.internals.dom.addClass(this.element.node, NavigationSelector.ITEM_RIGHT);
     else api.internals.dom.removeClass(this.element.node, NavigationSelector.ITEM_RIGHT);
   }
+
+  get collapsePrimary () {
+    const buttons = this.element.children.map(child => child.getInstance('CollapseButton')).filter(button => button !== null && (button.hasClass(NavigationSelector.BUTTON) || button.hasClass(NavigationSelector.TRANSLATE_BUTTON)));
+    return buttons[0];
+  }
 }
 
 const NavigationMousePosition = {
@@ -75,21 +86,26 @@ class Navigation extends api.core.CollapsesGroup {
     super.init();
     this.clicked = false;
     this.out = false;
-    this.listen('focusout', this.focusOut.bind(this));
-    this.listen('mousedown', this.down.bind(this));
+    this.listen('focusout', this.focusOutHandler.bind(this));
+    this.listen('mousedown', this.mouseDownHandler.bind(this));
+    this.listenClick({ capture: true });
   }
 
   validate (member) {
-    return member.element.node.matches(NavigationSelector.COLLAPSE);
+    return super.validate(member) && member.element.node.matches(api.internals.legacy.isLegacy ? NavigationSelector.COLLAPSE_LEGACY : NavigationSelector.COLLAPSE);
   }
 
-  down (e) {
+  mouseDownHandler (e) {
     if (!this.isBreakpoint(api.core.Breakpoints.LG) || this.index === -1 || !this.current) return;
     this.position = this.current.node.contains(e.target) ? NavigationMousePosition.INSIDE : NavigationMousePosition.OUTSIDE;
     this.requestPosition();
   }
 
-  focusOut (e) {
+  clickHandler (e) {
+    if (e.target.matches('a, button') && !e.target.matches('[aria-controls]') && !e.target.matches(api.core.DisclosureSelector.PREVENT_CONCEAL)) this.index = -1;
+  }
+
+  focusOutHandler (e) {
     if (!this.isBreakpoint(api.core.Breakpoints.LG)) return;
     this.out = true;
     this.requestPosition();
@@ -129,7 +145,7 @@ class Navigation extends api.core.CollapsesGroup {
   get index () { return super.index; }
 
   set index (value) {
-    if (value === -1 && this.current !== null && this.current.hasFocus) this.current.focus();
+    if (value === -1 && this.current && this.current.hasFocus) this.current.focus();
     super.index = value;
   }
 }

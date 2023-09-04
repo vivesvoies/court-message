@@ -1,5 +1,5 @@
 /*!
- * DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
+ * DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
  */
 @media (min-width: 36em) {
   /*! media sm */
@@ -3017,6 +3017,11 @@
     background-image: url("../../icons/system/fr--arrow-left-s-line-double.svg");
   }
 
+  .fr-icon-arrow-right-down-circle-fill::before,
+  .fr-icon-arrow-right-down-circle-fill::after {
+    background-image: url("../../icons/system/fr--arrow-right-down-circle-fill.svg");
+  }
+
   .fr-icon-arrow-right-s-last-line::before,
   .fr-icon-arrow-right-s-last-line::after {
     background-image: url("../../icons/system/fr--arrow-right-s-last-line.svg");
@@ -3027,9 +3032,19 @@
     background-image: url("../../icons/system/fr--arrow-right-s-line-double.svg");
   }
 
+  .fr-icon-arrow-right-up-circle-fill::before,
+  .fr-icon-arrow-right-up-circle-fill::after {
+    background-image: url("../../icons/system/fr--arrow-right-up-circle-fill.svg");
+  }
+
   .fr-icon-capslock-line::before,
   .fr-icon-capslock-line::after {
     background-image: url("../../icons/system/fr--capslock-line.svg");
+  }
+
+  .fr-icon-equal-circle-fill::before,
+  .fr-icon-equal-circle-fill::after {
+    background-image: url("../../icons/system/fr--equal-circle-fill.svg");
   }
 
   .fr-icon-error-fill::before,

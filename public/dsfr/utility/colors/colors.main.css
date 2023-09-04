@@ -1,5 +1,5 @@
 /*!
- * DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
+ * DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
  */
 .fr-background-default--grey {
   background-color: var(--background-default-grey) !important;
@@ -363,6 +363,82 @@
 
 .fr-background-flat--grey {
   background-color: var(--background-flat-grey) !important;
+}
+
+.fr-background-flat--blue-france {
+  background-color: var(--background-flat-blue-france) !important;
+}
+
+.fr-background-flat--red-marianne {
+  background-color: var(--background-flat-red-marianne) !important;
+}
+
+.fr-background-flat--green-tilleul-verveine {
+  background-color: var(--background-flat-green-tilleul-verveine) !important;
+}
+
+.fr-background-flat--green-bourgeon {
+  background-color: var(--background-flat-green-bourgeon) !important;
+}
+
+.fr-background-flat--green-emeraude {
+  background-color: var(--background-flat-green-emeraude) !important;
+}
+
+.fr-background-flat--green-menthe {
+  background-color: var(--background-flat-green-menthe) !important;
+}
+
+.fr-background-flat--green-archipel {
+  background-color: var(--background-flat-green-archipel) !important;
+}
+
+.fr-background-flat--blue-ecume {
+  background-color: var(--background-flat-blue-ecume) !important;
+}
+
+.fr-background-flat--blue-cumulus {
+  background-color: var(--background-flat-blue-cumulus) !important;
+}
+
+.fr-background-flat--purple-glycine {
+  background-color: var(--background-flat-purple-glycine) !important;
+}
+
+.fr-background-flat--pink-macaron {
+  background-color: var(--background-flat-pink-macaron) !important;
+}
+
+.fr-background-flat--pink-tuile {
+  background-color: var(--background-flat-pink-tuile) !important;
+}
+
+.fr-background-flat--yellow-tournesol {
+  background-color: var(--background-flat-yellow-tournesol) !important;
+}
+
+.fr-background-flat--yellow-moutarde {
+  background-color: var(--background-flat-yellow-moutarde) !important;
+}
+
+.fr-background-flat--orange-terre-battue {
+  background-color: var(--background-flat-orange-terre-battue) !important;
+}
+
+.fr-background-flat--brown-cafe-creme {
+  background-color: var(--background-flat-brown-cafe-creme) !important;
+}
+
+.fr-background-flat--brown-caramel {
+  background-color: var(--background-flat-brown-caramel) !important;
+}
+
+.fr-background-flat--brown-opera {
+  background-color: var(--background-flat-brown-opera) !important;
+}
+
+.fr-background-flat--beige-gris-galet {
+  background-color: var(--background-flat-beige-gris-galet) !important;
 }
 
 .fr-background-flat--info {
@@ -1161,6 +1237,10 @@
   fill: var(--artwork-minor-beige-gris-galet) !important;
 }
 
+.fr-artwork-decorative--grey {
+  fill: var(--artwork-decorative-grey) !important;
+}
+
 .fr-artwork-decorative--blue-france {
   fill: var(--artwork-decorative-blue-france) !important;
 }
@@ -1169,10 +1249,230 @@
   fill: var(--artwork-decorative-red-marianne) !important;
 }
 
+.fr-artwork-decorative--green-tilleul-verveine {
+  fill: var(--artwork-decorative-green-tilleul-verveine) !important;
+}
+
+.fr-artwork-decorative--green-bourgeon {
+  fill: var(--artwork-decorative-green-bourgeon) !important;
+}
+
+.fr-artwork-decorative--green-emeraude {
+  fill: var(--artwork-decorative-green-emeraude) !important;
+}
+
+.fr-artwork-decorative--green-menthe {
+  fill: var(--artwork-decorative-green-menthe) !important;
+}
+
+.fr-artwork-decorative--green-archipel {
+  fill: var(--artwork-decorative-green-archipel) !important;
+}
+
+.fr-artwork-decorative--blue-ecume {
+  fill: var(--artwork-decorative-blue-ecume) !important;
+}
+
+.fr-artwork-decorative--blue-cumulus {
+  fill: var(--artwork-decorative-blue-cumulus) !important;
+}
+
+.fr-artwork-decorative--purple-glycine {
+  fill: var(--artwork-decorative-purple-glycine) !important;
+}
+
+.fr-artwork-decorative--pink-macaron {
+  fill: var(--artwork-decorative-pink-macaron) !important;
+}
+
+.fr-artwork-decorative--pink-tuile {
+  fill: var(--artwork-decorative-pink-tuile) !important;
+}
+
+.fr-artwork-decorative--yellow-tournesol {
+  fill: var(--artwork-decorative-yellow-tournesol) !important;
+}
+
+.fr-artwork-decorative--yellow-moutarde {
+  fill: var(--artwork-decorative-yellow-moutarde) !important;
+}
+
+.fr-artwork-decorative--orange-terre-battue {
+  fill: var(--artwork-decorative-orange-terre-battue) !important;
+}
+
+.fr-artwork-decorative--brown-cafe-creme {
+  fill: var(--artwork-decorative-brown-cafe-creme) !important;
+}
+
+.fr-artwork-decorative--brown-caramel {
+  fill: var(--artwork-decorative-brown-caramel) !important;
+}
+
+.fr-artwork-decorative--brown-opera {
+  fill: var(--artwork-decorative-brown-opera) !important;
+}
+
+.fr-artwork-decorative--beige-gris-galet {
+  fill: var(--artwork-decorative-beige-gris-galet) !important;
+}
+
 .fr-artwork-background--grey {
   fill: var(--artwork-background-grey) !important;
 }
 
+.fr-artwork-background--blue-france {
+  fill: var(--artwork-background-blue-france) !important;
+}
+
+.fr-artwork-background--red-marianne {
+  fill: var(--artwork-background-red-marianne) !important;
+}
+
+.fr-artwork-background--green-tilleul-verveine {
+  fill: var(--artwork-background-green-tilleul-verveine) !important;
+}
+
+.fr-artwork-background--green-bourgeon {
+  fill: var(--artwork-background-green-bourgeon) !important;
+}
+
+.fr-artwork-background--green-emeraude {
+  fill: var(--artwork-background-green-emeraude) !important;
+}
+
+.fr-artwork-background--green-menthe {
+  fill: var(--artwork-background-green-menthe) !important;
+}
+
+.fr-artwork-background--green-archipel {
+  fill: var(--artwork-background-green-archipel) !important;
+}
+
+.fr-artwork-background--blue-ecume {
+  fill: var(--artwork-background-blue-ecume) !important;
+}
+
+.fr-artwork-background--blue-cumulus {
+  fill: var(--artwork-background-blue-cumulus) !important;
+}
+
+.fr-artwork-background--purple-glycine {
+  fill: var(--artwork-background-purple-glycine) !important;
+}
+
+.fr-artwork-background--pink-macaron {
+  fill: var(--artwork-background-pink-macaron) !important;
+}
+
+.fr-artwork-background--pink-tuile {
+  fill: var(--artwork-background-pink-tuile) !important;
+}
+
+.fr-artwork-background--yellow-tournesol {
+  fill: var(--artwork-background-yellow-tournesol) !important;
+}
+
+.fr-artwork-background--yellow-moutarde {
+  fill: var(--artwork-background-yellow-moutarde) !important;
+}
+
+.fr-artwork-background--orange-terre-battue {
+  fill: var(--artwork-background-orange-terre-battue) !important;
+}
+
+.fr-artwork-background--brown-cafe-creme {
+  fill: var(--artwork-background-brown-cafe-creme) !important;
+}
+
+.fr-artwork-background--brown-caramel {
+  fill: var(--artwork-background-brown-caramel) !important;
+}
+
+.fr-artwork-background--brown-opera {
+  fill: var(--artwork-background-brown-opera) !important;
+}
+
+.fr-artwork-background--beige-gris-galet {
+  fill: var(--artwork-background-beige-gris-galet) !important;
+}
+
 .fr-artwork-motif--grey {
   fill: var(--artwork-motif-grey) !important;
+}
+
+.fr-artwork-motif--blue-france {
+  fill: var(--artwork-motif-blue-france) !important;
+}
+
+.fr-artwork-motif--red-marianne {
+  fill: var(--artwork-motif-red-marianne) !important;
+}
+
+.fr-artwork-motif--green-tilleul-verveine {
+  fill: var(--artwork-motif-green-tilleul-verveine) !important;
+}
+
+.fr-artwork-motif--green-bourgeon {
+  fill: var(--artwork-motif-green-bourgeon) !important;
+}
+
+.fr-artwork-motif--green-emeraude {
+  fill: var(--artwork-motif-green-emeraude) !important;
+}
+
+.fr-artwork-motif--green-menthe {
+  fill: var(--artwork-motif-green-menthe) !important;
+}
+
+.fr-artwork-motif--green-archipel {
+  fill: var(--artwork-motif-green-archipel) !important;
+}
+
+.fr-artwork-motif--blue-ecume {
+  fill: var(--artwork-motif-blue-ecume) !important;
+}
+
+.fr-artwork-motif--blue-cumulus {
+  fill: var(--artwork-motif-blue-cumulus) !important;
+}
+
+.fr-artwork-motif--purple-glycine {
+  fill: var(--artwork-motif-purple-glycine) !important;
+}
+
+.fr-artwork-motif--pink-macaron {
+  fill: var(--artwork-motif-pink-macaron) !important;
+}
+
+.fr-artwork-motif--pink-tuile {
+  fill: var(--artwork-motif-pink-tuile) !important;
+}
+
+.fr-artwork-motif--yellow-tournesol {
+  fill: var(--artwork-motif-yellow-tournesol) !important;
+}
+
+.fr-artwork-motif--yellow-moutarde {
+  fill: var(--artwork-motif-yellow-moutarde) !important;
+}
+
+.fr-artwork-motif--orange-terre-battue {
+  fill: var(--artwork-motif-orange-terre-battue) !important;
+}
+
+.fr-artwork-motif--brown-cafe-creme {
+  fill: var(--artwork-motif-brown-cafe-creme) !important;
+}
+
+.fr-artwork-motif--brown-caramel {
+  fill: var(--artwork-motif-brown-caramel) !important;
+}
+
+.fr-artwork-motif--brown-opera {
+  fill: var(--artwork-motif-brown-opera) !important;
+}
+
+.fr-artwork-motif--beige-gris-galet {
+  fill: var(--artwork-motif-beige-gris-galet) !important;
 }

@@ -1,18 +1,19 @@
-/*! DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
+/*! DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions) */
 
 const config = {
   prefix: 'fr',
   namespace: 'dsfr',
   organisation: '@gouvfr',
-  version: '1.8.5'
+  version: '1.10.0'
 };
 
 const api = window[config.namespace];
 
 const ModalSelector = {
   MODAL: api.internals.ns.selector('modal'),
-  SCROLL_SHADOW: api.internals.ns.selector('scroll-shadow'),
-  BODY: api.internals.ns.selector('modal__body')
+  SCROLL_DIVIDER: api.internals.ns.selector('scroll-divider'),
+  BODY: api.internals.ns.selector('modal__body'),
+  TITLE: api.internals.ns.selector('modal__title')
 };
 
 class ModalButton extends api.core.DisclosureButton {
@@ -32,6 +33,7 @@ const ModalAttribute = {
 class Modal extends api.core.Disclosure {
   constructor () {
     super(api.core.DisclosureType.OPENED, ModalSelector.MODAL, ModalButton, 'ModalsGroup');
+    this._isActive = false;
     this.scrolling = this.resize.bind(this, false);
     this.resizing = this.resize.bind(this, true);
   }
@@ -42,15 +44,50 @@ class Modal extends api.core.Disclosure {
 
   init () {
     super.init();
-    this.listen('click', this.click.bind(this));
-    this.listenKey(api.core.KeyCodes.ESCAPE, this.conceal.bind(this, false, false), true, true);
+    this._isDialog = this.node.tagName === 'DIALOG';
+    this.isScrolling = false;
+    this.listenClick();
+    this.addEmission(api.core.RootEmission.KEYDOWN, this._keydown.bind(this));
+  }
+
+  _keydown (keyCode) {
+    switch (keyCode) {
+      case api.core.KeyCodes.ESCAPE:
+        this._escape();
+        break;
+    }
+  }
+
+  // TODO v2 : passer les tagName d'action en constante
+  _escape () {
+    const tagName = document.activeElement ? document.activeElement.tagName : undefined;
+
+    switch (tagName) {
+      case 'INPUT':
+      case 'LABEL':
+      case 'TEXTAREA':
+      case 'SELECT':
+      case 'AUDIO':
+      case 'VIDEO':
+        break;
+
+      default:
+        if (this.isDisclosed) {
+          this.conceal();
+          this.focus();
+        }
+    }
+  }
+
+  retrieved () {
+    this._ensureAccessibleName();
   }
 
   get body () {
     return this.element.getDescendantInstances('ModalBody', 'Modal')[0];
   }
 
-  click (e) {
+  handleClick (e) {
     if (e.target === this.node && this.getAttribute(ModalAttribute.CONCEALING_BACKDROP) !== 'false') this.conceal();
   }
 
@@ -60,6 +97,9 @@ class Modal extends api.core.Disclosure {
     this.isScrollLocked = true;
     this.setAttribute('aria-modal', 'true');
     this.setAttribute('open', 'true');
+    if (!this._isDialog) {
+      this.activateModal();
+    }
     return true;
   }
 
@@ -69,7 +109,55 @@ class Modal extends api.core.Disclosure {
     this.removeAttribute('aria-modal');
     this.removeAttribute('open');
     if (this.body) this.body.deactivate();
+    if (!this._isDialog) {
+      this.deactivateModal();
+    }
     return true;
+  }
+
+  get isDialog () {
+    return this._isDialog;
+  }
+
+  set isDialog (value) {
+    this._isDialog = value;
+  }
+
+  activateModal () {
+    if (this._isActive) return;
+    this._isActive = true;
+    this._hasDialogRole = this.getAttribute('role') === 'dialog';
+    if (!this._hasDialogRole) this.setAttribute('role', 'dialog');
+  }
+
+  deactivateModal () {
+    if (!this._isActive) return;
+    this._isActive = false;
+    if (!this._hasDialogRole) this.removeAttribute('role');
+  }
+
+  _setAccessibleName (node, append) {
+    const id = this.retrieveNodeId(node, append);
+    this.warn(`add reference to ${append} for accessible name (aria-labelledby)`);
+    this.setAttribute('aria-labelledby', id);
+  }
+
+  _ensureAccessibleName () {
+    if (this.hasAttribute('aria-labelledby') || this.hasAttribute('aria-label')) return;
+    this.warn('missing accessible name');
+    const title = this.node.querySelector(ModalSelector.TITLE);
+    const primary = this.primaryButtons[0];
+
+    switch (true) {
+      case title !== null:
+        this._setAccessibleName(title, 'title');
+        break;
+
+      case primary !== undefined:
+        this.warn('missing required title, fallback to primary button');
+        this._setAccessibleName(primary, 'primary');
+        break;
+    }
   }
 }
 
@@ -148,7 +236,7 @@ class FocusTrap {
     if (!this.isTrapping) return;
     this.isTrapping = false;
     const focusables = this.focusables;
-    if (focusables.length) focusables[0].focus();
+    if (focusables.length && focusables.indexOf(document.activeElement) === -1) focusables[0].focus();
     this.element.setAttribute('aria-modal', true);
     window.addEventListener('keydown', this.handling);
     document.body.addEventListener('focus', this.focusing, true);
@@ -318,7 +406,7 @@ class ModalBody extends api.core.Instance {
   }
 
   init () {
-    this.listen('scroll', this.shade.bind(this));
+    this.listen('scroll', this.divide.bind(this));
   }
 
   activate () {
@@ -330,15 +418,15 @@ class ModalBody extends api.core.Instance {
     this.isResizing = false;
   }
 
-  shade () {
+  divide () {
     if (this.node.scrollHeight > this.node.clientHeight) {
       if (this.node.offsetHeight + this.node.scrollTop >= this.node.scrollHeight) {
-        this.removeClass(ModalSelector.SCROLL_SHADOW);
+        this.removeClass(ModalSelector.SCROLL_DIVIDER);
       } else {
-        this.addClass(ModalSelector.SCROLL_SHADOW);
+        this.addClass(ModalSelector.SCROLL_DIVIDER);
       }
     } else {
-      this.removeClass(ModalSelector.SCROLL_SHADOW);
+      this.removeClass(ModalSelector.SCROLL_DIVIDER);
     }
   }
 
@@ -351,7 +439,7 @@ class ModalBody extends api.core.Instance {
     const offset = OFFSET * (this.isBreakpoint(api.core.Breakpoints.MD) ? 2 : 1);
     if (this.isLegacy) this.style.maxHeight = `${window.innerHeight - offset}px`;
     else this.style.setProperty('--modal-max-height', `${window.innerHeight - offset}px`);
-    this.shade();
+    this.divide();
   }
 }
 

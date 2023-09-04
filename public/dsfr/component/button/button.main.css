@@ -1,5 +1,5 @@
 /*!
- * DSFR v1.8.5 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
+ * DSFR v1.10.0 | SPDX-License-Identifier: MIT | License-Filename: LICENSE.md | restricted use (see terms and conditions)
  */
 @charset "UTF-8";
 
@@ -9,7 +9,6 @@
 .fr-btn {
   --text-spacing: 0;
   --title-spacing: 0;
-  z-index: 1;
   display: inline-flex;
   flex-direction: row;
   align-items: center;
@@ -589,17 +588,17 @@
   content: none;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)) .fr-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]):not([class^=fr-fi-]):not([class*=" fr-fi-"]) {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg) .fr-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]):not([class^=fr-fi-]):not([class*=" fr-fi-"]) {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-icon-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-icon-"],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-fi-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-fi-"] {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-icon-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-icon-"],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-fi-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-fi-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -613,19 +612,19 @@
   justify-content: flex-start;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-icon-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-icon-"]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-fi-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-fi-"]::before {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-icon-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-icon-"]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class^=fr-fi-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg):not([class^=fr-btns-group--icon-]):not([class*=" fr-btns-group--icon-"]) .fr-btn[class*=" fr-fi-"]::before {
   --icon-size: 1.5rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class^=fr-icon-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class*=" fr-icon-"],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class^=fr-fi-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class*=" fr-fi-"] {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class^=fr-icon-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class*=" fr-icon-"],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class^=fr-fi-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class*=" fr-fi-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -635,19 +634,19 @@
   max-height: none;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class^=fr-icon-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class*=" fr-icon-"]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class^=fr-fi-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-left .fr-btn[class*=" fr-fi-"]::before {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class^=fr-icon-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class*=" fr-icon-"]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class^=fr-fi-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-left .fr-btn[class*=" fr-fi-"]::before {
   --icon-size: 1rem;
   margin-left: -0.125rem;
   margin-right: 0.5rem;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-icon-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-fi-],
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"] {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-icon-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-fi-],
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -657,10 +656,10 @@
   max-height: none;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-icon-]::after,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"]::after,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-fi-]::after,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"]::after {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-icon-]::after,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"]::after,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-fi-]::after,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"]::after {
   content: "";
 
   --icon-size: 1rem;
@@ -668,10 +667,10 @@
   margin-left: 0.5rem;
 }
 
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-icon-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class^=fr-fi-]::before,
-.fr-btns-group:where(:not(.fr-btns-group--sm):not(.fr-btns-group--lg)).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"]::before {
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-icon-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-icon-"]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class^=fr-fi-]::before,
+.fr-btns-group:not(.fr-btns-group--sm):not(.fr-btns-group--lg).fr-btns-group--icon-right .fr-btn[class*=" fr-fi-"]::before {
   content: none;
 }
 
@@ -800,6 +799,36 @@
   content: none;
 }
 
+.fr-btn--tooltip {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 2rem;
+  max-height: 2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.fr-btn--tooltip::before {
+  --icon-size: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+  background-color: currentColor;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-image: url("../../icons/system/question-line.svg");
+  mask-image: url("../../icons/system/question-line.svg");
+  content: "";
+}
+
 .fr-btn--fullscreen {
   font-size: 0.875rem;
   line-height: 1.5rem;
@@ -910,7 +939,8 @@ a.fr-btn--tertiary:not([href]) {
 .fr-btn--tertiary-no-outline,
 .fr-btn--close,
 .fr-btn--display,
-.fr-btn--fullscreen {
+.fr-btn--fullscreen,
+.fr-btn--tooltip {
   background-color: transparent;
 
   --hover: inherit;
@@ -923,9 +953,11 @@ a.fr-btn--tertiary-no-outline:not([href]),
 a.fr-btn--close:not([href]),
 a.fr-btn--display:not([href]),
 a.fr-btn--fullscreen:not([href]),
+a.fr-btn--tooltip:not([href]),
 .fr-btn--close:disabled,
 .fr-btn--display:disabled,
-.fr-btn--fullscreen:disabled {
+.fr-btn--fullscreen:disabled,
+.fr-btn--tooltip:disabled {
   color: var(--text-disabled-grey);
   background-color: transparent;
 
