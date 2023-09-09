@@ -85,7 +85,7 @@ fr:
     new:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
-      profile: "Profil et notes"
+      profile: "Fiche contact"
   
   contacts:
     contact:
