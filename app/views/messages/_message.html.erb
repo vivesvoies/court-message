@@ -1,7 +1,7 @@
 <%# Locals: wrap_in: tag to wrap the message into. Defaults to :li. Could be :div. %>
 <% tag = (defined?(wrap_in) && wrap_in.present?) ? wrap_in : :li %>
 
-<%= content_tag tag, id: dom_id(message), class: "Message Message--#{message.status}" do %>
+<%= content_tag tag, id: dom_id(message), class: "Message Message--#{message.status} Message--#{message.direction}" do %>
   <div class="Message__sender">
     <%= message.sender %>
   </div>
@@ -12,9 +12,8 @@
     <div class="Message__timestamp">
       <%= time_stamp_for message.created_at %>
     </div>
-    ·
     <div class="Message__status">
-      <%= message.status %>
+      <%= t("messages.status.#{message.status}") %>
     </div>
   </div>
 <% end %>

@@ -2,6 +2,12 @@
 $fs-small: .75rem;
 $fs-normal: 1rem;
 
+// Colors
+html {
+  --color-message-outbound: #CECEFC;
+  --color-message-inbound: #EDEDED;
+  --color-text-secondary: #606060;
+}
 
 @mixin container {
   @media (min-width: 62rem) {

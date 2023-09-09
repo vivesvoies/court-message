@@ -23,37 +23,73 @@
 }
 
 .Message {
+  width: 50%;
   max-width: 66%;
   list-style: none;
-  margin: .5rem 0;
+  margin: .375rem 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
+  &.Message--inbound {
+    padding-right: 2rem;
+  }
+
+  &.Message--outbound {
+    padding-left: 2rem;
+  }
 }
 
 .Message__content {
-  border: .5px solid gray;
   border-radius: .5rem;
-  padding: .5rem;
-  margin: .25rem 0;
-  background: white;
-  // width: auto;
+  padding: .625rem 1.25rem;
+  width: 100%;
+
+  .Message--inbound & {
+    background: var(--color-message-inbound);
+    border-top-left-radius: 0;
+  }
+
+  .Message--outbound & {
+    background: var(--color-message-outbound);
+    border-top-right-radius: 0;
+  }
 }
+
 .Message__sender,
 .Message__metadata {
-  font-size: .75rem;
-  font-family: sans-serif;
-  margin: 0 .5rem;
+  font-style: italic;
+  margin: .25rem .5rem 0 .5rem;
   text-align: right;
+  color: var(--color-text-secondary);
 }
-.Message__metadata > * {
+
+.Message__metadata>* {
   display: inline;
 }
+
 .Message--inbound {
   align-self: flex-start;
-  align-items: flex-start;
 }
+
 .Message--inbound .Message__sender,
 .Message--inbound .Message__metadata {
-  text-align: left;
+  text-align: right;
+}
+
+.Message__sender,
+.Message__status {
+  display: none;
+}
+
+.Message--submitted,
+.Message--rejected,
+.Message--undeliverable {
+  .Message__status {
+    display: inline;
+
+    &::before {
+      content: " · ";
+    }
+  }
 }

@@ -163,3 +163,10 @@ fr:
       edit_user: "Modifier le compte"
       update: "Mettre à jour le compte"
 
+  messages:
+    status:
+      inbound: "Reçu"
+      undeliverable: &message_error "Message non distribué"
+      rejected: *message_error
+      submitted: "Envoi en cours..."
+      delivered: "Envoyé"
