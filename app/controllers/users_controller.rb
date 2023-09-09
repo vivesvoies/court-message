@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: t(".user_updated") }
+        format.html { redirect_to user_url(@user), notice: I18n.t("users.update.user_updated") }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to users_url, notice: I18n.t(".user_destroyed"), status: :see_other
+    redirect_to users_url, notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private
