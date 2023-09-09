@@ -8,13 +8,24 @@
   </td>
 
   <td class="UserRow__teams">
-    <% user.teams.each do |team| %>
-      <%= link_to team.name, team %>
-    <% end %>
+    <ul class="fr-tags-group">
+      <% user.teams.each do |team| %>
+        <li><%= link_to team.name, edit_team_path(team), class: "fr-tag fr-tag--sm UserRow__teamTag" %></li>
+      <% end %>
+    </ul>
   </td>
 
   <td class="UserRow__roles">
-    <%= user.role %>
+    <%= tag.span user.role, class: "fr-tag fr-tag--sm UserRow__roleTag" %>
   </td>
 
+  <td class="UserRow__actions">
+    <ul class="UserRow__actionsGroup fr-btns-group fr-btns-group--sm fr-btns-group--inline-sm">
+      <% if can? :destroy, user %>
+        <li><%= button_to t(".delete_user"), user_path(user), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "fr-btn fr-btn--sm fr-btn--secondary fr-icon-delete-bin-line" %></li>
+      <% end %>
+
+      <li><%= link_to t(".edit_user"), edit_user_path(user), class: "fr-btn fr-btn--sm fr-btn--primary fr-icon-pencil-line" %></li>
+    </ul>
+  </td>
 </tr>

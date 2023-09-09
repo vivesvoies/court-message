@@ -1,9 +1,24 @@
-<h1>Users</h1>
+<div class="Page Page__index-users">
+  <div class="Block Block__index-users">
+    <header class="Users__header">
+      <h1>Liste des utilisateurs inscrits</h1>
+    </header>
 
-<div id="users" class="fr-table fr-table--bordered">
-  <table>
-    <% @users.each do |user| %>
-      <%= render user %>
-    <% end %>
-  </table>
+    <div id="users" class="fr-table fr-table--bordered">
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Équipes</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <% @users.each do |user| %>
+          <%= render user %>
+        <% end %>
+      </table>
+    </div>
+  </div>
 </div>

@@ -43,10 +43,14 @@ class User < ApplicationRecord
   has_many :messages, as: :sender, dependent: :destroy
   has_and_belongs_to_many :conversations
 
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :teams, through: :memberships
 
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
+  end
+
+  def bestowable_roles
+    ROLES[0..ROLES.index(role)]
   end
 end

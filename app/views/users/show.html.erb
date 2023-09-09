@@ -1,8 +1,24 @@
-<%= render @user %>
+<div class="Page Page__user-show">
+  <div class="Block Block__user-show UserShow">
+    <h1>
+      <%= @user.name %>
+      <span class="fr-tag"><%= t("roles." + @user.role) %></span>
+    </h1>
+    <p><%= @user.email %></p>
+    <div>
+      <ul class="fr-tags-group">
+        <% @user.teams.each do |team| %>
+          <li><%= link_to team.name, team_path(team), class: "fr-tag fr-tag" %></li>
+        <% end %>
+      <ul>
+    </div>
 
-<div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
+    <div class="UserShow__actions fr-btns-group fr-btns-group--inline fr-btns-group--right fr-btns-group--icon-left">
+      <% if can? :destroy, @user %>
+        <%= button_to t(".delete_user"), user_path(@user), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "fr-btn fr-btn--sm fr-btn--secondary fr-btn--icon-left fr-icon-delete-bin-line" %>
+      <% end %>
 
-  <%= button_to "Destroy this user", @user, method: :delete %>
+      <%= link_to t(".edit_user"), edit_user_path(@user), class: "fr-btn fr-btn--sm fr-btn--primary fr-btn--icon-left fr-icon-pencil-line" %>
+    </div>
+  </div>
 </div>

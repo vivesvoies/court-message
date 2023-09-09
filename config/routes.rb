@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :memberships, only: [:new, :create, :destroy]
 
   scope :admin do
-    resources :users, only: [:index]
+    resources :users, only: [:index, :show, :edit, :update, :destroy]
   end
 
   # Messaging services routes

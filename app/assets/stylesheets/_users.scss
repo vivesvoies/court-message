@@ -1,0 +1,9 @@
+.UserRow__actionsGroup {
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+.UserRow__actionsGroup > a + a {
+  margin-left: .5rem;
+}

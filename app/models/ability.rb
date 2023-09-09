@@ -20,11 +20,13 @@ class Ability
     return unless user.at_least?(:site_admin)
     
     # Rules for site admins -> manage every user and team
-    can [:read, :update], User
     can :manage, Team
+    can :manage, User
+    cannot :destroy, User, id: user.id
     return unless user.at_least?(:super_admin)
-
+    
     can :manage, :all
+    cannot :destroy, User, id: user.id
   end
 
 end

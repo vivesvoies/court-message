@@ -2,7 +2,9 @@ fr:
   missing_value: "Non renseigné"
   sign_out: "Déconnexion"
   back: "Retour"
-  
+  name: "Nom"
+  email: "Email"
+
   application:
     model_errors:
       save_error: "Impossible d’enregistrer."
@@ -68,6 +70,12 @@ fr:
         sign_in: "Connexion à Court‑message"
         no_account: "Vous n’avez pas de compte ?"
   
+  roles:
+    user: "Utilisateur"
+    team_admin: "Administrateur d’équipe"
+    site_admin: "Administrateur général"
+    super_admin: "Superutilisateur"
+
   conversations:
     header:
       new: "Nouvelle conversation"
@@ -139,4 +147,17 @@ fr:
       create_membership: "Ajouter"
     update:
       success: "Équipe mise à jour."
+
+  users:
+    show:
+      edit_user: "Modifier le compte"
+      delete_user: "Supprimer le compte"
+      delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
+    destroy:
+      user_destroyed: "Le compte a été supprimé."
+    update:
+      user_updated: "Le compte a été mis à jour."
+    form:
+      edit_user: "Modifier le compte"
+      update: "Mettre à jour le compte"
 
