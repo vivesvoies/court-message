@@ -50,17 +50,21 @@
 ///
 
 .Conversation {
+  list-style: none;
   border-bottom: 1px solid var(--border-default-grey);
   padding: 0; // override dsfr style for <li>
 }
 .Conversation__link {
-  padding: .5rem;
+  padding: .5rem 1rem;
+  height: 7rem;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
   grid-template-areas:
-    "name time"
-    "sub sub";
+    ".         time"
+    "preview status"
+    ".       agents";
+  align-items: center;
   &:any-link {
     text-decoration: none;
     background: unset;
@@ -73,21 +77,41 @@
 .Conversation--active .Conversation__link:hover,
 .Conversation--active .Conversation__link:active,
 .Conversation--active .Conversation__link {
-  background: var(--background-action-low-blue-cumulus);
+  background: var(--color-bg-selected);
   color: var(--text-label-blue-cumulus);
 }
 
+.Conversation__preview {
+  grid-area: preview;
+}
 .Conversation__contact {
-  grid-area: name;
   font-weight: bold;
+  margin-bottom: .25rem;
   @include truncate;
 }
 .Conversation__latest {
   grid-area: time;
-  text-align: right;
   font-size: $fs-small;
+  line-height: 1rem;
+  text-align: right;
+  font-style: italic;
 }
 .Conversation__sub {
   grid-area: sub;
-  @include truncate;
+  font-size: $fs-small;
+  line-height: 1.25rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.Conversation__status {
+  grid-area: status;
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 100%;
+  justify-self: end;
+  .Conversation--unread & {
+    background: var(--background-action-high-blue-france-hover);
+  }
 }

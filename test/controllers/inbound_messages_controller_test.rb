@@ -25,4 +25,13 @@ class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
       post inbound_messages_path, params: { "content": "hello" }
     end
   end
+
+  test "should mark conversation as unread" do
+    contact = create(:contact, :with_conversation)
+    conversation = contact.conversation
+    assert conversation.read?
+
+    post inbound_messages_path, params: { to: fake_number, from: contact.phone, text: "abc" }
+    assert conversation.reload.unread?
+  end
 end

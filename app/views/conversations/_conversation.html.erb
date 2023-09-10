@@ -1,14 +1,21 @@
 <%= turbo_stream_from "conversation_list_item_#{conversation.id}" %>
-<li class="Conversation <%= "Conversation--active" if @conversation == conversation %>" data-conversation-list-target="conversation" id="<%= dom_id conversation %>">
+<li class="Conversation <%= "Conversation--active" if @conversation == conversation %> Conversation--<%= conversation.status %>"
+    data-conversation-list-target="conversation"
+    data-conversation-status-url="<%= read_status_team_conversation_path(conversation.team, conversation.id) %>"
+    id="<%= dom_id conversation %>">
   <%= link_to [conversation.team, conversation], class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance", action: "click->conversation-list#activate" } do %>
-    <div class="Conversation__contact">
-      <%= conversation.title %>
-    </div>
     <div class="Conversation__latest">
       <%= time_stamp_for conversation.updated_at %>
     </div>
-    <div class="Conversation__sub <%= last_message_class_for conversation %>">
-      <%= last_message_extract_for conversation %>
+    <div class="Conversation__status"></div>
+    <div class="Conversation__preview">
+      <div class="Conversation__contact">
+        <%= conversation.title %>
+      </div>
+      <div class="Conversation__sub <%= last_message_class_for conversation %>">
+        <%= last_message_extract_for conversation %>
+      </div>
     </div>
+    <div class="Conversation__agents"></div>
   <% end %>
 </li>

@@ -3,6 +3,7 @@
 # Table name: conversations
 #
 #  id         :bigint           not null, primary key
+#  read       :boolean          default(TRUE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  contact_id :bigint           not null
@@ -69,5 +70,41 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal(0, count_queries { preloaded.messages.first.content })
     assert_equal(0, count_queries { preloaded.agents.first.identifier })
     assert_equal(0, count_queries { preloaded.contact.name })
+  end
+
+  def test_default_as_read
+    @conversation = create(:conversation)
+    assert(@conversation.read?)
+  end
+
+  def test_mark_as_read
+    @conversation = create(:conversation, read: false)
+    assert_changes "@conversation.unread?" do
+      @conversation.mark_as_read!
+    end
+  end
+
+  def test_mark_as_unread
+    @conversation = create(:conversation, read: true)
+    assert_changes "@conversation.unread?" do
+      @conversation.mark_as_unread!
+    end
+  end
+
+  def test_read
+    @conversation = create(:conversation, read: true)
+    assert(@conversation.read?)
+  end
+
+  def test_unread
+    @conversation = create(:conversation, read: false)
+    assert(@conversation.unread?)
+  end
+
+  def test_status_string
+    @conversation = create(:conversation, read: true)
+    assert_equal(@conversation.status, "read")
+    @conversation.mark_as_unread!
+    assert_equal(@conversation.status, "unread")
   end
 end

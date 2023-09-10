@@ -10,6 +10,14 @@
   }
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  box-sizing: inherit;
+}
+
 body {
   display: flex;
   flex-direction: column;

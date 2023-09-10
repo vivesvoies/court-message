@@ -8,7 +8,7 @@
 #  phone      :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  team_id    :bigint           default(1), not null
+#  team_id    :bigint           default(2), not null
 #
 # Indexes
 #

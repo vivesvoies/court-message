@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :conversations, only: [:index, :show] do
       member do
         get :detail, to: "conversations#show", defaults: { detail: true }
+        patch "status", to: "read_status#update", as: :read_status
       end
     end
   end

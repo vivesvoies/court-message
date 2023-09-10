@@ -15,7 +15,13 @@ class InboundMessagesController < ApplicationController
     authenticate_message!
     service = InboundMessagesService.new(vonage_params)
     @message = service.message
-    if @message.save
+    
+    ActiveRecord::Base.transaction do
+      @message.save
+      @message.conversation.mark_as_unread!
+    end
+
+    if @message.persisted?
       head :created
     else
       head :bad_request

@@ -3,6 +3,7 @@
 # Table name: conversations
 #
 #  id         :bigint           not null, primary key
+#  read       :boolean          default(TRUE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  contact_id :bigint           not null
@@ -21,7 +22,7 @@ class Conversation < ApplicationRecord
   has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy
   has_and_belongs_to_many :agents, class_name: "User"
 
-  after_update_commit :broadcast_list_update
+  after_update_commit :broadcast_conversation_update
 
   # TODO: eager loading EVERY MESSAGE, this is overkill but needed for now to show the latest messages.
   # Should create a last_message_id column. Use the :after_add option of the has_many method.
@@ -37,11 +38,30 @@ class Conversation < ApplicationRecord
   def title
     contact.to_s
   end
-  
-  protected
 
-  def broadcast_list_update
-    broadcast_remove_to "conversation_list_item_#{id}"
-    broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
+  def mark_as_read!
+    update!(read: true)
+  end
+
+  def mark_as_unread!
+    update!(read: false)
+  end
+
+  def unread? = !read?
+  def status = read? ? "read" : "unread"
+
+  private
+
+  def broadcast_conversation_update
+    puts self.inspect
+    puts self.changes.inspect
+    puts self.saved_changes.inspect
+
+    if unread? # broadcast a new message
+      broadcast_remove_to "conversation_list_item_#{id}"
+      broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
+    else # broadcast another upddate (such as change in read / unread status)
+      broadcast_replace_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
+    end
   end
 end

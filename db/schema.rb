@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_24_135222) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_10_154455) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_135222) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "team_id", default: 1, null: false
+    t.bigint "team_id", default: 2, null: false
     t.index ["phone"], name: "index_contacts_on_phone"
     t.index ["team_id", "phone"], name: "index_contacts_on_team_id_and_phone", unique: true
     t.index ["team_id"], name: "index_contacts_on_team_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_24_135222) do
     t.bigint "contact_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "read", default: true
     t.index ["contact_id"], name: "index_conversations_on_contact_id"
   end
 
