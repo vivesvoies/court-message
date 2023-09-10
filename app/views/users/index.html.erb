@@ -1,3 +1,8 @@
+<%= content_for :back do %>
+  <%= link_to t(:back), root_path, class: "fr-btn fr-btn--icon-left fr-fi-arrow-left-line" %>
+<% end %>
+<%= render partial: "menu" %>
+
 <div class="Page Page__index-users">
   <div class="Block Block__index-users">
     <header class="Users__header">

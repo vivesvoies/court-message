@@ -1,10 +1,9 @@
 .NavMenu {
   margin: .5rem 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
-
-.NavMenu__signout {
-  margin-left: auto;
+.NavMenu__back {
+  margin-right: auto;
 }
