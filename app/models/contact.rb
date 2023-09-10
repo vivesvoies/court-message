@@ -22,7 +22,7 @@
 #
 class Contact < ApplicationRecord
   include Conversationalist
-  has_one :conversation, dependent: :destroy
+  has_one :conversation, dependent: :destroy, touch: true
   has_many :messages, as: :sender, dependent: nil # let the Conversation model delete the messages
   belongs_to :team
 
