@@ -65,4 +65,13 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :forbidden
   end
+
+  test "site admin should create membership in another team" do
+    site_admin = create(:user, role: :site_admin)
+    user = create(:user)
+    sign_in site_admin
+    assert_difference("Membership.count") do
+      post memberships_url, params: { membership: { user_id: user.id, team_id: @other_team.id } }
+    end
+  end
 end
