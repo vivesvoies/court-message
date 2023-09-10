@@ -1,0 +1,7 @@
+<p>Bonjour <%= @email %>,</p>
+
+<% if @resource.try(:unconfirmed_email?) %>
+  <p>Vous venez de faire la demande pour utiliser <%= @resource.unconfirmed_email %> comme adresse de connexion à Court-message.</p>
+<% else %>
+  <p>Votre adresse de connexion à Court-message a bien été changée en <%= @resource.email %>.</p>
+<% end %>
