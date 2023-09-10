@@ -1,14 +1,14 @@
 @import "settings";
 
 .Page {
-  margin: 2.5rem auto;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   justify-content: space-around;
   width: 100%;
   @media (min-width: 48rem) {
-    margin: 3.5rem auto;
+    margin-top: 3.5rem;
     flex-direction: row;
     flex-wrap: wrap;
     &:has(.Block ~ .Block) {
@@ -18,6 +18,10 @@
       }
     }
   }
+}
+
+.NavMenu + .Page {
+  margin-top: 0;
 }
 
 .Block {

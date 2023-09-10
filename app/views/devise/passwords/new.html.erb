@@ -1,3 +1,7 @@
+<%= content_for :back do %>
+  <%= link_to t(:back), root_path, class: "fr-btn fr-btn--icon-left fr-fi-arrow-left-line" %>
+<% end %>
+<%= render partial: "menu" %>
 <div class="Page Page__forgot-password">
   <div class="Block Block__forgot-password">
     <h1><%= t(".forgot_your_password") %></h1>

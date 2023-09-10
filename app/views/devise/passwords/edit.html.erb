@@ -1,3 +1,7 @@
+<%= content_for :back do %>
+  <%= link_to t(:back), root_path, class: "fr-btn fr-btn--icon-left fr-fi-arrow-left-line" %>
+<% end %>
+<%= render partial: "menu" %>
 <div class="Page Page__change-password">
   <div class="Block Block__change-password">
     <h1><%= t(".change_your_password") %></h1>

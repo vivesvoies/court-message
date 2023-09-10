@@ -1,3 +1,7 @@
+<%= content_for :back do %>
+  <%= link_to t(".back"), teams_path, class: "fr-btn fr-btn--icon-left fr-fi-arrow-left-line" %>
+<% end %>
+<%= render partial: "menu" %>
 <div class="Page Page__edit-team">
   <div class="Block Block__edit-team">
     <header class="Teams__header">

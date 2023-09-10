@@ -142,6 +142,7 @@ fr:
       create: "Créer l’équipe"
       save_error: "L’équipe n’a pas pu être enregistrée."
     edit:
+      back: "Liste des équipes"
       edit: "Réglages de l’équipe"
     show:
       edit: "Modifier la fiche"
