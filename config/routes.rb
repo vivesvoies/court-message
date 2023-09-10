@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   root to: redirect("/teams")
 
   # User-facing routes
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations" }
+  devise_scope :user do
+    get "/users/await-confirmation", to: "registrations#show", as: :await_confirmation
+  end
+
   resources :contacts, only: [:show, :new, :edit, :create, :update, :destroy]
   resources :messages, only: [:new, :create]
   resources :teams, only: [:index, :show, :new, :edit, :create, :update, :destroy] do
