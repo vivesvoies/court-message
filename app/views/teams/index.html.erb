@@ -1,15 +1,17 @@
 <div class="Page Page__index-team">
   <div class="Block Block__index-team">
     <header class="Teams__header">
-      <h1><%= t(".teams_for", name: Current.user.identifier) %></h1>
+      <h1><%= t(".welcome") %></h1>
     </header>
     
-    <div class="Teams__list">
-      <%= render collection: @teams, partial: "team" %>
-      <% if @teams.count == 0 %>
-        <p><%= t(".no_team") %></p>
-      <% end %>
-    </div>
+    <% if @teams.count == 0 %>
+      <p><%= t(".no_team") %></p>
+    <% else %>
+      <h4><%= t(".teams_for", name: Current.user.identifier) %></h4>
+      <div class="Teams__list">
+        <%= render collection: @teams, partial: "team" %>
+      </div>
+    <% end %>
 
     <div class="Teams__actions">
       <% if can? :create, Team %>
@@ -20,7 +22,7 @@
     <% if @all_teams && @all_teams.length > 0 %>
       <hr>
 
-      <h2><%= t(".all_teams") %></h1>
+      <h4><%= t(".all_teams") %></h4>
       <div class="Teams__list Teams__list--mini">
         <%= render collection: @all_teams, partial: "team" %>
       </div>

@@ -1,17 +1,19 @@
 <div class="TeamTile fr-tile fr-enlarge-link fr-tile--horizontal" id="<%= dom_id team %>">
   <div class="TeamTile__body fr-tile__body">
     <h4 class="fr-tile__title Team__name">
-      <%= link_to team.name, team_path(team), class: "fr-tile__link" %>
+      <%= link_to team.name, team_path(team), class: "fr-tile__link Team__name-link" %>
     </h4>
     <div class="TeamTile__info fr-tile__desc">
       <p><%= simple_format team.address %></p>
       <p><%= t(".members", count: team.memberships.count) %></p>
     </div>
 
-    <% if can? :edit, team %>
-      <div class="TeamTile__actions fr-card__footer">
-        <%= link_to "Configurer l’équipe", edit_team_path(team), class: "fr-btn fr-btn--sm" %>
-      </div>
-    <% end %>
+    <div class="TeamTile__actions fr-card__footer">
+      <%= link_to t(".open"), team_conversations_path(team), class: "TeamTile__btn fr-btn fr-btn--sm" %>
+      <%= link_to edit_team_path(team), class: "TeamTile__btn fr-btn fr-btn--sm fr-btn--tertiary-no-outline" do %>
+        <span class="fr-icon-equalizer-line fr-icon--sm"></span>&nbsp;
+        <%= t(".settings") %>
+      <% end if can? :edit, team %>
+    </div>
   </div>
 </div>

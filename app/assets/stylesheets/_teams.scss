@@ -29,10 +29,6 @@
   justify-content: flex-end;
 }
 
-.Team__name {
-  font-weight: bold;
-}
-
 .TeamDetails__header {
   display: flex;
   flex-flow: row wrap;
@@ -63,14 +59,29 @@
   }
 }
 
+.TeamTile .Team__name {
+  font-weight: bold;
+  a.Team__name-link::after { // a use case for !important if there ever was one, ¯\_(ツ)_/¯
+    content: none;
+  }
+}
+
 .TeamTile .TeamTile__body {
   height: 100%;
-  padding-block: 2rem;
+  padding-block: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .TeamTile__actions {
+  order: 10;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   position: relative;
   z-index: 1;
   margin: auto 0 0 0;
   padding: 0; 
+  gap: .5rem;
 }
