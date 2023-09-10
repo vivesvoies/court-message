@@ -23,8 +23,7 @@
 }
 
 .Message {
-  width: 50%;
-  max-width: 66%;
+  width: 66%;
   list-style: none;
   margin: .375rem 0;
   display: flex;
@@ -37,6 +36,11 @@
 
   &.Message--outbound {
     padding-left: 2rem;
+  }
+}
+@media (min-width: 60rem) {
+  .Message {
+    width: 50%;
   }
 }
 
