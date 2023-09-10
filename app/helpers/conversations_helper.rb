@@ -1,6 +1,6 @@
 module ConversationsHelper
   def last_message_extract_for conversation
-    (conversation.messages.last&.content || "")[0, 50]
+    (conversation.messages.order(created_at: :asc)&.last&.content || "")[0, 50]
   end
 
   def last_message_class_for conversation
