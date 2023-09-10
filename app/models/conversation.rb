@@ -21,6 +21,8 @@ class Conversation < ApplicationRecord
   has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy
   has_and_belongs_to_many :agents, class_name: "User"
 
+  after_update_commit :broadcast_list_update
+
   # TODO: eager loading EVERY MESSAGE, this is overkill but needed for now to show the latest messages.
   # Should create a last_message_id column. Use the :after_add option of the has_many method.
   # See https://github.com/louije/court-message/issues/47
@@ -34,5 +36,12 @@ class Conversation < ApplicationRecord
 
   def title
     contact.to_s
+  end
+  
+  protected
+
+  def broadcast_list_update
+    broadcast_remove_to "conversation_list_item_#{id}"
+    broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
   end
 end

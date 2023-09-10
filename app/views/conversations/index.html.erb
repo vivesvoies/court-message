@@ -4,6 +4,7 @@
       <%= render partial: "conversations/header", locals: { team: @team } %>
     <% end %>
     
+    <%= turbo_stream_from "team_conversations_list_#{@team.id}" %>
     <ol id="conversations" class="ConversationList" data-controller="conversation-list" data-conversation-list-item-class="Conversation" data-conversation-list-active-class="Conversation--active">
       <%= render @conversations %>
     </ol>

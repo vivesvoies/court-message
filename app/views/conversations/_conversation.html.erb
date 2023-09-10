@@ -1,5 +1,6 @@
+<%= turbo_stream_from "conversation_list_item_#{conversation.id}" %>
 <li class="Conversation <%= "Conversation--active" if @conversation == conversation %>" data-conversation-list-target="conversation" id="<%= dom_id conversation %>">
-  <%= link_to [@team, conversation], class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance", action: "click->conversation-list#activate" } do %>
+  <%= link_to [conversation.team, conversation], class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance", action: "click->conversation-list#activate" } do %>
     <div class="Conversation__contact">
       <%= conversation.title %>
     </div>
