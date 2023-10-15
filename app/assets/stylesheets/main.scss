@@ -18,6 +18,12 @@ html {
   box-sizing: inherit;
 }
 
+body,
+input,
+select,
+textarea {
+  font-family: OpenSans, sans-serif;
+}
 body {
   display: flex;
   flex-direction: column;
