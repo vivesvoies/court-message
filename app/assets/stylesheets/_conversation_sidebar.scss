@@ -1,4 +1,4 @@
-@import "settings";
+@import "variables";
 
 ///
 /// Conversation left-pane
@@ -9,8 +9,9 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border-right: 0 solid var(--border-default-grey);
+  border-right: 0 solid var(--list-border);
   overflow-y: scroll;
+  background-color: var(--list-bg);
 }
 
 @media (min-width: 40rem) {
@@ -25,24 +26,33 @@
 
 .ConversationHeader__actions {
   display: flex;
-  // margin: .5rem 0;
+  margin: .5rem 0;
 }
 
 .ConversationHeader__new {
-  width: 100%;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  // width: 100%;
+  margin: 1rem auto;
+  padding: .5rem 1rem;
   font-weight: 700;
-  min-height: var(--size-header);
   background: var(--border-action-low-blue-france);
 }
 
 .ConversationHeader__search {
-  max-height: 2.5rem; // Gecko visual bug: 1 more pixel on <input> than on <button>
+  border-top: 1px solid var(--list-separator);
+  padding: 2rem 1.5rem;
+}
+.ConversationHeader__search [type=search] {
+  margin: 0 auto;
+  width: 100%;
 }
 .ConversationHeader__search button {
   background-color: var(--background-contrast-grey);
   box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
+}
+
+.ConversationList {
+  border-top: 2px solid var(--list-separator-top);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, .25);
 }
 
 ///
@@ -51,7 +61,7 @@
 
 .Conversation {
   list-style: none;
-  border-bottom: 1px solid var(--border-default-grey);
+  border-bottom: 1px solid var(--list-separator);
   padding: 0; // override dsfr style for <li>
 }
 .Conversation__link {
@@ -77,8 +87,8 @@
 .Conversation--active .Conversation__link:hover,
 .Conversation--active .Conversation__link:active,
 .Conversation--active .Conversation__link {
-  background: var(--color-bg-selected);
-  color: var(--text-label-blue-cumulus);
+  background: var(--list-selected-bg);
+  color: var(--text-list-selected);
 }
 
 .Conversation__preview {

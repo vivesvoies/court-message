@@ -78,12 +78,12 @@ fr:
 
   conversations:
     header:
-      new: "Nouvelle conversation"
-      search: "Rechercher"
+      new: "Nouveau message"
+      search: "Rechercher dans tous les messages"
     team_picker:
       switch_team: "Changer d’équipe"
     new:
-      new_conversation: "Nouvelle conversation"
+      new_conversation: "Nouveau message"
     conversation_detail:
       profile: "Fiche contact"
   

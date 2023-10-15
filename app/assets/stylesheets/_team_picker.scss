@@ -9,6 +9,7 @@
 .MenuItem {
   padding-inline: 1.5rem;
   display: flex;
+  align-items: center;
   > .fr-btn,
   > form.button_to {
     flex: 1;
@@ -24,6 +25,7 @@
 .Menu hr {
   margin: 0 1.5rem;
   background-position: center;
+  opacity: 0;
 }
 
 .TeamPicker {
@@ -38,6 +40,7 @@
   list-style: none;
   box-sizing: border-box;
   height: var(--size-header);
+  border-bottom: 1px solid var(--list-separator);
   &::-webkit-details-marker,
   &::marker {
     display: none;
@@ -55,6 +58,7 @@
 }
 
 .TeamPicker__info {
+  margin-top: .5rem;
   // summary padding, icon margin, icon size, icon margin, name padding
   margin-left: calc(0rem - 0.1875rem + 1.5rem + .5rem + .75rem);
   :last-child {

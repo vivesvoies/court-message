@@ -50,12 +50,12 @@
   width: 100%;
 
   .Message--inbound & {
-    background: var(--color-message-inbound);
+    background: var(--inbound-message-bg);
     border-top-left-radius: 0;
   }
 
   .Message--outbound & {
-    background: var(--color-message-outbound);
+    background: var(--outbound-message-bg);
     border-top-right-radius: 0;
   }
 }
@@ -65,7 +65,7 @@
   font-style: italic;
   margin: .25rem .5rem 0 .5rem;
   text-align: right;
-  color: var(--color-text-secondary);
+  color: var(--text-secondary);
 }
 
 .Message__metadata>* {

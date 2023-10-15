@@ -1,0 +1,65 @@
+// Font-size
+$fs-small: .75rem;
+$fs-normal: 1rem;
+
+/*
+  Color associations.
+  Map color names to semantic use case.
+*/
+:root {
+  --outbound-message-bg: var(--color-peach);
+  --inbound-message-bg: var(--color-latte);
+  --text-secondary: var(--color-black);
+  
+  --list-bg: var(--color-sable);
+  --list-separator: var(--color-brown);
+  --list-separator-top: var(--color-brown-transparent);
+  --list-border: var(--color-black);
+  --list-selected-bg: var(--color-peach);
+  --text-list-selected: var(--color-black);
+
+  --action-bg: var(--color-black);
+  --action-border: var(--color-black);
+  --action-text: var(--color-white);
+  --action-secondary-text: var(--color-black);
+
+  --input-text: var(--color-ochre);
+  --input-border: var(--color-ochre);
+}
+
+/*
+  Color values
+  Shouldn't be used directly in stylesheets.
+  Should only be used when setting up variables in this file.
+*/
+:root {
+  --color-white: #ffffff;
+  --color-white-transparent: #FFFFFF80;
+  --color-black: #000000;
+  --color-sable: #FFFAF2;
+  --color-peach: #FAD29B;
+  --color-ochre: #A8947A;
+  --color-brown: #604D33;
+  --color-brown-transparent: #604D3333;
+  --color-latte: #FAEFE0;
+  --color-robin: #FF4E4E;
+  --color-brick: #FF6E30;
+  --color-sapin: #156D58;
+  --color-pomme: #6FCB72;
+  --color-alien: #2ef735;
+}
+
+@mixin container {
+  @media (min-width: 62rem) {
+    max-width: 42rem;
+  }
+  @media (min-width: 72rem) {
+    max-width: 54rem;
+  }
+}
+
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
