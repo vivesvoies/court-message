@@ -1,10 +1,12 @@
-FROM ruby:3.2.0
+FROM ghcr.io/moritzheiber/ruby-jemalloc:3.2.2-slim
 
 LABEL maintainer="ljt@meidosem.com"
 
 RUN apt-get update -yqq && \
     apt-get install -yqq --no-install-recommends \
-    vim
+    libpq-dev \
+    vim \
+    git
 
 WORKDIR /usr/src/cm/
 
