@@ -53,10 +53,6 @@ class Conversation < ApplicationRecord
   private
 
   def broadcast_conversation_update
-    puts self.inspect
-    puts self.changes.inspect
-    puts self.saved_changes.inspect
-
     if unread? # broadcast a new message
       broadcast_remove_to "conversation_list_item_#{id}"
       broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
