@@ -1,5 +1,5 @@
 <%= content_for :back do %>
-  <%= link_to t(:back), root_path, class: "fr-btn fr-btn--icon-left fr-icon-arrow-left-line" %>
+  <%= link_to t(:back), root_path, class: "cm-btn cm-btn--icon-left fr-icon-arrow-left-line" %>
 <% end %>
 <%= render partial: "menu" %>
 <div class="Page Page__forgot-password">
@@ -21,8 +21,8 @@
       </fieldset>
     
       <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element fr-btns-group">
-          <%= f.submit t(".send_me_reset_password_instructions"), class: "fr-btn" %>
+        <div class="fr-fieldset__element cm-btns-group">
+          <%= f.submit t(".send_me_reset_password_instructions"), class: "cm-btn" %>
         </div>
       </fieldset>
     <% end %>

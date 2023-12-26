@@ -10,13 +10,13 @@
   padding-inline: 1.5rem;
   display: flex;
   align-items: center;
-  > .fr-btn,
+  > .cm-btn,
   > form.button_to {
     flex: 1;
   }
   > form.button_to {
     display: flex;
-    > .fr-btn {
+    > .cm-btn {
       flex: 1;
     } 
   }

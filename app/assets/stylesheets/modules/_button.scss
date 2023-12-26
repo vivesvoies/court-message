@@ -1,0 +1,556 @@
+.cm-btn {
+  background-color: var(--action-bg);
+  color: var(--action-text);
+  border-radius: .75rem;
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+
+}
+
+.cm-btn::before,
+.cm-btn::after {
+  display: block;
+}
+
+.cm-btn[class^=cm-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.cm-btn--icon-left[class^=cm-icon-],
+.cm-btn--icon-left[class*=" cm-icon-"] {
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btn--icon-left[class^=cm-icon-]::before,
+.cm-btn--icon-left[class*=" cm-icon-"]::before {
+  --icon-size: 1rem;
+  margin-left: -0.125rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btn--sm {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+}
+
+
+.cm-btn--sm[class^=cm-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn--sm[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 2rem;
+  max-height: 2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.cm-btn--sm[class^=cm-icon-]:not([class*=cm-btn--icon-])::before,
+.cm-btn--sm[class*=" cm-icon-"]:not([class*=cm-btn--icon-])::before {
+  --icon-size: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.cm-btn--sm.cm-btn--icon-left[class^=cm-icon-],
+.cm-btn--sm.cm-btn--icon-left[class*=" cm-icon-"] {
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btn--sm.cm-btn--icon-left[class^=cm-icon-]::before,
+.cm-btn--sm.cm-btn--icon-left[class*=" cm-icon-"]::before {
+  --icon-size: 1rem;
+  margin-left: -0.125rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btn--lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.cm-btn--lg[class^=cm-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn--lg[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 3rem;
+  max-height: 3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.cm-btn--lg[class^=cm-icon-]:not([class*=cm-btn--icon-])::before,
+.cm-btn--lg[class*=" cm-icon-"]:not([class*=cm-btn--icon-])::before {
+  --icon-size: 2rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.cm-btn--lg.cm-btn--icon-left[class^=cm-icon-],
+.cm-btn--lg.cm-btn--icon-left[class*=" cm-icon-"],
+.cm-btn--lg.cm-btn--icon-left[class^=cm-fi-],
+.cm-btn--lg.cm-btn--icon-left[class*=" cm-fi-"] {
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btn--lg.cm-btn--icon-left[class^=cm-icon-]::before,
+.cm-btn--lg.cm-btn--icon-left[class*=" cm-icon-"]::before,
+.cm-btn--lg.cm-btn--icon-left[class^=cm-fi-]::before,
+.cm-btn--lg.cm-btn--icon-left[class*=" cm-fi-"]::before {
+  --icon-size: 1.5rem;
+  margin-left: -0.1875rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+
+  /**
+  * cm-btns-group--inline : aligne les boutons horizontalement dans tout les cas
+  * cm-btns-group--inline-(sm/md/lg) : permet de passer en horizontal à partir de la valeur du breakpoint appliqué (sm, md, lg)
+  */
+
+  /**
+  * cm-btns-group--left : (Défaut) aligne les boutons sur la gauche (en lecture L-t-R)
+  */
+
+  /**
+  * cm-btns-group--right : aligne les boutons sur la droite
+  */
+
+  /**
+  * cm-btns-group--center : aligne les boutons au centre du conteneur
+  */
+
+  /**
+  * cm-btns-group--center : aligne les boutons au centre du conteneur
+  */
+
+  /**
+  * cm-btns-group--equisized : Fixe la largeur des boutons à celle du plus grand. Géré en grande partie en JS.
+  */
+
+  /**
+  * cm-btns-group--sm : Fixe les boutons à la taille SM
+  */
+
+  /**
+  * cm-btns-group--md : (défaut) Fixe les boutons à la taille MD
+  */
+
+  /**
+  * cm-btns-group--lg : Fixe les boutons à la taille LG (sans modfifieur => MD)
+  */
+}
+
+.cm-btns-group > li {
+  width: 100%;
+  max-width: 100%;
+}
+
+.cm-btns-group .cm-btn {
+  width: calc(100% - 1rem);
+  margin: 0 0.5rem 1rem;
+  justify-content: center;
+}
+
+.cm-btns-group--inline .cm-btn {
+  width: auto;
+  max-width: 100%;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group--inline > li {
+  display: inline-flex;
+  max-width: 100%;
+  width: auto;
+}
+
+.cm-btns-group--inline.cm-btns-group--right.cm-btns-group--inline-reverse {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+.cm-btns-group--left,
+.cm-btns-group--left li {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.cm-btns-group--right,
+.cm-btns-group--right li {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.cm-btns-group--center,
+.cm-btns-group--center li {
+  justify-content: center;
+  text-align: center;
+}
+
+.cm-btns-group--between,
+.cm-btns-group--between li {
+  justify-content: space-between;
+  text-align: center;
+}
+
+.cm-btns-group--equisized {
+  --equisized-width: auto;
+}
+
+.cm-btns-group--equisized .cm-btn {
+  justify-content: center;
+  width: var(--equisized-width);
+}
+
+.cm-btns-group--sm .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+}
+
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 2rem;
+  max-height: 2rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  justify-content: flex-start;
+}
+
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 1rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 1rem;
+  margin-left: -0.125rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+  content: "";
+
+  --icon-size: 1rem;
+  margin-right: -0.125rem;
+  margin-left: 0.5rem;
+}
+
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+  content: none;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg) .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  justify-content: flex-start;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 1.5rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 1rem;
+  margin-left: -0.125rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+  content: "";
+
+  --icon-size: 1rem;
+  margin-right: -0.125rem;
+  margin-left: 0.5rem;
+}
+
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+  content: none;
+}
+
+.cm-btns-group--lg .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+}
+
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 3rem;
+  max-height: 3rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  justify-content: flex-start;
+}
+
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 2rem;
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+  --icon-size: 1.5rem;
+  margin-left: -0.1875rem;
+  margin-right: 0.5rem;
+}
+
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.5rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+}
+
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+  content: "";
+
+  --icon-size: 1.5rem;
+  margin-right: -0.1875rem;
+  margin-left: 0.5rem;
+}
+
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+  content: none;
+}
+
+.cm-fieldset__element > .cm-btns-group {
+  margin-bottom: -1rem;
+}
+
+.cm-btn--close {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+  display: flex;
+  margin-left: auto;
+  margin-right: -1rem;
+}
+
+.cm-btn--close::after {
+
+  --icon-size: 1rem;
+  margin-right: -0.125rem;
+  margin-left: 0.5rem;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+  background-color: currentColor;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-image: assset-url("../../images/icons/close-line.svg");
+  mask-image: asset-url("../../images/icons/close-line.svg");
+  content: "";
+}
+
+.cm-btn--close::before {
+  content: none;
+}
+
+.cm-btn:disabled,
+a.cm-btn:not([href]) {
+  color: var(--text-disabled-grey);
+  background-color: var(--background-disabled-grey);
+
+  --idle: transparent;
+  --hover: var(--background-disabled-grey-hover);
+  --active: var(--background-disabled-grey-active);
+}
+
+.cm-btn--secondary {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--action-border);
+  color: var(--action-secondary-text);
+}
+
+.cm-btn--secondary:disabled,
+a.cm-btn--secondary:not([href]) {
+  color: var(--text-disabled-grey);
+  box-shadow: inset 0 0 0 1px var(--border-disabled-grey);
+  background-color: transparent;
+
+  --hover: inherit;
+  --active: inherit;
+}
+
+.cm-btn--tertiary {
+  background-color: transparent;
+
+  --hover: inherit;
+  --active: inherit;
+  color: var(--text-action-high-blue-france);
+  box-shadow: inset 0 0 0 1px var(--border-default-grey);
+}
+
+.cm-btn--tertiary:disabled,
+a.cm-btn--tertiary:not([href]) {
+  color: var(--text-disabled-grey);
+  box-shadow: inset 0 0 0 1px var(--border-disabled-grey);
+  background-color: transparent;
+
+  --hover: inherit;
+  --active: inherit;
+}
+
+.cm-btn--tertiary-no-outline,
+.cm-btn--close {
+  background-color: transparent;
+
+  --hover: inherit;
+  --active: inherit;
+  color: var(--text-action-high-blue-france);
+}
+
+.cm-btn--tertiary-no-outline:disabled,
+a.cm-btn--tertiary-no-outline:not([href]),
+a.cm-btn--close:not([href]),
+.cm-btn--close:disabled {
+  color: var(--text-disabled-grey);
+  background-color: transparent;
+
+  --hover: inherit;
+  --active: inherit;
+}
+
+

@@ -9,8 +9,8 @@
     </div>
 
     <div class="TeamTile__actions fr-card__footer">
-      <%= link_to t(".open"), team_conversations_path(team), class: "TeamTile__btn fr-btn fr-btn--sm" %>
-      <%= link_to edit_team_path(team), class: "TeamTile__btn fr-btn fr-btn--sm fr-btn--tertiary-no-outline" do %>
+      <%= link_to t(".open"), team_conversations_path(team), class: "TeamTile__btn cm-btn cm-btn--sm" %>
+      <%= link_to edit_team_path(team), class: "TeamTile__btn cm-btn cm-btn--sm cm-btn--tertiary-no-outline" do %>
         <span class="fr-icon-equalizer-line fr-icon--sm"></span>&nbsp;
         <%= t(".settings") %>
       <% end if can? :edit, team %>

@@ -5,7 +5,7 @@
 
     <header class="ConversationDetail__header">
       <nav class="ConversationDetail__main-nav">
-        <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back fr-btn fr-icon-arrow-left-line fr-btn--icon-left" %>
+        <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn fr-icon-arrow-left-line cm-btn--icon-left" %>
       </nav>
       <h2 class="ConversationDetail__title">
         <%= conversation.title %>
@@ -13,7 +13,7 @@
       <nav class="ConversationDetail__side-nav">
         <%= link_to t(".profile"), contact_path(conversation.contact),
                     data: { turbo_frame: dom_id(conversation.contact), action: "click->conversation-detail#toggleContact" },
-                    class: "ConversationDetail__show-contact fr-btn fr-btn--secondary fr-icon-information-fill fr-btn--icon-left" %>
+                    class: "ConversationDetail__show-contact cm-btn cm-btn--secondary fr-icon-information-fill cm-btn--icon-left" %>
       </nav>
     </header>
     

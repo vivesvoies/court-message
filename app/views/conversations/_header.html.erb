@@ -3,12 +3,12 @@
 <div class="ConversationHeader__actions">
   <%=
     link_to t(".new"), new_contact_path(create_conversation: true, team_id: team.id, modal: true),
-            class: "fr-btn fr-btn--lg fr-icon-edit-box-line fr-btn--icon-left fr-btn--tertiary-no-outline ConversationHeader__new", title: t(".new"),
+            class: "cm-btn cm-btn--lg fr-icon-edit-box-line cm-btn--icon-left cm-btn--tertiary-no-outline ConversationHeader__new", title: t(".new"),
             data: { turbo_frame: "modal" }
   %>
 </div>
 
 <div class="ConversationHeader__search fr-search-bar" role="search">
   <%= text_field_tag :search_query, nil, placeholder: t(".search"), class: "cm-input-search", type: :search %>
-  <%#= button_tag t(".search"), title: t(".search"), class: "fr-btn fr-btn--tertiary-no-outline" %>
+  <%#= button_tag t(".search"), title: t(".search"), class: "cm-btn cm-btn--tertiary-no-outline" %>
 </div>

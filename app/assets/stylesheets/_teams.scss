@@ -49,11 +49,11 @@
 .TeamTile {
   box-sizing: border-box;
   &.fr-enlarge-link {
-    .fr-btn:hover,
-    .fr-btn:active {
+    .cm-btn:hover,
+    .cm-btn:active {
       background: var(--hover-tint);
     }
-    .fr-btn::before {
+    .cm-btn::before {
       content: none;
     }
   }

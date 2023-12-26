@@ -3,12 +3,12 @@
     <%= turbo_frame_tag @contact, class: "ContactDetail" do %>
       <%= render "turbo_flash" %>
       <%= render @contact %>
-      <ul class="ContactDetail__actions fr-btns-group fr-btns-group--icon-left">
+      <ul class="ContactDetail__actions cm-btns-group cm-btns-group--icon-left">
         <li>
-          <%= link_to t(".edit"), edit_contact_path(@contact), class: "ContactDetail__edit-btn fr-btn fr-btn--sm fr-btn--icon-left fr-icon-pencil-fill" %>
+          <%= link_to t(".edit"), edit_contact_path(@contact), class: "ContactDetail__edit-btn cm-btn cm-btn--sm cm-btn--icon-left fr-icon-pencil-fill" %>
         </li>
         <li>
-          <%= button_to t(".destroy"), @contact, method: :delete, class: "ContactDetail__destroy-btn fr-btn fr-btn--sm fr-btn--secondary", data: { turbo_confirm: t(".confirm_destroy") } %>
+          <%= button_to t(".destroy"), @contact, method: :delete, class: "ContactDetail__destroy-btn cm-btn cm-btn--sm cm-btn--secondary", data: { turbo_confirm: t(".confirm_destroy") } %>
         </li>
       </ul>
     <% end %>

@@ -21,14 +21,14 @@
         </div>
       </fieldset>
       <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element fr-btns-group">
+        <div class="fr-fieldset__element cm-btns-group">
           <% if devise_mapping.rememberable? %>
             <div class="fr-fieldset__element fr-checkbox-group fr-checkbox-group--sm">
               <%= f.check_box :remember_me %>
               <%= f.label :remember_me %>
             </div>
           <% end %>
-          <%= f.submit t(".sign_in"), class: "fr-btn" %>
+          <%= f.submit t(".sign_in"), class: "cm-btn" %>
         </div>
       </fieldset>
     <% end %>
@@ -36,9 +36,9 @@
     <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
       <hr>
       <h2><%= t(".no_account") %></h2>
-      <ul class="fr-btns-group">
+      <ul class="cm-btns-group">
         <li>
-          <%= link_to t("devise.shared.links.sign_up"), new_registration_path(resource_name), class: "fr-btn fr-btn--secondary" %>
+          <%= link_to t("devise.shared.links.sign_up"), new_registration_path(resource_name), class: "cm-btn cm-btn--secondary" %>
         </li>
       </ul>
     <% end %>
