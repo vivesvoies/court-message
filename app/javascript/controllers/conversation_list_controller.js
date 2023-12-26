@@ -6,7 +6,10 @@ export default class extends Controller {
   static classes = ["item", "active", "unread"];
 
   initialize() {
-    this.selection = this.conversationTargets.filter(conv => conv.classList.contains(this.activeClass))[0].id;
+    const selected = this.conversationTargets.filter(conv => conv.classList.contains(this.activeClass));
+    if (selected.length > 0) {
+      this.selection = selected[0].id;
+    }
   }
 
   activate(event) {
