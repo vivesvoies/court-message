@@ -31,8 +31,8 @@
       <fieldset class="fr-fieldset">
         <div class="fr-fieldset__element cm-btns-group">
           <% if devise_mapping.rememberable? %>
-            <div class="fr-fieldset__element fr-checkbox-group fr-checkbox-group--sm">
-              <%= f.check_box :remember_me %>
+            <div class="fr-fieldset__element fr-checkbox-group fr-checkbox-group--sm" hidden>
+              <%= f.check_box :remember_me, checked: true %>
               <%= f.label :remember_me %>
             </div>
           <% end %>
