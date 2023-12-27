@@ -1,0 +1,30 @@
+@import "variables";
+
+.SiteIntro {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 8rem 1fr;
+  gap: 2rem;
+}
+.SiteIntro__logo {
+  order: -1;
+  height: 100%;
+}
+
+@media screen and (min-width: $width-mid) {
+  .SiteIntro {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+  }
+  .SiteIntro__logo {
+    order: inherit;
+  }
+}
+
+.SiteIntro__title {
+  font: var(--font-hero);
+}
+.SiteIntro__text {
+  font: var(--font-subtitle);
+}
+ 

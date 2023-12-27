@@ -1,7 +1,15 @@
 <div class="Page Page__sign-in">
   <div class="Block Block__sign-in">
-    <h1><%= t(".sign_in") %></h1>
-    
+    <header class="SiteIntro">
+      <div>
+        <h1 class="SiteIntro__title"><%= t("text.welcome") %></h1>
+        <p class="SiteIntro__text">
+          <%= t("text.intro") %>
+        </p>
+      </div>
+      <%= image_tag "cm-logo.svg", class: "SiteIntro__logo",  alt: t(".logo-alt") %>
+    </header>
+
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <fieldset class="fr-fieldset">
         <div class="fr-fieldset__element fr-input-group">

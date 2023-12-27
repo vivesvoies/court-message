@@ -1,15 +1,15 @@
 .cm-btn {
   background-color: var(--action-bg);
   color: var(--action-text);
-  border-radius: .75rem;
+  border-radius: 20rem;
 
   display: inline-flex;
   flex-direction: row;
   align-items: center;
   width: fit-content;
 
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: .75rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
@@ -21,8 +21,8 @@
   display: block;
 }
 
-.cm-btn[class^=cm-icon-]:not([class*=cm-btn--icon-]),
-.cm-btn[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+.cm-btn[class^=fr-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn[class*=" fr-icon-"]:not([class*=cm-btn--icon-]) {
   overflow: hidden;
   white-space: nowrap;
   max-width: 2.5rem;
@@ -31,15 +31,15 @@
   padding-right: 0.5rem;
 }
 
-.cm-btn--icon-left[class^=cm-icon-],
-.cm-btn--icon-left[class*=" cm-icon-"] {
+.cm-btn--icon-left[class^=fr-icon-],
+.cm-btn--icon-left[class*=" fr-icon-"] {
   overflow: initial;
   max-width: 100%;
   max-height: none;
 }
 
-.cm-btn--icon-left[class^=cm-icon-]::before,
-.cm-btn--icon-left[class*=" cm-icon-"]::before {
+.cm-btn--icon-left[class^=fr-icon-]::before,
+.cm-btn--icon-left[class*=" fr-icon-"]::before {
   --icon-size: 1rem;
   margin-left: -0.125rem;
   margin-right: 0.5rem;
@@ -53,8 +53,8 @@
 }
 
 
-.cm-btn--sm[class^=cm-icon-]:not([class*=cm-btn--icon-]),
-.cm-btn--sm[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+.cm-btn--sm[class^=fr-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn--sm[class*=" fr-icon-"]:not([class*=cm-btn--icon-]) {
   overflow: hidden;
   white-space: nowrap;
   max-width: 2rem;
@@ -63,22 +63,22 @@
   padding-right: 0.5rem;
 }
 
-.cm-btn--sm[class^=cm-icon-]:not([class*=cm-btn--icon-])::before,
-.cm-btn--sm[class*=" cm-icon-"]:not([class*=cm-btn--icon-])::before {
+.cm-btn--sm[class^=fr-icon-]:not([class*=cm-btn--icon-])::before,
+.cm-btn--sm[class*=" fr-icon-"]:not([class*=cm-btn--icon-])::before {
   --icon-size: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.cm-btn--sm.cm-btn--icon-left[class^=cm-icon-],
-.cm-btn--sm.cm-btn--icon-left[class*=" cm-icon-"] {
+.cm-btn--sm.cm-btn--icon-left[class^=fr-icon-],
+.cm-btn--sm.cm-btn--icon-left[class*=" fr-icon-"] {
   overflow: initial;
   max-width: 100%;
   max-height: none;
 }
 
-.cm-btn--sm.cm-btn--icon-left[class^=cm-icon-]::before,
-.cm-btn--sm.cm-btn--icon-left[class*=" cm-icon-"]::before {
+.cm-btn--sm.cm-btn--icon-left[class^=fr-icon-]::before,
+.cm-btn--sm.cm-btn--icon-left[class*=" fr-icon-"]::before {
   --icon-size: 1rem;
   margin-left: -0.125rem;
   margin-right: 0.5rem;
@@ -91,8 +91,8 @@
   padding: 0.5rem 1.5rem;
 }
 
-.cm-btn--lg[class^=cm-icon-]:not([class*=cm-btn--icon-]),
-.cm-btn--lg[class*=" cm-icon-"]:not([class*=cm-btn--icon-]) {
+.cm-btn--lg[class^=fr-icon-]:not([class*=cm-btn--icon-]),
+.cm-btn--lg[class*=" fr-icon-"]:not([class*=cm-btn--icon-]) {
   overflow: hidden;
   white-space: nowrap;
   max-width: 3rem;
@@ -101,15 +101,15 @@
   padding-right: 0.5rem;
 }
 
-.cm-btn--lg[class^=cm-icon-]:not([class*=cm-btn--icon-])::before,
-.cm-btn--lg[class*=" cm-icon-"]:not([class*=cm-btn--icon-])::before {
+.cm-btn--lg[class^=fr-icon-]:not([class*=cm-btn--icon-])::before,
+.cm-btn--lg[class*=" fr-icon-"]:not([class*=cm-btn--icon-])::before {
   --icon-size: 2rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.cm-btn--lg.cm-btn--icon-left[class^=cm-icon-],
-.cm-btn--lg.cm-btn--icon-left[class*=" cm-icon-"],
+.cm-btn--lg.cm-btn--icon-left[class^=fr-icon-],
+.cm-btn--lg.cm-btn--icon-left[class*=" fr-icon-"],
 .cm-btn--lg.cm-btn--icon-left[class^=cm-fi-],
 .cm-btn--lg.cm-btn--icon-left[class*=" cm-fi-"] {
   overflow: initial;
@@ -117,8 +117,8 @@
   max-height: none;
 }
 
-.cm-btn--lg.cm-btn--icon-left[class^=cm-icon-]::before,
-.cm-btn--lg.cm-btn--icon-left[class*=" cm-icon-"]::before,
+.cm-btn--lg.cm-btn--icon-left[class^=fr-icon-]::before,
+.cm-btn--lg.cm-btn--icon-left[class*=" fr-icon-"]::before,
 .cm-btn--lg.cm-btn--icon-left[class^=cm-fi-]::before,
 .cm-btn--lg.cm-btn--icon-left[class*=" cm-fi-"]::before {
   --icon-size: 1.5rem;
@@ -127,6 +127,8 @@
 }
 
 .cm-btns-group {
+  list-style-type: none;
+
   display: flex;
   align-items: stretch;
   flex-wrap: wrap;
@@ -233,15 +235,15 @@
   width: var(--equisized-width);
 }
 
-.cm-btns-group--sm .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+.cm-btns-group--sm .cm-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]) {
   font-size: 0.875rem;
   line-height: 1.5rem;
   min-height: 2rem;
   padding: 0.25rem 0.75rem;
 }
 
-.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
-.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-],
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"] {
   font-size: 0.875rem;
   line-height: 1.5rem;
   min-height: 2rem;
@@ -255,15 +257,15 @@
   justify-content: flex-start;
 }
 
-.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--sm:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 1rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
-.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=fr-icon-],
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"] {
   font-size: 0.875rem;
   line-height: 1.5rem;
   min-height: 2rem;
@@ -273,15 +275,15 @@
   max-height: none;
 }
 
-.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--sm.cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 1rem;
   margin-left: -0.125rem;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=fr-icon-],
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"] {
   font-size: 0.875rem;
   line-height: 1.5rem;
   min-height: 2rem;
@@ -291,8 +293,8 @@
   max-height: none;
 }
 
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::after,
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::after {
   content: "";
 
   --icon-size: 1rem;
@@ -300,20 +302,20 @@
   margin-left: 0.5rem;
 }
 
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--sm.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::before {
   content: none;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg) .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg) .cm-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]) {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -327,15 +329,15 @@
   justify-content: flex-start;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg):not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 1.5rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=fr-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -345,15 +347,15 @@
   max-height: none;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 1rem;
   margin-left: -0.125rem;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=fr-icon-],
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"] {
   font-size: 1rem;
   line-height: 1.5rem;
   min-height: 2.5rem;
@@ -363,8 +365,8 @@
   max-height: none;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::after,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::after {
   content: "";
 
   --icon-size: 1rem;
@@ -372,20 +374,20 @@
   margin-left: 0.5rem;
 }
 
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group:not(.cm-btns-group--sm):not(.cm-btns-group--lg).cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::before {
   content: none;
 }
 
-.cm-btns-group--lg .cm-btn:not([class^=cm-icon-]):not([class*=" cm-icon-"]) {
+.cm-btns-group--lg .cm-btn:not([class^=fr-icon-]):not([class*=" fr-icon-"]) {
   font-size: 1.125rem;
   line-height: 1.75rem;
   min-height: 3rem;
   padding: 0.5rem 1.5rem;
 }
 
-.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-],
-.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-],
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"] {
   font-size: 1.125rem;
   line-height: 1.75rem;
   min-height: 3rem;
@@ -399,15 +401,15 @@
   justify-content: flex-start;
 }
 
-.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--lg:not([class^=cm-btns-group--icon-]):not([class*=" cm-btns-group--icon-"]) .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 2rem;
   margin-left: 0;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=cm-icon-],
-.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=fr-icon-],
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"] {
   font-size: 1.125rem;
   line-height: 1.75rem;
   min-height: 3rem;
@@ -417,15 +419,15 @@
   max-height: none;
 }
 
-.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--lg.cm-btns-group--icon-left .cm-btn[class*=" fr-icon-"]::before {
   --icon-size: 1.5rem;
   margin-left: -0.1875rem;
   margin-right: 0.5rem;
 }
 
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-],
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"] {
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=fr-icon-],
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"] {
   font-size: 1.125rem;
   line-height: 1.75rem;
   min-height: 3rem;
@@ -435,8 +437,8 @@
   max-height: none;
 }
 
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::after,
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::after {
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::after,
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::after {
   content: "";
 
   --icon-size: 1.5rem;
@@ -444,8 +446,8 @@
   margin-left: 0.5rem;
 }
 
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=cm-icon-]::before,
-.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" cm-icon-"]::before {
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class^=fr-icon-]::before,
+.cm-btns-group--lg.cm-btns-group--icon-right .cm-btn[class*=" fr-icon-"]::before {
   content: none;
 }
 
@@ -501,6 +503,7 @@ a.cm-btn:not([href]) {
 .cm-btn--secondary {
   background-color: transparent;
   box-shadow: inset 0 0 0 1px var(--action-border);
+  // border: 1px solid var(--action-border);
   color: var(--action-secondary-text);
 }
 

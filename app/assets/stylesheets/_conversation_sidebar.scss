@@ -101,14 +101,14 @@
 }
 .Conversation__latest {
   grid-area: time;
-  font-size: $fs-small;
+  font: var(--font-small);
   line-height: 1rem;
   text-align: right;
   font-style: italic;
 }
 .Conversation__sub {
   grid-area: sub;
-  font-size: $fs-small;
+  font: var(--font-small);
   line-height: 1.25rem;
   display: -webkit-box;
   -webkit-box-orient: vertical;

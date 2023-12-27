@@ -16,13 +16,14 @@
 
 html {
   box-sizing: inherit;
+  font-family: var(--font-family-main);
 }
 
 body,
 input,
 select,
 textarea {
-  font-family: OpenSans, sans-serif;
+  font: var(--font-body);
 }
 body {
   display: flex;

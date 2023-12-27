@@ -69,6 +69,7 @@ fr:
       new:
         sign_in: "Connexion à Court‑message"
         no_account: "Vous n’avez pas de compte ?"
+        logo-alt: "Logo Court‑message"
   
   roles:
     user: "Utilisateur"

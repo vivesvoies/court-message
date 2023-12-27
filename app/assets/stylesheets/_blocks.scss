@@ -1,13 +1,12 @@
 @import "variables";
 
 .Page {
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   justify-content: space-around;
   width: 100%;
-  @media (min-width: 48rem) {
+  @media (min-width: $width-mid) {
     margin-top: 3.5rem;
     flex-direction: row;
     flex-wrap: wrap;
@@ -25,7 +24,6 @@
 }
 
 .Block {
-  background: var(--background-alt-grey);
   width: 100%;
   flex: 1;
   justify-self: stretch;
