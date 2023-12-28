@@ -155,7 +155,7 @@
 
 html {
   box-sizing: inherit;
-  family: var(--family);
+  font-family: var(--family);
 }
 
 body,
@@ -172,6 +172,11 @@ body {
   min-height: 100dvh;
   margin: 0;
   background: white;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
 }
 .Main {
   flex: 1;
