@@ -8,11 +8,11 @@
     
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
     
-      <fieldset class="fr-fieldset">
+      <fieldset class="cm-fieldset">
         <%= render "devise/shared/error_messages", resource: resource %>
         <%= f.hidden_field :reset_password_token %>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password, t(".new_password"), class: "fr-label" %>
           <% if @minimum_password_length %>
             <span class="fr-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
@@ -20,14 +20,14 @@
           <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password_confirmation, class: "fr-label" %>
           <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>
       </fieldset>
     
-      <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element cm-btns-group">
+      <fieldset class="cm-fieldset">
+        <div class="cm-fieldset__element cm-btns-group">
           <%= f.submit t(".change_my_password"), class: "cm-btn" %>
         </div>
       </fieldset>

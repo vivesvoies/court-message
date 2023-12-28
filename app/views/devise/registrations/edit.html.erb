@@ -8,10 +8,10 @@
     
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     
-      <fieldset class="fr-fieldset">
+      <fieldset class="cm-fieldset">
         <%= render "devise/shared/error_messages", resource: resource %>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :email, class: "fr-label" do %>
             <%= t("devise.shared.forms.identifier") %>
             <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
@@ -23,7 +23,7 @@
           <div><%= t(".currently_waiting_confirmation_for_email", email: resource.unconfirmed_email) %></div>
         <% end %>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password %>
           <span class="fr-hint-text"><%= t(".leave_blank_if_you_don_t_want_to_change_it") %></span>
           <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
@@ -32,19 +32,19 @@
           <% end %>
         </div>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password_confirmation, class: "fr-label" %>
           <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>
       
-        <div class="fr-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element fr-input-group">
           <%= f.label :current_password %>
           <span class="fr-hint-text"><%= t(".we_need_your_current_password_to_confirm_your_changes") %></span>
           <%= f.password_field :current_password, autocomplete: "current-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>
       </fieldset>
-      <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element cm-btns-group cm-btns-group--right cm-btns-group--inline">
+      <fieldset class="cm-fieldset">
+        <div class="cm-fieldset__element cm-btns-group cm-btns-group--right cm-btns-group--inline">
           <%= f.submit t(".update"), class: "cm-btn" %>
         </div>
       </fieldset>
