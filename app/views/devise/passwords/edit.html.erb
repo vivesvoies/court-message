@@ -15,7 +15,7 @@
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password, t(".new_password"), class: "fr-label" %>
           <% if @minimum_password_length %>
-            <span class="fr-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
+            <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
           <% end %>
           <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>

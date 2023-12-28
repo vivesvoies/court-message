@@ -14,7 +14,7 @@
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :email, class: "fr-label" do %>
             <%= t("devise.shared.forms.identifier") %>
-            <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
+            <span class="cm-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>        
         </div>
@@ -25,10 +25,10 @@
       
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password %>
-          <span class="fr-hint-text"><%= t(".leave_blank_if_you_don_t_want_to_change_it") %></span>
+          <span class="cm-hint-text"><%= t(".leave_blank_if_you_don_t_want_to_change_it") %></span>
           <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
           <% if @minimum_password_length %>
-            <span class="fr-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
+            <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
           <% end %>
         </div>
       
@@ -39,7 +39,7 @@
       
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :current_password %>
-          <span class="fr-hint-text"><%= t(".we_need_your_current_password_to_confirm_your_changes") %></span>
+          <span class="cm-hint-text"><%= t(".we_need_your_current_password_to_confirm_your_changes") %></span>
           <%= f.password_field :current_password, autocomplete: "current-password", class: "fr-input fr-password__input", aria_required: true %>
         </div>
       </fieldset>

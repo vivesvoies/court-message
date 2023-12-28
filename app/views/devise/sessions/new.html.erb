@@ -1,4 +1,4 @@
-<div class="Page__SiteIntro cm-page">
+<div class="Page__Intro cm-page">
   <div class="cm-container">
     <header class="SiteIntro cm-column cm-col-full">
       <div>
@@ -16,7 +16,7 @@
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :email, class: "cm-label" do %>
             <%= t("devise.shared.forms.identifier") %>
-            <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
+            <span class="cm-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "cm-input" %>        
         </div>

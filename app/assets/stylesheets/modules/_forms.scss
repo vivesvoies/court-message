@@ -18,3 +18,10 @@
 .cm-fieldset__element {
   margin-bottom: 1rem
 }
+
+.cm-hint-text {
+  display: block;
+  font: var(--font-small);
+  line-height: 1.25rem;
+  margin-bottom: 1rem;
+}
