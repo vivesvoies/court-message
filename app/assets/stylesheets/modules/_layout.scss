@@ -1,0 +1,76 @@
+@import "variables";
+
+:root {
+  --page-padding: 2rem;
+}
+
+.cm-page {
+  padding: var(--page-padding) var(--page-padding) 0;
+}
+
+@media screen and (min-width: $width-small) {
+  :root {
+    --page-padding: 3rem;
+  }
+}
+
+.cm-container {
+  --columns: 12;
+  --width: initial;
+  --width-small: initial;
+  --width-mid: initial;
+  --width-large: initial;
+  --width-huge: initial;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.cm-container--auto {
+  align-items: space-between;
+  > * {
+    flex: 1;
+  }
+}
+.cm-container.cm-container--wide {
+  max-width: 100%;
+}
+
+.cm-column {
+  --width: var(--width-small, var(--columns));
+  flex-basis: calc(var(--width) / var(--columns) * 100%);
+}
+.cm-column.cm-col-full {
+  --width: var(--columns);
+}
+.cm-column.cm-col-half {
+  --width: calc(var(--columns) / 2);
+}
+
+// $width-small: 36rem;
+// $width-mid: 48rem;
+// $width-large: 62rem;
+// $width-huge: 78rem;
+
+@media screen and (min-width: $width-mid) {
+  .cm-column {
+    --width: var(--width-mid, var(--width-small, 0));
+  }
+}
+@media screen and (min-width: $width-large) {
+  .cm-container {
+    max-width: 42rem;
+  }
+  .cm-column {
+    --width: var(--width-large, var(--width-mid, var(--width-small, 0)));
+  }
+}
+@media screen and (min-width: $width-huge) {
+  .cm-container {
+    max-width: 64rem;
+  }
+  .cm-column {
+    --width: var(--width-huge, var(--width-large, var(--width-mid, var(--width-small, 0))));
+  }
+}

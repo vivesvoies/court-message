@@ -1,0 +1,18 @@
+<footer class="PartnerFooter cm-page">
+  <ul class="FooterList cm-container cm-container--auto cm-container--wide">
+    <li class="FooterItem">
+      <h3>Court-message</h3>
+    </li>
+    <li class="FooterItem FooterItem__block">
+      <%= image_tag "vv-logo.svg", class: "Partner__logo",  alt: t(".logo-vv-alt") %>
+      <%= image_tag "anct-logo-societe-numerique.svg", class: "Partner__logo",  alt: t(".logo-anct-alt") %>
+    </li>
+    <li class="FooterItem FooterItem__block FooterItem__block--stack">
+      <p><%= t("text.long_desc") %></p>
+      <%= render partial: "legal" %>
+    </li>
+    <li class="FooterItem">
+      Version beta
+    </li>
+  </ul>
+</footer>

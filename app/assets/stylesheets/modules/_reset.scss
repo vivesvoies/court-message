@@ -1,0 +1,197 @@
+button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  margin: 0;
+  color: inherit;
+  background-color: transparent;
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-family: var(--family), arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  border-radius: 0;
+  border: 0;
+  background-color: transparent;
+  margin: 0;
+}
+
+input[type=search] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
+}
+
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+  margin-left: 1rem;
+  margin-right: -1px;
+  width: 1.25rem;
+  height: 1.25rem;
+  mask-size: 1.25rem 1.25rem;
+}
+
+a,
+button,
+input,
+input[type=checkbox] + label::before,
+input[type=radio] + label::before,
+input[type=button],
+input[type=image],
+input[type=reset],
+input[type=submit],
+select,
+textarea,
+[tabindex],
+video[controls],
+audio[controls],
+[contenteditable]:not([contenteditable=false]),
+details,
+details > summary:first-of-type {
+  outline-offset: 2px;
+  outline-width: 2px;
+  outline-color: var(--focus-ring);
+}
+
+a:focus,
+button:focus,
+input:focus,
+input[type=checkbox]:focus + label::before,
+input[type=radio]:focus + label::before,
+input[type=button]:focus,
+input[type=image]:focus,
+input[type=reset]:focus,
+input[type=submit]:focus,
+select:focus,
+textarea:focus,
+[tabindex]:focus,
+video:focus[controls],
+audio:focus[controls],
+[contenteditable]:not([contenteditable=false]):focus,
+details:focus,
+details > summary:first-of-type:focus {
+  outline-style: solid;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+input[type=checkbox]:focus:not(:focus-visible) + label::before,
+input[type=radio]:focus:not(:focus-visible) + label::before,
+input[type=button]:focus:not(:focus-visible),
+input[type=image]:focus:not(:focus-visible),
+input[type=reset]:focus:not(:focus-visible),
+input[type=submit]:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+[tabindex]:focus:not(:focus-visible),
+video:focus:not(:focus-visible)[controls],
+audio:focus:not(:focus-visible)[controls],
+[contenteditable]:not([contenteditable=false]):focus:not(:focus-visible),
+details:focus:not(:focus-visible),
+details > summary:first-of-type:focus:not(:focus-visible) {
+  outline-style: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+input[type=checkbox]:focus-visible + label::before,
+input[type=radio]:focus-visible + label::before,
+input[type=button]:focus-visible,
+input[type=image]:focus-visible,
+input[type=reset]:focus-visible,
+input[type=submit]:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+video:focus-visible[controls],
+audio:focus-visible[controls],
+[contenteditable]:not([contenteditable=false]):focus-visible,
+details:focus-visible,
+details > summary:first-of-type:focus-visible {
+  outline-style: solid;
+}
+
+button,
+input[type=button],
+input[type=image],
+input[type=reset],
+input[type=submit] {
+  --hover-tint: var(--hover);
+  --active-tint: var(--active);
+}
+
+a,
+button,
+input[type=checkbox],
+input[type=checkbox] + label,
+input[type=radio],
+input[type=radio] + label,
+input[type=file],
+input[type=range],
+input[type=button],
+input[type=image],
+input[type=reset],
+input[type=submit],
+select,
+video[controls],
+audio[controls],
+details,
+details > summary:first-of-type {
+  cursor: pointer;
+}
+
+a:not([href]),
+button:disabled,
+input:disabled,
+input[type=checkbox]:disabled,
+input[type=checkbox]:disabled + label,
+input[type=radio]:disabled,
+input[type=radio]:disabled + label,
+input[type=file]:disabled,
+input[type=range]:disabled,
+input[type=button]:disabled,
+input[type=image]:disabled,
+input[type=reset]:disabled,
+input[type=submit]:disabled,
+select:disabled,
+textarea:disabled,
+video:not([href])[controls],
+audio:not([href])[controls] {
+  cursor: not-allowed;
+}
+
+/**
+ * Override de l'opacité chrome sur un élément disabled
+ */
+a:not([href]),
+button:disabled,
+input:disabled,
+input[type=checkbox]:disabled,
+input[type=checkbox]:disabled + label,
+input[type=radio]:disabled,
+input[type=radio]:disabled + label,
+textarea:disabled,
+video:not([href]),
+audio:not([href]) {
+  opacity: 1;
+  color: var(--dark6);
+}

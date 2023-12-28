@@ -1,0 +1,12 @@
+.LegalLinks {
+  list-style-type: none;
+  font: var(--font-micro);
+  gap: .5rem;
+}
+
+.LegalLinks > li {
+  display: inline;
+}
+.LegalLinks > li + li:before {
+  content: " | ";
+}

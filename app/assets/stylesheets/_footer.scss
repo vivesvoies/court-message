@@ -1,0 +1,60 @@
+@import "variables";
+
+.PartnerFooter {
+  position: sticky;
+  top: calc(100vh - 8.5rem);
+}
+
+.FooterList {
+  flex-direction: column;
+  list-style-type: none;
+  border-top: 1px solid purple;
+  padding: 1rem 0 3rem;;
+  gap: 1rem;
+}
+@media (min-width: $width-mid) {
+  .FooterList {
+    padding-bottom: 1rem;
+    flex-direction: row;
+  }
+}
+
+.FooterItem > h3 {
+  margin: 0;
+  font: var(--font-body-bold);
+}
+
+.FooterItem__block {
+  flex: 2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.FooterItem__block--stack {
+  gap: .5rem;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.Partner__logo {
+  display: block;
+  height: 3rem;
+}
+
+
+.FooterItem p {
+  font: var(--font-small);
+  margin: 0;
+}
+
+.FooterItem:first-child,
+.FooterItem:last-child {
+  flex: .75;
+}
+
+@media (min-width: $width-mid) {
+  .FooterItem:last-child {
+    text-align: right;
+  }
+}

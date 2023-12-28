@@ -10,6 +10,9 @@ fr:
       save_error: "Impossible d’enregistrer."
     modal:
       close: "Fermer"
+    partner_footer:
+      logo-anct-alt: "Logo ANCT Société numérique"
+      logo-vv-alt: "Logo Vives voies"
 
   activerecord:
     models:
@@ -67,9 +70,10 @@ fr:
         back: "Retour"
     sessions:
       new:
-        sign_in: "Connexion à Court‑message"
-        no_account: "Vous n’avez pas de compte ?"
+        sign_in: "Je me connecte"
+        no_account: "Créer un compte"
         logo-alt: "Logo Court‑message"
+        forgot_your_password: "J’ai oublié mon mot de passe"
   
   roles:
     user: "Utilisateur"

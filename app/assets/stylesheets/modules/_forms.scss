@@ -1,0 +1,20 @@
+.cm-fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cm-fieldset + .cm-fieldset {
+  margin-top: 1rem;
+}
+
+.cm-fieldset--split {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: flex-start;
+}
+
+.cm-fieldset__element {
+  margin-bottom: 1rem
+}

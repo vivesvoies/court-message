@@ -2,6 +2,10 @@ fr:
   text:
     welcome: "Bienvenue."
     intro:
-      Court-Message est un outil collaboratif d’envoi et de réception de sms.
+      Court-message est un outil collaboratif d’envoi et de réception de sms.
       Il a été conçu pour faciliter le dialogue, la médiation à distance
       et l’auto-suivi des personnes.
+    long_desc:
+        Court-Message est un outil collaboratif d’envoi et de réception de sms.
+        Cet outil est financé par l’Agence Nationale de Cohésion des Territoires
+        dans le cadre du programme Société Numérique. Il est piloté par l’association Vives Voies. 

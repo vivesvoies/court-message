@@ -1,6 +1,6 @@
-<div class="Page Page__sign-in">
-  <div class="Block Block__sign-in">
-    <header class="SiteIntro">
+<div class="Page__SiteIntro cm-page">
+  <div class="cm-container">
+    <header class="SiteIntro cm-column cm-col-full">
       <div>
         <h1 class="SiteIntro__title"><%= t("text.welcome") %></h1>
         <p class="SiteIntro__text">
@@ -10,45 +10,47 @@
       <%= image_tag "cm-logo.svg", class: "SiteIntro__logo",  alt: t(".logo-alt") %>
     </header>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element fr-input-group">
-          <%= f.label :email, class: "fr-label" do %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "LoginForm cm-column" }) do |f| %>
+      <%# Login fields %>
+      <fieldset class="cm-fieldset">
+        <div class="cm-fieldset__element fr-input-group">
+          <%= f.label :email, class: "cm-label" do %>
             <%= t("devise.shared.forms.identifier") %>
             <span class="fr-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "fr-input" %>        
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "cm-input" %>        
         </div>
       
-        <div class="fr-fieldset__element fr-input-group">
-          <%= f.label :password, class: "fr-label" %>
-          <%= f.password_field :password, autocomplete: "current-password", class: "fr-input fr-password__input", aria_required: true %>
+        <div class="cm-fieldset__element fr-input-group">
+          <%= f.label :password, class: "cm-label" %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "cm-input fr-password__input", aria_required: true %>
+        </div>
+
+        <%# Hidden remember check %>
+        <% if devise_mapping.rememberable? %>
+          <div class="cm-fieldset__element fr-checkbox-group fr-checkbox-group--sm" hidden>
+            <%= f.check_box :remember_me, checked: true %>
+            <%= f.label :remember_me %>
+          </div>
+        <% end %>
+
+      </fieldset>
+
+      <%# Buttons %>
+      <fieldset class="cm-fieldset LoginForm__actions cm-container">
+        <div class="cm-fieldset__element LoginForm__forgot cm-column">
           <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-            <%= link_to t("devise.shared.links.forgot_your_password"), new_password_path(resource_name), class: "fr-link" %>
+            <%= link_to t(".forgot_your_password"), new_password_path(resource_name), class: "cm-btn cm-btn--link" %>
+          <% end %>
+        </div>
+        <div class="cm-fieldset__element cm-btns-group cm-btns-group--icon-left LoginForm__action-buttons LoginForm__buttons cm-column">
+          <%= f.button t(".sign_in"), type: "submit", class: "cm-btn cm-btn--fat cm-btn--icon-left cm-icon-arrow-right" %>
+          <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
+            <%= link_to t("devise.shared.links.sign_up"), new_registration_path(resource_name), class: "cm-btn cm-btn--fat cm-btn--secondary cm-btn--icon-left cm-icon-plus" %>
           <% end %>
         </div>
       </fieldset>
-      <fieldset class="fr-fieldset">
-        <div class="fr-fieldset__element cm-btns-group">
-          <% if devise_mapping.rememberable? %>
-            <div class="fr-fieldset__element fr-checkbox-group fr-checkbox-group--sm" hidden>
-              <%= f.check_box :remember_me, checked: true %>
-              <%= f.label :remember_me %>
-            </div>
-          <% end %>
-          <%= f.submit t(".sign_in"), class: "cm-btn" %>
-        </div>
-      </fieldset>
-    <% end %>
-    
-    <%- if devise_mapping.registerable? && controller_name != 'registrations' %>
-      <hr>
-      <h2><%= t(".no_account") %></h2>
-      <ul class="cm-btns-group">
-        <li>
-          <%= link_to t("devise.shared.links.sign_up"), new_registration_path(resource_name), class: "cm-btn cm-btn--secondary" %>
-        </li>
-      </ul>
-    <% end %>
+    <% end %>    
   </div>
 </div>
+<%= render partial: "partner_footer" %>

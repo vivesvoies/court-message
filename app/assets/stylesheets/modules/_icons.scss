@@ -1,0 +1,52 @@
+$icon-names: (
+  "arrow-right",
+  "close-line",
+  "plus"
+);
+
+[class^=cm-icon-]::before,
+[class^=cm-icon-]::after,
+[class*=" cm-icon-"]::before,
+[class*=" cm-icon-"]::after {
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+  background-color: currentColor;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  --icon-size: 1.5rem;
+}
+
+[class^=cm-icon-]::before,
+[class*=" cm-icon-"]::before {
+  content: "";
+}
+
+.cm-icon--xs::before,
+.cm-icon--xs::after {
+  --icon-size: 0.75rem;
+}
+
+.cm-icon--sm::before,
+.cm-icon--sm::after {
+  --icon-size: 1rem;
+}
+
+.cm-icon--md::before,
+.cm-icon--md::after {
+  --icon-size: 1.5rem;
+}
+
+.cm-icon--lg::before,
+.cm-icon--lg::after {
+  --icon-size: 2rem;
+}
+
+@each $icon-name in $icon-names {
+  .cm-icon-#{$icon-name}::before,
+  .cm-icon-#{$icon-name}::after {
+    mask-image: image-url("icons/#{$icon-name}.svg");
+  }
+}

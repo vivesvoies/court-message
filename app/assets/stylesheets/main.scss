@@ -1,13 +1,152 @@
+@import "variables";
+
+/* Sizes */
 :root {
   --size-header: 3rem;
   --size-viewer: calc(100vh);
   --size-message-box: 8rem;
+  --input-overhang: 1rem;
 }
-
 @supports (height: 100dvh) {
   :root {
     --size-viewer: calc(100dvh);
   }
+}
+
+/*
+  Color associations.
+  Map color names to semantic use case.
+*/
+:root {
+  --outbound-message-bg: var(--color-peach);
+  --inbound-message-bg: var(--color-latte);
+  --text-secondary: var(--color-black);
+  
+  --list-bg: var(--color-sable);
+  --list-separator: var(--color-brown);
+  --list-separator-top: var(--color-brown-transparent);
+  --list-border: var(--color-black);
+  --list-selected-bg: var(--color-peach);
+  --text-list-selected: var(--color-black);
+
+  --action-bg: var(--color-black);
+  --action-border: var(--color-black);
+  --action-hover: var(--color-brown);
+  --action-active: var(--color-ochre);
+  --action-text: var(--color-white);
+
+  --action-secondary-text: var(--color-black);
+  --action-secondary-hover: var(--color-dark9);
+  --action-secondary-active: var(--color-dark8);
+
+  --input-text: var(--color-ochre);
+  --input-bg: var(--color-latte);
+  --input-border: var(--color-ochre);
+
+  --focus-ring: var(--color-peach);
+}
+
+/*
+  Color values
+  Shouldn't be used directly in stylesheets.
+  Should only be used when setting up variables in this file.
+*/
+:root {
+  --color-white: #ffffff;
+  --color-white-transparent: #FFFFFF80;
+  --color-black: #000000;
+  --color-sable: #FFFAF2;
+  --color-peach: #FAD29B;
+  --color-ochre: #A8947A;
+  --color-brown: #604D33;
+  --color-brown-transparent: #604D3333;
+  --color-latte: #FAEFE0;
+  --color-robin: #FF4E4E;
+  --color-brick: #FF6E30;
+  --color-sapin: #156D58;
+  --color-pomme: #6FCB72;
+  --color-alien: #2ef735;
+
+  --color-dark1: #1a1a1a;
+  --color-dark2: #333333;
+  --color-dark3: #4d4d4d;
+  --color-dark4: #666666;
+  --color-dark5: #808080;
+  --color-dark6: #999999;
+  --color-dark7: #b3b3b3;
+  --color-dark8: #cccccc;
+  --color-dark9: #e6e6e6;
+
+
+}
+
+/*
+  Font styles
+*/
+:root {
+  --family:           var(--open-sans);
+
+  --font-hero:        normal 700 var(--font-size-large)   var(--family);
+  --font-subtitle:    normal 700 var(--font-size-big)     var(--family);
+
+  --font-message:     normal 400 var(--font-size-regular) var(--family);
+
+  --font-body:        normal 400 var(--font-size-small)   var(--family);
+  --font-body-bold:   normal 700 var(--font-size-small)   var(--family);
+
+  --font-medium-bold: normal 700 var(--font-size-tiny)    var(--family); 
+
+  --font-small:       normal 400 var(--font-size-micro)   var(--family);
+  --font-small-bold:  normal 700 var(--font-size-micro)   var(--family);
+
+  --font-micro:       normal 400 var(--font-size-micro)   var(--family);  
+}
+
+@media (min-width: $width-mid) {
+  :root {
+    --font-hero:        normal 700 var(--font-size-huge)    var(--family);
+    --font-subtitle:    normal 700 var(--font-size-large)   var(--family);
+
+    --font-message:     normal 400 var(--font-size-big)     var(--family);
+
+    --font-body:        normal 400 var(--font-size-regular) var(--family);
+    --font-body-bold:   normal 700 var(--font-size-regular) var(--family);
+
+    --font-medium-bold: normal 700 var(--font-size-small)   var(--family);
+
+    --font-small:       normal 400 var(--font-size-tiny)    var(--family);
+    --font-small-bold:  normal 700 var(--font-size-tiny)    var(--family);
+
+    --font-micro:       normal 400 var(--font-size-micro)   var(--family);
+  }
+}
+
+/*
+  Character sizes
+  Shouldn't be used directly in stylesheets.
+  Should only be used when setting up variables in this file.
+*/
+:root {
+  --open-sans:         OpenSans, sans-serif;
+  --font-size-huge:    4rem;     // 64px
+  --font-size-large:   1.5rem;   // 24px
+  --font-size-big:     1.125rem; // 18px
+  --font-size-regular: 1rem;     // 16px
+  --font-size-small:   .875rem;  // 14px
+  --font-size-tiny:    .75rem;   // 12px
+  --font-size-micro:   .625rem;  // 10px
+}
+
+/*
+  Links
+*/
+:root {
+  --underline-max-width: 100%;
+  --underline-hover-width: 0;
+  --underline-idle-width: var(--underline-max-width);
+  --underline-x: calc(var(--underline-max-width) * 0);
+  --underline-thickness: 0.0625em;
+  --underline-img: linear-gradient(0deg, currentColor, currentColor);
 }
 
 *, *::before, *::after {
@@ -16,7 +155,7 @@
 
 html {
   box-sizing: inherit;
-  font-family: var(--font-family-main);
+  family: var(--family);
 }
 
 body,
@@ -31,15 +170,11 @@ body {
   justify-content: space-between;
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--background-default-grey);
-}
-.Header,
-.Footer {
-  
+  margin: 0;
+  background: white;
 }
 .Main {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-.Page {}

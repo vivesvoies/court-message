@@ -11,6 +11,29 @@
   height: 100%;
 }
 
+.LoginForm {
+  --width-mid: 10;
+  --width-huge: 8;
+}
+.LoginForm__action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: fit-content;
+  justify-self: flex-end;
+  > .cm-btn {
+    width: auto !important;
+  }
+}
+.LoginForm__forgot {
+  --width-mid: 6;
+  --width-large: 7;
+}
+.LoginForm__buttons {
+  --width-mid: 6;
+  --width-large: 5;
+}
+
 @media screen and (min-width: $width-mid) {
   .SiteIntro {
     grid-template-columns: 2fr 1fr;
@@ -18,6 +41,7 @@
   }
   .SiteIntro__logo {
     order: inherit;
+    max-width: 16rem;
   }
 }
 
