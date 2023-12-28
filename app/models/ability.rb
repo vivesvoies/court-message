@@ -4,8 +4,8 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    belongs_to_team = { team: { id: user.team_ids } }
     return unless user.present?
+    belongs_to_team = { team: { id: user.team_ids } }
 
     # Rules for all users -> be part of team
     can :read, Team, belongs_to_team
