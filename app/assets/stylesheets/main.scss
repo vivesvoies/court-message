@@ -29,6 +29,8 @@
   --list-selected-bg: var(--color-peach);
   --text-list-selected: var(--color-black);
 
+  --footer-separator: var(--color-dark1);
+
   --action-bg: var(--color-black);
   --action-border: var(--color-black);
   --action-hover: var(--color-brown);
@@ -44,6 +46,8 @@
   --input-border: var(--color-ochre);
 
   --focus-ring: var(--color-peach);
+
+  --btn-hover: var(--shadow-1)
 }
 
 /*
@@ -77,7 +81,7 @@
   --color-dark8: #cccccc;
   --color-dark9: #e6e6e6;
 
-
+  --shadow-1: 0 0 .25rem .0625rem rgba(0, 0, 0, .25);
 }
 
 /*

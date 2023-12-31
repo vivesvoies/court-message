@@ -13,8 +13,12 @@
   min-height: 2.5rem;
   padding: 0.5rem 1rem;
 
-  --hover: var(--action-hover);
+  --hover: var(--action-bg);
   --active: var(--action-active);
+  --hover-shadow: var(--btn-hover);
+}
+.cm-btn:hover {
+  box-shadow: var(--hover-shadow);
 }
 
 .cm-btn--fat {
@@ -173,43 +177,6 @@
   flex-wrap: wrap;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
-
-  /**
-  * cm-btns-group--inline : aligne les boutons horizontalement dans tout les cas
-  * cm-btns-group--inline-(sm/md/lg) : permet de passer en horizontal à partir de la valeur du breakpoint appliqué (sm, md, lg)
-  */
-
-  /**
-  * cm-btns-group--left : (Défaut) aligne les boutons sur la gauche (en lecture L-t-R)
-  */
-
-  /**
-  * cm-btns-group--right : aligne les boutons sur la droite
-  */
-
-  /**
-  * cm-btns-group--center : aligne les boutons au centre du conteneur
-  */
-
-  /**
-  * cm-btns-group--center : aligne les boutons au centre du conteneur
-  */
-
-  /**
-  * cm-btns-group--equisized : Fixe la largeur des boutons à celle du plus grand. Géré en grande partie en JS.
-  */
-
-  /**
-  * cm-btns-group--sm : Fixe les boutons à la taille SM
-  */
-
-  /**
-  * cm-btns-group--md : (défaut) Fixe les boutons à la taille MD
-  */
-
-  /**
-  * cm-btns-group--lg : Fixe les boutons à la taille LG (sans modfifieur => MD)
-  */
 }
 
 .cm-btns-group > li {
@@ -528,6 +495,7 @@
   content: none;
 }
 
+// TODO
 .cm-btn:disabled,
 a.cm-btn:not([href]) {
   color: var(--text-disabled-grey);
@@ -538,24 +506,28 @@ a.cm-btn:not([href]) {
   --active: var(--background-disabled-grey-active);
 }
 
+// TODO
 .cm-btn--secondary {
   background-color: transparent;
   box-shadow: inset 0 0 0 1px var(--action-border);
   color: var(--action-secondary-text);
   --hover: var(--action-secondary-hover);
   --active: var(--action-secondary-active);
+  --hover-shadow: inset 0 0 0 1px var(--action-border), var(--btn-hover);
 }
 .cm-btn--secondary[href]:hover,
 .cm-btn--secondary:hover {
-  background-color: var(--hover);
+  --hover-tint: var(--hover);
 }
 .cm-btn--secondary:focus,
 .cm-btn--secondary:active,
 .cm-btn--secondary[href]:focus,
 .cm-btn--secondary[href]:active {
-  background-color: var(--active);
+  --active-tint: var(--active);
 }
 
+
+// TODO
 .cm-btn--secondary:disabled,
 a.cm-btn--secondary:not([href]) {
   color: var(--text-disabled-grey);
@@ -566,6 +538,7 @@ a.cm-btn--secondary:not([href]) {
   --active: inherit;
 }
 
+// TODO
 .cm-btn--tertiary {
   background-color: transparent;
 
@@ -585,6 +558,7 @@ a.cm-btn--tertiary:not([href]) {
   --active: inherit;
 }
 
+// TODO
 .cm-btn--tertiary-no-outline,
 .cm-btn--close {
   background-color: transparent;
@@ -594,6 +568,7 @@ a.cm-btn--tertiary:not([href]) {
   color: var(--text-action-high-blue-france);
 }
 
+// TODO
 .cm-btn--tertiary-no-outline:disabled,
 a.cm-btn--tertiary-no-outline:not([href]),
 a.cm-btn--close:not([href]),

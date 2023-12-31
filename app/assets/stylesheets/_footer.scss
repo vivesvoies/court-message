@@ -8,7 +8,7 @@
 .FooterList {
   flex-direction: column;
   list-style-type: none;
-  border-top: 1px solid purple;
+  border-top: 1px solid var(--footer-separator);
   padding: 1rem 0 3rem;;
   gap: 1rem;
 }
