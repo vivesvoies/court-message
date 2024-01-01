@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root to: redirect("/teams")
 
+  get "/.internal/ui", to: "pages#show", page: "ui"
+
   # User-facing routes
   devise_for :users, controllers: { registrations: "registrations" }
   devise_scope :user do

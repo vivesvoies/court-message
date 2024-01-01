@@ -1,0 +1,31 @@
+.UIPage {
+  padding-bottom: 3rem;
+}
+.UIPage h1 {
+  margin-top: 2rem;
+}
+.UIPage h2 {
+  font-size: 1rem;
+  margin: 1rem 0 0;
+}
+.UIList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.UIList__sublist {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.UI__rect {
+  border: 1px solid rgba(0, 0, 0, .5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  max-height: 8rem;
+}
