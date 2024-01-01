@@ -1,5 +1,9 @@
 @import "variables";
 
+.Page__Intro.cm-page {
+  padding-bottom: 0;
+}
+
 .SiteIntro {
   display: grid;
   grid-template-columns: 100%;

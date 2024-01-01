@@ -4,6 +4,9 @@
   position: sticky;
   top: calc(100vh - 8.5rem);
 }
+.PartnerFooter.cm-page {
+  padding-bottom: 0;
+}
 
 .FooterList {
   flex-direction: column;

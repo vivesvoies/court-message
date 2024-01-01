@@ -5,7 +5,7 @@
 }
 
 .cm-page {
-  padding: var(--page-padding) var(--page-padding) 0;
+  padding: var(--page-padding);
 }
 
 @media screen and (min-width: $width-small) {
@@ -25,6 +25,7 @@
   flex-wrap: wrap;
   margin: 0 auto;
   max-width: 100%;
+  width: 100%;
 }
 
 .cm-container--auto {
@@ -41,10 +42,10 @@
   --width: var(--width-small, var(--columns));
   flex-basis: calc(var(--width) / var(--columns) * 100%);
 }
-.cm-column.cm-col-full {
+.cm-column.cm-col--full {
   --width: var(--columns);
 }
-.cm-column.cm-col-half {
+.cm-column.cm-col--half {
   --width: calc(var(--columns) / 2);
 }
 
