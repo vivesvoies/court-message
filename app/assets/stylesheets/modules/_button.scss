@@ -18,6 +18,7 @@
   --hover-shadow: var(--btn-hover);
 }
 .cm-btn:hover {
+  --hover-tint: var(--hover);
   box-shadow: var(--hover-shadow);
 }
 
@@ -37,6 +38,8 @@
   border-radius: 0;
   border: none;
 
+  --hover: transparent;
+  --hover-shadow: none;
   color: var(--action-secondary-text);
   font: var(--font-body);
 }
@@ -72,6 +75,14 @@
   max-height: 2.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.cm-btn[class^=cm-icon-]:not([class*=cm-btn--icon-])::before,
+.cm-btn[class*=" cm-icon-"]:not([class*=cm-btn--icon-])::before {
+    --icon-size: 1.5rem;
+    margin-left: 0;
+    margin-right: 0.5rem;
+
 }
 
 .cm-btn--icon-left[class^=cm-icon-],
@@ -486,8 +497,8 @@
   height: var(--icon-size);
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
-  -webkit-mask-image: image-url("icons/close-line.svg");
-  mask-image: image-url("icons/close-line.svg");
+  -webkit-mask-image: image-url("icons/cross.svg");
+  mask-image: image-url("icons/cross.svg");
   content: "";
 }
 

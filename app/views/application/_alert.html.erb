@@ -1,0 +1,11 @@
+<div class="cm-alert <%= flash_cm_class(type) %>" data-controller="auto-remove" id="<%= flash_id(type, message) %>">
+  <div class="cm-alert__icon">
+    <i class="cm-icon-<%= flash_icon(type) %> cm-icon--sm"></i>
+  </div>
+  <p class="cm-alert__content">
+    <%= message %>
+  </p>
+  <div class="cm-alert__close">
+    <i class="cm-icon-cross"></i>
+  </div>
+</div>

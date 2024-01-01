@@ -6,33 +6,6 @@
   z-index: 1000;
   pointer-events: none;
 }
-.Flash {
-  min-width: Min(20rem, 90%);
-  width: 50%;
-  max-width: 33rem;
-  display: block;
-  border-radius: .25rem;
-  box-shadow: var(--overlap-shadow);
+.FlashContainer .cm-alert {
   margin: 1rem 1rem 1rem auto;
-  pointer-events: auto;
-  background: var(--background-default-grey);
-  transition: opacity .5s ease;
-  cursor: pointer;
-}
-.Flash:hover, .Flash:focus {
-  opacity: 100%;
-  animation: none;
-}
-.Flash--notice {
-  // background: var(--background-contrast-info);
-  animation: disappear 5s ease both;
-}
-.Flash--alert {
-  // background: var(--background-contrast-warning);
-}
-@keyframes disappear {
-  0%   { opacity: 0; }
-  10%  { opacity: 85%; }
-  90%  { opacity: 85%; }
-  100% { opacity: 0; }
 }

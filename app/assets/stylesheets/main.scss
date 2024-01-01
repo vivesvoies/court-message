@@ -47,7 +47,14 @@
 
   --focus-ring: var(--color-peach);
 
-  --btn-hover: var(--shadow-1)
+  --btn-hover: var(--shadow-1);
+
+  --alert-warn: var(--color-robin);
+  --alert-disabled: var(--color-ochre-transparent);
+  --alert-success: var(--color-pomme);
+  --alert-info: var(--color-brown);
+  --alert-delete: var(--color-mouse);
+  --alert-content: var(--color-white);
 }
 
 /*
@@ -59,9 +66,11 @@
   --color-white: #ffffff;
   --color-white-transparent: #FFFFFF80;
   --color-black: #000000;
+  --color-mouse: #7b7b7b;
   --color-sable: #FFFAF2;
   --color-peach: #FAD29B;
   --color-ochre: #A8947A;
+  --color-ochre-transparent: #A8947A99;
   --color-brown: #604D33;
   --color-brown-transparent: #604D3333;
   --color-latte: #FAEFE0;
