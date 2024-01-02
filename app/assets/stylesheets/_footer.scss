@@ -11,7 +11,7 @@
 .FooterList {
   flex-direction: column;
   list-style-type: none;
-  border-top: 1px solid var(--footer-separator);
+  border-top: 1px solid var(--page-border);
   padding: 1rem 0 3rem;;
   gap: 1rem;
 }

@@ -1,7 +1,9 @@
   <div class="NavMenu">
-    <%= tag.div class: "NavMenu__back" do %>
-      <%= content_for :back %>
-    <% end if content_for? :back %>
+    <h1 class="Menu__Title">
+      <%= t(:site_title) %>
+    </h1>
+  
     <%= link_to "Administration", users_path, class: "NavMenu__admin cm-btn cm-btn--tertiary-no-outline cm-btn--icon-left fr-icon-team-line" if can? :index, User %>
+  
     <%= button_to t(:sign_out), destroy_user_session_path, method: :delete, class: "cm-btn cm-btn--tertiary-no-outline cm-btn--icon-left fr-icon-logout-box-r-line", form: { class: "NavMenu__signout" },  data: { turbo_frame: "_top" } if signed_in? %>
   </div>

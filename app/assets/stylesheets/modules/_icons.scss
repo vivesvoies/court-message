@@ -77,6 +77,11 @@ $icon-names: (
   --icon-size: 2rem;
 }
 
+.cm-icon--xl::before,
+.cm-icon--xl::after {
+  --icon-size: 4rem;
+}
+
 @each $icon-name in $icon-names {
   .cm-icon-#{$icon-name}::before,
   .cm-icon-#{$icon-name}::after {

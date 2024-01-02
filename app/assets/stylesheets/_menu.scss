@@ -1,9 +1,15 @@
 .NavMenu {
-  margin: .5rem 2rem;
+  padding: .5rem 2rem;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  border-bottom: 1px solid var(--page-border);
 }
 .NavMenu__back {
   margin-right: auto;
+}
+.Menu__Title {
+  font: var(--font-subtitle);
+  line-height: 1;
+  margin: 0 auto 0 0;
 }
