@@ -2,32 +2,21 @@
 <div class="Page Page__index-team">
   <div class="Block Block__index-team">
     <header class="Teams__header">
-      <h1><%= t(".welcome") %></h1>
+      <h1>
+        <i class="cm-icon-home cm-icon--xl"></i>
+        <%= t(".my_teams") %>
+      </h1>
     </header>
     
     <% if @teams.count == 0 %>
       <p><%= t(".no_team") %></p>
     <% else %>
-      <h4><%= t(".teams_for", name: Current.user.identifier) %></h4>
-      <div class="Teams__list">
+      <div class="cm-container Teams__list">
         <%= render collection: @teams, partial: "team" %>
       </div>
     <% end %>
 
-    <div class="Teams__actions">
-      <% if can? :create, Team %>
-        <%= link_to t(".new_team"), new_team_path, class: "cm-btn cm-btn--primary" %>
-      <% end %>
-    </div>
-
-    <% if @all_teams && @all_teams.length > 0 %>
-      <hr>
-
-      <h4><%= t(".all_teams") %></h4>
-      <div class="Teams__list Teams__list--mini">
-        <%= render collection: @all_teams, partial: "team" %>
-      </div>
-    <% end %>
   </div>
 </div>
 
+<%= render partial: "footer" %>

@@ -1,8 +1,15 @@
+section + section {
+  border-top: 1px solid var(--page-border);
+  padding: 1rem 0;  
+  margin: 1rem 0;
+}
+
 .UIPage {
   padding-bottom: 3rem;
 }
 .UIPage h1 {
   margin-top: 2rem;
+  font: var(--font-subtitle);
 }
 .UIPage h2 {
   font-size: 1rem;

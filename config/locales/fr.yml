@@ -1,4 +1,5 @@
 fr:
+  site_title: "Court‑message"
   missing_value: "Non renseigné"
   sign_out: "Déconnexion"
   back: "Retour"
@@ -123,9 +124,9 @@ fr:
       open: "Ouvrir la messagerie"
       settings: "Configurer"
       members:
-        zero: "L’équipe ne comporte aucun membre"
-        one: "L’équipe comporte un membre"
-        other: "L’équipe comporte %{count} membres"
+        zero: "aucun membre"
+        one: "un membre"
+        other: "%{count} membres"
       edit: "Modifier"
     team_details:
       add_member: "Ajouter un membre"
@@ -135,7 +136,7 @@ fr:
         other: "%{count} membres actifs"
     index:
       all_teams: "Toutes les autres équipes"
-      welcome: "Bienvenue sur Court‑message."
+      my_teams: "Mes équipes"
       teams_for: "Équipes de %{name}"
       new_team: "Ajouter une équipe"
       no_team: "Vous ne faites encore partie d’aucune équipe. Demandez une invitation."

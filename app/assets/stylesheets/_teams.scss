@@ -1,26 +1,19 @@
-.Block__index-team {
-  
-}
-.Block__edit-team + .Block__team-members {
-  flex: .5;
+.Teams__header h1 {
+  font: var(--font-hero);
 }
 
 .Teams__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: 1rem;
+  --gap: 2rem;
 }
 
-.Teams__list--mini .TeamTile {
-  .TeamTile__body {
-    padding: 0;
-  }
-  .TeamTile__info {
-    display: none;
-  }
-  .TeamTile__actions {
-    margin-top: 1rem;
-  }
+.TeamTile {
+  --width-small: 12;
+  --width-mid: 6;
+}
+
+.TeamTile__body [class^="cm-icon-"],
+.TeamTile__body [class*="cm-icon-"] {
+  margin-right: .5rem;
 }
 
 .Teams__actions {
@@ -46,42 +39,3 @@
   align-items: center;
 }
 
-.TeamTile {
-  box-sizing: border-box;
-  &.fr-enlarge-link {
-    .cm-btn:hover,
-    .cm-btn:active {
-      background: var(--hover-tint);
-    }
-    .cm-btn::before {
-      content: none;
-    }
-  }
-}
-
-.TeamTile .Team__name {
-  font-weight: bold;
-  a.Team__name-link::after { // a use case for !important if there ever was one, ¯\_(ツ)_/¯
-    content: none;
-  }
-}
-
-.TeamTile .TeamTile__body {
-  height: 100%;
-  padding-block: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.TeamTile__actions {
-  order: 10;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-  margin: auto 0 0 0;
-  padding: 0; 
-  gap: .5rem;
-}
