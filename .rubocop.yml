@@ -14,6 +14,5 @@ Layout/SpaceInsidePercentLiteralDelimiters:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Minitest/ManyAssertions:
+Style/Documentation:
   Enabled: false
-  
