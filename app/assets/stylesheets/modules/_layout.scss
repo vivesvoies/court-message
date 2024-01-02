@@ -26,6 +26,7 @@
   margin: 0 auto;
   max-width: 100%;
   width: 100%;
+  gap: var(--gap, 0rem);
 }
 
 .cm-container--auto {
@@ -40,7 +41,8 @@
 
 .cm-column {
   --width: var(--width-small, var(--columns));
-  flex-basis: calc(var(--width) / var(--columns) * 100%);
+
+  flex-basis: calc((100% + var(--gap)) * (var(--width) / var(--columns)) - var(--gap));
 }
 .cm-column.cm-col--full {
   --width: var(--columns);
