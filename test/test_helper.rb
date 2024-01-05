@@ -8,6 +8,7 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 DatabaseCleaner.strategy = :transaction
 
 class ActiveSupport::TestCase
+  self.use_transactional_tests = false
   include FactoryBot::Syntax::Methods
 
   # Run tests in parallel with specified workers
