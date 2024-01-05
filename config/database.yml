@@ -19,3 +19,7 @@ test:
 production:
   <<: *default
   database: cm_production
+
+staging:
+  <<: *default
+  database: cm_production # legacy: this env used to be called production
