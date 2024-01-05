@@ -11,8 +11,8 @@ class ReadStatusController < ApplicationController
     elsif @status == "unread"
       @conversation.mark_as_unread!
       head :ok
-    else 
-      render status: :unprocessable_entity
+    else
+      head :bad_request
     end
   end
 

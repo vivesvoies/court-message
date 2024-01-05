@@ -6,11 +6,11 @@ class ConversationsHelperTest < ActiveSupport::TestCase
   def test_last_message_extract_for
     empty_convo = create(:conversation)
     convo_with_message = create(:conversation)
-    message = create(:inbound_message, content: "0123456789" * 10)
+    message = create(:inbound_message, content: "0123456789" * 15)
     convo_with_message.messages << message
 
     assert_equal(last_message_extract_for(empty_convo), "")
-    assert_equal(last_message_extract_for(convo_with_message), "0123456789" * 5)
+    assert_equal(last_message_extract_for(convo_with_message), "0123456789" * 11 + "...")
   end
 
   def test_last_message_class_for

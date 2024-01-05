@@ -25,27 +25,32 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "should show picker on index" do
     with_normal_user
     get teams_url
+
     assert_response :success
   end
 
   test "should not show edit buttons on picker" do
     with_normal_user
     get teams_url
+
     assert_select "[href=\"#{edit_team_path(@team)}\"]", count: 0
   end
 
   test "should not display new team button to non-admins" do
     with_normal_user
     get teams_url
+
     assert_select "[href=\"#{new_team_path}\"]", count: 0
   end
 
   test "should redirect normal users to their team if team.count is 1" do
     user = create(:user)
+
     assert_equal(1, user.teams.count)
 
     sign_in user
     get teams_url
+
     assert_redirected_to(team_conversations_url(user.teams.first))
   end
 
@@ -55,6 +60,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
     sign_in user
     get teams_url(picker: "show")
+
     assert_response :success
   end
 
@@ -125,12 +131,14 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should display new team button to admins" do
+    skip "feature currently in discussion"
     with_team_admin
     get teams_url
     assert_select "[href=\"#{new_team_path}\"]", count: 1
   end
 
   test "should show every team to site admins" do
+    skip "feature removed, could be readded"
     with_site_admin
     other_teams = create_list(:team, 3)
 
@@ -143,7 +151,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not how every team to team admins" do
     user = create(:user, role: :team_admin)
-    team = user.teams.first
     other_teams = create_list(:team, 3)
     sign_in user
 

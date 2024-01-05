@@ -15,10 +15,12 @@ class InboundMessagesController < ApplicationController
     authenticate_message!
     service = InboundMessagesService.new(vonage_params)
     @message = service.message
-    
-    ActiveRecord::Base.transaction do
-      @message.save
-      @message.conversation.mark_as_unread!
+
+    if @message.valid?
+      ActiveRecord::Base.transaction do
+        @message.save
+        @message.conversation.mark_as_unread!
+      end
     end
 
     if @message.persisted?

@@ -1,7 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
-require_relative "./support/capybara"
+require_relative "support/capybara"
 require "minitest/mock"
 require "minitest/reporters"
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
@@ -12,6 +12,7 @@ class ActiveSupport::TestCase
 
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)
+  # parallelize(workers: 1)
 
   Faker::Config.locale = "fr"
 
@@ -31,7 +32,7 @@ class ActiveSupport::TestCase
     count = 0
 
     counter_f = ->(name, started, finished, unique_id, payload) {
-      unless %w[ CACHE SCHEMA ].include?(payload[:name])
+      unless %w[CACHE SCHEMA].include?(payload[:name])
         count += 1
       end
     }
