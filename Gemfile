@@ -31,7 +31,7 @@ gem "rails-i18n", "~> 7.0.8"
 gem "vonage", "~> 7.19"
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "factory_bot_rails"
   gem "faker"
   gem "minitest-reporters"
@@ -40,7 +40,7 @@ end
 group :development do
   gem "annotate"
   gem "rack-mini-profiler"
-  gem "rubocop"
+  gem "standard", require: false
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
   # gem "web-console"
@@ -56,7 +56,7 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 ### Defaults and suggestions from the Rails template:
 
