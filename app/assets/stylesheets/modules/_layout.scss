@@ -42,7 +42,7 @@
 .cm-column {
   --width: var(--width-small, var(--columns));
 
-  flex-basis: calc((100% + var(--gap)) * (var(--width) / var(--columns)) - var(--gap));
+  flex-basis: calc((100% + var(--gap, 0rem)) * (var(--width) / var(--columns)) - var(--gap, 0rem));
 }
 .cm-column.cm-col--full {
   --width: var(--columns);
@@ -58,7 +58,7 @@
 
 @media screen and (min-width: $width-mid) {
   .cm-column {
-    --width: var(--width-mid, var(--width-small, 0));
+    --width: var(--width-mid, var(--width-small, 0rem));
   }
 }
 @media screen and (min-width: $width-large) {
@@ -66,7 +66,7 @@
     max-width: 42rem;
   }
   .cm-column {
-    --width: var(--width-large, var(--width-mid, var(--width-small, 0)));
+    --width: var(--width-large, var(--width-mid, var(--width-small, 0rem)));
   }
 }
 @media screen and (min-width: $width-huge) {
@@ -74,6 +74,6 @@
     max-width: 64rem;
   }
   .cm-column {
-    --width: var(--width-huge, var(--width-large, var(--width-mid, var(--width-small, 0))));
+    --width: var(--width-huge, var(--width-large, var(--width-mid, var(--width-small, 0rem))));
   }
 }
