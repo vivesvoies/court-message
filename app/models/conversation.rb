@@ -48,6 +48,7 @@ class Conversation < ApplicationRecord
   end
 
   def unread? = !read?
+
   def status = read? ? "read" : "unread"
 
   private

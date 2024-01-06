@@ -32,16 +32,16 @@ class TeamTest < ActiveSupport::TestCase
   end
 
   def test_auto_slug
-    name = "My Team"
+    name = "A Team"
     t = create(:team, name:)
     assert_equal(name.parameterize, t.slug)
   end
 
   def test_slugs_and_names_uniqueness
-    name = "My Team"
-    t = create(:team, name:)
+    name = "Another Team"
+    create(:team, name:)
     assert_raise(ActiveRecord::RecordInvalid) {
-      t2 = create(:team, name:)
+      create(:team, name:)
     }
   end
 
