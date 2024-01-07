@@ -1,0 +1,42 @@
+@import "variables";
+
+.Viewer {
+  flex: 1;
+  height: var(--size-viewer);
+
+  display: grid;
+  grid-template-rows: auto var(--size-tab-bar);
+  grid-template-areas: 
+    "main"
+    "tabs";
+  @media screen and (min-width: $width-small) {
+    grid-template-columns: minmax(25rem, 1fr) 2fr minmax(25rem, 1fr);
+    grid-template-areas: 
+      "left work right"
+      "left tabs right";
+  }
+}
+
+.ConversationSidebar {
+  grid-area: main;
+  @media screen and (min-width: $width-small) {
+    grid-area: left;
+    border-right: 1px solid var(--list-border);
+  }
+}
+.ConversationDetail {
+  grid-area: main;
+  @media screen and (min-width: $width-small) {
+    grid-area: work;
+  }
+}
+.ConversationUserbar {
+  grid-area: main;
+  @media screen and (min-width: $width-small) {
+    grid-area: right;
+    border-left: 1px solid var(--list-border);
+  }
+}
+.TabBar {
+  grid-area: tabs;
+}

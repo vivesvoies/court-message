@@ -1,3 +1,5 @@
+/* #region Primary */
+
 .cm-btn {
   background-color: var(--action-bg);
   color: var(--action-text);
@@ -52,6 +54,21 @@
   background-image: var(--underline-img), var(--underline-img);
 }
 
+// TODO
+.cm-btn:disabled,
+a.cm-btn:not([href]) {
+  color: var(--text-disabled-grey);
+  background-color: var(--background-disabled-grey);
+
+  --idle: transparent;
+  --hover: var(--background-disabled-grey-hover);
+  --active: var(--background-disabled-grey-active);
+}
+
+/* #endregion */
+
+/* #region Icons */
+
 // Hack to have icons work on <input type="submit">, which
 // cannot have a before or after.
 // The <input> is wrapped in a button span or div.
@@ -98,6 +115,9 @@
   margin-left: -0.125rem;
   margin-right: 0.5rem;
 }
+/* #endregion */
+
+/* #region Sizes */
 
 .cm-btn--sm {
   font-size: 0.875rem;
@@ -179,6 +199,10 @@
   margin-left: -0.1875rem;
   margin-right: 0.5rem;
 }
+
+/* #endregion */
+
+/* #region Groups */
 
 .cm-btns-group {
   list-style-type: none;
@@ -472,50 +496,55 @@
   margin-bottom: -1rem;
 }
 
-.cm-btn--close {
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-  min-height: 2rem;
-  padding: 0.25rem 0.75rem;
-  overflow: initial;
-  max-width: 100%;
-  max-height: none;
+/* #endregion */
+
+/* #region Caption */
+
+.cm-btn.cm-btn--caption[class^=cm-icon-],
+.cm-btn.cm-btn--caption[class*=cm-icon-] {
   display: flex;
-  margin-left: auto;
-  margin-right: -1rem;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  text-align: center;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 0;
+  background-color: transparent;
+  font: var(--font-small);
+  color: var(--text-primary);
+
+  --hover-shadow: none;
+  --hover: var(--text-primary);
+
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-position: 0 0;
+    background-size: 100% 3px;
+    background-image: var(--underline-img);
+  }
 }
 
-.cm-btn--close::after {
-  --icon-size: 1rem;
-  margin-right: -0.125rem;
-  margin-left: 0.5rem;
-  flex: 0 0 auto;
-  display: inline-block;
-  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
-  background-color: currentColor;
-  width: var(--icon-size);
-  height: var(--icon-size);
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-image: image-url("icons/cross.svg");
-  mask-image: image-url("icons/cross.svg");
-  content: "";
+
+// background-image: var(--underline-img), var(--underline-img);
+// background-position: var(--underline-x) 100%, var(--underline-x) calc(100% - var(--underline-thickness));
+// background-repeat: no-repeat, no-repeat;
+// transition: background-size 0s;
+// background-size: var(--underline-hover-width) calc(var(--underline-thickness) * 2), var(--underline-idle-width) var(--underline-thickness);
+// }
+
+.cm-btn--caption[class^=cm-icon-]::before,
+.cm-btn--caption[class*=cm-icon-]::before,
+.cm-btn--caption[class^=cm-icon-]::after,
+.cm-btn--caption[class*=cm-icon-]::after {
+  display: block;
 }
 
-.cm-btn--close::before {
-  content: none;
-}
+/* #endregion */
 
-// TODO
-.cm-btn:disabled,
-a.cm-btn:not([href]) {
-  color: var(--text-disabled-grey);
-  background-color: var(--background-disabled-grey);
-
-  --idle: transparent;
-  --hover: var(--background-disabled-grey-hover);
-  --active: var(--background-disabled-grey-active);
-}
+/* #region Secondary */
 
 // TODO
 .cm-btn--secondary {
@@ -548,6 +577,10 @@ a.cm-btn--secondary:not([href]) {
   --hover: inherit;
   --active: inherit;
 }
+
+/* #endregion */
+
+/* #region Tertiary */
 
 // TODO
 .cm-btn--tertiary {
@@ -591,4 +624,42 @@ a.cm-btn--close:not([href]),
   --active: inherit;
 }
 
+/* #endregion */
 
+/* #region Close */
+
+.cm-btn--close {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  overflow: initial;
+  max-width: 100%;
+  max-height: none;
+  display: flex;
+  margin-left: auto;
+  margin-right: -1rem;
+}
+
+.cm-btn--close::after {
+  --icon-size: 1rem;
+  margin-right: -0.125rem;
+  margin-left: 0.5rem;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
+  background-color: currentColor;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-image: image-url("icons/cross.svg");
+  mask-image: image-url("icons/cross.svg");
+  content: "";
+}
+
+.cm-btn--close::before {
+  content: none;
+}
+
+/* #endregion */

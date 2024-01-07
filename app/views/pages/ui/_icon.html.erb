@@ -1,0 +1,11 @@
+<section id="icon" class="cm-container">
+  <h1>Icons</h1>
+  <div class="UIList">
+    <div class="UIList__sublist">
+      <% @icons.each do |icon| %>
+        <%= link_to icon, "javascript:void(0)", class: "cm-btn cm-icon-#{icon}" %>
+      <% end %>
+    </div>
+  </div>
+</section>
+

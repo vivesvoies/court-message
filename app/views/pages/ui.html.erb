@@ -1,141 +1,19 @@
-<section class="cm-page UIPage cm-container">
-  <div class="cm-column cm-col--full">
-    <section id="btn">
-      <h1>Button</h1>
-      <div class="UIList">
-        <div class="UIList__sublist">
-          <a href="javascript:void(0)" class="cm-btn">Bouton principal</a>
-          <a href="javascript:void(0)" class="cm-btn cm-btn--icon-left cm-icon-swap-structure">Bouton principal à icône</a>
-          <a href="javascript:void(0)" class="cm-btn cm-btn--fat">Bouton principal fat</a>
-        </div>
-        <div class="UIList__sublist">
-          <a href="javascript:void(0)" class="cm-btn cm-btn--secondary">Bouton secondaire</a>
-          <a href="javascript:void(0)" class="cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-bin">Bouton secondaire à icône</a>
-        </div>
-        <div class="UIList__sublist">
-          <a href="javascript:void(0)" class="cm-btn cm-btn--tertiary">Bouton tertiaire</a>
-          <a href="javascript:void(0)" class="cm-btn cm-btn--tertiary cm-btn--icon-left cm-icon-star">Bouton tertiaire à icône</a>
-        </div>
-        <div class="UIList__sublist">
-          <a href="javascript:void(0)" class="cm-btn cm-btn--link">Bouton lien</a>
-          <a href="javascript:void(0)" class="cm-btn cm-btn--link cm-btn--icon-left cm-icon-magnifying-glass">Bouton lien à icône</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="icon">
-      <h1>Icons</h1>
-      <div class="UIList">
-        <div class="UIList__sublist">
-          <% @icons.each do |icon| %>
-            <%= link_to icon, "javascript:void(0)", class: "cm-btn cm-icon-#{icon}" %>
-          <% end %>
-        </div>
-      </div>
-    </section>
-
-    <section id="alert">
-      <h1>Notifications</h1>
-      <div class="UIList">
-        <div class="UIList__sublist">
-          <%= render partial: "alert", locals: { message: "Warn", type: :warn } %>
-          <%= render partial: "alert", locals: { message: "Disabled also a bit longer than the rest", type: :disabled } %>
-        </div>
-        <div class="UIList__sublist">
-          <%= render partial: "alert", locals: { message: "Success of some random operation", type: :success } %>
-          <%= render partial: "alert", locals: { message: "Info", type: :info } %>
-        </div>
-        <div class="UIList__sublist">
-          <%= render partial: "alert", locals: { message: "Delete", type: :delete } %>
-        </div>
-        <div class="UIList__sublist">
-          <%= render partial: "alert", locals: { message: "Very long warning text that will cause an overflow on any screen width", type: :warn, icon: :warn } %>
-          <%= render partial: "alert", locals: { message: "L'anémone et l'ancolie ont poussé dans le jardin où dort la mélancolie entre l'amour et le dédain", type: :info, icon: :disabled } %>
-        </div>
-      </div>
-    </section>
-
-    <section id="tile">
-      <h1>Tiles / tuiles</h1>
-      <div class="cm-container" style="--gap: 2rem">
-        <article class="cm-column cm-tile" style="--width: 6">
-          <header class="cm-tile__title">
-            <h1>Titre</h1>
-          </header>
-          <div class="cm-tile__body">
-            <p>Contenu</p>
-            <div class="cm-tile__actions">
-              <button class="cm-btn cm-btn--secondary">Clic</button>
-              <button class="cm-btn ">Clic clic</button>
-            </div>
-          </div>
-        </article>
-        <article class="cm-column cm-tile" style="--width: 6">
-          <header class="cm-tile__title">
-            <h1>Titre</h1>
-          </header>
-          <div class="cm-tile__body">
-            <p>Contenu</p>
-            <div class="cm-tile__actions">
-              <button class="cm-btn cm-btn--secondary">Clic</button>
-              <button class="cm-btn ">Clic clic</button>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="layout">
-      <h1>Columns</h1>
-      <div class="UIList">
-        <h2>Douze colonnes égales, sans gouttière</h2>
-        <article class="cm-container"">
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-        </article>
-
-        <h2>Douze colonnes égales</h2>
-        <article class="cm-container" style="--gap: 1rem">
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-        </article>
-
-        <h2>Colonnes de largeurs différentes</h2>
-        <article class="cm-container" style="--gap: 1rem">
-          <div class="cm-column UI__rect" style="--width: 6">6</div>
-          <div class="cm-column UI__rect" style="--width: 3">3</div>
-          <div class="cm-column UI__rect" style="--width: 2">2</div>
-          <div class="cm-column UI__rect" style="--width: 1">1</div>
-        </article>
-
-        <h2>Colonnes de largeurs différentes sur petit écran</h2>
-        <article class="cm-container" style="--gap: 1rem">
-          <div class="cm-column UI__rect" style="--width-small: 12; --width-mid: 6">sm-12, 6</div>
-          <div class="cm-column UI__rect" style="--width-small: 12; --width-mid: 3">sm-12, 3</div>
-          <div class="cm-column UI__rect" style="--width-small: 6; --width-mid: 2">sm-6, 2</div>
-          <div class="cm-column UI__rect" style="--width-small: 6; --width-mid: 1">sm-6, 1</div>
-        </article>
-      </div>
-    </section>
-  </div>
-</section>
+<% sections = %w[btn icon alert tile input layout]  %>
+<section class="cm-page UIPage">
+  <div class="cm-container cm-container--wide">
+    <aside class="cm-column UIPage__toc">
+      <ul class="UIPage__toc-list">
+        <% sections.each do |section| %>
+          <li class="UIPage__toc-item">
+            <a href="#<%= section %>" class="UIPage__toc-link"><%= section %></a>
+          </li>
+        <% end %>
+      </ul>
+    </aside>
+    <div class="cm-column UIPage__examples">
+      <% sections.each do |section| %>
+        <%= render partial: "pages/ui/#{section}" %>
+      <% end %>
+    </div>
+  </section>
+</div>

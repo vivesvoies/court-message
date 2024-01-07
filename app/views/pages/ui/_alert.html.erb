@@ -1,0 +1,20 @@
+<section id="alert" class="cm-container">
+  <h1>Notifications</h1>
+  <div class="UIList">
+    <div class="UIList__sublist">
+      <%= render partial: "alert", locals: { message: "Warn", type: :warn } %>
+      <%= render partial: "alert", locals: { message: "Disabled also a bit longer than the rest", type: :disabled } %>
+    </div>
+    <div class="UIList__sublist">
+      <%= render partial: "alert", locals: { message: "Success of some random operation", type: :success } %>
+      <%= render partial: "alert", locals: { message: "Info", type: :info } %>
+    </div>
+    <div class="UIList__sublist">
+      <%= render partial: "alert", locals: { message: "Delete", type: :delete } %>
+    </div>
+    <div class="UIList__sublist">
+      <%= render partial: "alert", locals: { message: "Very long warning text that will cause an overflow on any screen width", type: :warn, icon: :warn } %>
+      <%= render partial: "alert", locals: { message: "L'anémone et l'ancolie ont poussé dans le jardin où dort la mélancolie entre l'amour et le dédain", type: :info, icon: :disabled } %>
+    </div>
+  </div>
+</section>

@@ -18,12 +18,12 @@
             <%= t("devise.shared.forms.identifier") %>
             <span class="cm-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "cm-input" %>        
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "cm-input cm-input--overhang" %>        
         </div>
       
         <div class="cm-fieldset__element fr-input-group">
           <%= f.label :password, class: "cm-label" %>
-          <%= f.password_field :password, autocomplete: "current-password", class: "cm-input fr-password__input", aria_required: true %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "cm-input cm-input--overhang fr-password__input", aria_required: true %>
         </div>
 
         <%# Hidden remember check %>

@@ -9,5 +9,16 @@
       <%= render @conversations %>
     </ol>
   </div>
-  <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
+
+  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail", data: { controller: "conversation-detail" } do %>
+    <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
+  <% end %>
+
+  <%= turbo_frame_tag "conversation_userbar", class: "ConversationUserbar" do %>
+    <%= render partial: "conversation_userbar" %>
+  <% end %>
+
+  <div class="TabBar">
+    <%= render partial: "tab_bar" %>
+  </div>
 </div>

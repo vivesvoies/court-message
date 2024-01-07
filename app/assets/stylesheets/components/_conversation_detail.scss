@@ -4,6 +4,8 @@
 /// Conversation detail view
 ///
 .ConversationDetail {
+  position: relative;
+  background-color: var(--messages-bg);
   display: grid;
   grid-template-areas:
     "header   header"
@@ -11,9 +13,9 @@
     "input    input";
   
   grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto 1fr var(--size-message-box);
+  grid-template-rows: auto 1fr;
   // max-width: 30rem;
-  max-height: var(--size-viewer);
+  max-height: calc(var(--size-viewer) - var(--size-tab-bar));
   margin: 0;
 }
 
@@ -21,15 +23,9 @@
   display: none;
 }
 
-@mixin contact-visible {
-  grid-template-areas:
-  "header   header"
-  "messages contact"
-  "input    contact";
-  .ContactDetail {
-    display: flex;
-    border-left: 1px solid var(--border-default-grey);
-    padding: 1rem;
+.ConversationDetail__main-nav {
+  @media (min-width: $width-small) {
+    display: none;
   }
 }
 
@@ -37,9 +33,6 @@
 // .ConversationDetail:has(.ContactDetail[src]) {
 //   @include contact-visible();
 // }
-.ConversationDetail--contact-visible {
-  @include contact-visible();
-}
 
 .ConversationDetail__header {
   grid-area: header;
@@ -56,22 +49,30 @@
   margin: 0;
 }
 
-.ConversationDetail--contact-visible .ConversationDetail__show-contact {
-  background: var(--background-alt-green-emeraude);
-  color: var(--text-label-green-emeraude);
-  box-shadow: inset 0 0 0 1px var(--text-label-green-emeraude);
+.ConversationDetail__scroller {
+  grid-area: messages;
+  overflow-y: scroll;
+  position: relative;
+  height: 100%;
 }
 
 .ConversationDetail__footer {
+  position: sticky;
+  min-height: var(--size-message-box);
+  bottom: 0;
+  width: 100%;
   grid-area: input;
-  
-  // background: var(--background-contrast-blue-france);
-  border-top: 1px solid var(--border-default-grey);
-  padding: 2rem 2rem 1rem 2rem;
+  padding: 2rem 1rem 1rem 1rem;
+  background-color: var(--message-box-bg);
+  -webkit-backdrop-filter: blur(.25rem);
+  backdrop-filter: blur(.25rem);
+
+
+  // gradient that makes the white background fade to transparent at the top
+  // background-image: linear-gradient(0deg, rgba(255,255,255,1) 90%, rgba(255,255,255,0) 100%);
 }
 
 .MessageList {
-  grid-area: messages;
   > * {
     overflow-anchor: none;
   }
@@ -79,8 +80,4 @@
     content: " ";
     overflow-anchor: auto;
   }
-}
-
-.ContactDetail {
-  grid-area: contact;
 }

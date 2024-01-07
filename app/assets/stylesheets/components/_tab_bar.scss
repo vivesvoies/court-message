@@ -1,0 +1,28 @@
+@import "variables";
+
+.TabBar {
+  border-top: 1px solid var(--page-border);
+}
+
+.TabBar ul {
+  max-height: var(--size-tab-bar);
+  position: relative;
+  padding: 0 .5rem;
+  list-style-type: none;  
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.TabBar .cm-btn {
+  position: relative;
+  top: -2px;
+}
+@media screen and (min-width: $width-small) {
+  .TabBar .cm-btn.cm-btn--caption[class^=cm-icon-], 
+  .TabBar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
+    overflow: hidden;
+    max-height: 2.5rem;
+    max-width: 2.5rem;
+    padding: 1rem 2rem .5rem;
+  }
+}

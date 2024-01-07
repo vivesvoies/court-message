@@ -1,0 +1,29 @@
+///
+/// New message form
+///
+.MessageForm {}
+.MessageForm__input-group {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 1rem;
+}
+.MessageForm__input-group .MessageForm__field {
+  flex: 1;
+  margin-bottom: 0;
+}
+.MessageForm__field textarea {
+  resize: vertical;
+  background-color: var(--messages-bg);
+}
+.MessageForm__media-btns {
+  &.cm-btns-group.cm-btns-group--inline .cm-btn {
+    margin: 0;
+  }
+}
+
+.MessageForm__character_count {
+  margin: .5rem 0 0 0;
+  min-height: 1.25rem; // cm-hint-text line-height
+  grid-column: 1/-1;
+}

@@ -22,6 +22,7 @@ $icon-names: (
   "magnifying-glass",
   "menu",
   "microphone",
+  "new-message",
   "pencil",
   "person-add",
   "phone",
@@ -87,4 +88,11 @@ $icon-names: (
   .cm-icon-#{$icon-name}::after {
     mask-image: image-url("icons/#{$icon-name}.svg");
   }
+}
+
+.cm-icon-send::before,
+.cm-icon-send::after {
+  --icon-size: 1.25rem !important;
+  margin-left: 1px !important;
+  margin-right: 1rem !important;
 }
