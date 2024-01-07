@@ -517,10 +517,11 @@ a.cm-btn:not([href]) {
   --hover-shadow: none;
   --hover: var(--text-primary);
 
-
+  :checked + &,
   &:hover,
   &:focus,
   &:active {
+    background-repeat: no-repeat;
     background-position: 0 0;
     background-size: 100% 3px;
     background-image: var(--underline-img);

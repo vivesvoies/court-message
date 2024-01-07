@@ -3,12 +3,14 @@
 .TabBar {
   border-top: 1px solid var(--page-border);
 }
+.TabBar__radio {
+  display: none;
+}
 
-.TabBar ul {
+.TabBar nav {
   max-height: var(--size-tab-bar);
   position: relative;
   padding: 0 .5rem;
-  list-style-type: none;  
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -17,7 +19,13 @@
   position: relative;
   top: -2px;
 }
+.TabBar :checked + .cm-btn.cm-btn--caption {
+  background-size: 100% 5px;
+}
 @media screen and (min-width: $width-small) {
+  .TabBar .cm-small-only.cm-btn {
+    display: none;
+  }
   .TabBar .cm-btn.cm-btn--caption[class^=cm-icon-], 
   .TabBar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
     overflow: hidden;
