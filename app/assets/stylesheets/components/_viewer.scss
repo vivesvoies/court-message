@@ -9,8 +9,8 @@
   grid-template-areas: 
     "main"
     "tabs";
-  @media screen and (min-width: $width-small) {
-    grid-template-columns: minmax(25rem, 1fr) 2fr minmax(25rem, 1fr);
+  @media screen and (min-width: $width-large) {
+    grid-template-columns: minmax(25rem, 1fr) minmax(30rem, 2fr) minmax(25rem, 1fr);
     grid-template-areas: 
       "left work right"
       "left tabs right";
@@ -19,20 +19,20 @@
 
 .ConversationSidebar {
   grid-area: main;
-  @media screen and (min-width: $width-small) {
+  @media screen and (min-width: $width-large) {
     grid-area: left;
     border-right: 1px solid var(--list-border);
   }
 }
 .ConversationDetail {
   grid-area: main;
-  @media screen and (min-width: $width-small) {
+  @media screen and (min-width: $width-large) {
     grid-area: work;
   }
 }
 .ConversationUserbar {
   grid-area: main;
-  @media screen and (min-width: $width-small) {
+  @media screen and (min-width: $width-large) {
     grid-area: right;
     border-left: 1px solid var(--list-border);
   }

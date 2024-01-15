@@ -22,7 +22,7 @@
 .TabBar :checked + .cm-btn.cm-btn--caption {
   background-size: 100% 5px;
 }
-@media screen and (min-width: $width-small) {
+@media screen and (min-width: $width-large) {
   .TabBar .cm-small-only.cm-btn {
     display: none;
   }
