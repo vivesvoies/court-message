@@ -9,8 +9,7 @@
   display: grid;
   grid-template-areas:
     "header   header"
-    "messages messages"
-    "input    input";
+    "messages messages";
   
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto 1fr;
@@ -60,6 +59,7 @@
   position: sticky;
   min-height: var(--size-message-box);
   bottom: 0;
+  top: 100%;
   width: 100%;
   grid-area: input;
   padding: 2rem 1rem 1rem 1rem;
@@ -73,6 +73,7 @@
 }
 
 .MessageList {
+  grid-area: list;
   > * {
     overflow-anchor: none;
   }
