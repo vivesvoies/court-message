@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="conversation-list"
 export default class extends Controller {
   static targets = ["conversation"];
-  static classes = ["item", "active", "unread"];
+  static classes = ["item", "active", "unread", "link"];
 
   initialize() {
     const selected = this.conversationTargets.filter(conv => conv.classList.contains(this.activeClass));
@@ -33,6 +33,13 @@ export default class extends Controller {
     target.classList.add(this.activeClass);
 
     this.selection = target.id;
+  }
+
+  reselect() {
+    const target = this.element.querySelector(`#${this.selection} > .${this.linkClass}`);
+    window.setTimeout(() => {
+      Turbo.visit(target.href, { action: target.dataset.turboAction, frame: target.dataset.turboFrame });
+    }, 0);
   }
 
   markAsRead(target) {

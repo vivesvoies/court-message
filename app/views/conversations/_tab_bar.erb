@@ -1,16 +1,32 @@
-<nav>
-  <%= radio_button_tag :current_tab, "home", class: "TabBar__radio" %>
-  <%= label_tag "current_tab_home", t(".home"), class: "cm-small-only cm-btn cm-btn--caption cm-icon-home" %>
+<% conversation_destination = @conversation ? team_conversation_path(Current.team, @conversation) : team_conversations_path(Current.team) %>
 
-  <%= radio_button_tag :current_tab, "conversations", class: "TabBar__radio" %>
-  <%= label_tag "current_tab_conversations", t(".conversations"), class: "cm-btn cm-btn--caption cm-icon-chat" %>
-
-  <%= radio_button_tag :current_tab, "new_message", class: "TabBar__radio" %>
-  <%= label_tag "current_tab_new_message", t(".new_message"), class: "cm-small-only cm-btn cm-btn--caption cm-icon-new-message" %>
-
-  <%= radio_button_tag :current_tab, "contacts", class: "TabBar__radio" %>
-  <%= label_tag "current_tab_contacts", t(".contacts"), class: "cm-btn cm-btn--caption cm-icon-address-book" %>
-
-  <%= radio_button_tag :current_tab, "inbox", class: "TabBar__radio" %>
-  <%= label_tag "current_tab_inbox", t(".inbox"), class: "cm-small-only cm-btn cm-btn--caption cm-icon-chat-bubble" %>
+<nav data-controller="tab-bar" data-tab-bar-viewer-outlet=".Viewer" data-tab-bar-active-tab-class="TabBarButton--active">
+  <%= tab_for :home,
+    icon: :home,
+    mobile: :only,
+    destination: conversation_destination
+  %>
+  <%= tab_for :conversations,
+    active: true,
+    icon: :chat,
+    frame: :conversation_detail,
+    destination: "javascript:void(0)"
+  %>
+  <%= tab_for :contacts,
+    icon: :"address-book",
+    frame: :contacts, 
+    destination: page_path("contacts")
+  %>
+  <%= tab_for :presets,
+    icon: :star,
+    mobile: :only,
+    frame: :presets,
+    destination: page_path("presets")
+  %>
+  <%= tab_for :inbox,
+    icon: :"chat-bubble",
+    mobile: :only,
+    frame: :inbox,
+    destination: page_path("inbox")
+  %>
 </nav>

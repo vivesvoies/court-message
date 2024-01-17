@@ -1,11 +1,17 @@
-<div class="Viewer" id="viewer" data-controller="viewer">
+<div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList">
   <div id="conversation_sidebar" class="ConversationSidebar">
     <%= turbo_frame_tag "conversation_header", class: "ConversationHeader" do %>
       <%= render partial: "conversations/header", locals: { team: @team } %>
     <% end %>
     
     <%= turbo_stream_from "team_conversations_list_#{@team.id}" %>
-    <ol id="conversations" class="ConversationList" data-controller="conversation-list" data-conversation-list-item-class="Conversation" data-conversation-list-active-class="Conversation--active" data-conversation-list-unread-class="Conversation--unread">
+    <ol id="conversations"
+        class="ConversationList"
+        data-controller="conversation-list"
+        data-conversation-list-item-class="Conversation"
+        data-conversation-list-active-class="Conversation--active"
+        data-conversation-list-unread-class="Conversation--unread"
+        data-conversation-list-link-class="Conversation__link">
       <%= render @conversations %>
     </ol>
   </div>
@@ -14,11 +20,11 @@
     <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
   <% end %>
 
-  <%= turbo_frame_tag "conversation_userbar", class: "ConversationUserbar" do %>
-    <%= render partial: "conversation_userbar" %>
-  <% end %>
+  <%= turbo_frame_tag "contacts", class: "Contacts" %>
+  <%= turbo_frame_tag "presets", class: "Presets" %>
+  <%= turbo_frame_tag "inbox", class: "Inbox" %>
 
-  <div class="TabBar">
+  <%= turbo_frame_tag "tab_bar", class: "TabBar" do %>
     <%= render partial: "tab_bar" %>
-  </div>
+  <% end %>
 </div>

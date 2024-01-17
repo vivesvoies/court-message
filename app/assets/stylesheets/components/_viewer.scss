@@ -17,6 +17,52 @@
   }
 }
 
+.ConversationSidebar,
+.ConversationDetail,
+.Contacts,
+.Presets,
+.Inbox {
+  position: relative;
+}
+
+.Viewer--tab-home {
+  .ConversationSidebar {
+    z-index: 10;
+  }
+}
+.Viewer--tab-conversations {
+  .ConversationDetail {
+    z-index: 10;
+  }
+  .Contacts {
+    display: none;
+  }
+}
+.Viewer--tab-contacts {
+  .Contacts {
+    z-index: 10;
+  }
+  .ConversationDetail {
+    display: none;
+  }
+}
+.Viewer--tab-presets {
+  .Presets {
+    z-index: 10;
+  }
+  .Inbox {
+    display: none;
+  }
+}
+.Viewer--tab-inbox {
+  .Inbox {
+    z-index: 10;
+  }
+  .Presets {
+    display: none;
+  }
+}
+
 .ConversationSidebar {
   grid-area: main;
   @media screen and (min-width: $width-large) {
@@ -24,13 +70,15 @@
     border-right: 1px solid var(--list-border);
   }
 }
-.ConversationDetail {
+.ConversationDetail,
+.Contacts {
   grid-area: main;
   @media screen and (min-width: $width-large) {
     grid-area: work;
   }
 }
-.ConversationUserbar {
+.Presets,
+.Inbox {
   grid-area: main;
   @media screen and (min-width: $width-large) {
     grid-area: right;
@@ -39,4 +87,6 @@
 }
 .TabBar {
   grid-area: tabs;
+  position: relative;
+  z-index: 100;
 }

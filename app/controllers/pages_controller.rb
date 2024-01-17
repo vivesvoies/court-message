@@ -3,8 +3,11 @@ class PagesController < ApplicationController
   skip_authorization_check
 
   def show
-    prepare_ui_page if params[:page] == "ui"
-    render params[:page]
+    @page = params[:id]
+    prepare_ui_page if @page == "ui"
+    render @page
+  rescue ActionView::MissingTemplate
+    render "show"
   end
 
   private

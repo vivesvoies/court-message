@@ -3,9 +3,6 @@
 .TabBar {
   border-top: 1px solid var(--page-border);
 }
-.TabBar__radio {
-  display: none;
-}
 
 .TabBar nav {
   max-height: var(--size-tab-bar);
@@ -19,7 +16,7 @@
   position: relative;
   top: -2px;
 }
-.TabBar :checked + .cm-btn.cm-btn--caption {
+.TabBar .TabBarButton--active.cm-btn.cm-btn--caption {
   background-size: 100% 5px;
 }
 @media screen and (min-width: $width-large) {
