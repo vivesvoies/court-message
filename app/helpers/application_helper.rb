@@ -2,6 +2,8 @@ module ApplicationHelper
   def time_stamp_for time
     if time.today?
       time.strftime("%H:%M")
+    elsif time.yesterday?
+      I18n.l(time, format: :yesterday)
     elsif time.past? && (Time.zone.now - time) < 7.days
       I18n.l(time, format: "%A")
     else

@@ -76,6 +76,12 @@ fr:
         logo-alt: "Logo Court‑message"
         forgot_your_password: "J’ai oublié mon mot de passe"
   
+  date:
+    yesterday: &yesterday "hier"
+  time:
+    formats:
+      yesterday: *yesterday
+
   roles:
     user: "Utilisateur"
     team_admin: "Administrateur d’équipe"
@@ -84,12 +90,12 @@ fr:
 
   conversations:
     header:
-      new: "Nouveau message"
+      new: "Écrire un message"
       search: "Rechercher dans tous les messages"
     team_picker:
       switch_team: "Changer d’équipe"
     new:
-      new_conversation: "Nouveau message"
+      new_conversation: "Écrire un message"
     conversation_detail:
       profile: "Fiche contact"
   
