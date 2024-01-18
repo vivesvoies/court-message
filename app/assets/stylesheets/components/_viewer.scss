@@ -26,41 +26,23 @@
 }
 
 .Viewer--tab-home {
-  .ConversationSidebar {
-    z-index: 10;
-  }
+  .ConversationSidebar { z-index: 10; }
 }
 .Viewer--tab-conversations {
-  .ConversationDetail {
-    z-index: 10;
-  }
-  .Contacts {
-    display: none;
-  }
+  .ConversationDetail { z-index: 10; }
+  .Contacts { display: none; }
 }
 .Viewer--tab-contacts {
-  .Contacts {
-    z-index: 10;
-  }
-  .ConversationDetail {
-    display: none;
-  }
+  .Contacts { z-index: 10; }
+  .ConversationDetail { display: none; }
 }
 .Viewer--tab-presets {
-  .Presets {
-    z-index: 10;
-  }
-  .Inbox {
-    display: none;
-  }
+  .Presets { z-index: 10; }
+  .Inbox { display: none; }
 }
 .Viewer--tab-inbox {
-  .Inbox {
-    z-index: 10;
-  }
-  .Presets {
-    display: none;
-  }
+  .Inbox { z-index: 10; }
+  .Presets { display: none; }
 }
 
 .ConversationSidebar {
@@ -69,6 +51,9 @@
     grid-area: left;
     border-right: 1px solid var(--list-border);
   }
+}
+.ConversationDetail, .Presets {
+  z-index: 5;
 }
 .ConversationDetail,
 .Contacts {
