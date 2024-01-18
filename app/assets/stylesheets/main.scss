@@ -32,6 +32,7 @@
   --list-separator-top: var(--color-brown-transparent);
   --list-border: var(--color-black);
   --list-selected-bg: var(--color-peach);
+  --list-active-bg: var(--color-peach-intense);
   --text-list-selected: var(--color-black);
 
   --userbar-bg: var(--color-sable);
@@ -56,6 +57,8 @@
 
   --btn-hover: var(--shadow-1);
 
+  --notif-conversation-unread: var(--color-robin);
+
   --alert-warn: var(--color-robin);
   --alert-disabled: var(--color-ochre-transparent);
   --alert-success: var(--color-pomme);
@@ -79,6 +82,7 @@
   --color-mouse: #7b7b7b;
   --color-sable: #FFFAF2;
   --color-peach: #FAD29B;
+  --color-peach-intense: #ffb347;
   --color-ochre: #A8947A;
   --color-ochre-transparent: #A8947A99;
   --color-brown: #604D33;

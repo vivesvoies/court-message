@@ -24,11 +24,7 @@
 }
 
 .ConversationHeader__new {
-  // width: 100%;
   margin: 1rem auto;
-  padding: .5rem 1rem;
-  font-weight: 700;
-  background: var(--border-action-low-blue-france);
 }
 
 .ConversationHeader__search {
@@ -38,10 +34,6 @@
 .ConversationHeader__search [type=search] {
   margin: 0 auto;
   width: 100%;
-}
-.ConversationHeader__search button {
-  background-color: var(--background-contrast-grey);
-  box-shadow: inset 0 -2px 0 0 var(--border-action-high-blue-france);
 }
 
 .ConversationList {
@@ -76,7 +68,7 @@
 }
 
 .Conversation .Conversation__link:active {
-  background: var(--background-alt-blue-cumulus);
+  background: var(--list-active-bg);
 }
 .Conversation--active .Conversation__link:hover,
 .Conversation--active .Conversation__link:active,
@@ -116,6 +108,6 @@
   border-radius: 100%;
   justify-self: end;
   .Conversation--unread & {
-    background: var(--background-action-high-blue-france-hover);
+    background: var(--notif-conversation-unread);
   }
 }
