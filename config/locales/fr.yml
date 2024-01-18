@@ -90,12 +90,14 @@ fr:
 
   conversations:
     header:
-      new: "Écrire un message"
+      new: "Nouvelle conversation"
       search: "Rechercher dans tous les messages"
+    sidebar:
+      my_conversations: "Mes conversations"
     team_picker:
       switch_team: "Changer d’équipe"
     new:
-      new_conversation: "Écrire un message"
+      new_conversation: "Nouvelle conversation"
     conversation_detail:
       profile: "Fiche contact"
   

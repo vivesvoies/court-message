@@ -20,6 +20,7 @@
 */
 :root {
   --text-primary: var(--color-black);
+  --text-secondary: var(--color-dark1);
 
   --outbound-message-bg: var(--color-peach);
   --inbound-message-bg: var(--color-latte);
@@ -27,7 +28,8 @@
   --messages-bg: var(--color-white);
   --message-box-bg: var(--color-white-transparentish);
   
-  --list-bg: var(--color-sable);
+  --list-bg: var(--color-latte);
+  --list-header-bg: var(--color-white);
   --list-separator: var(--color-brown);
   --list-separator-top: var(--color-brown-transparent);
   --list-border: var(--color-black);
@@ -67,6 +69,8 @@
   --alert-content: var(--color-white);
 
   --tile-bg: var(--color-latte);
+
+  --modal-bg: var(--color-white);
 }
 
 /*
