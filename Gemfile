@@ -46,6 +46,7 @@ group :development do
   # gem "web-console"
   gem "better_errors"
   gem "binding_of_caller"
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :test do
