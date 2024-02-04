@@ -40,7 +40,6 @@ end
 group :development do
   gem "annotate"
   gem "rack-mini-profiler"
-  gem "standard", require: false
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
   # gem "web-console"
