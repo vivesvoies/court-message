@@ -29,7 +29,7 @@ class ActiveSupport::TestCase
     DatabaseCleaner.clean
   end
 
-  def count_queries &block
+  def count_queries(&block)
     count = 0
 
     counter_f = ->(name, started, finished, unique_id, payload) {

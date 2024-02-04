@@ -47,7 +47,7 @@ class MessageTest
       assert(m.valid?)
 
       m.content = "       " # tabs, spaces, nbsps
-      assert(!m.valid?)
+      assert_not(m.valid?)
     end
 
     def test_content_size

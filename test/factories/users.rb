@@ -28,6 +28,6 @@ FactoryBot.define do
     name { Faker::Name.name }
     password { Faker::Internet.password }
     confirmed_at { Time.now }
-    teams { [association(:team)] }
+    teams { [ association(:team) ] }
   end
 end
