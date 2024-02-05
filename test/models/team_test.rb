@@ -70,7 +70,7 @@ class TeamTest < ActiveSupport::TestCase
 
     assert(user.in? team)
     assert(team.include? user)
-    refute(other_user.in? team)
-    refute(team.include? other_user)
+    assert_not(other_user.in? team)
+    assert_not(team.include? other_user)
   end
 end

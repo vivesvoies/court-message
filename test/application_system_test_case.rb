@@ -22,7 +22,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   private
 
-  def resize_window_to w, h
+  def resize_window_to(w, h)
     Capybara.current_session.driver.browser.manage.window.resize_to(w, h)
   end
 end

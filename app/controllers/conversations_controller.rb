@@ -2,7 +2,7 @@ class ConversationsController < ApplicationController
   before_action :set_team, only: %i[ index show ]
   before_action :all_conversations, only: %i[ index show ]
   before_action :set_conversation, only: %i[ show ]
-  
+
   authorize_resource :team
   authorize_resource
 

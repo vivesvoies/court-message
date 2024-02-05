@@ -29,7 +29,7 @@ class User < ApplicationRecord
     site_admin
     super_admin
   ].freeze
-  enum :role, ROLES.map { |role| [role.to_sym, role] }.to_h, suffix: true
+  enum :role, ROLES.map { |role| [ role.to_sym, role ] }.to_h, suffix: true
 
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable

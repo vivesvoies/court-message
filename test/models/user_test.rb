@@ -36,21 +36,21 @@ class UserTest < ActiveSupport::TestCase
   def test_at_least
     user = create(:user)
     assert(user.at_least?(:user))
-    refute(user.at_least?(:team_admin))
-    refute(user.at_least?(:site_admin))
-    refute(user.at_least?(:super_admin))
+    assert_not(user.at_least?(:team_admin))
+    assert_not(user.at_least?(:site_admin))
+    assert_not(user.at_least?(:super_admin))
 
     team_admin = create(:user, role: :team_admin)
     assert(team_admin.at_least?(:user))
     assert(team_admin.at_least?(:team_admin))
-    refute(team_admin.at_least?(:site_admin))
-    refute(team_admin.at_least?(:super_admin))
+    assert_not(team_admin.at_least?(:site_admin))
+    assert_not(team_admin.at_least?(:super_admin))
 
     site_admin = create(:user, role: :site_admin)
     assert(site_admin.at_least?(:user))
     assert(site_admin.at_least?(:team_admin))
     assert(site_admin.at_least?(:site_admin))
-    refute(site_admin.at_least?(:super_admin))
+    assert_not(site_admin.at_least?(:super_admin))
 
     super_admin = create(:user, role: :super_admin)
     assert(super_admin.at_least?(:user))

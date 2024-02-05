@@ -68,7 +68,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   test "should not update message" do
     # See OutboundMessagesControllerTest for message status update tests
     assert_raises(NoMethodError) {
-      patch message_url(@message), params: { message: {  } }
+      patch message_url(@message), params: { message: {} }
     }
   end
 

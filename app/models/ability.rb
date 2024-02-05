@@ -13,21 +13,20 @@ class Ability
     can :create, Message, belongs_to_team
     can :manage, Contact, belongs_to_team
     return unless user.at_least?(:team_admin)
-    
+
     # Rules for team admins -> create teams, add members, manage members
-    can [:read, :create, :update], Team, belongs_to_team
+    can [ :read, :create, :update ], Team, belongs_to_team
     can :manage, Membership, belongs_to_team
     return unless user.at_least?(:site_admin)
-    
+
     # Rules for site admins -> manage every user and team
     can :manage, Team
     can :manage, User
     can :manage, Membership
     cannot :destroy, User, id: user.id
     return unless user.at_least?(:super_admin)
-    
+
     can :manage, :all
     cannot :destroy, User, id: user.id
   end
-
 end

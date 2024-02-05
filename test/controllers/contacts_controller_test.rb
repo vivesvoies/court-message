@@ -4,7 +4,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @contact = create(:contact)
     @temp = build(:contact)
-    @user = create(:user, teams: [@contact.team])
+    @user = create(:user, teams: [ @contact.team ])
 
     sign_in(@user)
   end
@@ -43,7 +43,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create conversation when flag is set" do
-    assert_difference(["Contact.count", "Conversation.count"]) do
+    assert_difference([ "Contact.count", "Conversation.count" ]) do
       post contacts_url,
            params: {
              contact: { name: @temp.name, email: @temp.email, phone: @temp.phone,
