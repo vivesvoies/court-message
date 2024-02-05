@@ -10,7 +10,7 @@
 
 Rails.logger.info("Seed the DB on environment: #{Rails.env}")
 Rails.logger.info("___________________________")
-raise "You are in production or staging environment! Won't modify DB, bye :)" if Rails.env.production? || Rails.env.staging?
+raise "You are in production or staging environment! Won't modify DB, bye :)" unless Rails.env.local?
 
 # Clean test DB
 
@@ -26,15 +26,15 @@ Message.destroy_all
 users = [
   {
     id: 1,
-    name: "AdminSuper",
-    email: "super@court-message.fr:",
+    name: "Admin Super",
+    email: "super@court-message.fr",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "super_admin"
   },
   {
     id: 2,
-    name: "AdminSite",
+    name: "Admin Site",
     email: "site@court-message.fr",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
@@ -42,7 +42,7 @@ users = [
   },
   {
     id: 3,
-    name: "AdminTeam",
+    name: "Admin Team",
     email: "team@court-message.fr",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
@@ -84,12 +84,12 @@ teams = [
   {
     id: 1,
     name: "AdminTeam",
-    address: "1 rue"
+    address: "123 Fake Street, AdminCity, AdminCountry"
   },
   {
     id: 2,
     name: "UserTeam",
-    address: ""
+    address: "456 Fun Avenue, UserCity, UserCountry"
   }
 ]
 
