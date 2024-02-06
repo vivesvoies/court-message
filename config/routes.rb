@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   root to: redirect("/teams")
 
   get "/.internal/ui", to: "pages#show", id: "ui"

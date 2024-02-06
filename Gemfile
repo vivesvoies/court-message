@@ -28,6 +28,8 @@ gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
 gem "rails-i18n", "~> 7.0.8"
 
+gem 'rails_admin', '~> 3.0'
+
 gem "vonage", "~> 7.19"
 
 group :development, :test do
@@ -70,4 +72,5 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 # gem "image_processing", "~> 1.2"
 
 # gem "jsbundling-rails"
-# gem "cssbundling-rails"
+gem "cssbundling-rails"
+gem "sassc-rails"
