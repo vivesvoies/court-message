@@ -31,7 +31,7 @@ fr:
       message:
         content: Le contenu du message
       team:
-        name: "Le nom de l’équipe"
+        name: "Nom de l’équipe"
         slug: "L’identifiant unique de l’équipe"
         address: "L’adresse de l’équipe"
       membership:
@@ -180,12 +180,12 @@ fr:
       new_team: "Ajouter une équipe"
       create_then_add: "Vous devez enregistrer votre équipe avant d’y ajouter des membres."
     form:
-      update: "Mettre à jour l’équipe"
+      update: "Enregistrer les modifications"
       create: "Créer l’équipe"
       save_error: "L’équipe n’a pas pu être enregistrée."
     edit:
       back: "Liste des équipes"
-      edit: "Réglages de l’équipe"
+      edit: "Information"
     show:
       title: "Membres de l'équipe"
       add_member: "Ajouter un membre"

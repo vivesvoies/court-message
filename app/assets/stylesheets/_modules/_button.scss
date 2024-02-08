@@ -28,6 +28,11 @@
   min-height: 3rem;
 }
 
+.cm-btn--pomme {
+  background-color: var(--color-pomme);
+  --hover: var(--color-pomme);
+}
+
 .cm-btn--link[href] {
   background-color: transparent;
   background-image: var(--underline-img), var(--underline-img);

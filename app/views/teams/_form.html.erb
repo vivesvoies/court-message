@@ -4,21 +4,24 @@
   <% end %>
 
   <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :name, class: "fr-label" %>
-      <%= form.text_field :name, class: "fr-input" %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :name, class: "cm-label" %>
+      <%= form.text_field :name, class: "cm-input" %>
     </div>
 
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :address, class: "fr-label" %>
-      <%= form.text_area :address, class: "fr-input", rows: 4 %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :address, class: "cm-label" %>
+      <%= form.text_area :address, class: "cm-input", rows: 4 %>
     </div>
 
   </fieldset>
 
   <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element cm-btns-group">
-      <%= form.submit team.new_record? ? t(".create") : t(".update"), class: "cm-btn" %>
+    <div class="cm-fieldset__element cm-btns-group--right">
+      <div class="cm-btn cm-btn--pomme">
+        <i class="cm-icon--sm cm-icon-checkmark"></i>
+        <%= form.submit team.new_record? ? t(".create") : t(".update") %>
+      </div>
     </div>
   </fieldset>
 <% end %>
