@@ -17,8 +17,8 @@ class Avo::Resources::Message < Avo::BaseResource
         neutral: :unsent # gray
       },
       sortable: true
-    field :conversation, as: :belongs_to, sortable: true
-    field :sender, as: :belongs_to, polymorphic_as: :sender, types: [ ::User ], sortable: true
+    field :conversation, as: :belongs_to
+    field :sender, as: :belongs_to, polymorphic_as: :sender, types: [ ::User ]
     field :created_at,
       as: :date,
       format: "yyyy-LL-dd"
