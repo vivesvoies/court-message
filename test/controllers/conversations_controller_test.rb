@@ -52,7 +52,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation--active .Conversation__contact", text: @conversation.title
   end
 
-  #TODO: conversation_detail could be delete
+  # TODO: conversation_detail could be delete
   # test "should show conversation detail without sidebar" do
   #   @conversation = create(:conversation, contact: @contact)
 
