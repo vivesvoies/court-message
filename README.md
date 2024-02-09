@@ -1,9 +1,9 @@
 # Court-message
 Envoi et réception de messages (SMS et WhatsApp) pour la médiation numérique.
 
-## Setup
+## Lancer le projet avec docker-compose pour le developement
 
-### Lancer le projet avec docker-compose pour le developement
+### Setup
 
 #### Requirements
 
@@ -22,7 +22,31 @@ docker-compose run web rails db:migrate
 docker-compose run web rails db:seed
 ```
 
-### Lancer le projet en local pour le developement
+### Tests
+
+```bash
+docker-compose run web rails test
+```
+
+## Linter
+
+Ce projet utilise [omakase](https://github.com/rails/rubocop-rails-omakase) comme linter de **code**.
+
+Pour le lancer, utilisez :
+
+```bash
+bundle exec rubocop
+```
+
+Pour l'autocorrection, utilisez :
+
+```bash
+bundle exec rubocop -a
+```
+
+## Lancer le projet en local pour le developement
+
+### Setup
 
 #### Requirements
 
@@ -62,15 +86,8 @@ rails server
 
 Elle sera disponible à cette url `http://127.0.0.1:3000`
 
-## Tests
 
-### Avec docker-compose:
-
-```bash
-docker-compose run web rails test
-```
-
-### Avec le server local
+### Tests
 
 **Créer un réseau**
 ```bash
@@ -95,20 +112,4 @@ Pensez à le supprimer notre réseau par la suite:
 
 ```bash
 docker network rm grid
-```
-
-## Linter
-
-Ce projet utilise [omakase](https://github.com/rails/rubocop-rails-omakase) comme linter de **code**.
-
-Pour le lancer, utilisez :
-
-```bash
-bundle exec rubocop
-```
-
-Pour l'autocorrection, utilisez :
-
-```bash
-bundle exec rubocop -a
 ```
