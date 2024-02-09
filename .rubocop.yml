@@ -1,0 +1,14 @@
+# Omakase Ruby styling for Rails
+inherit_gem:
+  rubocop-rails-omakase: rubocop.yml
+
+# Your own specialized rules go here
+
+AllCops:
+  SuggestExtensions: false
+  Exclude:
+    - "db/schema.rb"
+    - 'db/migrate/*'
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

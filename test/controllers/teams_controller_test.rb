@@ -190,8 +190,8 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not allow removing self from team" do
     with_team_admin
-    other_user = create(:user, teams: [@team])
-        
+    other_user = create(:user, teams: [ @team ])
+
     get edit_team_url(@team)
 
     assert_select "[action=\"#{membership_path(other_user.memberships.first)}\"] input[value=delete]", count: 1
@@ -223,12 +223,11 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   test "site admins should destroy any team" do
     with_site_admin
     other_team = create(:team)
-    
+
     assert_difference("Team.count", -1) do
       delete team_url(other_team)
     end
 
     assert_redirected_to teams_url
   end
-
 end

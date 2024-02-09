@@ -11,7 +11,7 @@ class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
   test "should accept POST requests" do
     DatabaseCleaner.strategy = :truncation
 
-    assert_difference(["Message.count"]) do
+    assert_difference([ "Message.count" ]) do
       post inbound_messages_path, params: { to: fake_number, from: @contact.phone, text: "abc" }
     end
 

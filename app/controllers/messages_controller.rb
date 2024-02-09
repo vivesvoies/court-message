@@ -32,7 +32,7 @@ class MessagesController < ApplicationController
     if outbound.submit!
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to [@message.conversation.team, @message.conversation] }
+        format.html { redirect_to [ @message.conversation.team, @message.conversation ] }
       end
     else
       # TODO: probably a different kind of error

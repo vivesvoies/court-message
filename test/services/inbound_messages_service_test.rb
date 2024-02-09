@@ -21,7 +21,7 @@ class InboundMessagesServiceTest < ActiveSupport::TestCase
     assert_nil(contact)
 
     message.save
-    refute(message.persisted?)
+    assert_not(message.persisted?)
   end
 
   def test_finds_the_correct_contact

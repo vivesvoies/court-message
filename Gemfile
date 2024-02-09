@@ -40,12 +40,12 @@ end
 group :development do
   gem "annotate"
   gem "rack-mini-profiler"
-  gem "standard", require: false
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
   # gem "web-console"
   gem "better_errors"
   gem "binding_of_caller"
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :test do

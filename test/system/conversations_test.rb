@@ -3,7 +3,7 @@ require "application_system_test_case"
 class ConversationsTest < ApplicationSystemTestCase
   setup do
     @team = create(:team)
-    @user = create(:user, teams: [@team])
+    @user = create(:user, teams: [ @team ])
 
     @contact = create(:contact, team: @team)
     @conversation = create(:conversation, contact: @contact)

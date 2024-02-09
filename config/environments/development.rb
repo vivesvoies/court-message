@@ -9,7 +9,7 @@ Rails.application.configure do
   config.hosts << "musical-dodo-guided.ngrok-free.app" # ngrok
 
   # Enable better_errors from Docker
-  BetterErrors::Middleware.allow_ip! '0.0.0.0/0'
+  BetterErrors::Middleware.allow_ip! "0.0.0.0/0"
 
   # Devise needs this
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }

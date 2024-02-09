@@ -4,7 +4,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @team = create(:team)
     @other_team = create(:team)
-    @admin = create(:user, role: :team_admin, teams: [@team])
+    @admin = create(:user, role: :team_admin, teams: [ @team ])
     sign_in @admin
   end
 
