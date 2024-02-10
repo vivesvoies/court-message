@@ -1,6 +1,4 @@
 class Avo::Resources::Team < Avo::BaseResource
-    # FIXME: The button to the show panel use the slug instead of the id even with this option
-    # It could be related to the way the id is managed in the Team class.
     self.includes = []
     self.find_record_method = -> {
           id.to_i == 0 ? query.find_by_slug(id) : query.find(id)
