@@ -1,7 +1,6 @@
-<%= form_with(model: user) do |form| %>
-  <h1><%= t(".edit_user") %></h1>
+<%= form_with(model: user, url: team_user_path) do |form| %>
   <% if user.errors.any? %>
-    <%= render partial: "model_errors", locals: { model: user } %>
+    <%= render partial: "model_errors", locals: { model: user, team: } %>
   <% end %>
 
   <fieldset class="cm-fieldset">

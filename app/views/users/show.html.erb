@@ -20,10 +20,10 @@
 
     <div class="UserShow__actions cm-btns-group cm-btns-group--inline cm-btns-group--right cm-btns-group--icon-left">
       <% if can? :destroy, @user %>
-        <%= button_to t(".delete_user"), user_path(@user), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "cm-btn cm-btn--sm cm-btn--secondary cm-btn--icon-left fr-icon-delete-bin-line" %>
+        <%= button_to t(".delete_user"), team_user_path(@team, @user), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "cm-btn cm-btn--sm cm-btn--secondary cm-btn--icon-left fr-icon-delete-bin-line" %>
       <% end %>
 
-      <%= link_to t(".edit_user"), edit_user_path(@user), class: "cm-btn cm-btn--sm cm-btn--primary cm-btn--icon-left fr-icon-pencil-line" %>
+      <%= link_to t(".edit_user"), edit_team_user_path(@user), class: "cm-btn cm-btn--sm cm-btn--primary cm-btn--icon-left fr-icon-pencil-line" %>
     </div>
   </div>
 </div>
