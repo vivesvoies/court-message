@@ -22,7 +22,7 @@
   <td class="UserRow__actions">
     <ul class="UserRow__actionsGroup cm-btns-group cm-btns-group--sm cm-btns-group--inline-sm">
       <% if can? :destroy, user %>
-        <li><%= button_to t(".delete_user"), team_user_path(user), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" %></li>
+        <li><%= button_to t(".delete_user"), team_user_path(@team, user.id), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" %></li>
       <% end %>
 
       <li><%= link_to t(".edit_user"), edit_team_user_path(@team, user.id), class: "cm-btn cm-btn--sm cm-btn--primary fr-icon-pencil-line" %></li>
