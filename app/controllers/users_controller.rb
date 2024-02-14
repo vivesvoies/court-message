@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   authorize_resource :team
   authorize_resource
 
+  # GET /teams/1/users/new
+  def create
+  end
+
   # GET /teams/1/users
   def index
     @users = @team.users

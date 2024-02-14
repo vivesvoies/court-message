@@ -75,24 +75,23 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_out @user
   end
 
-  # TODO: uncomment when implementing create in UsersController
-  # test "users should not be able to create user" do
-  #   sign_in @user
-  #   get new_team_user_url(@team)
-  #   assert_response :forbidden
-  # end
+  test "users should not be able to create user" do
+    sign_in @user
+    get new_team_user_url(@team)
+    assert_response :forbidden
+  end
 
-  # test "team admins should be able to create user" do
-  #   sign_in @team_admin
-  #   get new_team_user_url(@team)
-  #   assert_response :success
-  # end
+  test "team admins should be able to create user" do
+    sign_in @team_admin
+    get new_team_user_url(@team)
+    assert_response :success
+  end
 
-  # test "site admins should be able to create user" do
-  #   sign_in @site_admin
-  #   get new_team_user_url(@team)
-  #   assert_response :success
-  # end
+  test "site admins should be able to create user" do
+    sign_in @site_admin
+    get new_team_user_url(@team)
+    assert_response :success
+  end
 
   # FIXME: Check role modification in User Class
   # test "should allow site admin to update role" do
