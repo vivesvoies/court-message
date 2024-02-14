@@ -10,7 +10,6 @@ env:
   POSTGRES_DB: cm_test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password
-  VONAGE_APPLICATION_ID: ${{secrets.VONAGE_APPLICATION_ID}}
 
 jobs:
   linter:
