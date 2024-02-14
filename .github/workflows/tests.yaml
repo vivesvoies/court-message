@@ -6,6 +6,11 @@ on:
     branches:
       - main
 
+env:
+  POSTGRES_DB: cm_test
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+
 jobs:
   linter:
     name: linter
@@ -20,3 +25,50 @@ jobs:
           bundler-cache: true
       - name: Run linter
         run: bundle exec rubocop
+
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16.1-alpine
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7.2.4-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.0
+          bundler-cache: true
+      - name: Install dependencies
+        run: |
+          bundle install --jobs 4 --retry 3
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rake

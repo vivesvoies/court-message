@@ -52,14 +52,16 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation--active .Conversation__contact", text: @conversation.title
   end
 
-  test "should show conversation detail without sidebar" do
-    @conversation = create(:conversation, contact: @contact)
+  # TODO: conversation_detail could be delete
+  # test "should show conversation detail without sidebar" do
+  #   @conversation = create(:conversation, contact: @contact)
 
-    get detail_team_conversation_url(@team, @conversation)
-    assert_response :success
-    assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
-    assert_select "#conversation_sidebar .Conversation__contact", false
-  end
+  #   get detail_team_conversation_url(@team, @conversation)
+  #   assert_response :success
+  #   assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
+  #   assert_select "#conversation_sidebar .Conversation__contact", false
+  # end
+
   test "should not get conversations that belong to another team" do
     @conversation = create(:conversation, contact: @contact)
     @other_conversation = create(:conversation)

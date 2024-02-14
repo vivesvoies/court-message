@@ -25,7 +25,13 @@ class OutboundMessagesService
 
   private
 
-  def default_provider = vonage_provider
+  def default_provider
+    unless Rails.env.test?
+      vonage_provider
+    else
+      DummyProvider.new
+    end
+  end
 
   def vonage_provider
     @vonage_provider ||= VonageProvider.new
