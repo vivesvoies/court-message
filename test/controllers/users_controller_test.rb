@@ -8,6 +8,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @other_user = create(:user, role: :user, teams: [ @team ])
     @team_admin = create(:user, role: :team_admin, teams: [ @team ])
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
+    @user = @team.users.first
+    @team_admin = @team.users.first
+    @site_admin = @team.users.first
   end
 
   test "normal users should be able to access index" do
