@@ -1,10 +1,7 @@
-<%= content_for :back do %>
-  <%= link_to t(:back), root_path, class: "cm-btn cm-btn--icon-left fr-icon-arrow-left-line" %>
-<% end %>
-<%= render partial: "menu" %>
-
 <div class="Page Page__user-edit">
-  <div class="Block Block__user-edit UserEdit">
+
+  <%= turbo_frame_tag @user do %>
+    <% if Current.user == @user %><%= t(".me") %><% end %>
     <%= render "form", user: @user %>
-  </div>
+  <% end %>
 </div>

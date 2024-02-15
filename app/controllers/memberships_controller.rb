@@ -25,7 +25,7 @@ class MembershipsController < ApplicationController
     @team = @membership.team
     authorize! :destroy, @membership
     @membership.destroy
-    redirect_to edit_team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
+    redirect_to team_path(@team), status: :see_other # , notice: t("users.destroy.destroyed")
   end
 
   private
