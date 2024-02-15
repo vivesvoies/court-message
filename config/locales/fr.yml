@@ -179,6 +179,11 @@ fr:
       user_updated: "Le compte a été mis à jour."
     form:
       remove: "Retirer de l'équipe"
+    invitation:
+      new: "Ajouter à l'équipe"
+    index:
+      title: "Membres de l'équipe"
+      add_member: "Ajouter un membre"
     edit:
       me: "Moi"
 

@@ -11,5 +11,34 @@
       <%= render @team.memberships %>
     </div>
 
+    <div class="Team__members-action">
+      <%= link_to new_team_user_path(@team, @user),
+        data: { turbo_frame: dom_id(User.new) },
+        class: "UserTile__btn cm-btn cm-btn--secondary cm-btn--fat" do %>
+        <i class="cm-icon-plus cm-icon--sm"></i>&nbsp;
+      <%= t("users.index.add_member") %>
+      <% end if can? :create, User %>
+      <%= turbo_frame_tag User.new %>
+
+      <%= link_to new_membership_path(team_id: @team.id),
+              data: { turbo_frame: dom_id(Membership.new) },
+              class: "UserTile__btn cm-btn cm-btn--secondary cm-btn--fat" do %>
+        <i class="cm-icon-plus cm-icon--sm"></i>&nbsp;
+      <%= t("users.index.add_member") %>
+      <% end if can? :create, User %>
+      <%= turbo_frame_tag Membership.new %>
+
+
+ <%
+=begin%>
+ <%=
+      link_to t(".add_member"), new_membership_path(team_id: @team.id),
+              class: "cm-btn fr-icon-user-add-line cm-btn--icon-left cm-btn--secondary", title: t(".add_member"),
+              data: { turbo_frame: "modal" }
+      %>  
+<%
+=end%>
+
+    </div>
   </div>
 </div>
