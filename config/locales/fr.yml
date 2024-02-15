@@ -175,8 +175,6 @@ fr:
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
-    destroy:
-      destroyed: "Le membre a été retiré de l’équipe."
     update:
       user_updated: "Le compte a été mis à jour."
     form:
