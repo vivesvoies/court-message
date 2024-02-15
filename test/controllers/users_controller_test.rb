@@ -10,39 +10,39 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
   end
 
-  test "normal users should be able to access index" do
+  test "normal users should be able to access his team" do
     sign_in @user
-    get team_users_url(@team)
+    get team_url(@team)
     assert_response :success
     sign_out @user
   end
 
-  test "team admins should be able to access index" do
+  test "team admins should be able to access his team" do
     sign_in @team_admin
-    get team_users_url(@team, @user)
+    get team_url(@team, @user)
     assert_response :success
     sign_out @team_admin
   end
 
-  test "site admins should be able to access index of all teams" do
+  test "site admins should be able to access all teams" do
     sign_in @site_admin
-    get team_users_url(@team, @user)
+    get team_url(@team, @user)
     assert_response :success
-    get team_users_url(@other_team, @site_admin)
+    get team_url(@other_team, @site_admin)
     assert_response :success
     sign_out @site_admin
   end
 
-  test "users should not be able to access index of another team" do
+  test "users should not be able to access to an another team" do
     sign_in @user
-    get team_users_url(@other_team, @user)
+    get team_url(@other_team, @user)
     assert_response :forbidden
     sign_out @user
   end
 
-  test "team admins should not be able to access index of another team" do
+  test "team admins should not be able to access to an another team" do
     sign_in @team_admin
-    get team_users_url(@other_team, @team_admin)
+    get team_url(@other_team, @team_admin)
     assert_response :forbidden
     sign_out @team_admin
   end
@@ -56,23 +56,32 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "team admins should be able to edit any user" do
     sign_in @team_admin
-    get edit_team_user_url(@team, @other_user)
+    get edit_team_user_url(@team, @site_admin)
     assert_response :success
     sign_out @team_admin
   end
 
   test "site admins should be able to edit any user" do
     sign_in @site_admin
-    get edit_team_user_url(@team, @other_user)
+    get edit_team_user_url(@other_team, @other_user)
+    assert_response :success
+    get edit_team_user_url(@team, @team_admin)
     assert_response :success
     sign_out @site_admin
   end
 
-  test "should not edit user when not self" do
+  test "users should not edit user when not self" do
     sign_in @user
     get edit_team_user_url(@team, @other_user)
     assert_response :forbidden
     sign_out @user
+  end
+
+  test "should not be able delete user when self" do
+    sign_in @team_admin
+    delete team_user_url(@team, @team_admin)
+    assert_response :forbidden
+    sign_out @team_admin
   end
 
   # TODO: uncomment when implementing UsersController
