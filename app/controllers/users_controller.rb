@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   # DELETE /teams/1/users/1
   def destroy
     @user.destroy
-    redirect_to users_url, notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
+    redirect_to team_url(@team.id), notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private

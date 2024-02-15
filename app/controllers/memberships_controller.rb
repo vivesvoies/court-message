@@ -15,9 +15,9 @@ class MembershipsController < ApplicationController
 
     authorize! :create, @membership
     if @membership.save
-      redirect_to edit_team_path(@team) # , notice: "Membre ajouté à l’équipe."
+      redirect_to team_path(@team) # , notice: "Membre ajouté à l’équipe."
     else
-      redirect_to edit_team_path(@team), alert: @membership.errors.full_messages.join(", ")
+      redirect_to team_path(@team), alert: @membership.errors.full_messages.join(", ")
     end
   end
 
