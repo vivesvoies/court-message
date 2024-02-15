@@ -52,6 +52,6 @@ class UsersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def user_params
-    params.require(:user).permit(:name, :email) # removed :role, as we'd need to check for :role <= Current.user.role first
+    params.require(:user).permit(:name, :email, :phone) # removed :role, as we'd need to check for :role <= Current.user.role first
   end
 end

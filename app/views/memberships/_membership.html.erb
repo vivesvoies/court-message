@@ -1,10 +1,5 @@
 <div class="Membership" id=<%= dom_id(membership) %>>
-  <span class="Membership__identifier">
-    <%= membership.identifier %>
-  </span>
-  <%=
-    button_to t(".remove_member"), membership,
-              method: :delete, class: "Membership__remove cm-btn cm-btn--sm cm-btn--tertiary-no-outline fr-icon-close-circle-line cm-btn--icon-left",
-              form: { data: { turbo: false } } unless membership.user == Current.user && Current.user.team_admin_role?
-  %>
+  <%= turbo_frame_tag "users" do %>
+    <%= render membership.user %>
+  <% end %> 
 </div>

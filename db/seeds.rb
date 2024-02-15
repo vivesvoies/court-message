@@ -28,6 +28,7 @@ users = [
     id: 1,
     name: "Admin Super",
     email: "super@court-message.fr",
+    phone: "06 10 34 37 91",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "super_admin"
@@ -36,6 +37,7 @@ users = [
     id: 2,
     name: "Admin Site",
     email: "site@court-message.fr",
+    phone: "06 10 34 37 95",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "site_admin"
@@ -44,6 +46,7 @@ users = [
     id: 3,
     name: "Admin Team",
     email: "team@court-message.fr",
+    phone: "06 10 34 37 96",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "team_admin"
@@ -52,6 +55,7 @@ users = [
     id: 4,
     name: "Marthe Bellemare",
     email: "marthe@court-message.fr",
+    phone: "06 10 34 37 99",
     password: "fakePassw0rd",
     confirmed_at: DateTime.new(2021, 1, 1),
     role: "user"
@@ -60,6 +64,7 @@ users = [
     id: 5,
     name: "Yoan Jacquet",
     email: "yoan@court-message.fr",
+    phone: "06 10 34 37 98",
     password: "fakePassw0rd",
     confirmed_at: DateTime.new(2022, 12, 30),
     role: "user"
@@ -68,6 +73,7 @@ users = [
     id: 6,
     name: "Lionel Léotard",
     email: "lionel@court-message.fr",
+    phone: "06 10 34 37 97",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "user"

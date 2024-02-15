@@ -1,7 +1,15 @@
+<%= render partial: "menu" %>
 <div class="Page Page__team-members">
   <div class="Block Block__team-members">
-    <%= turbo_frame_tag "team_members" do %>
-      <%= render partial: "team_details" %>
-    <% end %>
+    <header class="TeamTitle__header">
+      <h1>
+        <%= t(".title") %>
+      </h1>
+    </header>
+
+    <div class="Team__members-list">
+      <%= render @team.memberships %>
+    </div>
+
   </div>
 </div>

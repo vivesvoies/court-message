@@ -10,7 +10,6 @@ class TeamsController < ApplicationController
 
   # GET /teams/1
   def show
-    redirect_to team_conversations_path(@team)
   end
 
   # GET /teams/new
