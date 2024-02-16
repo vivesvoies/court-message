@@ -1,0 +1,26 @@
+<div class="ContactDetail">
+  <div class="ContactDetail__info">
+    <div class="Contact__info"> 
+      <div class="cm-fieldset__element cm-input-group">
+        <label class="cm-label"><%= t(:phone) %></label>
+        <div class="Contact__phone cm-input">
+          <%= @contact.phone %>
+        </div>
+      </div>
+
+      <div class="cm-fieldset__element cm-input-group">
+        <label class="cm-label"><%= t(:email) %></label>
+        <div class="Contact__email cm-input">
+          <%= @contact.email %>
+        </div>
+      </div>
+
+      <div class="cm-fieldset__element cm-input-group">
+        <label class="cm-label"><%= t(".notes") %></label>
+        <div class="Contact__notes cm-input">
+          <%= @contact.notes %>
+        </div>
+      </div>
+  </div>
+  </div>
+</div> 

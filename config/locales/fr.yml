@@ -120,16 +120,21 @@ fr:
       missing_name: "Nom non renseigné"
       missing_phone: "Numéro de téléphone non renseigné"
       missing_email: "Adresse email non renseignée"
+      created: " · fiche créée le "
     show:
       edit: "Modifier la fiche"
+      message: "Écrire un message"
       confirm_destroy: "Supprimer la conversation et tous les messages ?\nCette opération ne pourra pas être annulée."
       destroy: "Supprimer la conversation"
+      notes: "Notes"
     new:
-      new_contact: "Nouvelle fiche"
+      new_contact: "Nouveau contact"
+      new_list: "Nouvelle liste de diffusion"
     form:
       update: "Mettre à jour la fiche"
       create: "Créer la fiche"
       save_error: "La fiche n’a pas pu être enregistrée."
+      destroy: "Supprimer le contact"
     update:
       success: "Fiche mise à jour."
     destroy:

@@ -1,33 +1,41 @@
-<%= turbo_frame_tag @contact, class: "ContactDetail" do %>
-  <%= form_with(model: contact) do |form| %>
-    <% if contact.errors.any? %>
-      <%= render partial: "model_errors", locals: { model: contact, message: t(".save_error") } %>
-    <% end %>
-  
-    <%= hidden_field_tag :create_conversation, @create_conversation %>
-    <%= form.hidden_field :team_id %>
-  
-    <fieldset class="cm-fieldset">
-      <div class="cm-fieldset__element cm-input-group">
-        <%= form.label :name, "Nom", class: "Contact__label-name cm-label" %>
-        <%= form.text_field :name, class: "cm-input cm-input--overhang" %>
-      </div>
-      
-      <div class="cm-fieldset__element cm-input-group">
-        <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone cm-label" %>
-        <%= form.text_field :phone, class: "cm-input cm-input--overhang" %>
-      </div>
-      
-      <div class="cm-fieldset__element cm-input-group">
-        <%= form.label :email, "Adresse email", class: "Contact__label-email cm-label" %>
-        <%= form.text_field :email, class: "cm-input cm-input--overhang" %>
-      </div>
-    </fieldset>
-  
-    <fieldset class="cm-fieldset">
-      <div class="cm-fieldset__element cm-btns-group">
-        <%= form.submit contact.new_record? ? t(".create") : t(".update"), class: "cm-btn" %>
-      </div>
-    </fieldset>
+<%= form_with(model: [ @team, @contact ], url: contact.new_record? ? team_contacts_path(@team) : team_contact_path(@team, @contact)) do |form| %>
+  <% if contact.errors.any? %>
+    <%= render partial: "model_errors", locals: { model: contact, message: t(".save_error") } %>
   <% end %>
+
+  <%= hidden_field_tag :create_conversation, @create_conversation %>
+  <%= form.hidden_field :team_id %>
+
+  <div>
+  <%= button_tag type: 'submit', class: "cm-btn cm-btn--pomme" do %>
+    <i class="cm-icon-checkmark cm-icon--sm"></i>
+    <%= contact.new_record? ? t(".create") : t(:update) %>
+  <% end %>
+
+  <% unless @contact.new_record? %>
+   <%= link_to t(:cancel), edit_team_contact_path(@team, @contact) %> 
+  <% end %>
+  </div>
+
+  <fieldset class="cm-fieldset">
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :name, "Nom", class: "Contact__label-name cm-label" %>
+      <%= form.text_field :name, class: "cm-input cm-input--overhang" %>
+    </div>
+    
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone cm-label" %>
+      <%= form.text_field :phone, class: "cm-input cm-input--overhang" %>
+    </div>
+    
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :email, "Adresse email", class: "Contact__label-email cm-label" %>
+      <%= form.text_field :email, class: "cm-input cm-input--overhang" %>
+    </div>
+
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :notes, "Adresse notes", class: "Contact__label-notes cm-label" %>
+      <%= form.text_field :notes, class: "cm-input cm-input--overhang" %> 
+    </div>
+  </fieldset>
 <% end %>

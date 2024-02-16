@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
   before_action :set_contact, only: %i[ show edit update destroy ]
-  before_action :set_team, only: %i[ new ]
+  before_action :set_team, only: %i[ index show new edit update ]
   authorize_resource :team
   authorize_resource
 
@@ -37,12 +37,8 @@ class ContactsController < ApplicationController
 
     if @contact.save
       respond_to do |format|
-        format.html { redirect_to @contact, notice: "Contact was successfully created." }
-        format.turbo_stream {
-          flash.now[:notice] = "Contact was successfully created."
-          render turbo_stream: turbo_stream.prepend("conversations", partial: "conversations/conversation",
-                                                                     locals: { conversation: @contact.conversation })
-        }
+        format.html { redirect_to team_contacts_path(@team), notice: "Contact was successfully created." }
+        format.turbo_stream
       end
     else
       render :new, status: :unprocessable_entity
@@ -52,7 +48,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT /contacts/1
   def update
     if @contact.update(contact_params)
-      redirect_to @contact, notice: I18n.t(".contacts.update.success")
+      redirect_to edit_team_contact_path(@team, @contact), notice: I18n.t(".contacts.update.success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -65,7 +61,7 @@ class ContactsController < ApplicationController
 
     @contact.destroy
     respond_to do |format|
-      format.html { redirect_to team_conversations_path(@team), notice: I18n.t(".contacts.destroy.success") }
+      format.html { redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success") }
       format.turbo_stream {
         flash.now[:notice] = I18n.t(".contacts.destroy.success")
       }
@@ -80,15 +76,15 @@ class ContactsController < ApplicationController
   end
 
   def set_team
-    @team = Team.find(params[:team_id])
+    @team = Current.team || Team.find_by(slug: params[:team_id])
   end
 
   # Only allow a list of trusted parameters through.
   def contact_params
-    params.fetch(:contact, {}).permit(:name, :email, :phone)
+    params.fetch(:contact, {}).permit(:name, :email, :phone, :notes)
   end
 
   def new_contact_params
-    params.fetch(:contact, {}).permit(:name, :email, :phone, :team_id)
+    params.fetch(:contact, {}).permit(:name, :email, :phone, :notes, :team_id)
   end
 end

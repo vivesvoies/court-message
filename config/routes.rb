@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         patch "status", to: "read_status#update", as: :read_status
       end
     end
+    resources :contacts
   end
   resources :memberships, only: [ :new, :create, :destroy ]
 
