@@ -28,7 +28,7 @@
 
     <%= link_to t(:cancel), team_users_path, class: "cm-btn cm-btn--secondary" %>
 
-    <%= link_to membership_path(Membership.find_by(user: user.id, team: Current.team.id).id),
+    <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
               data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"

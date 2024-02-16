@@ -2,6 +2,6 @@
 
   <%= turbo_frame_tag @user do %>
     <% if Current.user == @user %><%= t(".me") %><% end %>
-    <%= render "form", user: @user %>
+    <%= render "form", { user: @user, team: @team } %>
   <% end %>
 </div>

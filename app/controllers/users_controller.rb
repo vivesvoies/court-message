@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ index show ]
+  before_action :set_team, only: %i[ index edit ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
