@@ -2,10 +2,10 @@
 
 .Viewer {
   flex: 1;
-  height: var(--size-viewer);
+  max-height: var(--size-viewer);
 
   display: grid;
-  grid-template-rows: auto var(--size-tab-bar);
+  grid-template-rows:  1fr var(--size-tab-bar);
   grid-template-areas: 
     "main"
     "tabs";
