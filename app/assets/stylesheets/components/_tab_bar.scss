@@ -2,6 +2,10 @@
 
 .TabBar {
   border-top: 1px solid var(--page-border);
+  @media screen and (min-width: $width-large) {
+    border-top: none;
+    border-bottom: 1px solid var(--page-border);
+  }
 }
 
 .TabBar nav {
@@ -12,13 +16,11 @@
   justify-content: space-evenly;
   align-items: center;
 }
-.TabBar .cm-btn {
-  position: relative;
-  top: -2px;
-}
 .TabBar .TabBarButton--active.cm-btn.cm-btn--caption {
   background-size: 100% 5px;
 }
+
+// Hide caption on large screens
 @media screen and (min-width: $width-large) {
   .TabBar .cm-small-only.cm-btn {
     display: none;
@@ -26,8 +28,24 @@
   .TabBar .cm-btn.cm-btn--caption[class^=cm-icon-], 
   .TabBar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
     overflow: hidden;
-    max-height: 2.5rem;
+    max-height: 3rem;
     max-width: 2.5rem;
-    padding: 1rem 2rem .5rem;
+    padding: 1rem 2rem 2.25rem;
+  }
+}
+
+// border on top on small screens
+@media screen and (max-width: $width-large) {
+  .TabBar .cm-btn.cm-btn--caption[class^=cm-icon-], 
+  .TabBar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
+    gap: .25rem;
+    :checked + &,
+    &[class$=--active],
+    &[class*=--active],
+    &:hover,
+    &:focus,
+    &:active {
+      background-position: 0 0;
+    }
   }
 }
