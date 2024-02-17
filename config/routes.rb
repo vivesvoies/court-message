@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   get "/.internal/ui", to: "pages#show", id: "ui"
   resources :pages, only: [ :show ]
 
+  authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
+    mount Avo::Engine, at: Avo.configuration.root_path
+  end
+
   # User-facing routes
   devise_for :users, controllers: { registrations: "registrations" }
   devise_scope :user do
