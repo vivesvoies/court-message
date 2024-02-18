@@ -18,6 +18,9 @@ Rails.application.routes.draw do
   resources :messages, only: [ :new, :create ]
   resources :teams, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
     member do
+      get :menu, to: "teams#menu"
+    end
+    member do
       get :detail, to: "teams#show", defaults: { detail: true }
     end
     resources :conversations, only: [ :index, :show ] do
