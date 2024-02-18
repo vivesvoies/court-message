@@ -4,5 +4,3 @@ module TeamsHelper
     render partial: "menu_item", locals: { label:, icon:, active:, destination:, frame: }
   end
 end
-
-
