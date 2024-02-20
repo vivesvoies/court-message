@@ -6,7 +6,7 @@
 <div class="Page Page__user-edit">
 
   <%= turbo_frame_tag @user do %>
-    <% if Current.user == @user %><%= t(".me") %><% end %>
+    <h4><% if Current.user == @user %><%= t(".me") %><% end %></h4>
     <%= render "form", { user: @user, team: @team } %>
   <% end %>
 </div>
