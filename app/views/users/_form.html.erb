@@ -1,7 +1,7 @@
-<%= form_with(model: user, url: team_user_path) do |form| %>
+<%= form_with(model: user, url: team_user_path, method: :patch) do |form| %>
   <% if user.errors.any? %>
     <%= render partial: "model_errors", locals: { model: user, team: } %>
-  <% end %>
+  <% end %>  
 
   <fieldset class="cm-fieldset">
     <div class="cm-fieldset__element fr-input-group">
@@ -10,19 +10,33 @@
     </div>
 
     <div class="cm-fieldset__element fr-input-group">
+      <%= form.label :phone, t(:phone), class: "fr-label" %>
+      <%= form.text_field :phone, class: "fr-input" %>
+    </div>
+
+    <div class="cm-fieldset__element fr-input-group">
       <%= form.label :email, t(:email), class: "fr-label" %>
       <%= form.text_field :email, class: "fr-input" %>
     </div>
-
-    <div class="cm-fieldset__element fr-select-group">
-      <%= form.label :role, t(".role"), class: "fr-label" %>
-      <%= form.select :role, roles_collection, {}, class: "fr-select" %>
-    </div>
   </fieldset>
 
-  <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element cm-btns-group">
-      <%= form.submit t(".update"), class: "cm-btn" %>
-    </div>
-  </fieldset>
+  <div class="Block Block__team-members">
+    <%= button_tag type: 'submit', class: "cm-btn cm-btn--pomme" do %>
+      <i class="cm-icon-checkmark cm-icon--sm"></i>&nbsp;
+      <%= t(:update) %>
+    <% end %>
+
+    <%= link_to t(:cancel), team_users_path, class: "cm-btn cm-btn--secondary" %>
+
+    <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure?"
+              },
+              class: "cm-btn cm-btn--secondary cm-btn--secondary-robin" do %>
+      <i class="cm-icon-cross cm-icon--sm"></i>&nbsp;
+      <%= t("users.form.remove") %>
+    <% end if can? :destroy, user %>
+
+  </div>
 <% end %>

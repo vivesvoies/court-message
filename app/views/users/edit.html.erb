@@ -4,7 +4,9 @@
 <%= render partial: "main_menu" %>
 
 <div class="Page Page__user-edit">
-  <div class="Block Block__user-edit UserEdit">
-    <%= render "form", user: @user %>
-  </div>
+
+  <%= turbo_frame_tag @user do %>
+    <% if Current.user == @user %><%= t(".me") %><% end %>
+    <%= render "form", { user: @user, team: @team } %>
+  <% end %>
 </div>

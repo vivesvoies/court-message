@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ index show ]
+  before_action :set_team, only: %i[ index edit ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
@@ -25,11 +25,11 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: I18n.t("users.update.user_updated") }
-        format.json { render :show, status: :ok, location: @user }
+        format.html { redirect_to team_url(@team), notice: I18n.t("users.update.user_updated") }
+        format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.turbo_stream { render turbo_stream: turbo_stream.replace(@user) }
       end
     end
   end
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   # DELETE /teams/1/users/1
   def destroy
     @user.destroy
-    redirect_to users_url, notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
+    redirect_to team_url(@team.id), notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private
