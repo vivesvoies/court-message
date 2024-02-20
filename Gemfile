@@ -30,6 +30,8 @@ gem "rails-i18n", "~> 7.0.8"
 
 gem "vonage", "~> 7.19"
 
+gem "avo", ">= 3.2.1"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "factory_bot_rails"

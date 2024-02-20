@@ -89,11 +89,18 @@ fr:
     site_admin: "Administrateur général"
     super_admin: "Superutilisateur"
 
+  menu:
+    swap_team: Changer d’équipe
+    conversations: Messagerie
+    contacts: Répertoire
+    team: Équipe
+    edit_team: Configurer
+
   conversations:
-    header:
-      new: "Nouvelle conversation"
-      search: "Rechercher dans tous les messages"
+    menu:
     sidebar:
+      search: "Rechercher dans tous les messages"
+      new: "Nouvelle conversation"
       my_conversations: "Mes conversations"
     team_picker:
       switch_team: "Changer d’équipe"
@@ -101,6 +108,13 @@ fr:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
       profile: "Fiche contact"
+    tab_bar:
+      home: "Accueil"
+      conversations: "Messagerie"
+      contacts: "Répertoire"
+      presets: "Modèles"
+      inbox: "Chat"
+
   
   contacts:
     contact:

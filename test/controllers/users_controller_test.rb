@@ -54,10 +54,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_out @user
   end
 
-  test "team admins should be able to edit any user" do
+  test "team admins should be able to edit user in their team" do
     sign_in @team_admin
-    get edit_team_user_url(@team, @other_user)
+    get edit_team_user_url(@team, @user)
     assert_response :success
+    get edit_team_user_url(@team, @other_user)
+    assert_response :forbidden
     sign_out @team_admin
   end
 

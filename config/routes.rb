@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   get "/.internal/ui", to: "pages#show", id: "ui"
   resources :pages, only: [ :show ]
 
+  authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
+    mount Avo::Engine, at: Avo.configuration.root_path
+  end
+
   # User-facing routes
   devise_for :users, controllers: { registrations: "registrations" }
   devise_scope :user do
@@ -14,6 +18,9 @@ Rails.application.routes.draw do
   resources :messages, only: [ :new, :create ]
   resources :teams, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
     member do
+      get :menu, to: "teams#menu"
+    end
+    member do
       get :detail, to: "teams#show", defaults: { detail: true }
     end
     resources :conversations, only: [ :index, :show ] do
@@ -22,7 +29,7 @@ Rails.application.routes.draw do
         patch "status", to: "read_status#update", as: :read_status
       end
     end
-    resources :users, only: [ :index, :show, :edit, :new, :update, :destroy ]
+    resources :users, only: [ :index, :edit, :update ]
   end
   resources :memberships, only: [ :new, :create, :destroy ]
 
