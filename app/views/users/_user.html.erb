@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="UserTile__actionsGroup">
-        <%= link_to edit_team_user_path(@team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" do %>
+        <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" do %>
           <i class="cm-icon-settings cm-icon--sm"></i>
         <% end if can? :update, user %>
     </div>
