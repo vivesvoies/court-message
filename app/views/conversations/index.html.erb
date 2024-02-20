@@ -1,5 +1,6 @@
 <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList">
   <%= turbo_frame_tag "conversation_sidebar", class: "ConversationSidebar" do %>
+    <%= render partial: "conversations/team_name", locals: { team: @team } %>
     <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @conversations } %>
   <% end %>
 

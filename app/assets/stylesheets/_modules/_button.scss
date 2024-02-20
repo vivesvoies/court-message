@@ -507,10 +507,11 @@ a.cm-btn:not([href]) {
 
 .cm-btn.cm-btn--caption[class^=cm-icon-],
 .cm-btn.cm-btn--caption[class*=cm-icon-] {
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .25rem;
+  gap: .5rem;
   text-align: center;
   max-width: 100%;
   max-height: 100%;
@@ -529,12 +530,11 @@ a.cm-btn:not([href]) {
   &:focus,
   &:active {
     background-repeat: no-repeat;
-    background-position: 0 0;
+    background-position: 0 100%;
     background-size: 100% 3px;
     background-image: var(--underline-img);
   }
 }
-
 
 // background-image: var(--underline-img), var(--underline-img);
 // background-position: var(--underline-x) 100%, var(--underline-x) calc(100% - var(--underline-thickness));

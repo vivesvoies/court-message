@@ -4,6 +4,7 @@ class PagesController < ApplicationController
 
   def show
     @page = params[:id]
+    @frame = params[:frame]
     prepare_ui_page if @page == "ui"
     render @page
   rescue ActionView::MissingTemplate

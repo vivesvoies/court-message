@@ -1,3 +1,8 @@
+<%= content_for :back do %>
+  <%= link_to t(:back), root_path, class: "cm-btn cm-btn--icon-left fr-icon-arrow-left-line" %>
+<% end %>
+<%= render partial: "main_menu" %>
+
 <div class="Page Page__user-edit">
 
   <%= turbo_frame_tag @user do %>

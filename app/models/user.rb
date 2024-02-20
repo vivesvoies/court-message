@@ -54,4 +54,8 @@ class User < ApplicationRecord
   def bestowable_roles
     ROLES[0..ROLES.index(role)]
   end
+
+  def is_authorize_on_avo
+    self.role == "site_admin" || self.role == "super_admin"
+  end
 end
