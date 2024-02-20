@@ -1,0 +1,7 @@
+<%# locals: (team:) %>
+<%= link_to menu_team_path(team), class: "ConversationSidebar__menuButton", data: { turbo_action: :advance } do %>
+  <h1 class="ConversationSidebar__teamName">
+    <i class="cm-icon-home cm-btn"></i>
+    <%= team.name %>
+  </h1>
+<% end %>

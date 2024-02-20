@@ -2,18 +2,19 @@
 
 .Viewer {
   flex: 1;
-  height: var(--size-viewer);
+  max-height: var(--size-viewer);
 
   display: grid;
-  grid-template-rows: auto var(--size-tab-bar);
+  grid-template-rows:  1fr var(--size-tab-bar);
   grid-template-areas: 
-    "main"
-    "tabs";
+  "main"
+  "tabs";
   @media screen and (min-width: $width-large) {
+    grid-template-rows: var(--size-tab-bar) 1fr;
     grid-template-columns: minmax(25rem, 1fr) minmax(30rem, 2fr) minmax(25rem, 1fr);
     grid-template-areas: 
-      "left work right"
-      "left tabs right";
+      "left tabs right"
+      "left work right";
   }
 }
 

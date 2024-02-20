@@ -1,0 +1,21 @@
+.cm-menu {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--list-bg);
+  height: -webkit-fill-available;
+}
+
+.cm-menu-item[href] {
+  padding: 1.5rem;
+  background-color: var(--menu-item-bg);
+  background-position-x: 1.5rem;
+  background-position-y: 100%;
+  background-size: var(--underline-hover-width) calc(var(--underline-thickness) * 2), calc(100% - 3rem) var(--underline-thickness);
+  &:hover,
+  &:active {
+    --underline-hover-width: 0;
+  }
+}
+.cm-menu-item--active {
+  background-color: var(--menu-item-active);
+}

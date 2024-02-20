@@ -30,9 +30,9 @@ class ContactTest < ActiveSupport::TestCase
 
     @contact.destroy
 
-    assert_nil Contact.find_by(id: @contact.id)
-    assert_nil Conversation.find_by(id: @conversation.id)
-    assert_nil Message.find_by(id: @message.id)
+    assert_raises(ActiveRecord::RecordNotFound) { Contact.find(@contact.id) }
+    assert_raises(ActiveRecord::RecordNotFound) { Conversation.find(@conversation.id) }
+    assert_raises(ActiveRecord::RecordNotFound) { Message.find(@message.id) }
   end
 
   def test_email_validations

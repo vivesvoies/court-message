@@ -1,7 +1,9 @@
-<div class="Page Page__team-members">
-  <div class="Block Block__team-members">
-    <%= turbo_frame_tag "team_members" do %>
-      <%= render partial: "team_details" %>
-    <% end %>
+<%= turbo_frame_tag "conversation_detail" do %>
+  <div class="Page Page__team-members">
+    <div class="Block Block__team-members">
+      <%= turbo_frame_tag "team_members" do %>
+        <%= render partial: "team_details" %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
