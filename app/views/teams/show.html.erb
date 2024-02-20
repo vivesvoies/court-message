@@ -1,10 +1,8 @@
 <%= turbo_frame_tag "conversation_detail" do %>
   <div class="Page Page__team-members">
+    <%= turbo_frame_tag "team_members" do %>
     <div class="Block Block__team-members">
-      <%= turbo_frame_tag "team_members" do %>
-        <%= render partial: "team_details" %>
-      <% end %>
-    </div>
+          <%= render @team.memberships %>
 
     <div class="Team__members-action">
       <%= link_to new_team_user_path(@team, @user),
@@ -15,25 +13,7 @@
       <% end if can? :create, User %>
       <%= turbo_frame_tag User.new %>
 
-      <%= link_to new_membership_path(team_id: @team.id),
-              data: { turbo_frame: dom_id(Membership.new) },
-              class: "UserTile__btn cm-btn cm-btn--secondary cm-btn--fat" do %>
-        <i class="cm-icon-plus cm-icon--sm"></i>&nbsp;
-      <%= t("users.index.add_member") %>
-      <% end if can? :create, User %>
-      <%= turbo_frame_tag Membership.new %>
-
-
- <%
-=begin%>
- <%=
-      link_to t(".add_member"), new_membership_path(team_id: @team.id),
-              class: "cm-btn fr-icon-user-add-line cm-btn--icon-left cm-btn--secondary", title: t(".add_member"),
-              data: { turbo_frame: "modal" }
-      %>  
-<%
-=end%>
-
     </div>
+    <% end %>
   </div>
 <% end %>

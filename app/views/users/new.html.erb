@@ -1,7 +1,7 @@
 <main class="container">
   <%= link_to sanitize("&larr; Back to users"), team_users_path %>
 
-  <%= turbo_frame_tag "new_user" do %>
+  <%= turbo_frame_tag @user do %>
     <%= render "invitation", user: @user %>
   <% end %>
 </main>
