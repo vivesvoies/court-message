@@ -1,9 +1,14 @@
 <%= turbo_frame_tag "conversation_detail" do %>
   <div class="Page Page__team-members">
-    <div class="Block Block__team-members">
-      <%= turbo_frame_tag "team_members" do %>
-        <%= render partial: "team_details" %>
-      <% end %>
-    </div>
+    <%= turbo_frame_tag "team_members" do %>
+        <header class="Teams__header">
+      <h1>
+        <%= t(".title") %>
+      </h1>
+    </header>
+      <div class="Block Block__team-members">
+        <%= render @team.memberships %>
+      </div>
+    <% end %>
   </div>
 <% end %>

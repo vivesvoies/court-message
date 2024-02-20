@@ -190,7 +190,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  # TODO: should be modify when settings user would be implemented
+  # TODO: To be modified when implementing team edit
   # test "should not allow removing self from team" do
   #   with_team_admin
   #   other_user = create(:user, teams: [ @team ])

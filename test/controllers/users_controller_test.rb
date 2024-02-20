@@ -1,6 +1,7 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
+  logger = Rails.logger
   setup do
     @team = create(:team)
     @other_team = create(:team)
@@ -8,6 +9,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @other_user = create(:user, role: :user, teams: [ @other_team ])
     @team_admin = create(:user, role: :team_admin, teams: [ @team ])
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
+  end
+
+  test "should not get show" do
+    assert_raises(ActionController::RoutingError) {
+      get team_user_url(@team, @user)
+    }
+  end
+
+  test "should not get index" do
+    assert_raises(ActionController::RoutingError) {
+      delete team_user_url(@team, @user)
+    }
   end
 
   test "normal users should be able to access his team" do
@@ -79,81 +92,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_out @user
   end
 
-  test "should not be able delete user when self" do
-    sign_in @team_admin
-    delete team_user_url(@team, @team_admin)
+  test "should not allow user to update via UserController" do
+    sign_in @user
+    other_user = create(:user, role: :user, teams: [ @team ])
+    patch team_user_url(@team, other_user), params: { user: { name: "New name", email: "new@email.com", password: "password123", password_confirmation: "password123" } }
     assert_response :forbidden
-    sign_out @team_admin
   end
 
-  # TODO: uncomment when implementing UsersController
-  # test "users should not be able to create user" do
-  #   sign_in @user
-  #   get new_team_user_url(@team)
-  #   assert_response :forbidden
-  # end
+  test "should not allow user to update role" do
+    sign_in @user
+    patch team_user_url(@team, @user), params: { user: { role: :site_admin } }
+    assert_redirected_to team_url(@team)
+    assert_equal "user", @user.reload.role
+    patch team_user_url(@team, @user), params: { user: { role: :team_admin } }
+    assert_redirected_to team_url(@team)
+    assert_equal "user", @user.reload.role
+  end
 
-  # test "team admins should be able to create user" do
-  #   sign_in @team_admin
-  #   get new_team_user_url(@team)
-  #   assert_response :success
-  # end
-
-  # test "site admins should be able to create user" do
-  #   sign_in @site_admin
-  #   get new_team_user_url(@team)
-  #   assert_response :success
-  # end
-
-  # FIXME: Check role modification in User Class
-  # test "should allow site admin to update role" do
-  #   user = create(:user, role: :site_admin)
-  #   other_user = create(:user)
-  #   sign_in user
-  #   patch user_url(other_user), params: { user: { role: :team_admin } }
-  #   assert_redirected_to user_url(other_user)
-  #   assert_equal "team_admin", other_user.reload.role
-  # end
-
-  # TODO: uncomment when implementing UsersController
-  # test "should not allow user to update via UserController" do
-  #   sign_in @user
-  #   patch user_url(user), params: { user: { name: "New name", email: "new@email.com", password: "password123", password_confirmation: "password123" } }
-  #   assert_response :forbidden
-  # end
-
-  # test "should not allow user to update role" do
-  #   sign_in @user
-  #   patch user_url(user), params: { user: { role: :site_admin } }
-  #   assert_response :forbidden
-  #   assert_equal "user", user.reload.role
-  # end
-
-  # test "should allow site admin to update role" do
-  #   sign_in @site_admin
-  #   patch user_url(other_user), params: { user: { role: :team_admin } }
-  #   assert_redirected_to user_url(other_user)
-  #   assert_equal "team_admin", other_user.reload.role
-  # end
-
-  # test "should allow site admin to delete user" do
-  #   sign_in @site_admin
-  #   delete user_url(other_user)
-  #   assert_redirected_to users_url
-  #   assert_equal 1, User.count
-  # end
-
-  # test "should not allow user to delete user" do
-  #   sign_in @user
-  #   delete user_url(other_user)
-  #   assert_response :forbidden
-  #   assert_equal 2, User.count
-  # end
-
-  # test "admins cannot delete themselves" do
-  #   sign_in @user
-  #   delete user_url(user)
-  #   assert_response :forbidden
-  #   assert_equal 1, User.count
-  # end
+  test "should not allow site admin to update role" do
+    other_user = create(:user, role: :user, teams: [ @team ])
+    sign_in @site_admin
+    patch team_user_url(@team, other_user), params: { user: { role: :team_admin } }
+    assert_redirected_to team_url(@team)
+    assert_equal "user", other_user.reload.role
+  end
 end
