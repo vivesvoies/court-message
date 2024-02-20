@@ -1,0 +1,5 @@
+<%# locals: (label:, icon:, active:, destination:, frame:) %>
+<%= link_to destination, class: "cm-menu-item #{"cm-menu-item--active" if active}", data: { turbo_frame: frame, turbo_action: :advance } do %>
+  <i class="cm-btn cm-icon-<%= icon %>"></i>
+  <%= t("menu." + label.to_s) %>
+<% end %>

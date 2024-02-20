@@ -8,7 +8,7 @@ class Ability
     belongs_to_team = { team: { id: user.team_ids } }
 
     # Rules for all users -> be part of team
-    can :read, User, belongs_to_team
+    can :read, User, memberships: belongs_to_team
     can :update, User, id: user.id
     can :read, Team, belongs_to_team
     can :read, Conversation, belongs_to_team
@@ -17,7 +17,7 @@ class Ability
     return unless user.at_least?(:team_admin)
 
     # Rules for team admins -> create teams, add members, manage members
-    can [ :create, :update, :destroy ], User
+    can [ :create, :update, :destroy ], User, memberships: belongs_to_team
     can [ :read, :create, :update ], Team, belongs_to_team
     can :manage, Membership, belongs_to_team
     cannot :destroy, User, id: user.id

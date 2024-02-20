@@ -16,6 +16,26 @@
 ///
 /// Conversation list header
 ///
+.ConversationSidebar__menuButton {
+  display: flex;
+  height: var(--size-tab-bar);
+  align-items: center;
+}
+.ConversationSidebar__teamName {
+  font: var(--font-subtitle);
+  padding: .5rem 1rem;
+  margin: 0;
+}
+.ConversationSidebar .ConversationSidebar__teamName [class^=cm-icon-] {
+  pointer-events: none;
+  &::before,
+  &::after {
+    --icon-size: 1.25rem;
+    margin: 0 .125rem;
+  }
+}
+
+
 
 .ConversationHeader__actions {
   display: flex;
@@ -48,6 +68,7 @@
   text-align: center;
   background-color: var(--list-bg);
 }
+
 .ConversationList {
   background-color: var(--list-bg);
   height: -webkit-fill-available;

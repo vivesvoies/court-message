@@ -5,7 +5,7 @@
   --size-header: 3rem;
   --size-viewer: 100vh;
   --size-message-box: 7rem;
-  --size-tab-bar: 3.5rem;
+  --size-tab-bar: 3rem;
   --input-overhang: 1rem;
 }
 @supports (height: 100dvh) {
@@ -36,6 +36,9 @@
   --list-selected-bg: var(--color-peach);
   --list-active-bg: var(--color-peach-intense);
   --text-list-selected: var(--color-black);
+
+  --menu-item-bg: var(--color-white);
+  --menu-item-active: var(--color-latte);
 
   --userbar-bg: var(--color-sable);
 

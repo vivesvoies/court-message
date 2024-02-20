@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :set_team, only: %i[ show edit update destroy ]
+  before_action :set_team, only: %i[ show edit menu update destroy ]
   authorize_resource
 
   # GET /teams
@@ -8,8 +8,15 @@ class TeamsController < ApplicationController
     redirect_to team_conversations_path(@teams.first) unless show_picker?
   end
 
-  # GET /teams/1
+  # GET /teams/:team_slug
   def show
+  end
+
+  # GET /teams/:team_slug/menu
+  def menu
+    if request.headers["Turbo-Frame"] != "conversation_sidebar"
+      redirect_to team_conversations_path(@team)
+    end
   end
 
   # GET /teams/new
@@ -17,7 +24,7 @@ class TeamsController < ApplicationController
     @team = Team.new
   end
 
-  # GET /teams/1/edit
+  # GET /teams/:team_slug/edit
   def edit
   end
 
@@ -33,7 +40,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /teams/1
+  # PATCH/PUT /teams/:team_slug
   def update
     if @team.update(team_params)
       redirect_to @team, notice: "Team was successfully updated."
@@ -42,7 +49,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  # DELETE /teams/1
+  # DELETE /teams/:team_slug
   def destroy
     @team.destroy
     redirect_to teams_url, notice: "Team was successfully destroyed.", status: :see_other
