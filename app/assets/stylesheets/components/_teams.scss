@@ -16,6 +16,11 @@
   margin-right: .5rem;
 }
 
+.TeamShow {
+  padding: 2rem;
+  display: block !important;
+}
+
 .Teams__actions {
   margin: 2rem 0;
   display: flex;
@@ -30,12 +35,17 @@
   margin-bottom: 1rem;
 }
 
-.Team__members-list {
-}
-
-.Membership {
-  display: flex;
+.TeamShow__header {
+  grid-area: header;
+  
+  background: var(--background-contrast-grey);
+  display: grid;
   justify-content: space-between;
-  align-items: center;
+  grid-auto-flow: column;
 }
 
+.TeamShow__title {
+  font: var(--font-subtitle);
+  font-weight: bold;
+  margin: 0;
+}

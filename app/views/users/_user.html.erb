@@ -1,11 +1,10 @@
-<div id="<%= dom_id user %>">
+<div class="cm-container User" id="<%= dom_id user %>">
   <%= turbo_frame_tag user do %>
   
-    <div class="User__body cm-tile__body">
+    <div class="User__body">
       <div class="User__name">
-        <h4><%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %></h4>
+          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
       </div>
-    
       <div class="User__created_at">
         <%= t(".join") %> <%= user.created_at.year.to_s %>
       </div>

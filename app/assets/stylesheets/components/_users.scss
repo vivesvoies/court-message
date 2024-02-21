@@ -7,3 +7,30 @@
 .UserRow__actionsGroup > a + a {
   margin-left: .5rem;
 }
+
+.User__body {
+  margin-top: 2em;
+}
+
+.User__created_at {
+  margin-bottom: 1em;
+}
+
+.User__name {
+  font-weight: bold;
+}
+
+.User__actions {
+  font: var(--font-small);
+  line-height: 1rem;
+  text-align: right;
+  font-style: italic;
+}
+
+.UserForm_actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}

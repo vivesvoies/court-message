@@ -21,10 +21,10 @@
     </div>
   </fieldset>
 
-  <div class="Block Block__team-members">
+  <div class="UserForm_actions">
     <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--pomme cm-btn--icon-left cm-icon-checkmark" %>
 
-    <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--secondary" %>
+    <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--tertiary" %>
 
     <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
               data: {
