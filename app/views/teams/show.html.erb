@@ -1,27 +1,10 @@
-<div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList">
-  <%= turbo_frame_tag "conversation_sidebar", class: "ConversationSidebar" do %>
-    <%= render partial: "conversations/team_name", locals: { team: @team } %>
-    <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @team.conversations } %>
-  <% end %>
-
-  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail TeamShow" do %>
-      <header class="TeamShow__header">
-        <h1 class="TeamShow__title">
-          <%= t(".title") %>
-        </h1>
-      </header>
-      <div class="TeamShow__members-list">
-        <%= turbo_frame_tag "team_members" do %>
-          <%= render @team.memberships %>
-        <% end %>
-      </div>
-  <% end %>
-
-  <%= turbo_frame_tag "contacts", class: "Contacts" %>
-  <%= turbo_frame_tag "presets", class: "Presets" %>
-  <%= turbo_frame_tag "inbox", class: "Inbox" %>
-
-  <%= turbo_frame_tag "tab_bar", class: "TabBar" do %>
-    <%= render partial: "conversations/tab_bar" %>
+<header class="TeamShow__header">
+  <h1 class="TeamShow__title">
+    <%= t(".title") %>
+  </h1>
+</header>
+<div class="TeamShow__members-list">
+  <%= turbo_frame_tag "team_members" do %>
+    <%= render @team.memberships %>
   <% end %>
 </div>
