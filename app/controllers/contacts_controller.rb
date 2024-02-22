@@ -37,7 +37,7 @@ class ContactsController < ApplicationController
 
     if @contact.save
       respond_to do |format|
-        format.html { redirect_to team_contacts_path(@team, @contact), notice: "Contact was successfully created." }
+        format.html { redirect_to team_contacts_path(@team), notice: "Contact was successfully created." }
         format.turbo_stream
       end
     else

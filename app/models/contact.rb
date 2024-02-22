@@ -5,12 +5,13 @@
 #  id               :bigint           not null, primary key
 #  email            :string
 #  name             :string
-#  notes            :string
+#  notes            :text
 #  notes_updated_at :datetime
-#  notes_updated_by :bigint
+#  notes_updated_by :integer
 #  phone            :string
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
+#  team_id          :bigint           default(1), not null
 #
 # Indexes
 #
