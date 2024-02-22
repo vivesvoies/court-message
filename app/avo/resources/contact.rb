@@ -6,6 +6,7 @@ class Avo::Resources::Contact < Avo::BaseResource
         field :name, as: :text
         field :email, as: :text
         field :phone, as: :text
+        field :notes, as: :text
         field "team", as: :text do
             record.team.name
         rescue
@@ -19,6 +20,10 @@ class Avo::Resources::Contact < Avo::BaseResource
             format: "yyyy-LL-dd"
         if view.show?
             field :team_id, as: :number
+            field :notes_updated_at,
+                as: :date,
+                format: "yyyy-LL-dd"
+            field :notes_updated_by, as: :text
         end
     end
 end

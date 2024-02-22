@@ -13,28 +13,28 @@
   <% end %>
 
   <% unless @contact.new_record? %>
-   <%= link_to t(:cancel), edit_team_contact_path(@team, @contact) %> 
+    <%= link_to t(:cancel), team_contact_path(@team, @contact) %> 
   <% end %>
   </div>
 
   <fieldset class="cm-fieldset">
     <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :name, "Nom", class: "Contact__label-name cm-label" %>
+      <%= form.label :name, t(:name), class: "Contact__label-name cm-label" %>
       <%= form.text_field :name, class: "cm-input cm-input--overhang" %>
     </div>
     
     <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :phone, "Numéro de téléphone", class: "Contact__label-phone cm-label" %>
+      <%= form.label :phone, t(:phone), class: "Contact__label-phone cm-label" %>
       <%= form.text_field :phone, class: "cm-input cm-input--overhang" %>
     </div>
     
     <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :email, "Adresse email", class: "Contact__label-email cm-label" %>
+      <%= form.label :email, t(:email), class: "Contact__label-email cm-label" %>
       <%= form.text_field :email, class: "cm-input cm-input--overhang" %>
     </div>
 
     <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :notes, "Adresse notes", class: "Contact__label-notes cm-label" %>
+      <%= form.label :notes, t(".notes"), class: "Contact__label-notes cm-label" %>
       <%= form.text_field :notes, class: "cm-input cm-input--overhang" %> 
     </div>
   </fieldset>

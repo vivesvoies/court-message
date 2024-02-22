@@ -122,13 +122,15 @@ fr:
       missing_email: "Adresse email non renseignée"
       created: " · fiche créée le "
     show:
-      edit: "Modifier la fiche"
       message: "Écrire un message"
       confirm_destroy: "Supprimer la conversation et tous les messages ?\nCette opération ne pourra pas être annulée."
       destroy: "Supprimer la conversation"
       notes: "Notes"
+    contact_detail:
+      edit: "Modifier la fiche"
+      last_updated: "dernière modification le"
+      by: "par"
     new:
-      new_contact: "Nouveau contact"
       new_list: "Nouvelle liste de diffusion"
     form:
       update: "Mettre à jour la fiche"
@@ -139,6 +141,8 @@ fr:
       success: "Fiche mise à jour."
     destroy:
       success: "Conversation et fiche contact supprimées."
+    index:
+      new_contact: "Nouveau contact"
 
   memberships:
     membership:

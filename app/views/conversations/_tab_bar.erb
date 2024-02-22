@@ -1,4 +1,5 @@
 <% conversation_destination = @conversation ? team_conversation_path(Current.team, @conversation) : team_conversations_path(Current.team) %>
+<% contact_destination = @conversation ? team_contact_path(Current.team, @conversation.contact_id) : new_team_contact_path(Current.team) %>
 
 <nav data-controller="tab-bar" data-tab-bar-viewer-outlet=".Viewer" data-tab-bar-active-tab-class="TabBarButton--active">
   <%= tab_for :home,
@@ -14,8 +15,8 @@
   %>
   <%= tab_for :contacts,
     icon: :"address-book",
-    frame: :contacts, 
-    destination: team_contacts_path(@team)
+    frame: :contacts,
+    destination: "javascript:void(0)"
   %>
   <%= tab_for :presets,
     icon: :star,

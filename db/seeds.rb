@@ -142,21 +142,34 @@ contacts = [
     id: 1,
     name: "Alice Legendre",
     email: "alice@mail.com",
-    phone: "06 10 34 37 99",
+    phone: "+33 6 10 34 37 99",
+    notes: "Besoin d’aide dans recherche de logement\nPenser à l’ajouter à la liste de diffusion “Logement de 2023”",
+    notes_updated_at: DateTime.now.utc,
+    notes_updated_by: 4,
     team_id: 2
   },
   {
     id: 2,
     name: "Zarha Alami",
     email: "zahra@mail.com",
-    phone: "06 10 56 76 90",
+    phone: "+33 6 10 56 76 90",
     team_id: 2
   },
   {
     id: 3,
     name: "Joyce Selegenda",
     email: "joyce@mail.com",
-    phone: "07 35 47 82 09",
+    phone: "+33 7 35 47 82 09",
+    team_id: 2
+  },
+  {
+    id: 4,
+    name: "Tarek Amedine",
+    email: "tarek@mail.com",
+    phone: "+33 6 98 37 46 59 ",
+    notes: "A contacter",
+    notes_updated_at: DateTime.now.utc,
+    notes_updated_by: 5,
     team_id: 2
   }
 ]
@@ -180,6 +193,12 @@ conversations = [
     read: false,
     created_at: DateTime.now.utc,
     contact_id: 2
+  },
+  {
+    id: 3,
+    read: false,
+    created_at: DateTime.now.utc,
+    contact_id: 3
   }
 ]
 
@@ -240,6 +259,24 @@ messages = [
     status: "undeliverable",
     created_at: DateTime.now.utc,
     conversation_id: 1,
+    sender_type: "User",
+    sender_id: 4
+  },
+  {
+    id: 7,
+    content: "Je suis un message de test status: inbound",
+    status: "inbound",
+    created_at: DateTime.now.utc.years_ago(1),
+    conversation_id: 3,
+    sender_type: "User",
+    sender_id: 6
+  },
+  {
+    id: 8,
+    content: "Je suis un message de test status: delivered",
+    status: "delivered",
+    created_at: DateTime.now.utc.years_ago(1),
+    conversation_id: 3,
     sender_type: "User",
     sender_id: 4
   }

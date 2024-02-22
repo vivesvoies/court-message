@@ -22,6 +22,7 @@ class Ability
     # Rules for site admins -> manage every user and team
     can :manage, Team
     can :manage, User
+    can :manage, Contact
     can :manage, Membership
     cannot :destroy, User, id: user.id
     return unless user.at_least?(:super_admin)

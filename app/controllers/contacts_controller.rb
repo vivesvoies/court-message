@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
+  before_action :set_team, only: %i[ index show new edit update destroy ]
   before_action :set_contact, only: %i[ show edit update destroy ]
-  before_action :set_team, only: %i[ index show new edit update ]
   authorize_resource :team
   authorize_resource
 
@@ -37,7 +37,7 @@ class ContactsController < ApplicationController
 
     if @contact.save
       respond_to do |format|
-        format.html { redirect_to team_contacts_path(@team), notice: "Contact was successfully created." }
+        format.html { redirect_to team_contacts_path(@team, @contact), notice: "Contact was successfully created." }
         format.turbo_stream
       end
     else

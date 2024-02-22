@@ -2,14 +2,16 @@
 #
 # Table name: contacts
 #
-#  id         :bigint           not null, primary key
-#  email      :string
-#  name       :string
-#  notes      :string
-#  phone      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  team_id    :bigint           default(2), not null
+#  id               :bigint           not null, primary key
+#  email            :string
+#  name             :string
+#  notes            :string
+#  notes_updated_at :datetime
+#  notes_updated_by :bigint
+#  phone            :string
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  team_id          :bigint           default(1), not null
 #
 # Indexes
 #
