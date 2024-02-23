@@ -4,16 +4,16 @@ class ContactsController < ApplicationController
   authorize_resource :team
   authorize_resource
 
-  # GET /contacts
+  # GET team/:team_slug/contacts
   def index
     @contacts = Contact.all
   end
 
-  # GET /contacts/1
+  # GET team/:team_slug/contacts/:id
   def show
   end
 
-  # GET /contacts/new
+  # GET team/:team_slug/contacts/new
   def new
     @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
     @contact = Contact.new(team_id: @team.id)
@@ -22,11 +22,11 @@ class ContactsController < ApplicationController
     end
   end
 
-  # GET /contacts/1/edit
+  # GET team/:team_slug/contacts/:id/edit
   def edit
   end
 
-  # POST /contacts
+  # POST team/:team_slug/contacts
   def create
     @contact = Contact.new(new_contact_params)
     if params[:create_conversation]
@@ -46,7 +46,7 @@ class ContactsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /contacts/1
+  # PATCH/PUT team/:team_slug/contacts/:id
   def update
     if @contact.update(contact_params)
       redirect_to edit_team_contact_path(@team, @contact), notice: I18n.t(".contacts.update.success")
@@ -55,7 +55,7 @@ class ContactsController < ApplicationController
     end
   end
 
-  # DELETE /contacts/1
+  # DELETE team/:team_slug/contacts/:id
   def destroy
     @team = @contact.team
     @conversation = @contact.conversation
