@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
 
   # GET team/:team_slug/contacts
   def index
-    @contacts = Contact.all
+    @contacts = @team.contacts
   end
 
   # GET team/:team_slug/contacts/:id
