@@ -15,6 +15,21 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should only see contacts belonging to user's team on index page" do
+    get team_contacts_url(@user.teams.first)
+
+    assert_response :success
+    assert_select "div.Contact__name" do |name_elements|
+      displayed_contact_names = name_elements.map(&:text)
+
+      user_team_contact_names = @user.teams.first.contacts.pluck(:name)
+
+      displayed_contact_names.each do |contact_name|
+        assert_includes user_team_contact_names, contact_name
+      end
+    end
+  end
+
   test "should get new" do
     get new_team_contact_url(@team)
     assert_response :success
