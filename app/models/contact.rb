@@ -34,16 +34,16 @@ class Contact < ApplicationRecord
 
   validates :email, uniqueness: { scope: :team_id }, allow_blank: true
 
-  after_update :update_notes_information
+  after_update_commit :update_notes_information, if: :notes_changed?
 
   def formatted_phone
     phone.phony_formatted(format: :national)
   end
 
+  private
+
   def update_notes_information
-    if notes_changed?
-      self.notes_updated_at = Time.current
-      self.notes_updated_by = Current.user.id if Current.user
-    end
+    self.notes_updated_at = Time.current
+    self.notes_updated_by = Current.user.id if Current.user
   end
 end

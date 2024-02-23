@@ -137,6 +137,8 @@ fr:
       create: "Créer la fiche"
       save_error: "La fiche n’a pas pu être enregistrée."
       destroy: "Supprimer le contact"
+    create:
+      success: "Conversation et fiche contact crées."
     update:
       success: "Fiche mise à jour."
     destroy:

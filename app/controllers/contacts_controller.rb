@@ -32,13 +32,14 @@ class ContactsController < ApplicationController
     if params[:create_conversation]
       @contact.build_conversation
     end
-
     @team = @contact.team
 
     if @contact.save
       respond_to do |format|
-        format.html { redirect_to team_contacts_path(@team), notice: "Contact was successfully created." }
-        format.turbo_stream
+        format.html { redirect_to team_contact_path(@team, @contact) }
+        format.turbo_stream {
+          flash.now[:notice] = I18n.t(".contacts.create.success")
+        }
       end
     else
       render :new, status: :unprocessable_entity
