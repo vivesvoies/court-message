@@ -145,7 +145,7 @@ contacts = [
     phone: "+33 6 10 34 37 99",
     notes: "Besoin d’aide dans recherche de logement\nPenser à l’ajouter à la liste de diffusion “Logement de 2023”",
     notes_updated_at: DateTime.now.utc,
-    notes_updated_by: 4,
+    notes_updated_by: User.find(4),
     team_id: 2
   },
   {
@@ -169,7 +169,7 @@ contacts = [
     phone: "+33 6 98 37 46 59 ",
     notes: "A contacter",
     notes_updated_at: DateTime.now.utc,
-    notes_updated_by: 5,
+    notes_updated_by: User.find(5),
     team_id: 2
   }
 ]
