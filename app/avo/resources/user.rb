@@ -41,16 +41,16 @@ class Avo::Resources::User < Avo::BaseResource
       field :unconfirmed_email, as: :text, show_on: :index
       field :messages, as: :has_many, visible: -> { resource.record.messages.any? }
       field :conversations, as: :has_and_belongs_to_many, visible: -> { resource.record.conversations.any? }
-      field :teams, as: :has_many, through: :memberships, visible: -> { resource.record.teams.any? }
     end
-      # TODO: Implemente reset password this line will not work
-      # Could be better to just resend an email for reset password?
+      # TODO: Password modification is possible. Could be better to just resend an email for reset password?
       field :password, as: :password
+      field :teams, as: :has_many, through: :memberships, visible: -> { resource.record.teams.any? }
   end
 
   # Actions that can be performed on user
   def actions
     action Avo::Actions::ResendInvitationEmail
-    action Avo::Actions::ResendConfirmationEmail
+    action Avo::Actions::SendConfirmationInstructions
+    action Avo::Actions::SendResetPasswordInstructions
   end
 end
