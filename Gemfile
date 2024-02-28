@@ -24,6 +24,7 @@ gem "bundler-audit" # Check dependencies for vulnerabilities
 gem "cancancan"
 gem "devise", "~> 4.9"
 gem "devise-i18n"
+gem "devise_invitable", "~> 2.0.0"
 gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
 gem "rails-i18n", "~> 7.0.8"

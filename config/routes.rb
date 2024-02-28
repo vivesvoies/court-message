@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       end
     end
     resources :users, only: [ :index, :new, :edit, :update ]
+    devise_for :users, controllers: { invitations: "invitations" }
   end
   resources :memberships, only: [ :new, :create, :destroy ]
 

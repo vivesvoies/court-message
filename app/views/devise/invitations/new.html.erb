@@ -1,0 +1,28 @@
+<%= turbo_frame_tag "invitations" do %>
+  <h2><%= t "devise.invitations.new.header" %></h2>
+
+  <%= form_for(resource, as: resource_name, url: user_team_invitation_path(resource_name), html: { method: :post }) do |f| %>
+    <%= render "devise/shared/error_messages", resource: resource %>
+
+    <%= f.hidden_field :team_ids, :value => [Current.team.id] %>
+
+    <fieldset class="cm-fieldset">
+      <% resource.class.invite_key_fields.each do |field| -%>
+        <div class="cm-fieldset__element cm-input-group">
+          <%= f.label field, t(:email), class: "cm-label"  %><br />
+          <%= f.text_field field, class: "cm-input" %>
+        </div>
+      <% end -%>
+
+      <div class="cm-fieldset__element cm-input-group">
+        <%= f.label :name, t(:name), class: "cm-label" %>
+        <%= f.text_field :name, class: "cm-input" %>
+      </div>
+
+      <div class="actions">
+        <%= button_tag t(".new"), type: 'submit', class: "cm-btn cm-btn--pomme cm-btn--icon-left cm-icon-checkmark" %>
+        <%= link_to t(:cancel), team_users_path, class: "cm-btn cm-btn--secondary" %>
+      </div>
+    </fieldset>
+  <% end %>
+<% end %>
