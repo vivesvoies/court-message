@@ -24,9 +24,9 @@
           <label class="cm-label"><%= t(".last_updated") %></label>
           <label class="cm-label"><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></label>
         <% end %>
-        <% unless !contact.notes_updated_by_id? %>
+        <% unless !contact.notes_last_editor_id? %>
           <label class="cm-label"><%= t(".by") %></label>
-          <label class="cm-label"><%= Current.user == User.find(contact.notes_updated_by_id) ? t(".me") : User.find(contact.notes_updated_by_id).name %></label>
+          <label class="cm-label"><%= Current.user == User.find(contact.notes_last_editor_id) ? t(".me") : User.find(contact.notes_last_editor_id).name %></label>
         <% end %>
         <div class="Contact__notes cm-input">
           <%= contact.notes %>

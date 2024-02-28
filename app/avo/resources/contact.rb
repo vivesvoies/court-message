@@ -23,7 +23,7 @@ class Avo::Resources::Contact < Avo::BaseResource
             field :notes_updated_at,
                 as: :date,
                 format: "yyyy-LL-dd"
-            field :notes_updated_by, as: :text
+            field :notes_last_editor, as: :text
         end
     end
 end
