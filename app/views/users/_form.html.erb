@@ -22,19 +22,16 @@
   </fieldset>
 
   <div class="UserForm__actions">
-    <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--pomme cm-btn--icon-left cm-icon-checkmark" %>
+    <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
 
     <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--tertiary" %>
 
-    <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+    <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
               data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               },
-              class: "cm-btn cm-btn--secondary cm-btn--secondary-robin" do %>
-      <i class="cm-icon-cross cm-icon--sm"></i>&nbsp;
-      <%= t("users.form.remove") %>
-    <% end if can? :destroy, user %>
+              class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
 
   </div>
 <% end %>
