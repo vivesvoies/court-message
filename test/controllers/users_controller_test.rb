@@ -1,7 +1,6 @@
 require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
-  logger = Rails.logger
   setup do
     @team = create(:team)
     @other_team = create(:team)
@@ -23,14 +22,14 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test "normal users should be able to access his team" do
+  test "normal users should be able to access their team" do
     sign_in @user
     get team_url(@team)
     assert_response :success
     sign_out @user
   end
 
-  test "team admins should be able to access his team" do
+  test "team admins should be able to access their team" do
     sign_in @team_admin
     get team_url(@team, @user)
     assert_response :success
