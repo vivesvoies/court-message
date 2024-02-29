@@ -1,19 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ index edit ]
+  before_action :set_team, only: %i[ edit ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
   authorize_resource
 
-  # GET /teams/1/users/new
-  def create
-  end
-
-  # GET /teams/1/users
-  def index
-    @users = @team.users
-  end
-
+  # GET /teams/1/users/1
   def show
   end
 

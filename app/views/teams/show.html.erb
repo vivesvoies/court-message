@@ -4,13 +4,12 @@
       <div class="Block Block__team-members">
         <%= render @team.memberships %>
 
-      <div class="Team__members-action">
-        <%= turbo_frame_tag "invitations" do %> 
-          <%= link_to t("users.index.add_member"), new_user_team_invitation_path(@team),
-              class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus" if can? :create, User %>
-        <% end %>
-      </div>
-
+      <%= turbo_frame_tag User.new %>
+      <%= link_to t("users.index.add_member"),
+        new_user_team_invitation_path(@team),
+        data: { turbo_frame: dom_id(User.new) },
+        class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus"  if can? :create, User %>
+      
     <% end %>
   </div>
 <% end %>

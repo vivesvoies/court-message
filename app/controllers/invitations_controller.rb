@@ -15,6 +15,10 @@ class InvitationsController < Devise::InvitationsController
     end
   end
 
+  def after_invite_path_for(resource)
+    team_url(Team.find(invite_params[:team_ids].first.to_i))
+  end
+
   protected
 
   def configure_permitted_parameters

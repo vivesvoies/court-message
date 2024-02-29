@@ -26,7 +26,7 @@
       <%= t(:update) %>
     <% end %>
 
-    <%= link_to t(:cancel), team_users_path, class: "cm-btn cm-btn--secondary" %>
+    <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--secondary" %>
 
     <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
               data: {
