@@ -11,7 +11,7 @@
   font-weight: bold;
 }
 
-.Contact__info [class$="--missing"] {
+.Contact__info [class*="--missing"] {
   font-style: italic;
 }
 

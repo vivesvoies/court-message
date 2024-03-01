@@ -37,7 +37,7 @@ class Contact < ApplicationRecord
 
   validates :email, uniqueness: { scope: :team_id }, allow_blank: true
 
-  after_update_commit :update_notes_information, if: :notes_changed?
+  before_update :update_notes_information, if: :notes_changed?
 
   def formatted_phone
     phone.phony_formatted(format: :national)
@@ -46,7 +46,7 @@ class Contact < ApplicationRecord
   private
 
   def update_notes_information
-    self.notes_updated_at = Time.current
-    self.notes_last_editor = Current.user.id if Current.user
+    self.update_columns(notes_updated_at: Time.current)
+    self.update_columns(notes_last_editor_id: Current.user.id) if Current.user
   end
 end

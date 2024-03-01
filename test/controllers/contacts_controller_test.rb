@@ -101,6 +101,17 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_team_contact_url(@team, @contact)
   end
 
+  test "should update notes_updated_at and notes_last_editor_id contact" do
+    assert_nil(@contact.notes_updated_at)
+    assert_nil(@contact.notes_last_editor_id)
+    assert_changes -> { @contact.notes_updated_at } do
+      patch team_contact_url(@team, @contact), params: { contact: { notes: "Some new notes" } }
+      assert_redirected_to edit_team_contact_url(@team, @contact)
+      @contact.reload
+    end
+    assert_equal(@contact.notes_last_editor_id, @user.id)
+  end
+
   test "should not update contact team" do
     @initial_team = @contact.team
     @new_team = create(:team)
