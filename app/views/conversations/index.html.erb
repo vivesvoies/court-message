@@ -8,7 +8,10 @@
     <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
   <% end %>
 
-  <%= turbo_frame_tag "contacts", class: "Contacts" %>
+  <%= turbo_frame_tag "contacts", class: "Contacts" do  %>
+    <%= render partial: "contacts/contact_detail", locals: { contact: Contact.find(@conversation.contact_id) } unless !@conversation %>
+  <% end %>
+
   <%= turbo_frame_tag "presets", class: "Presets" %>
   <%= turbo_frame_tag "inbox", class: "Inbox" %>
 

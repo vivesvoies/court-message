@@ -29,6 +29,11 @@ Rails.application.routes.draw do
         patch "status", to: "read_status#update", as: :read_status
       end
     end
+    resources :contacts do
+      member do
+        get :detail, to: "conversations#show", defaults: { detail: true }
+      end
+    end
     resources :users, only: [ :edit, :update ]
   end
   resources :memberships, only: [ :new, :create, :destroy ]

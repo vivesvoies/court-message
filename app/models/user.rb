@@ -46,6 +46,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :teams, through: :memberships
+  has_many :contacts
 
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
