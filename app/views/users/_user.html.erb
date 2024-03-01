@@ -1,31 +1,26 @@
-<tr id="<%= dom_id user %>" class="UserRow">
-  <td class="UserRow__name">
-    <%= user.name %>
-  </td>
-
-  <td class="UserRow__email">
-    <%= user.email %>
-  </td>
-
-  <td class="UserRow__teams">
-    <ul class="fr-tags-group">
-      <% user.teams.each do |team| %>
-        <li><%= link_to team.name, edit_team_path(team), class: "fr-tag fr-tag--sm UserRow__teamTag" %></li>
-      <% end %>
-    </ul>
-  </td>
-
-  <td class="UserRow__roles">
-    <%= tag.span user.role, class: "fr-tag fr-tag--sm UserRow__roleTag" %>
-  </td>
-
-  <td class="UserRow__actions">
-    <ul class="UserRow__actionsGroup cm-btns-group cm-btns-group--sm cm-btns-group--inline-sm">
-      <% if can? :destroy, user %>
-        <li><%= button_to t(".delete_user"), team_user_path(@team, user.id), method: :delete, data: { turbo_confirm: t(".delete_user_confirm") }, class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" %></li>
-      <% end %>
-
-      <li><%= link_to t(".edit_user"), edit_team_user_path(@team, user.id), class: "cm-btn cm-btn--sm cm-btn--primary fr-icon-pencil-line" %></li>
-    </ul>
-  </td>
-</tr>
+<div class="cm-container User" id="<%= dom_id user %>">
+  <%= turbo_frame_tag user do %>
+  
+    <div class="User__body">
+      <div class="User__name">
+          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
+      </div>
+      <div class="User__created_at">
+        <%= t(".join") %> <%= user.created_at.year.to_s %>
+      </div>
+    
+      <div class="User__phone">
+        <%= user.phone %>
+      </div>
+    
+      <div class="User__email">
+        <%= user.email %>
+      </div>
+    </div>
+    <div class="User__actions">
+        <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings" do %>
+          <i class="cm-icon-settings cm-icon--sm"></i>
+        <% end if can? :update, user %>
+    </div>
+  <% end %>
+</div>
