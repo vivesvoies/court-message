@@ -4,7 +4,10 @@ fr:
   sign_out: "Déconnexion"
   back: "Retour"
   name: "Nom"
-  email: "Email"
+  email: "Adresse email"
+  cancel: "Annuler"
+  phone: "Téléphone"
+  update: "Enregistrer les modifications"
 
   application:
     model_errors:
@@ -173,27 +176,25 @@ fr:
       back: "Liste des équipes"
       edit: "Réglages de l’équipe"
     show:
-      edit: "Modifier la fiche"
-      confirm_destroy: "Supprimer l’équipe ?"
-      destroy: "Supprimer la conversation"
-      create_membership: "Ajouter"
+      title: "Membres de l'équipe"
+      add_member: "Ajouter un membre"
     update:
       success: "Équipe mise à jour."
 
   users:
     user:
+      join: "a rejoint l'équipe en"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
+      me: "(moi)"
     show:
       edit_user: "Modifier le compte"
-      delete_user: "Supprimer le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
-    destroy:
-      user_destroyed: "Le compte a été supprimé."
     update:
       user_updated: "Le compte a été mis à jour."
     form:
-      edit_user: "Modifier le compte"
-      update: "Mettre à jour le compte"
+      remove: "Retirer de l'équipe"
+    edit:
+      me: "Moi"
 
   messages:
     new:

@@ -36,7 +36,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
       post memberships_url, params: { membership: { user_id: user.id, team_id: @team.id } }
     end
 
-    assert_redirected_to edit_team_path(@team)
+    assert_redirected_to team_path(@team)
   end
 
   test "should not create membership in another team" do
@@ -54,7 +54,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
       delete membership_url(membership)
     end
 
-    assert_redirected_to edit_team_path(@team)
+    assert_redirected_to team_path(@team)
   end
 
   test "should not destroy membership in another team" do

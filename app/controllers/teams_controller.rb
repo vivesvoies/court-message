@@ -10,7 +10,6 @@ class TeamsController < ApplicationController
 
   # GET /teams/:team_slug
   def show
-    redirect_to team_conversations_path(@team)
   end
 
   # GET /teams/:team_slug/menu

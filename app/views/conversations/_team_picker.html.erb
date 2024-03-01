@@ -13,10 +13,10 @@
       <%= link_to t(".switch_team"), teams_path(picker: "show"), class: "cm-btn cm-btn--secondary cm-btn--icon-left fr-icon-group-line", data: { turbo_frame: "_top" } %>
     </div>
     <hr>
-    <%= tag.div class: "MenuItem TeamPicker__admin" do %>
-      <%= link_to "Administration", users_path, class: "cm-btn cm-btn--secondary cm-btn--icon-left fr-icon-team-line", data: { turbo_frame: "_top" } %>
-      <hr>
-    <% end if can? :index, User %>
+    <div class="MenuItem TeamPicker__team">
+      <%= link_to "Équipes", team_users_path(team), class: "cm-btn cm-btn--secondary cm-btn--icon-left fr-icon-team-line", data: { turbo_frame: "_top" } %>
+    </div>
+    <hr>
     <div class="MenuItem TeamPicker__sign-out">
       <%= button_to t(:sign_out), destroy_user_session_path, method: :delete, class: "cm-btn cm-btn--secondary cm-btn--icon-left fr-icon-logout-box-r-line", data: { turbo_frame: "_top" } %>
     </div>
