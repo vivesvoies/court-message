@@ -50,9 +50,20 @@
   --action-active: var(--color-ochre);
   --action-text: var(--color-white);
 
+  --action-secondary-bg: var(--color-pomme);
   --action-secondary-text: var(--color-black);
   --action-secondary-hover: var(--color-dark9);
   --action-secondary-active: var(--color-dark8);
+
+  --action-validate-bg: var(--color-pomme);
+  --action-validate-text: var(--color-white);
+  --action-validate-hover: var(--color-pomme);
+  --action-validate-active: var(--color-ochre);
+
+  --action-cancel-bg: var(--color-robin);
+  --action-cancel-text: var(--color-robin);
+  --action-cancel-hover: var(--color-robin);
+  --action-cancel-active: var(--color-sable);
 
   --input-text: var(--color-ochre);
   --input-bg: var(--color-latte);

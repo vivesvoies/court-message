@@ -4,39 +4,34 @@
   <% end %>  
 
   <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :name, t(:name), class: "fr-label" %>
-      <%= form.text_field :name, class: "fr-input" %>
+
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :name, t(:name), class: "cm-label" %>
+      <%= form.text_field :name, class: "cm-input" %>
     </div>
 
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :phone, t(:phone), class: "fr-label" %>
-      <%= form.text_field :phone, class: "fr-input" %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :phone, t(:phone), class: "cm-label" %>
+      <%= form.text_field :phone, class: "cm-input" %>
     </div>
 
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :email, t(:email), class: "fr-label" %>
-      <%= form.text_field :email, class: "fr-input" %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :email, t(:email), class: "cm-label" %>
+      <%= form.text_field :email, class: "cm-input" %>
     </div>
   </fieldset>
 
-  <div class="Block Block__team-members">
-    <%= button_tag type: 'submit', class: "cm-btn cm-btn--pomme" do %>
-      <i class="cm-icon-checkmark cm-icon--sm"></i>&nbsp;
-      <%= t(:update) %>
-    <% end %>
+  <div class="UserForm__actions">
+    <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
 
     <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--secondary" %>
 
-    <%= link_to membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+    <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
               data: {
                 turbo_method: :delete,
                 turbo_confirm: "Are you sure?"
               },
-              class: "cm-btn cm-btn--secondary cm-btn--secondary-robin" do %>
-      <i class="cm-icon-cross cm-icon--sm"></i>&nbsp;
-      <%= t("users.form.remove") %>
-    <% end if can? :destroy, user %>
+              class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
 
   </div>
 <% end %>

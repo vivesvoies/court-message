@@ -1,14 +1,13 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Contacts</h1>
-
-<div id="contacts">
-  <% @contacts.each do |contact| %>
-    <%= contact %>
-    <p>
-      <%= link_to "Show this contact", contact %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New contact", new_contact_path %>
+<%= turbo_frame_tag "contacts" do %>
+  <div class="Page Page__index-contact">
+    <div class="Block Block__index-contact">
+      <%= link_to new_team_contact_path(@team),
+        class: "cm-btn cm-btn--sm cm-btn--tertiary",
+        data: { turbo_frame: "contacts" } do %>
+        <i class="cm-icon-person-add cm-icon--lg"></i>
+        <%= t(".new_contact") %>
+      <% end %>
+        <%= render partial: @contacts, team: @team %> 
+    </div>
+  </div>
+<% end %> 

@@ -3,10 +3,7 @@
 <% end %>
 <%= render partial: "main_menu" %>
 
-<div class="Page Page__user-edit">
-
-  <%= turbo_frame_tag @user do %>
-    <% if Current.user == @user %><%= t(".me") %><% end %>
-    <%= render "form", { user: @user, team: @team } %>
-  <% end %>
-</div>
+<%= turbo_frame_tag @user do %>
+  <h4><% if Current.user == @user %><%= t(".me") %><% end %></h4>
+  <%= render "form", { user: @user, team: @team } %>
+<% end %>

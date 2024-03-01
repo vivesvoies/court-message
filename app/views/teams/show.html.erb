@@ -1,7 +1,12 @@
 <%= turbo_frame_tag "conversation_detail" do %>
-  <div class="Page Page__team-members">
-    <%= turbo_frame_tag "team_members" do %>
-      <div class="Block Block__team-members">
+<header class="TeamShow__header">
+  <h1 class="TeamShow__title">
+    <%= t(".title") %>
+  </h1>
+</header>
+<div class="TeamShow__members-list">
+  <%= turbo_frame_tag "team_members" do %>
+          <div class="Block Block__team-members">
         <%= render @team.memberships %>
 
       <%= turbo_frame_tag User.new %>
@@ -9,7 +14,6 @@
         new_user_team_invitation_path(@team),
         data: { turbo_frame: dom_id(User.new) },
         class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus"  if can? :create, User %>
-      
-    <% end %>
-  </div>
+  <% end %>
+</div>
 <% end %>

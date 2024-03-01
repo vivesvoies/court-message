@@ -1,25 +1,24 @@
-<div id="<%= dom_id user %>">
+<div class="cm-container User" id="<%= dom_id user %>">
   <%= turbo_frame_tag user do %>
   
-    <div class="UserTile__body cm-tile__body">
-      <div class="UserTile__name">
-        <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
+    <div class="User__body">
+      <div class="User__name">
+          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
       </div>
-    
-      <div class="UserTile__created_at">
+      <div class="User__created_at">
         <%= t(".join") %> <%= user.created_at.year.to_s %>
       </div>
     
-      <div class="UserTile__phone">
+      <div class="User__phone">
         <%= user.phone %>
       </div>
     
-      <div class="UserTile__email">
+      <div class="User__email">
         <%= user.email %>
       </div>
     </div>
-    <div class="UserTile__actionsGroup">
-        <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary fr-icon-delete-bin-line" do %>
+    <div class="User__actions">
+        <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings" do %>
           <i class="cm-icon-settings cm-icon--sm"></i>
         <% end if can? :update, user %>
     </div>

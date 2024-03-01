@@ -1,19 +1,19 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ edit ]
+  before_action :set_team, only: %i[ index edit update ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
   authorize_resource
 
-  # GET /teams/1/users/1
+  # GET /teams/:team_slug/users/:id
   def show
   end
 
-  # GET /teams/1/users/1/edit
+  # GET /teams/:team_slug/users/:id/edit
   def edit
   end
 
-  # PATCH/PUT /teams/1/users/1
+  # PATCH/PUT /teams/:team_slug/users/:id
   def update
     respond_to do |format|
       if @user.update(user_params)
@@ -26,10 +26,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /teams/1/users/1
   def destroy
-    @user.destroy
-    redirect_to team_url(@team.id), notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private
@@ -39,7 +36,7 @@ class UsersController < ApplicationController
   end
 
   def set_team
-    @team = Current.team || Team.find_by(slug: params[:team_id])
+    @team = Team.find_by(slug: params[:team_id])
   end
 
   # Only allow a list of trusted parameters through.

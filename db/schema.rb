@@ -26,6 +26,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "team_id", default: 2, null: false
+    t.text "notes"
+    t.datetime "notes_updated_at"
+    t.bigint "notes_last_editor_id"
+    t.index ["notes_last_editor_id"], name: "index_contacts_on_notes_last_editor_id"
     t.index ["phone"], name: "index_contacts_on_phone"
     t.index ["team_id", "phone"], name: "index_contacts_on_team_id_and_phone", unique: true
     t.index ["team_id"], name: "index_contacts_on_team_id"
@@ -113,6 +117,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
   end
 
   add_foreign_key "contacts", "teams"
+  add_foreign_key "contacts", "users", column: "notes_last_editor_id"
   add_foreign_key "conversations", "contacts"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"

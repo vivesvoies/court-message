@@ -1,7 +1,9 @@
 <div class="Contact">
-  <div class="Contact__info">   
-    <%= info_tag(contact, key: :name,  missing: t(".missing_name")) %>
-    <%= info_tag(contact, key: :phone, missing: t(".missing_phone")) %>
-    <%= info_tag(contact, key: :email, missing: t(".missing_email")) %>
+  <div class="Contact__info">
+
+    <%= link_to team_contact_path(@team, contact.id) do %>
+
+    <%= info_tag(contact, key: :name,  missing: t(".missing_name")) %> <%= t(".created") %> <%= contact.created_at.strftime('%d/%m/%Y') %>
+    <% end %>
   </div>
 </div>
