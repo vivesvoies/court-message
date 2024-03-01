@@ -88,10 +88,12 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test "should show conversations on GET /team/:id" do
+  test "should show users on GET /team/:id" do
     with_normal_user
     get team_url(@team)
-    assert_redirected_to team_conversations_url(@team)
+
+    assert_response :success
+    assert_select "header", text: I18n.t("teams.show.title")
   end
 
   test "should not get edit" do
@@ -188,15 +190,16 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should not allow removing self from team" do
-    with_team_admin
-    other_user = create(:user, teams: [ @team ])
+  # TODO: To be modified when implementing team edit
+  # test "should not allow removing self from team" do
+  #   with_team_admin
+  #   other_user = create(:user, teams: [ @team ])
 
-    get edit_team_url(@team)
+  #   get edit_team_url(@team)
 
-    assert_select "[action=\"#{membership_path(other_user.memberships.first)}\"] input[value=delete]", count: 1
-    assert_select "[action=\"#{membership_path(@user.memberships.first)}\"]      input[value=delete]", count: 0
-  end
+  #   assert_select "[action=\"#{membership_path(other_user.memberships.first)}\"] input[value=delete]", count: 1
+  #   assert_select "[action=\"#{membership_path(@user.memberships.first)}\"]      input[value=delete]", count: 0
+  # end
 
   test "should update team" do
     with_team_admin

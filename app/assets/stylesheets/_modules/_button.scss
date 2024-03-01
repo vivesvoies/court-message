@@ -569,7 +569,6 @@ a.cm-btn:not([href]) {
   --active-tint: var(--active);
 }
 
-
 // TODO
 .cm-btn--secondary:disabled,
 a.cm-btn--secondary:not([href]) {
@@ -625,6 +624,32 @@ a.cm-btn--close:not([href]),
 
   --hover: inherit;
   --active: inherit;
+}
+
+/* #endregion */
+
+/* #region Validate */
+
+.cm-btn--validate {
+  background-color: var(--action-validate-bg);
+  box-shadow: inset 0 0 0 1px var(--action-validate-border);
+  color: var(--action-validate-text);
+  --hover: var(--action-validate-hover);
+  --active: var(--action-validate-active);
+  box-shadow: inset 0 0 0 1px var(--border-default-grey);
+}
+
+/* #endregion */
+
+/* #region Cancel */
+
+.cm-btn--cancel {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--action-cancel-bg);
+  color: var(--action-cancel-text);
+  --hover: inherit;
+  --active: var(--action-cancel-active);
+  --hover-shadow: inset 0 0 0 1px var(--action-cancel-hover), var(--btn-hover);
 }
 
 /* #endregion */

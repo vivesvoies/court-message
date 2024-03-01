@@ -1,4 +1,4 @@
-class Avo::Actions::ResendConfirmationEmail < Avo::BaseAction
+class Avo::Actions::SendConfirmationInstructions < Avo::BaseAction
   self.name = "Renvoyer le mail de confirmation"
 
   def handle(**args)
@@ -6,10 +6,8 @@ class Avo::Actions::ResendConfirmationEmail < Avo::BaseAction
 
     query.each do |record|
       record.confirmation_sent_at = DateTime.now.utc
-
-      # TODO: Should resend a confirmation email to join the team
+      resp = User.find(record.id).send_confirmation_instructions
+      succeed "Parfait le mail a été envoyé à #{record.email}"
     end
-
-    succeed "Parfait c'est envoyé!"
   end
 end

@@ -34,12 +34,9 @@ Rails.application.routes.draw do
         get :detail, to: "conversations#show", defaults: { detail: true }
       end
     end
+    resources :users, only: [ :edit, :update ]
   end
   resources :memberships, only: [ :new, :create, :destroy ]
-
-  scope :admin do
-    resources :users, only: [ :index, :show, :edit, :update, :destroy ]
-  end
 
   # Messaging services routes
   resources :inbound_messages, only: [ :create ]
