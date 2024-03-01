@@ -28,6 +28,7 @@ users = [
     id: 1,
     name: "Admin Super",
     email: "super@court-message.fr",
+    phone: "06 10 34 37 91",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "super_admin"
@@ -36,6 +37,7 @@ users = [
     id: 2,
     name: "Admin Site",
     email: "site@court-message.fr",
+    phone: "06 10 34 37 95",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "site_admin"
@@ -44,6 +46,7 @@ users = [
     id: 3,
     name: "Admin Team",
     email: "team@court-message.fr",
+    phone: "06 10 34 37 96",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "team_admin"
@@ -52,6 +55,7 @@ users = [
     id: 4,
     name: "Marthe Bellemare",
     email: "marthe@court-message.fr",
+    phone: "06 10 34 37 99",
     password: "fakePassw0rd",
     confirmed_at: DateTime.new(2021, 1, 1),
     role: "user"
@@ -60,6 +64,7 @@ users = [
     id: 5,
     name: "Yoan Jacquet",
     email: "yoan@court-message.fr",
+    phone: "06 10 34 37 98",
     password: "fakePassw0rd",
     confirmed_at: DateTime.new(2022, 12, 30),
     role: "user"
@@ -68,6 +73,7 @@ users = [
     id: 6,
     name: "Lionel Léotard",
     email: "lionel@court-message.fr",
+    phone: "06 10 34 37 97",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
     role: "user"
@@ -142,21 +148,34 @@ contacts = [
     id: 1,
     name: "Alice Legendre",
     email: "alice@mail.com",
-    phone: "06 10 34 37 99",
+    phone: "+33 6 10 34 37 99",
+    notes: "Besoin d’aide dans recherche de logement\nPenser à l’ajouter à la liste de diffusion “Logement de 2023”",
+    notes_updated_at: DateTime.now.utc,
+    notes_last_editor: User.find(4),
     team_id: 2
   },
   {
     id: 2,
     name: "Zarha Alami",
     email: "zahra@mail.com",
-    phone: "06 10 56 76 90",
+    phone: "+33 6 10 56 76 90",
     team_id: 2
   },
   {
     id: 3,
     name: "Joyce Selegenda",
     email: "joyce@mail.com",
-    phone: "07 35 47 82 09",
+    phone: "+33 7 35 47 82 09",
+    team_id: 2
+  },
+  {
+    id: 4,
+    name: "Tarek Amedine",
+    email: "tarek@mail.com",
+    phone: "+33 6 98 37 46 59 ",
+    notes: "A contacter",
+    notes_updated_at: DateTime.now.utc,
+    notes_last_editor: User.find(5),
     team_id: 2
   }
 ]
@@ -180,6 +199,12 @@ conversations = [
     read: false,
     created_at: DateTime.now.utc,
     contact_id: 2
+  },
+  {
+    id: 3,
+    read: false,
+    created_at: DateTime.now.utc,
+    contact_id: 3
   }
 ]
 
@@ -240,6 +265,24 @@ messages = [
     status: "undeliverable",
     created_at: DateTime.now.utc,
     conversation_id: 1,
+    sender_type: "User",
+    sender_id: 4
+  },
+  {
+    id: 7,
+    content: "Je suis un message de test status: inbound",
+    status: "inbound",
+    created_at: DateTime.now.utc.years_ago(1),
+    conversation_id: 3,
+    sender_type: "User",
+    sender_id: 6
+  },
+  {
+    id: 8,
+    content: "Je suis un message de test status: delivered",
+    status: "delivered",
+    created_at: DateTime.now.utc.years_ago(1),
+    conversation_id: 3,
     sender_type: "User",
     sender_id: 4
   }

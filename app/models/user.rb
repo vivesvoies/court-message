@@ -9,6 +9,7 @@
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  name                   :string
+#  phone                  :string
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -45,6 +46,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :teams, through: :memberships
+  has_many :contacts
 
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
