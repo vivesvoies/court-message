@@ -70,4 +70,14 @@ class User < ApplicationRecord
   def is_authorize_on_avo
     self.role == "site_admin" || self.role == "super_admin"
   end
+
+  # TODO: Check if the invitations is still valid
+  def waiting_invit_reply?
+    if confirmed_at.present? && invitation_created_at.nil?
+      return false
+    elsif invitation_created_at.present? && invitation_accepted_at.nil?
+      return true
+    end
+    false
+  end
 end

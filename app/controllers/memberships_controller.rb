@@ -25,6 +25,10 @@ class MembershipsController < ApplicationController
     @team = @membership.team
     authorize! :destroy, @membership
     @membership.destroy
+    # Delete the invitation if the user has been invited
+    if User.find(@membership.user_id).waiting_invit_reply?
+      remove_user_team_invitation_path(@team, User.find(@membership.user_id).invitation_token)
+    end
     redirect_to team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
   end
 

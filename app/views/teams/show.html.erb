@@ -1,19 +1,20 @@
 <%= turbo_frame_tag "conversation_detail" do %>
-<header class="TeamShow__header">
-  <h1 class="TeamShow__title">
-    <%= t(".title") %>
-  </h1>
-</header>
-<div class="TeamShow__members-list">
-  <%= turbo_frame_tag "team_members" do %>
-          <div class="Block Block__team-members">
-        <%= render @team.memberships %>
+  <header class="TeamShow__header">
+    <h1 class="TeamShow__title">
+      <%= t(".title") %>
+    </h1>
+  </header>
+  <div class="TeamShow__members-list">
+    <%= turbo_frame_tag "team_members" do %>
+      <%= render @team.memberships %>
 
-      <%= turbo_frame_tag User.new %>
-      <%= link_to t("users.index.add_member"),
-        new_user_team_invitation_path(@team),
-        data: { turbo_frame: dom_id(User.new) },
-        class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus"  if can? :create, User %>
-  <% end %>
-</div>
+      <section class="TeamShow__action">
+        <%= turbo_frame_tag User.new %>
+        <%= link_to t("users.index.add_member"),
+          new_user_team_invitation_path(@team),
+          data: { turbo_frame: dom_id(User.new) },
+          class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus"  if can? :create, User %>
+      </section>
+    <% end %>
+  </div>
 <% end %>

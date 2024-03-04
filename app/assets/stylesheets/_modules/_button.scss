@@ -639,6 +639,17 @@ a.cm-btn--close:not([href]),
   box-shadow: inset 0 0 0 1px var(--border-default-grey);
 }
 
+.cm-btn--validate:disabled,
+a.cm-btn--validate:not([href]) {
+  background-color: var(--action-validate-bg);
+  opacity:0.6;
+  box-shadow: none;
+  color: var(--action-validate-text);
+
+  --hover: inherit;
+  --active: inherit;
+}
+
 /* #endregion */
 
 /* #region Cancel */

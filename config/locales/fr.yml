@@ -208,6 +208,8 @@ fr:
       user_updated: "Le compte a été mis à jour."
     form:
       remove: "Retirer de l'équipe"
+      invitation_send: "Invitation envoyée"
+      cancel_invitation: "Annuler l'invitation"
     index:
       title: "Membres de l'équipe"
       add_member: "Ajouter un membre"

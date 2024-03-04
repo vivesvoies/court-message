@@ -1,0 +1,21 @@
+<h2><%= t "devise.invitations.edit.header" %></h2>
+<%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+  <%= f.hidden_field :invitation_token, readonly: true %>
+
+  <% if f.object.class.require_password_on_accepting %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= f.label :password, class: "cm-label" %><br />
+      <%= f.password_field :password, class: "cm-input" %>
+    </div>
+
+    <div class="cm-fieldset__element cm-input-group">
+      <%= f.label :password_confirmation, class: "cm-label" %><br />
+      <%= f.password_field :password_confirmation, class: "cm-input" %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit t("devise.invitations.edit.submit_button") %>
+  </div>
+<% end %>
