@@ -10,7 +10,7 @@ class Ability
     # Rules for all users -> be part of team
     can :read, User, memberships: belongs_to_team
     can :update, User, id: user.id
-    can :read, Team, belongs_to_team
+    can [ :read, :menu ], Team, belongs_to_team
     can :read, Conversation, belongs_to_team
     can :create, Message, belongs_to_team
     can :manage, Contact, belongs_to_team

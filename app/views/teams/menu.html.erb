@@ -7,6 +7,6 @@
     <%# TODO: change to team_contacts_path on next merge %>
     <%= menu_for(:contacts, icon: :"address-book", destination: team_contacts_path(@team), frame: "contacts") %>
     <%= menu_for(:team, icon: :team, destination: team_path(@team)) %>
-    <%= menu_for(:edit_team, icon: :settings, destination: edit_team_path(@team)) %>
+    <%= menu_for(:edit_team, icon: :settings, destination: edit_team_path(@team)) if can? :update, Team %>
   </div>
 <% end %>
