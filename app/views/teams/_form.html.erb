@@ -16,12 +16,7 @@
 
   </fieldset>
 
-  <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element cm-btns-group--right">
-      <div class="cm-btn cm-btn--pomme">
-        <i class="cm-icon--sm cm-icon-checkmark"></i>
-        <%= form.submit team.new_record? ? t(".create") : t(".update") %>
-      </div>
-    </div>
-  </fieldset>
+  <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+  <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--tertiary" %>
+
 <% end %>

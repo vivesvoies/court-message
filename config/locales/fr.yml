@@ -185,7 +185,7 @@ fr:
       save_error: "L’équipe n’a pas pu être enregistrée."
     edit:
       back: "Liste des équipes"
-      edit: "Information"
+      edit: "Informations"
     show:
       title: "Membres de l'équipe"
       add_member: "Ajouter un membre"
