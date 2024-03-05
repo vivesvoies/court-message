@@ -10,10 +10,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
   end
 
-  test "should not get show" do
-    assert_raises(ActionController::RoutingError) {
-      get team_user_url(@team, @user)
-    }
+  test "should get show" do
+    sign_in @user
+    get team_user_url(@team, @user)
+    assert_response :success
   end
 
   test "should not get index" do

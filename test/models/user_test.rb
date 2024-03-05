@@ -70,4 +70,21 @@ class UserTest < ActiveSupport::TestCase
     assert(super_admin.at_least?(:site_admin))
     assert(super_admin.at_least?(:super_admin))
   end
+
+  def test_waiting_invit_reply
+    user_without_invitation = create(:user)
+    assert_not(user_without_invitation.waiting_invit_reply?)
+
+    user_with_confirmed_at = create(:user, confirmed_at: Time.now)
+    assert_not(user_with_confirmed_at.waiting_invit_reply?)
+
+    user_with_invitation = create(:user, invitation_created_at: Time.now)
+    assert(user_with_invitation.waiting_invit_reply?)
+
+    user_with_invitation_and_confirmed_at = create(:user, confirmed_at: Time.now - 1, invitation_created_at: Time.now)
+    assert(user_with_invitation.waiting_invit_reply?)
+
+    user_with_accepted_invitation = create(:user, invitation_created_at: Time.now, invitation_accepted_at: Time.now)
+    assert_not(user_with_accepted_invitation.waiting_invit_reply?)
+  end
 end

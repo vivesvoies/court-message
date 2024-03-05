@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "team_id", default: 2, null: false
+    t.bigint "team_id", default: 1, null: false
     t.text "notes"
     t.datetime "notes_updated_at"
     t.bigint "notes_last_editor_id"
