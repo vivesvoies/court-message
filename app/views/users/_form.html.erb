@@ -2,36 +2,42 @@
   <% if user.errors.any? %>
     <%= render partial: "model_errors", locals: { model: user, team: } %>
   <% end %>  
+  <div class="cm-container UserForm">
 
-  <fieldset class="cm-fieldset">
-
-    <div class="cm-fieldset__element cm-input-group">
+    <div class="cm-fieldset__element">
       <%= form.label :name, t(:name), class: "cm-label" %>
       <%= form.text_field :name, class: "cm-input" %>
     </div>
 
-    <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :phone, t(:phone), class: "cm-label" %>
-      <%= form.text_field :phone, class: "cm-input" %>
+    <article class="cm-container">
+      <div class="cm-column cm-fieldset__element UserForm__phone">
+        <%= form.label :phone, t(:phone), class: "cm-label" %>
+        <%= form.text_field :phone, class: "cm-input" %>
+      </div>
+
+      <div class="cm-column cm-fieldset__element UserForm__email">
+        <%= form.label :email, t(:email), class: "cm-label" %>
+        <%= form.text_field :email, class: "cm-input" %>
+      </div>
+    </article>
+
+    <div class="cm-container UserForm__actions">
+      <div class="cm-column UserForm__submit">
+        <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+      </div>
+
+      <div class="cm-column UserForm__cancel">
+        <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--tertiary" %>
+      </div>
+
+      <div class="cm-column UserForm__remove">
+        <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+                data: {
+                  turbo_method: :delete,
+                  turbo_confirm: "Are you sure?"
+                },
+                class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
+      </div>
     </div>
-
-    <div class="cm-fieldset__element cm-input-group">
-      <%= form.label :email, t(:email), class: "cm-label" %>
-      <%= form.text_field :email, class: "cm-input" %>
-    </div>
-  </fieldset>
-
-  <div class="UserForm__actions">
-    <%= button_tag t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
-
-    <%= link_to t(:cancel), team_path(@team), class: "cm-btn cm-btn--tertiary" %>
-
-    <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
-              data: {
-                turbo_method: :delete,
-                turbo_confirm: "Are you sure?"
-              },
-              class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
-
   </div>
 <% end %>
