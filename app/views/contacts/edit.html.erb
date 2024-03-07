@@ -1,15 +1,4 @@
 <%= turbo_frame_tag "contacts" do %>
-  <div class="Page Page__edit-contact">
-    <div class="Block Block__edit-contact">
-      <h1><%= @contact.name %></h1>
-        <%= render "form", contact: @contact %>
-    </div>
-      <%= button_to team_contact_path(@team, @contact),
-              method: :delete,
-              "data-turbo" => "false",
-              class: "cm-btn cm-btn--robin" do %>
-        <i class="cm-icon-bin cm-icon--sm"></i>
-        <%= t(:delete) %>
-      <% end %>
-  </div>
+  <h1><%= @contact.name %></h1>
+  <%= render "form", contact: @contact %>
 <% end %>
