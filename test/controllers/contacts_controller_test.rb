@@ -15,12 +15,18 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get index without error even with a nameless contact" do
+    contact_with_no_name = Contact.create(email: "contact-mail@com", phone: "0102030405")
+    get team_contacts_url(@team)
+    assert_response :success
+  end
+
   test "should only see contacts belonging to user's team on index page" do
     get team_contacts_url(@user.teams.first)
 
     assert_response :success
-    assert_select "div.Contact__name" do |name_elements|
-      displayed_contact_names = name_elements.map(&:text)
+    assert_select "section.Contact" do |name_elements|
+      displayed_contact_names = name_elements.map { |element| element.at_css("label").text.strip }
 
       user_team_contact_names = @user.teams.first.contacts.pluck(:name)
 
@@ -53,6 +59,17 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should not create contact with invalid attributes" do
     assert_no_difference("Contact.count") do
       post team_contacts_url(@team), params: { contact: { name: nil, email: "john@example.com", phone: "1234567890", team_id: @team.id } }
+    end
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should not create contact with phone already existing" do
+    assert_difference("Contact.count") do
+      post team_contacts_url(@team), params: { contact: { name: "John Doe", email: "john@example.com", phone: "0123456789", team_id: @team.id } }
+    end
+    assert_no_difference("Contact.count") do
+      post team_contacts_url(@team), params: { contact: { name: nil, email: "johnDoe@example.com", phone: "1234567890", team_id: @team.id } }
     end
 
     assert_response :unprocessable_entity

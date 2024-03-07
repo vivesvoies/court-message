@@ -1,11 +1,7 @@
 <%= turbo_frame_tag "contacts" do %>
-  <div class="Page Page__new-contact">
-    <div class="Block Block__new-contact">
-      <%= link_to team_contacts_path do %>
-        <i class="cm-icon-chevrons-left cm-icon--sm"></i>
-      <% end %>
-      <h1><%= t(".new_contact") %></h1>
-        <%= render "form", contact: @contact %>
-    </div>
-  </div>
+  <%= link_to team_contacts_path do %>
+    <i class="cm-icon-chevrons-left cm-icon--sm"></i>
+  <% end %>
+  <h1><%= t(".new_contact") %></h1>
+  <%= render "form", contact: @contact %>
 <% end %>

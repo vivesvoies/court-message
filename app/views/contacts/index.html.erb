@@ -1,13 +1,25 @@
 <%= turbo_frame_tag "contacts" do %>
-  <div class="Page Page__index-contact">
-    <div class="Block Block__index-contact">
-      <%= link_to new_team_contact_path(@team),
-        class: "cm-btn cm-btn--sm cm-btn--tertiary",
-        data: { turbo_frame: "contacts" } do %>
-        <i class="cm-icon-person-add cm-icon--lg"></i>
-        <%= t(".new_contact") %>
+  <div class="ContactIndex__last-contact cm-container">
+    <% contact = Contact.order("created_at").last %>
+    <% if contact.present? %>
+      <div class="cm-column ContactIndex__last-contact-text">
+      <%= t(".last_contact")%>
+      </div>
+      <div class="cm-column ContactIndex__last-contact-data">
+      <%= link_to team_contact_path(@team, contact.id) do %>
+        <%= contact.name %>
       <% end %>
-        <%= render partial: @contacts, team: @team %> 
-    </div>
+      </div>
+    <% end %>
   </div>
+  <div class="ContactIndex__actions">
+    <%= link_to new_team_contact_path(@team),
+      class: "cm-btn cm-btn--sm cm-btn--tertiary",
+      data: { turbo_frame: "contacts" } do %>
+      <i class="cm-icon-person-add cm-icon--lg"></i>
+      <%= t(".new_contact") %>
+    <% end %>
+  </div>
+  <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
+  <%= render partial: @contacts, team: @team %> 
 <% end %> 

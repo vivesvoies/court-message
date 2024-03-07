@@ -6,8 +6,10 @@ fr:
   name: "Nom"
   email: "Adresse email"
   cancel: "Annuler"
-  phone: "Téléphone"
+  phone: "Téléphone Mobile"
   update: "Enregistrer les modifications"
+  last_updated: "dernière modification le"
+  by: "par "
 
   application:
     model_errors:
@@ -131,15 +133,17 @@ fr:
       notes: "Notes"
     contact_detail:
       edit: "Modifier la fiche"
-      last_updated: "dernière modification le"
-      by: "par"
     new:
       new_list: "Nouvelle liste de diffusion"
+      new_contact: "Nouveau contact"
     form:
       update: "Mettre à jour la fiche"
-      create: "Créer la fiche"
+      create: "Enregistrer le contact"
       save_error: "La fiche n’a pas pu être enregistrée."
       destroy: "Supprimer le contact"
+      info: "Les informations enregistrées seront visibles par tous les membres de l’équipe."
+      format: "Format attendu : (+33) 6 22 33 44 55"
+      remove: "Supprimer le contact"
     create:
       success: "Conversation et fiche contact crées."
     update:
@@ -148,6 +152,8 @@ fr:
       success: "Conversation et fiche contact supprimées."
     index:
       new_contact: "Nouveau contact"
+      search: "Rechercher un contact ou une liste de diffusion"
+      last_contact: "Dernier contact créé par vous :"
 
   memberships:
     membership:
@@ -204,6 +210,7 @@ fr:
       user_updated: "Le compte a été mis à jour."
     form:
       remove: "Retirer de l'équipe"
+      phone: "Téléphone"
     edit:
       me: "Moi"
 

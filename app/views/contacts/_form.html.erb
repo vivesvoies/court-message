@@ -6,36 +6,50 @@
   <%= hidden_field_tag :create_conversation, @create_conversation %>
   <%= form.hidden_field :team_id %>
 
-  <div>
-  <%= button_tag type: 'submit', class: "cm-btn cm-btn--pomme" do %>
-    <i class="cm-icon-checkmark cm-icon--sm"></i>
-    <%= contact.new_record? ? t(".create") : t(:update) %>
+  <% if @contact.new_record? %>
+    <div class="ContactForm__actions">
+      <%= button_tag t(".create"), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+      <p><%= t(".info") %></p>
+    </div>
   <% end %>
 
-  <% unless @contact.new_record? %>
-    <%= link_to t(:cancel), team_contact_path(@team, @contact) %> 
-  <% end %>
-  </div>
-
-  <fieldset class="cm-fieldset">
+  <fieldset class="cm-fieldset ContactForm">
     <div class="cm-fieldset__element cm-input-group">
       <%= form.label :name, t(:name), class: "Contact__label-name cm-label" %>
-      <%= form.text_field :name, class: "cm-input cm-input--overhang" %>
+      <%= form.text_field :name, class: "cm-input" %>
     </div>
     
     <div class="cm-fieldset__element cm-input-group">
       <%= form.label :phone, t(:phone), class: "Contact__label-phone cm-label" %>
-      <%= form.text_field :phone, class: "cm-input cm-input--overhang" %>
+      <p><%= t(".format") if contact.new_record? %></p>
+      <%= form.text_field :phone, class: "cm-input" %>
     </div>
     
     <div class="cm-fieldset__element cm-input-group">
       <%= form.label :email, t(:email), class: "Contact__label-email cm-label" %>
-      <%= form.text_field :email, class: "cm-input cm-input--overhang" %>
+      <%= form.text_field :email, class: "cm-input" %>
     </div>
 
     <div class="cm-fieldset__element cm-input-group">
       <%= form.label :notes, t(".notes"), class: "Contact__label-notes cm-label" %>
-      <%= form.text_area :notes, class: "cm-input cm-input--overhang" %> 
+      <div class="ContactForm__notes">
+        <% unless contact.new_record? || contact.notes_updated_at.nil? %>
+          <p><%= t(:last_updated) %><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></p>
+        <% end %>
+        <% unless !contact.notes_last_editor_id? %>
+          <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(".me") : User.find(contact.notes_last_editor_id).name %></p>
+        <% end %>
+      </div>
+      <%= form.text_area :notes, class: "cm-input cm-input--text" %> 
     </div>
   </fieldset>
+
+  <% unless @contact.new_record? %>
+    <%= button_tag contact.new_record? ? t(".create") : t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+    <%= link_to t(:cancel), team_contact_path(@team, @contact), class: "cm-btn cm-btn--tertiary" %> 
+    <%= button_to t(".remove"), team_contact_path(@team, @contact),
+        method: :delete,
+        "data-turbo" => "false",
+        class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-bin" %>
+  <% end %>
 <% end %>
