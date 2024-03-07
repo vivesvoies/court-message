@@ -1,3 +1,20 @@
+.Contact {
+  margin-right: .5rem;
+  --underline-img: none;
+}
+
+.Contact a {
+  color: var(--text-tertiary);
+}
+
+.Contact a:hover {
+  color: var(--text-tertiary-hover);
+}
+
+.Contact label {
+  font-weight: bold;
+}
+
 .ContactDetail {
   flex-direction: column;
   justify-content: space-between;
@@ -15,6 +32,43 @@
   font-style: italic;
 }
 
-.ContactDetail__actions {
-  
+.ContactForm__actions {
+  margin-left: auto;
+  margin-right: auto;
+  width: 33%;
+}
+
+.ContactForm p,
+.ContactDetail__notes p {
+  color: var(--text-format);
+  margin-block-start: 0;
+}
+
+.ContactDetail__notes,
+.ContactForm__notes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ContactIndex_input,
+.ContactIndex__actions,
+.ContactForm__actions,
+.ContactDetail__actions{
+  margin-block-start: 2.2em;
+  margin-block-end: 2.4em;
+}
+
+.ContactIndex__last-contact {
+  margin: initial;
+  margin-block-start: 2.2em;
+  margin-block-end: 2.4em;
+  height: 5rem;
+}
+
+.ContactIndex__last-contact-text {
+  --width: 2;
+}
+
+.ContactIndex__last-contact-data {
+  --width: 10;
 }
