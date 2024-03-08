@@ -10,6 +10,7 @@ fr:
   update: "Enregistrer les modifications"
   last_updated: "dernière modification le"
   by: "par "
+  me: "(moi)"
 
   application:
     model_errors:
@@ -202,7 +203,6 @@ fr:
     user:
       join: "a rejoint l'équipe en"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
-      me: "(moi)"
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."

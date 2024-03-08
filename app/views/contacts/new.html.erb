@@ -1,7 +1,4 @@
 <%= turbo_frame_tag "contacts" do %>
-  <%= link_to team_contacts_path do %>
-    <i class="cm-icon-chevrons-left cm-icon--sm"></i>
-  <% end %>
   <h1><%= t(".new_contact") %></h1>
   <%= render "form", contact: @contact %>
 <% end %>
