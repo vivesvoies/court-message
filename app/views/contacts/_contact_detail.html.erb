@@ -28,7 +28,7 @@
             <p><%= t(:last_updated) %><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></p>
           <% end %>
           <% unless !contact.notes_last_editor_id? %>
-            <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(".me") : User.find(contact.notes_last_editor_id).name %></p>
+            <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(:me) : User.find(contact.notes_last_editor_id).name %></p>
           <% end %>
         </div>
         <div class="cm-input cm-input--text">
