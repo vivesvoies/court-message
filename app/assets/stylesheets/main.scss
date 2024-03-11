@@ -21,12 +21,15 @@
 :root {
   --text-primary: var(--color-black);
   --text-secondary: var(--color-dark1);
+  --text-tertiary: var(--color-mouse);
+  --text-tertiary-hoover: var(--color-black);
 
   --outbound-message-bg: var(--color-peach);
   --inbound-message-bg: var(--color-latte);
   --text-secondary: var(--color-black);
   --messages-bg: var(--color-white);
   --message-box-bg: var(--color-white-transparentish);
+  --text-format: var(--color-mouse);
   
   --list-bg: var(--color-latte);
   --list-header-bg: var(--color-white);

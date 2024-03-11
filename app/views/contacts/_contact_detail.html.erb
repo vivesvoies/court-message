@@ -1,6 +1,9 @@
 <%= turbo_frame_tag "contacts" do %>
   <h1><%= contact.name  %></h1>
-  <%= link_to t(".edit"), edit_team_contact_path(@team, contact.id), class: "ContactDetail__edit-btn cm-btn cm-btn--sm cm-btn--secondary" %>
+  <div class="ContactDetail__actions">
+    <%= link_to t(".edit"), edit_team_contact_path(@team, contact.id), class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-settings" %>
+  </div>
+
   <div class="ContactDetail">
     <div class="ContactDetail__info">
 
@@ -17,18 +20,18 @@
           <%= contact.email %>
         </div>
       </div>
-      
-      <div class="cm-fieldset__element cm-input-group">
+
+      <div class="cm-fieldset__element cm-input-group ContactDetails__label">
         <label class="cm-label"><%= t(".notes") %></label>
-        <% unless !contact.notes_updated_at? %>
-          <label class="cm-label"><%= t(".last_updated") %></label>
-          <label class="cm-label"><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></label>
-        <% end %>
-        <% unless !contact.notes_last_editor_id? %>
-          <label class="cm-label"><%= t(".by") %></label>
-          <label class="cm-label"><%= Current.user == User.find(contact.notes_last_editor_id) ? t(".me") : User.find(contact.notes_last_editor_id).name %></label>
-        <% end %>
-        <div class="Contact__notes cm-input">
+        <div class="ContactDetail__notes">
+          <% unless !contact.notes_updated_at? %>
+            <p><%= t(:last_updated) %><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></p>
+          <% end %>
+          <% unless !contact.notes_last_editor_id? %>
+            <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(:me) : User.find(contact.notes_last_editor_id).name %></p>
+          <% end %>
+        </div>
+        <div class="cm-input cm-input--text">
           <%= contact.notes %>
         </div>
       </div>

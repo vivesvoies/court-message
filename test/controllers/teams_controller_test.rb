@@ -233,4 +233,11 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to teams_url
   end
+
+  test "should get menu for user" do
+    with_normal_user
+    get menu_team_url(@team)
+
+    assert_redirected_to team_conversations_url(@team)
+  end
 end

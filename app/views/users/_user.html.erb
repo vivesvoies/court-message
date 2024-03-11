@@ -1,9 +1,8 @@
-<div class="User" id="<%= dom_id user %>">
-  <%= turbo_frame_tag user do %>
-  
-    <div class="User__body">
+<%= turbo_frame_tag user do %>
+  <div class="cm-container" id="<%= dom_id user %>">
+    <div class="cm-column User__body">
       <div class="User__name">
-          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
+          <%= user.name %> <% if Current.user == user %><%= t(:me) %><% end %>
       </div>
       <div class="User__created_at">
         <%= t(".join") %> <%= user.created_at.year.to_s %>
@@ -17,10 +16,10 @@
         <%= user.email %>
       </div>
     </div>
-    <div class="User__actions">
+    <div class="cm-column User__actions">
         <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings" do %>
           <i class="cm-icon-settings cm-icon--sm"></i>
         <% end if can? :update, user %>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>
