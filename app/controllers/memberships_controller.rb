@@ -29,6 +29,7 @@ class MembershipsController < ApplicationController
 
     # Remove team membership
     @membership.destroy
+    user.reload
 
     # Delete user if does not belong to a team
     if user.team_ids.empty?

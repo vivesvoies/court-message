@@ -57,6 +57,29 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to team_path(@team)
   end
 
+  test "should destroy user if is not in any team" do
+    user = create(:user)
+    user.update(team_ids: [])
+    membership = create(:membership, team: @team, user: user)
+
+    assert_difference("User.count", -1) do
+      delete membership_url(membership)
+    end
+
+    assert_redirected_to team_path(@team)
+  end
+
+  test "should destroy membership if invitation is revoke and user does belong to a team" do
+    user = create(:user)
+    membership = create(:membership, team: @team, user: user)
+
+    assert_difference("Membership.count", -1) do
+      assert_difference("User.count", 0) do
+        delete membership_url(membership)
+      end
+    end
+  end
+
   test "should not destroy membership in another team" do
     membership = create(:membership, team: @other_team)
     assert_no_difference("Membership.count") do

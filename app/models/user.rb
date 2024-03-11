@@ -73,11 +73,15 @@ class User < ApplicationRecord
 
   # TODO: Check if the invitations is still valid
   def awaiting_invitation_reply?
-    if confirmed_at.present? && invitation_created_at.nil?
+    if confirmed_at.present? && invitation_created_at.nil? || invitation_accepted_at.present?
       return false
     elsif invitation_created_at.present? && invitation_accepted_at.nil?
       return true
     end
     false
+  end
+
+  def belongs_to_team?(team_id)
+    memberships.exists?(team_id: team_id)
   end
 end

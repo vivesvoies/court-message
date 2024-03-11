@@ -235,3 +235,7 @@ fr:
       rejected: *message_error
       submitted: "Envoi en cours..."
       delivered: "Envoyé"
+
+  invitations:
+    notice:
+      user_add_to_team: "Le membre à été ajouter à votre équipe"
