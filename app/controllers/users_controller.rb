@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ index edit update ]
+  before_action :set_team, only: %i[ index edit update destroy ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
@@ -27,6 +27,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
+    @user.destroy
+    redirect_to team_url(@team), notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private

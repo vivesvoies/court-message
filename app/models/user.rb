@@ -72,7 +72,7 @@ class User < ApplicationRecord
   end
 
   # TODO: Check if the invitations is still valid
-  def waiting_invit_reply?
+  def awaiting_invitation_reply?
     if confirmed_at.present? && invitation_created_at.nil?
       return false
     elsif invitation_created_at.present? && invitation_accepted_at.nil?

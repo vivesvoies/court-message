@@ -34,7 +34,7 @@ Rails.application.routes.draw do
         get :detail, to: "conversations#show", defaults: { detail: true }
       end
     end
-    resources :users, only: [ :show, :edit, :update ]
+    resources :users, only: [ :show, :edit, :update, :destroy ]
     devise_for :users, controllers: { invitations: "invitations" }
   end
   resources :memberships, only: [ :new, :create, :destroy ]

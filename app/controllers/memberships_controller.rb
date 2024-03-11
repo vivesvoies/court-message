@@ -24,11 +24,21 @@ class MembershipsController < ApplicationController
   def destroy
     @team = @membership.team
     authorize! :destroy, @membership
+
+    user = User.find(@membership.user_id)
+
+    # Remove team membership
     @membership.destroy
+
+    # Delete user if does not belong to a team
+    if user.team_ids.empty?
+      user.destroy
     # Delete the invitation if the user has been invited
-    if User.find(@membership.user_id).waiting_invit_reply?
-      remove_user_team_invitation_path(@team, User.find(@membership.user_id).invitation_token)
+    elsif user.awaiting_invitation_reply?
+      redirect_to remove_user_team_invitation_path(@team, user.invitation_token)
+      return
     end
+
     redirect_to team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
   end
 
