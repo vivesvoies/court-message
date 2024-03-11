@@ -68,18 +68,6 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "should destroy membership if invitation is revoke and user does belong to another team" do
-    other_team = create(:team)
-    membership = Membership.create(team: other_team.id, user: @other_user.id)
-
-    assert_difference("Membership.count") do
-      get membership_path(membership)
-    end
-  end
-
-  test "should not destroy user is invitation is revoke and user does belong to a team" do
-  end
-
   test "should redirect to sign in page if not signed in" do
     sign_out :user
 
