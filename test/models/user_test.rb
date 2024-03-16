@@ -87,4 +87,25 @@ class UserTest < ActiveSupport::TestCase
     user_with_accepted_invitation = create(:user, invitation_created_at: Time.now, invitation_accepted_at: Time.now)
     assert_not(user_with_accepted_invitation.awaiting_invitation_reply?)
   end
+
+  def test_can_be_deleted
+    user = create(:user)
+    user.update(teams: [], messages: [], confirmed_at: nil)
+    assert(user.can_be_deleted?)
+
+    user = create(:user)
+    assert_not(user.can_be_deleted?)
+
+    user = create(:user, confirmed_at: Time.now)
+    assert_not(user.can_be_deleted?)
+
+    user = create(:user)
+    team = create(:team)
+    user.teams << team
+    assert_not(user.can_be_deleted?)
+
+    user = create(:user)
+    new_message = Message.new({ content: "...", status: "unsent", sender_id: user.id })
+    assert_not(user.can_be_deleted?)
+  end
 end

@@ -81,7 +81,11 @@ class User < ApplicationRecord
     false
   end
 
-  def belongs_to_team?(team_id)
-    memberships.exists?(team_id: team_id)
+  def belongs_to_team?(team)
+    memberships.exists?(team_id: team.id)
+  end
+
+  def can_be_deleted?
+    !confirmed_at.present? && teams.empty? && messages.empty?
   end
 end

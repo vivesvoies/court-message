@@ -15,7 +15,7 @@ class MembershipsController < ApplicationController
 
     authorize! :create, @membership
     if @membership.save
-      redirect_to team_path(@team) # , notice: "Membre ajouté à l’équipe."
+      redirect_to team_path(@team), notice: I18n.t("memberships.create.added")
     else
       redirect_to team_path(@team), alert: @membership.errors.full_messages.join(", ")
     end
@@ -25,14 +25,14 @@ class MembershipsController < ApplicationController
     @team = @membership.team
     authorize! :destroy, @membership
 
-    user = User.find(@membership.user_id)
+    user = @membership.user
 
     # Remove team membership
     @membership.destroy
     user.reload
 
-    # Delete user if does not belong to a team
-    if user.team_ids.empty?
+    # Delete the user if he never had an active account
+    if user.can_be_deleted?
       user.destroy
     # Delete the invitation if the user has been invited
     elsif user.awaiting_invitation_reply?
@@ -40,7 +40,7 @@ class MembershipsController < ApplicationController
       return
     end
 
-    redirect_to team_path(@team), status: :see_other # , notice: t("memberships.destroy.destroyed")
+    redirect_to team_path(@team), status: :see_other, notice: I18n.t("memberships.destroy.destroyed")
   end
 
   private

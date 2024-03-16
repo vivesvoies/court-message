@@ -17,18 +17,13 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to team_url(@team), notice: I18n.t("users.update.user_updated") }
+        format.html { redirect_to team_path(@team), notice: I18n.t("users.update.user_updated") }
         format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@user) }
       end
     end
-  end
-
-  def destroy
-    @user.destroy
-    redirect_to team_url(@team), notice: I18n.t("users.destroy.user_destroyed"), status: :see_other
   end
 
   private

@@ -79,7 +79,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test "should create not team" do
+  test "should not create team" do
     with_normal_user
     assert_no_difference("Team.count") do
       post teams_url, params: { team: { name: "Team Name" } }
@@ -176,6 +176,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_url(Team.last)
+    assert_equal I18n.t("teams.create.created"), flash[:notice]
   end
 
   test "should be team member after creation" do
@@ -205,6 +206,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     with_team_admin
     patch team_url(@team), params: { team: {} }
     assert_redirected_to team_url(@team)
+    assert_equal I18n.t("teams.update.success"), flash[:notice]
   end
 
   test "team admins should not destroy team" do
@@ -221,6 +223,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to teams_url
+    assert_equal I18n.t("teams.destroy.destroyed"), flash[:notice]
   end
 
   test "site admins should destroy any team" do
@@ -232,6 +235,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to teams_url
+    assert_equal I18n.t("teams.destroy.destroyed"), flash[:notice]
   end
 
   test "should get menu for user" do

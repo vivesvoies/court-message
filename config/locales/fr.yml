@@ -113,6 +113,7 @@ fr:
       my_conversations: "Mes conversations"
     team_picker:
       switch_team: "Changer d’équipe"
+      team: "Équipes"
     new:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
@@ -164,7 +165,9 @@ fr:
     membership:
       remove_member: "Retirer de l’équipe"
     destroy:
-      destroyed: "Le membre a été retiré de l’équipe."
+      destroyed: "Membre retiré de l’équipe."
+    create:
+      added: "Membre ajouté à l’équipe."
 
   teams:
     team:
@@ -200,8 +203,12 @@ fr:
     show:
       title: "Membres de l'équipe"
       add_member: "Ajouter un membre"
+    create:
+      created: "Équipe crée."
     update:
       success: "Équipe mise à jour."
+    destroy:
+      destroyed: "Équipe supprimée."
 
   users:
     user:

@@ -37,6 +37,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.create.added"), flash[:notice]
   end
 
   test "should not create membership in another team" do
@@ -55,11 +56,12 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.destroy.destroyed"), flash[:notice]
   end
 
-  test "should destroy user if is not in any team" do
+  test "should destroy user if he is never have an active account" do
     user = create(:user)
-    user.update(team_ids: [])
+    user.update(team_ids: [], confirmed_at: nil)
     membership = create(:membership, team: @team, user: user)
 
     assert_difference("User.count", -1) do
@@ -67,6 +69,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.destroy.destroyed"), flash[:notice]
   end
 
   test "should destroy membership if invitation is revoke and user does belong to a team" do

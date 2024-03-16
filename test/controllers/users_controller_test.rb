@@ -17,29 +17,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should destroy user" do
-    sign_in @team_admin
-    assert_difference("User.count", -1) do
-      delete team_user_url(@team, @user)
-    end
-    assert_redirected_to team_url(@team)
-    sign_out @team_admin
-  end
-
-  test "should not be able to destroy when self" do
-    sign_in @team_admin
-    delete team_user_url(@team, @team_admin)
-    assert_response :forbidden
-    sign_out @team_admin
-  end
-
-  test "user should not be able to destroy" do
-    sign_in @user
-    delete team_user_url(@team, @other_team_user)
-    assert_response :forbidden
-    sign_out @user
-  end
-
   test "normal users should be able to access their team" do
     sign_in @user
     get team_url(@team)
@@ -76,6 +53,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get team_url(@other_team, @team_admin)
     assert_response :forbidden
     sign_out @team_admin
+  end
+
+  test "should update user" do
+    sign_in @team_admin
+    patch team_user_url(@team, @user), params: { user: { id: @user.id, name: "Update Name" } }
+
+    assert_redirected_to team_url(@team)
+    assert_equal I18n.t("users.update.user_updated"), flash[:notice]
+
+    @user.reload
+    assert_equal(@user.name, "Update Name")
   end
 
   test "should be able edit user when self" do

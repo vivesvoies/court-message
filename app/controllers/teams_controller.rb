@@ -34,7 +34,7 @@ class TeamsController < ApplicationController
 
     if @team.save
       Membership.create(team: @team, user: Current.user)
-      redirect_to @team, notice: "Team was successfully created."
+      redirect_to @team, notice: I18n.t("teams.create.created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -43,7 +43,7 @@ class TeamsController < ApplicationController
   # PATCH/PUT /teams/:team_slug
   def update
     if @team.update(team_params)
-      redirect_to @team, notice: "Team was successfully updated."
+      redirect_to @team, notice: I18n.t("teams.update.success")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -52,7 +52,7 @@ class TeamsController < ApplicationController
   # DELETE /teams/:team_slug
   def destroy
     @team.destroy
-    redirect_to teams_url, notice: "Team was successfully destroyed.", status: :see_other
+    redirect_to teams_path, notice: I18n.t("teams.destroy.destroyed"), status: :see_other
   end
 
   private
