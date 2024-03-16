@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   resources :contacts, only: [ :show, :new, :edit, :create, :update, :destroy ]
   resources :messages, only: [ :new, :create ]
-  resources :teams, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
+  resources :teams, only: [ :index, :show, :edit, :update ] do
     member do
       get :menu, to: "teams#menu"
     end
