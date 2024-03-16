@@ -5,14 +5,7 @@
 <div class="Page Page__edit-team">
   <div class="Block Block__edit-team">
     <header class="Teams__header">
-      <h1><%= t(".edit") %></h1>
+      <h2><%= t(".edit") %></h2>
     </header>
     <%= render "form", team: @team %>
-  </div>
-
-  <div class="Block Block__team-members">
-    <%= turbo_frame_tag "team_members" do %>
-      <%= render partial: "team_details" %>
-    <% end %>
-  </div>
 </div>

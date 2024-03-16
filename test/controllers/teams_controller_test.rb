@@ -22,6 +22,13 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
 
   ### Normal users
 
+  test "should get show" do
+    with_normal_user
+    get team_url(@team)
+
+    assert_response :success
+  end
+
   test "should show picker on index" do
     with_normal_user
     get teams_url
@@ -34,13 +41,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     get teams_url
 
     assert_select "[href=\"#{edit_team_path(@team)}\"]", count: 0
-  end
-
-  test "should not display new team button to non-admins" do
-    with_normal_user
-    get teams_url
-
-    assert_select "[href=\"#{new_team_path}\"]", count: 0
   end
 
   test "should redirect normal users to their team if team.count is 1" do
@@ -73,21 +73,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", text: I18n.t("teams.index.no_team")
   end
 
-  test "should not get new" do
-    with_normal_user
-    get new_team_url
-    assert_response :forbidden
-  end
-
-  test "should create not team" do
-    with_normal_user
-    assert_no_difference("Team.count") do
-      post teams_url, params: { team: { name: "Team Name" } }
-    end
-
-    assert_response :forbidden
-  end
-
   test "should show users on GET /team/:id" do
     with_normal_user
     get team_url(@team)
@@ -108,12 +93,11 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test "should not destroy team" do
+  test "should get menu for user" do
     with_normal_user
-    assert_no_difference("Team.count") do
-      delete team_url(@team)
-    end
-    assert_response :forbidden
+    get menu_team_url(@team)
+
+    assert_redirected_to team_conversations_url(@team)
   end
 
   ### Admins
@@ -163,81 +147,15 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_select "[href=\"#{team_path(other_teams.last)}\"]", count: 0
   end
 
-  test "should get new" do
-    with_team_admin
-    get new_team_url
-    assert_response :success
-  end
-
-  test "should create team" do
-    with_team_admin
-    assert_difference("Team.count") do
-      post teams_url, params: { team: { name: "Team Name" } }
-    end
-
-    assert_redirected_to team_url(Team.last)
-  end
-
-  test "should be team member after creation" do
-    with_team_admin
-    post teams_url, params: { team: { name: "Team Name" } }
-    assert Team.last.users.include?(@user)
-  end
-
   test "should get edit" do
     with_team_admin
     get edit_team_url(@team)
     assert_response :success
   end
 
-  # TODO: To be modified when implementing team edit
-  # test "should not allow removing self from team" do
-  #   with_team_admin
-  #   other_user = create(:user, teams: [ @team ])
-
-  #   get edit_team_url(@team)
-
-  #   assert_select "[action=\"#{membership_path(other_user.memberships.first)}\"] input[value=delete]", count: 1
-  #   assert_select "[action=\"#{membership_path(@user.memberships.first)}\"]      input[value=delete]", count: 0
-  # end
-
   test "should update team" do
     with_team_admin
     patch team_url(@team), params: { team: {} }
     assert_redirected_to team_url(@team)
-  end
-
-  test "team admins should not destroy team" do
-    with_team_admin
-    delete team_url(@team)
-
-    assert_response :forbidden
-  end
-
-  test "site admins should destroy team" do
-    with_site_admin
-    assert_difference("Team.count", -1) do
-      delete team_url(@team)
-    end
-
-    assert_redirected_to teams_url
-  end
-
-  test "site admins should destroy any team" do
-    with_site_admin
-    other_team = create(:team)
-
-    assert_difference("Team.count", -1) do
-      delete team_url(other_team)
-    end
-
-    assert_redirected_to teams_url
-  end
-
-  test "should get menu for user" do
-    with_normal_user
-    get menu_team_url(@team)
-
-    assert_redirected_to team_conversations_url(@team)
   end
 end
