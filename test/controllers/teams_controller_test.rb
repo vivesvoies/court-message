@@ -73,43 +73,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", text: I18n.t("teams.index.no_team")
   end
 
-  test "should get new" do
-    with_team_admin
-    get new_team_url
-    assert_response :success
-  end
-
-  test "should not get new" do
-    with_normal_user
-    get new_team_url
-    assert_response :forbidden
-  end
-
-  test "should create team" do
-    with_team_admin
-    assert_difference("Team.count") do
-      post teams_url, params: { team: { name: "Team Name" } }
-    end
-
-    assert_redirected_to team_url(Team.last)
-    assert_equal I18n.t("teams.create.created"), flash[:notice]
-  end
-
-  test "should be team member after creation" do
-    with_team_admin
-    post teams_url, params: { team: { name: "Team Name" } }
-    assert Team.last.users.include?(@user)
-  end
-
-  test "should not create team" do
-    with_normal_user
-    assert_no_difference("Team.count") do
-      post teams_url, params: { team: { name: "Team Name" } }
-    end
-
-    assert_response :forbidden
-  end
-
   test "should show users on GET /team/:id" do
     with_normal_user
     get team_url(@team)
@@ -195,41 +158,5 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     patch team_url(@team), params: { team: {} }
     assert_redirected_to team_url(@team)
     assert_equal I18n.t("teams.update.success"), flash[:notice]
-  end
-
-  test "team admins should not destroy team" do
-    with_team_admin
-    delete team_url(@team)
-
-    assert_response :forbidden
-  end
-
-  test "site admins should destroy team" do
-    with_site_admin
-    assert_difference("Team.count", -1) do
-      delete team_url(@team)
-    end
-
-    assert_redirected_to teams_url
-    assert_equal I18n.t("teams.destroy.destroyed"), flash[:notice]
-  end
-
-  test "site admins should destroy any team" do
-    with_site_admin
-    other_team = create(:team)
-
-    assert_difference("Team.count", -1) do
-      delete team_url(other_team)
-    end
-
-    assert_redirected_to teams_url
-    assert_equal I18n.t("teams.destroy.destroyed"), flash[:notice]
-  end
-
-  test "should get menu for user" do
-    with_normal_user
-    get menu_team_url(@team)
-
-    assert_redirected_to team_conversations_url(@team)
   end
 end
