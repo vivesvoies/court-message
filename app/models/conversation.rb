@@ -25,12 +25,12 @@ class Conversation < ApplicationRecord
   has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, after_add: :set_last_message
   has_and_belongs_to_many :agents, class_name: "User"
 
-  belongs_to :last_message, class_name: "Message", strict_loading: true, optional: true
+  belongs_to :last_message, class_name: "Message", optional: true
 
   after_update_commit :broadcast_conversation_update
 
   scope :for_team, ->(team) {
-                     includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order(updated_at: :desc)
+                     includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order("messages.updated_at DESC, conversations.updated_at DESC")
                    }
 
   def self.find_preloaded(id)

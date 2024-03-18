@@ -15,7 +15,11 @@ class MessagesController < ApplicationController
     @message.sender = Current.user
     outbound = OutboundMessagesService.new(@message)
 
+    @conversation = @message.conversation
     @message.save
+    @conversation.messages << @message
+    
+
     if !@message.persisted?
       # TODO: renders only the `new` frame
       # Instead show an error message.
@@ -32,7 +36,7 @@ class MessagesController < ApplicationController
     if outbound.submit!
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to [ @message.conversation.team, @message.conversation ] }
+        format.html { redirect_to [ @conversation.team, @conversation ] }
       end
     else
       # TODO: probably a different kind of error
