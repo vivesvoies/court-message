@@ -2,19 +2,22 @@
 #
 # Table name: conversations
 #
-#  id         :bigint           not null, primary key
-#  read       :boolean          default(TRUE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  contact_id :bigint           not null
+#  id              :bigint           not null, primary key
+#  read            :boolean          default(TRUE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  contact_id      :bigint           not null
+#  last_message_id :bigint
 #
 # Indexes
 #
-#  index_conversations_on_contact_id  (contact_id)
+#  index_conversations_on_contact_id       (contact_id)
+#  index_conversations_on_last_message_id  (last_message_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (contact_id => contacts.id)
+#  fk_rails_...  (last_message_id => messages.id)
 #
 require "test_helper"
 
@@ -106,5 +109,14 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal(@conversation.status, "read")
     @conversation.mark_as_unread!
     assert_equal(@conversation.status, "unread")
+  end
+
+  def test_last_message
+    @conversation = create(:conversation)
+    @conversation.messages << create(:inbound_message)
+    last = create(:outbound_message)
+    @conversation.messages << last
+
+    assert_equal(last, @conversation.last_message)
   end
 end

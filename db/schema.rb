@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_23_182027) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_165144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,7 +40,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_182027) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "read", default: true
+    t.bigint "last_message_id"
     t.index ["contact_id"], name: "index_conversations_on_contact_id"
+    t.index ["last_message_id"], name: "index_conversations_on_last_message_id"
   end
 
   create_table "conversations_users", id: false, force: :cascade do |t|
@@ -101,13 +103,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_182027) do
     t.string "unconfirmed_email"
     t.enum "role", default: "user", null: false, enum_type: "user_role"
     t.string "phone"
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.bigint "invited_by_id"
+    t.integer "invitations_count", default: 0
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "contacts", "teams"
   add_foreign_key "contacts", "users", column: "notes_last_editor_id"
   add_foreign_key "conversations", "contacts"
+  add_foreign_key "conversations", "messages", column: "last_message_id"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
