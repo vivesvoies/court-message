@@ -34,13 +34,13 @@ class MembershipsController < ApplicationController
     # Delete the user if he never had an active account
     if user.can_be_deleted?
       user.destroy
-    # Delete the invitation if the user has been invited
-    elsif user.awaiting_invitation_reply?
-      redirect_to remove_user_team_invitation_path(@team, user.invitation_token)
-      return
     end
 
-    redirect_to team_path(@team), status: :see_other, notice: I18n.t("memberships.destroy.destroyed")
+    # Delete the invitation if the user has been invited
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to user.awaiting_invitation_reply? ? remove_user_team_invitation_path(@team, user.invitation_token) : team_path(@team), status: :see_other, notice: I18n.t("memberships.destroy.destroyed") }
+    end
   end
 
   private

@@ -3,7 +3,7 @@ class InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters
 
   def create
-    user = User.find_by(email: invite_params[:email].strip)
+    user = User.find_by(email: invite_params[:email])
     # If the user is not a team member the membership is automatically created
     Membership.create(team: @team, user: User.find(invite_resource.id)) unless user && user.belongs_to_team?(@team)
     # If the user is confirmed no invitation is sent
