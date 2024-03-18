@@ -40,10 +40,6 @@ class Conversation < ApplicationRecord
     includes({ messages: :sender }, :contact, :agents).find(id)
   end
 
-  def title
-    contact.to_s
-  end
-
   def mark_as_read!
     update!(read: true)
   end
@@ -51,6 +47,12 @@ class Conversation < ApplicationRecord
   def mark_as_unread!
     update!(read: false)
   end
+
+  def timestamp
+    last_message&.updated_at || updated_at
+  end
+
+  def title = contact.to_s
 
   def unread? = !read?
 

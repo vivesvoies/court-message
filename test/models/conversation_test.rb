@@ -119,4 +119,14 @@ class ConversationTest < ActiveSupport::TestCase
 
     assert_equal(last, @conversation.last_message)
   end
+
+  def test_timestamp_is_never_nil
+    @conversation = create(:conversation)
+    @conversation.messages << create(:inbound_message)
+    
+    assert_equal(@conversation.last_message.updated_at, @conversation.timestamp)
+    
+    @new_conversation = create(:conversation)
+    assert_equal(@new_conversation.updated_at, @new_conversation.timestamp)
+  end
 end
