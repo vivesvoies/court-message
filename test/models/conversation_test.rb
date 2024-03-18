@@ -62,6 +62,20 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal(team_1_convos.sort, Conversation.for_team(team_1).sort)
   end
 
+  def test_preloading_last_message_in_team_scope
+    team = create(:team) do |team|
+      create_list(:conversation, 3, team:)
+    end
+    conversations = team.conversations
+    conversations.each do |convo|
+      convo.messages << create(:inbound_message)
+    end
+
+    preloaded = Conversation.for_team(team)
+
+    assert_equal(1, count_queries { preloaded.map(&:last_message) })
+  end
+
   def test_preloading_query
     c = create(:conversation) do |conversation|
       create_list(:inbound_message, 10, conversation:)

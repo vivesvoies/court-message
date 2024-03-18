@@ -29,11 +29,8 @@ class Conversation < ApplicationRecord
 
   after_update_commit :broadcast_conversation_update
 
-  # TODO: eager loading EVERY MESSAGE, this is overkill but needed for now to show the latest messages.
-  # Should create a last_message_id column. Use the :after_add option of the has_many method.
-  # See https://github.com/louije/court-message/issues/47
   scope :for_team, ->(team) {
-                     includes(:messages, contact: :team).where(contacts: { team_id: team.id }).order(updated_at: :desc)
+                     includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order(updated_at: :desc)
                    }
 
   def self.find_preloaded(id)
