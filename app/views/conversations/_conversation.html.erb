@@ -5,7 +5,7 @@
     id="<%= dom_id conversation %>">
   <%= link_to [conversation.team, conversation], class: "Conversation__link", data: { turbo_frame: "conversation_detail", turbo_action: "advance", action: "conversation-list#activate" } do %>
     <div class="Conversation__latest">
-      <%= time_stamp_for conversation.updated_at %>
+      <%= last_message_timestamp conversation %>
     </div>
     <div class="Conversation__status"></div>
     <div class="Conversation__preview">

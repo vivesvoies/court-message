@@ -8,4 +8,8 @@ module ConversationsHelper
     direction = conversation.messages.last&.direction
     direction ? "Conversation__sub--#{direction}" : "Conversation__sub--empty"
   end
+
+  def last_message_timestamp(conversation)
+    time_stamp_for conversation.messages.where(status: [ :delivered, :inbound ]).maximum(:created_at)
+  end
 end

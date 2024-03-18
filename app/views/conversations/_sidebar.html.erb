@@ -15,9 +15,14 @@
   </div>
 <% end %>
 
-<div class="ConversationSwitcher">
+ <div class="ConversationSwitcher">
   <%= turbo_stream_from "team_conversations_list_#{team.id}" %>
-  <h3><%= t(".my_conversations") %></h3>
+  <div class="ConversationSwitcher__tab">
+    <%= link_to t(".all_conversations"), team_conversations_path(team, show: "all") %>
+    <%= link_to t(".my_conversations"), team_conversations_path(team, show: "mine") %>
+    <h3><%= t(".all_conversations") %></h3>
+    <h3><%= t(".my_conversations") %></h3>
+  </div>
   <ol id="conversations"
       class="ConversationList"
       data-controller="conversation-list"
@@ -25,6 +30,6 @@
       data-conversation-list-active-class="Conversation--active"
       data-conversation-list-unread-class="Conversation--unread"
       data-conversation-list-link-class="Conversation__link">
-    <%= render conversations %>
+    <%= render partial: conversations, locals: { conversations: conversations } %>
   </ol>
 </div>

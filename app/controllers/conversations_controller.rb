@@ -1,6 +1,6 @@
 class ConversationsController < ApplicationController
   before_action :set_team, only: %i[ index show ]
-  before_action :all_conversations, only: %i[ index show ]
+  before_action :load_conversations, only: %i[ index show ]
   before_action :set_conversation, only: %i[ show ]
 
   authorize_resource :team
@@ -21,8 +21,17 @@ class ConversationsController < ApplicationController
 
   private
 
-  def all_conversations
-    @conversations = Conversation.for_team(@team)
+  # WIP
+  def load_conversations
+    which_convos = params[:show]
+    # https://cm.fr/team/conversations/4?show=all
+    # https://cm.fr/team/conversations?show=all
+    if which_convos == "mine"
+      # @conversations = Conversation.for_team(@team).where(user: Current.user)
+      @conversations = Conversation.for_team(@team).where(user: Current.user)
+    else
+      @conversations = Conversation.for_team(@team)
+    end
   end
 
   def set_conversation

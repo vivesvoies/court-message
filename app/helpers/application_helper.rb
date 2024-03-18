@@ -1,5 +1,7 @@
 module ApplicationHelper
   def time_stamp_for(time)
+    return "" if time.nil?
+
     if time.today?
       time.strftime("%H:%M")
     elsif time.yesterday?

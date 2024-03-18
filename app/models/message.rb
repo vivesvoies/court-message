@@ -44,4 +44,8 @@ class Message < ApplicationRecord
   def direction
     inbound_status? ? :inbound : :outbound
   end
+
+  def successful?
+    inbound_status? || delivered_status?
+  end
 end
