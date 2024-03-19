@@ -45,6 +45,7 @@ class Avo::Resources::User < Avo::BaseResource
       # TODO: Password modification is possible. Could be better to just resend an email for reset password?
       field :password, as: :password
       field :teams, as: :has_many, through: :memberships
+      field :templates, as: :has_many, visible: -> { resource.record.templates.any? }
   end
 
   # Actions that can be performed on user
