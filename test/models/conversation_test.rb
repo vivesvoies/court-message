@@ -104,6 +104,22 @@ class ConversationTest < ActiveSupport::TestCase
     assert_not_equal(preloaded.first, conversations.second)
   end
 
+  def test_complex_team_scope_ordering
+    # ensure that messages.updated_at and conversations.updated_at are both coalesced
+
+    team = create(:team) do |team|
+      create_list(:conversation, 3, team:)
+    end
+    
+    conversations = team.conversations
+    first, second, third = conversations
+    first.messages << create(:inbound_message)
+
+    preloaded = Conversation.for_team(team)
+    assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
+    assert_equal([first, third, second], preloaded)
+  end
+
   def test_preloading_query
     c = create(:conversation) do |conversation|
       create_list(:inbound_message, 10, conversation:)

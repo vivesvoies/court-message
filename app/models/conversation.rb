@@ -30,7 +30,7 @@ class Conversation < ApplicationRecord
   after_update_commit :broadcast_conversation_update
 
   scope :for_team, ->(team) {
-                     includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order("messages.updated_at DESC, conversations.updated_at DESC")
+                     includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order(Arel.sql("COALESCE(messages.updated_at, conversations.updated_at) DESC"))
                    }
 
   def self.find_preloaded(id)
