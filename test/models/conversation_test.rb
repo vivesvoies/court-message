@@ -107,17 +107,17 @@ class ConversationTest < ActiveSupport::TestCase
   def test_complex_team_scope_ordering
     # ensure that messages.updated_at and conversations.updated_at are both coalesced
 
-    team = create(:team) do |team|
-      create_list(:conversation, 3, team:)
-    end
+    team = create(:team)
+    oldest = create(:conversation, team:, updated_at: 1.day.ago)
+    middle = create(:conversation, team:, updated_at: 1.hour.ago)
+    newest = create(:conversation, team:, updated_at: 1.minute.ago)
 
-    conversations = team.conversations
-    first, second, third = conversations
-    first.messages << create(:inbound_message)
+    preloaded = Conversation.for_team(team).pluck(:id)
+    assert_equal([ newest.id, middle.id, oldest.id ], preloaded)
 
-    preloaded = Conversation.for_team(team)
-    assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
-    assert_equal([ first, third, second ], preloaded)
+    oldest.messages << create(:inbound_message)
+    preloaded = Conversation.for_team(team).pluck(:id)
+    assert_equal([ oldest.id, newest.id, middle.id ], preloaded)
   end
 
   def test_preloading_query
