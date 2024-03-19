@@ -4,7 +4,7 @@ class ApplicationHelperTest < ActiveSupport::TestCase
   include ApplicationHelper
 
   def test_time_stamp_for
-    today = Time.zone.now - 5.hours
+    today = Time.current.beginning_of_day
     yesterday = Time.zone.now - 1.day
     this_week = Time.zone.now - 4.days
     past = Time.zone.now - 8.days
