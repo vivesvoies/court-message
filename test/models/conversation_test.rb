@@ -84,20 +84,20 @@ class ConversationTest < ActiveSupport::TestCase
     conversations.each do |convo|
       convo.messages << create(:inbound_message)
     end
-    
+
     # Order by last message, then by conversation updated_at
     preloaded = Conversation.for_team(team)
-    
+
     assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
     assert_equal(preloaded.first, conversations.last)
-    
+
     # When a message is added, the conversation jumps to the top
     conversations.first.messages << create(:outbound_message)
     preloaded = Conversation.for_team(team)
-    
+
     assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
     assert_equal(preloaded.first, conversations.first)
-    
+
     # When a conversastion is updated, it does not jump to the top
     conversations.second.touch
     preloaded = Conversation.for_team(team)
@@ -110,14 +110,14 @@ class ConversationTest < ActiveSupport::TestCase
     team = create(:team) do |team|
       create_list(:conversation, 3, team:)
     end
-    
+
     conversations = team.conversations
     first, second, third = conversations
     first.messages << create(:inbound_message)
 
     preloaded = Conversation.for_team(team)
     assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
-    assert_equal([first, third, second], preloaded)
+    assert_equal([ first, third, second ], preloaded)
   end
 
   def test_preloading_query
@@ -174,16 +174,15 @@ class ConversationTest < ActiveSupport::TestCase
     @conversation.messages << create(:inbound_message)
     last = create(:outbound_message)
     @conversation.messages << last
-
     assert_equal(last, @conversation.last_message)
   end
 
   def test_timestamp_is_never_nil
     @conversation = create(:conversation)
     @conversation.messages << create(:inbound_message)
-    
+
     assert_equal(@conversation.last_message.updated_at, @conversation.timestamp)
-    
+
     @new_conversation = create(:conversation)
     assert_equal(@new_conversation.updated_at, @new_conversation.timestamp)
   end

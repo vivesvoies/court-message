@@ -18,7 +18,6 @@ class MessagesController < ApplicationController
     @conversation = @message.conversation
     @message.save
     @conversation.messages << @message
-    
 
     if !@message.persisted?
       # TODO: renders only the `new` frame
