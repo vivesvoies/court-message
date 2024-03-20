@@ -77,4 +77,10 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
       delete message_url(@message)
     }
   end
+
+  test "should set Conversation#last_message on create" do
+    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
+    assert_equal("Heya", @conversation.reload.last_message.content)
+    assert_equal(Message.last, @conversation.last_message)
+  end
 end
