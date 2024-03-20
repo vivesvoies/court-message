@@ -2,19 +2,22 @@
 #
 # Table name: conversations
 #
-#  id         :bigint           not null, primary key
-#  read       :boolean          default(TRUE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  contact_id :bigint           not null
+#  id              :bigint           not null, primary key
+#  read            :boolean          default(TRUE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  contact_id      :bigint           not null
+#  last_message_id :bigint
 #
 # Indexes
 #
-#  index_conversations_on_contact_id  (contact_id)
+#  index_conversations_on_contact_id       (contact_id)
+#  index_conversations_on_last_message_id  (last_message_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (contact_id => contacts.id)
+#  fk_rails_...  (last_message_id => messages.id)
 #
 require "test_helper"
 
@@ -57,6 +60,64 @@ class ConversationTest < ActiveSupport::TestCase
     team_1 = teams[0]
     team_1_convos = team_1.conversations
     assert_equal(team_1_convos.sort, Conversation.for_team(team_1).sort)
+  end
+
+  def test_preloading_last_message_in_team_scope
+    team = create(:team) do |team|
+      create_list(:conversation, 3, team:)
+    end
+    conversations = team.conversations
+    conversations.each do |convo|
+      convo.messages << create(:inbound_message)
+    end
+
+    preloaded = Conversation.for_team(team)
+
+    assert_equal(1, count_queries { preloaded.map(&:last_message) })
+  end
+
+  def test_team_scope_ordering
+    team = create(:team) do |team|
+      create_list(:conversation, 3, team:)
+    end
+    conversations = team.conversations
+    conversations.each do |convo|
+      convo.messages << create(:inbound_message)
+    end
+
+    # Order by last message, then by conversation updated_at
+    preloaded = Conversation.for_team(team)
+
+    assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, conversations.last)
+
+    # When a message is added, the conversation jumps to the top
+    conversations.first.messages << create(:outbound_message)
+    preloaded = Conversation.for_team(team)
+
+    assert_equal(preloaded, conversations.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, conversations.first)
+
+    # When a conversastion is updated, it does not jump to the top
+    conversations.second.touch
+    preloaded = Conversation.for_team(team)
+    assert_not_equal(preloaded.first, conversations.second)
+  end
+
+  def test_complex_team_scope_ordering
+    # ensure that messages.updated_at and conversations.updated_at are both coalesced
+
+    team = create(:team)
+    oldest = create(:conversation, team:, updated_at: 1.day.ago)
+    middle = create(:conversation, team:, updated_at: 1.hour.ago)
+    newest = create(:conversation, team:, updated_at: 1.minute.ago)
+
+    preloaded = Conversation.for_team(team).pluck(:id)
+    assert_equal([ newest.id, middle.id, oldest.id ], preloaded)
+
+    oldest.messages << create(:inbound_message)
+    preloaded = Conversation.for_team(team).pluck(:id)
+    assert_equal([ oldest.id, newest.id, middle.id ], preloaded)
   end
 
   def test_preloading_query
@@ -106,5 +167,23 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal(@conversation.status, "read")
     @conversation.mark_as_unread!
     assert_equal(@conversation.status, "unread")
+  end
+
+  def test_last_message
+    @conversation = create(:conversation)
+    @conversation.messages << create(:inbound_message)
+    last = create(:outbound_message)
+    @conversation.messages << last
+    assert_equal(last, @conversation.last_message)
+  end
+
+  def test_timestamp_is_never_nil
+    @conversation = create(:conversation)
+    @conversation.messages << create(:inbound_message)
+
+    assert_equal(@conversation.last_message.updated_at, @conversation.timestamp)
+
+    @new_conversation = create(:conversation)
+    assert_equal(@new_conversation.updated_at, @new_conversation.timestamp)
   end
 end

@@ -51,4 +51,13 @@ class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
   ensure
     DatabaseCleaner.strategy = @previous_strategy
   end
+
+  test "should set Conversation#last_message on create" do
+    DatabaseCleaner.strategy = :truncation
+    post inbound_messages_path, params: { to: fake_number, from: @contact.phone, text: "def" }
+
+    assert_equal "def", @contact.conversation.last_message.content
+  ensure
+    DatabaseCleaner.strategy = @previous_strategy
+  end
 end

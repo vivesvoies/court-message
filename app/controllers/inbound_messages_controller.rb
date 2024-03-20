@@ -20,6 +20,7 @@ class InboundMessagesController < ApplicationController
       ActiveRecord::Base.transaction do
         @message.save
         @message.conversation.mark_as_unread!
+        @message.conversation.messages << @message
       end
     end
 
