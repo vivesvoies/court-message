@@ -11,7 +11,7 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  notes_last_editor_id :bigint
-#  team_id              :bigint           default(2), not null
+#  team_id              :bigint           not null
 #
 # Indexes
 #
