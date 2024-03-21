@@ -3,7 +3,6 @@
 ///
 /// Conversation left-pane
 ///
-
 .ConversationSidebar {
   display: flex;
   flex-direction: column;
@@ -16,10 +15,18 @@
 ///
 /// Conversation list header
 ///
+.ConversationSidebar__header {
+}
+
 .ConversationSidebar__menuButton {
+  border-bottom: 1px solid var(--page-border);
   display: flex;
   height: var(--size-tab-bar);
   align-items: center;
+  background: none;
+  &:any-link {
+    --underline-hover-width: 0;
+  }
 }
 .ConversationSidebar__teamName {
   font: var(--font-subtitle);
