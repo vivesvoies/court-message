@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_21_103044) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -25,7 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
     t.string "phone"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "team_id", default: 1, null: false
+    t.bigint "team_id", null: false
     t.text "notes"
     t.datetime "notes_updated_at"
     t.bigint "notes_last_editor_id"
@@ -40,7 +40,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "read", default: true
+    t.bigint "last_message_id"
     t.index ["contact_id"], name: "index_conversations_on_contact_id"
+    t.index ["last_message_id"], name: "index_conversations_on_last_message_id"
   end
 
   create_table "conversations_users", id: false, force: :cascade do |t|
@@ -119,6 +121,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_28_141659) do
   add_foreign_key "contacts", "teams"
   add_foreign_key "contacts", "users", column: "notes_last_editor_id"
   add_foreign_key "conversations", "contacts"
+  add_foreign_key "conversations", "messages", column: "last_message_id"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
