@@ -49,12 +49,6 @@ class TeamsController < ApplicationController
     end
   end
 
-  # DELETE /teams/:team_slug
-  def destroy
-    @team.destroy
-    redirect_to teams_path, notice: I18n.t("teams.destroy.destroyed"), status: :see_other
-  end
-
   private
 
   def show_picker?

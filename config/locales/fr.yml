@@ -84,7 +84,7 @@ fr:
     invitations:
       user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
       new:
-        new: "Ajouter à l'équipe"
+        new: "Ajouter à l’équipe"
 
   date:
     yesterday: &yesterday "hier"
@@ -201,18 +201,16 @@ fr:
       back: "Liste des équipes"
       edit: "Informations"
     show:
-      title: "Membres de l'équipe"
+      title: "Membres de l’équipe"
       add_member: "Ajouter un membre"
     create:
-      created: "Équipe crée."
+      created: "Équipe créée."
     update:
       success: "Équipe mise à jour."
-    destroy:
-      destroyed: "Équipe supprimée."
 
   users:
     user:
-      join: "a rejoint l'équipe en"
+      join: "a rejoint l’équipe en"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
     show:
       edit_user: "Modifier le compte"
@@ -220,11 +218,11 @@ fr:
     update:
       user_updated: "Le compte a été mis à jour."
     form:
-      remove: "Retirer de l'équipe"
+      remove: "Retirer de l’équipe"
       invitation_send: "Invitation envoyée"
-      cancel_invitation: "Annuler l'invitation"
+      cancel_invitation: "Annuler l’invitation"
     index:
-      title: "Membres de l'équipe"
+      title: "Membres de l’équipe"
       add_member: "Ajouter un membre"
       phone: "Téléphone"
     edit:
@@ -245,4 +243,4 @@ fr:
 
   invitations:
     notice:
-      user_add_to_team: "Le membre à été ajouter à votre équipe"
+      user_add_to_team: "Le membre à été ajouté à votre équipe"

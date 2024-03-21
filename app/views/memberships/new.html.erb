@@ -1,4 +1,4 @@
-<main class="container">
+<div class="container">
   <%= link_to sanitize("&larr; Back"), team_path(@team.id) %>
 
   <%= turbo_frame_tag "new_membership" do %>
@@ -22,4 +22,4 @@
     <% end %> 
 
   <% end %>
-</main>
+</div>

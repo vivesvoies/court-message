@@ -31,7 +31,7 @@ class MembershipsController < ApplicationController
     @membership.destroy
     user.reload
 
-    # Delete the user if he never had an active account
+    # Delete the user if no active account
     if user.can_be_deleted?
       user.destroy
     end

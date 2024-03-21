@@ -8,7 +8,7 @@
     <%= turbo_frame_tag "team_members" do %>
       <%= render @team.memberships %>
 
-      <section class="TeamShow__action">
+      <section class="TeamShow__actions">
         <%= turbo_frame_tag User.new %>
         <%= link_to t("users.index.add_member"),
           new_user_team_invitation_path(@team),
