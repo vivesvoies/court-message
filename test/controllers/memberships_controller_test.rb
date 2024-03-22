@@ -14,22 +14,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test "should get new" do
-    get new_membership_url(team_id: @team.id)
-    assert_response :success
-  end
-
-  test "should not get new without team" do
-    assert_raises(ActiveRecord::RecordNotFound) {
-      get new_membership_url
-    }
-  end
-
-  test "should not get new without proper team" do
-    get new_membership_url(team_id: @other_team.id)
-    assert_response :forbidden
-  end
-
   test "should create membership" do
     user = create(:user)
     assert_difference("Membership.count") do

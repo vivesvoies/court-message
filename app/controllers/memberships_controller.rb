@@ -4,11 +4,6 @@ class MembershipsController < ApplicationController
   authorize_resource :team
   authorize_resource
 
-  def new
-    @users = User.where.not(id: @team.memberships.pluck(:user_id))
-    @membership = Membership.new(team: @team)
-  end
-
   def create
     @membership = Membership.new(membership_params)
     @team = @membership.team

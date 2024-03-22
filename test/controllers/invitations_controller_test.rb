@@ -9,6 +9,19 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     @other_user = create(:user)
   end
 
+  test "should get new" do
+    sign_in @user
+    get new_user_team_invitation_path(@team)
+    assert_response :success
+  end
+
+  test "should not get new without proper team" do
+    sign_in @user
+    other_team = create(:team)
+    get new_user_team_invitation_path(other_team)
+    assert_response :forbidden
+  end
+
   test "should create a new user when invited" do
     sign_in @user
 

@@ -215,15 +215,13 @@ fr:
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
+      add_member: "Ajouter un membre"
     update:
       user_updated: "Le compte a été mis à jour."
     form:
       remove: "Retirer de l’équipe"
       invitation_send: "Invitation envoyée"
       cancel_invitation: "Annuler l’invitation"
-    index:
-      title: "Membres de l’équipe"
-      add_member: "Ajouter un membre"
       phone: "Téléphone"
     edit:
       me: "Moi"

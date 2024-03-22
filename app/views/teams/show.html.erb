@@ -10,7 +10,7 @@
 
       <section class="TeamShow__actions">
         <%= turbo_frame_tag User.new %>
-        <%= link_to t("users.index.add_member"),
+        <%= link_to t(".add_member"),
           new_user_team_invitation_path(@team),
           data: { turbo_frame: dom_id(User.new) },
           class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus"  if can? :create, User %>
