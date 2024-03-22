@@ -1,11 +1,11 @@
-<%= turbo_frame_tag "conversation_sidebar" do %>
+<%= turbo_frame_tag "navigation" do %>
   <%= render partial: "conversations/team_name", locals: { team: @team } %>
   <div class="cm-menu">
     <%= menu_for(:swap_team, icon: :"swap-structure", destination: teams_path(), frame: "_top") %>
     <%= menu_for(:conversations, icon: :chat, destination: team_conversations_path(@team), frame: "_top") %>
 
     <%# TODO: change to team_contacts_path on next merge %>
-    <%= menu_for(:contacts, icon: :"address-book", destination: team_contacts_path(@team), frame: "contacts") %>
+    <%= menu_for(:contacts, icon: :"address-book", destination: team_contacts_path(@team)) %>
     <%= menu_for(:team, icon: :team, destination: team_path(@team)) %>
     <%= menu_for(:edit_team, icon: :settings, destination: team_path(@team)) if can? :update, Team %>
   </div>

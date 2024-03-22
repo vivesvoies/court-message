@@ -13,7 +13,8 @@
   
   grid-template-columns: 2fr 1fr;
   grid-template-rows: auto 1fr;
-  // max-width: 30rem;
+
+  height: 100%;
   max-height: calc(var(--size-viewer) - var(--size-tab-bar));
   margin: 0;
 }

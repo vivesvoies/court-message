@@ -1,5 +1,5 @@
 module TeamsHelper
-  def menu_for(label, icon:, destination:, frame: :content)
+  def menu_for(label, icon:, destination:, frame: :primary)
     active = current_page?(destination)
     render partial: "menu_item", locals: { label:, icon:, active:, destination:, frame: }
   end

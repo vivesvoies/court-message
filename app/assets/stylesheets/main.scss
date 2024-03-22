@@ -19,6 +19,8 @@
   Map color names to semantic use case.
 */
 :root {
+  --viewer-bg: var(--color-sable);
+
   --text-primary: var(--color-black);
   --text-secondary: var(--color-dark1);
   --text-tertiary: var(--color-mouse);
@@ -225,7 +227,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
+}
+body.has-viewer-visible {
+  -webkit-overflow-scrolling: auto;
+  overflow: hidden;
 }
 .Main {
   flex: 1;

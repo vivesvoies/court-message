@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "contacts" do %>
+<%= turbo_frame_tag :primary do %>
   <div class="ContactIndex__last-contact cm-container">
     <% contact = Contact.order("created_at").last %>
     <% if contact.present? %>

@@ -5,29 +5,30 @@
   <%= tab_for :home,
     icon: :home,
     mobile: :only,
-    destination: conversation_destination
+    frame: :navigation,
+    destination: menu_team_path(Current.team)
   %>
   <%= tab_for :conversations,
     active: true,
     icon: :chat,
-    frame: :conversation_detail,
+    frame: :primary,
     destination: "javascript:void(0)"
   %>
   <%= tab_for :contacts,
     icon: :"address-book",
-    frame: :contacts,
+    frame: :primary,
     destination: "javascript:void(0)"
   %>
   <%= tab_for :presets,
     icon: :star,
     mobile: :only,
-    frame: :presets,
+    frame: :secondary,
     destination: page_path("presets")
   %>
   <%= tab_for :inbox,
     icon: :"chat-bubble",
     mobile: :only,
-    frame: :inbox,
+    frame: :secondary,
     destination: page_path("inbox")
   %>
 </nav>

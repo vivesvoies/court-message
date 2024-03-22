@@ -15,11 +15,11 @@
     <%= hotwire_livereload_tags if Rails.env.development? %>
   </head>
 
-  <body>
+  <body class="<%= yield(:body_class) %>">
     <%= turbo_frame_tag "modal" %>
     <div class="FlashContainer" id="flash"><%= render "flash" %></div>
     <main class="Main">
-      <%= yield %>
+      <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>
   </body>
 </html>

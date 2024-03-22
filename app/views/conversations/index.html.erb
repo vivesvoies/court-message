@@ -1,21 +1,12 @@
-<div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList">
-  <%= turbo_frame_tag "conversation_sidebar", class: "ConversationSidebar" do %>
+<% content_for :navigation do %>
+  <div class="ConversationSidebar">
     <%= render partial: "conversations/team_name", locals: { team: @team } %>
     <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @conversations } %>
-  <% end %>
+  </div>
+<% end %>
 
+<%= content_for :primary do %>
   <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail", data: { controller: "conversation-detail" } do %>
-    <%= render partial: "conversation_detail", locals: { conversation: @conversation } %>
+    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
   <% end %>
-
-  <%= turbo_frame_tag "contacts", class: "Contacts" do  %>
-    <%= render partial: "contacts/contact_detail", locals: { contact: Contact.find(@conversation.contact_id) } unless !@conversation %>
-  <% end %>
-
-  <%= turbo_frame_tag "presets", class: "Presets" %>
-  <%= turbo_frame_tag "inbox", class: "Inbox" %>
-
-  <%= turbo_frame_tag "tab_bar", class: "TabBar" do %>
-    <%= render partial: "tab_bar" %>
-  <% end %>
-</div>
+<% end %>
