@@ -2,6 +2,8 @@ class InvitationsController < Devise::InvitationsController
   before_action :set_team
   before_action :configure_permitted_parameters
 
+  authorize_resource :team
+
   def create
     user = User.find_by(email: invite_params[:email])
     # If the user is not a team member the membership is automatically created

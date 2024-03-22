@@ -1,6 +1,5 @@
 require "test_helper"
 
-
 class InvitationsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
@@ -49,7 +48,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to team_url(@team)
   end
 
-  test "should not send invitation if user is already in the team and confirm" do
+  test "should not send invitation if user is already in the team and confirmed" do
     sign_in @user
     @user.update(confirmed_at: DateTime.now, invitation_sent_at: nil)
 
@@ -61,7 +60,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("devise.invitations.user_already_in_the_team"), flash[:notice]
   end
 
-  test "should not create a new user if user is already in the team and confirm" do
+  test "should not create a new user if user is already in the team and confirmed" do
     sign_in @user
     @user.update(confirmed_at: DateTime.now)
 
@@ -73,7 +72,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal I18n.t("devise.invitations.user_already_in_the_team"), flash[:notice]
   end
 
-  test "should not create an invitation if user is already in a team and confirm" do
+  test "should not create an invitation if user is already in a team and confirmed" do
     sign_in @user
     @user.update(confirmed_at: DateTime.now, invitation_token: nil)
 
@@ -110,5 +109,12 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
 
     assert_redirected_to new_user_session_path
+  end
+
+  test "should not allow to invite to a team if not a member" do
+    sign_in @other_user
+
+    post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+    assert_response :forbidden
   end
 end
