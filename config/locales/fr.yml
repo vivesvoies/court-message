@@ -20,6 +20,15 @@ fr:
     partner_footer:
       logo-anct-alt: "Logo ANCT Société numérique"
       logo-vv-alt: "Logo Vives voies"
+    tab_bar:
+      home: "Accueil"
+      conversations: "Messagerie"
+      contacts: "Répertoire"
+      presets: "Modèles"
+      inbox: "Chat"
+    viewer_detail_tab_bar:
+      conversations: "Messagerie"
+      contacts: "Répertoire"
 
   activerecord:
     models:
