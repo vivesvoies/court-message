@@ -81,7 +81,11 @@ fr:
         no_account: "Créer un compte"
         logo-alt: "Logo Court‑message"
         forgot_your_password: "J’ai oublié mon mot de passe"
-  
+    invitations:
+      user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
+      new:
+        new: "Ajouter à l’équipe"
+
   date:
     yesterday: &yesterday "hier"
   time:
@@ -109,6 +113,7 @@ fr:
       my_conversations: "Mes conversations"
     team_picker:
       switch_team: "Changer d’équipe"
+      team: "Équipes"
     new:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
@@ -160,7 +165,9 @@ fr:
     membership:
       remove_member: "Retirer de l’équipe"
     destroy:
-      destroyed: "Le membre a été retiré de l’équipe."
+      destroyed: "Membre retiré de l’équipe."
+    create:
+      added: "Membre ajouté à l’équipe."
 
   teams:
     team:
@@ -194,22 +201,27 @@ fr:
       back: "Liste des équipes"
       edit: "Informations"
     show:
-      title: "Membres de l'équipe"
+      title: "Membres de l’équipe"
       add_member: "Ajouter un membre"
+    create:
+      created: "Équipe créée."
     update:
       success: "Équipe mise à jour."
 
   users:
     user:
-      join: "a rejoint l'équipe en"
+      join: "a rejoint l’équipe en"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
+      add_member: "Ajouter un membre"
     update:
       user_updated: "Le compte a été mis à jour."
     form:
-      remove: "Retirer de l'équipe"
+      remove: "Retirer de l’équipe"
+      invitation_send: "Invitation envoyée"
+      cancel_invitation: "Annuler l’invitation"
       phone: "Téléphone"
     edit:
       me: "Moi"
@@ -226,3 +238,7 @@ fr:
       rejected: *message_error
       submitted: "Envoi en cours..."
       delivered: "Envoyé"
+
+  invitations:
+    notice:
+      user_add_to_team: "Le membre à été ajouté à votre équipe"

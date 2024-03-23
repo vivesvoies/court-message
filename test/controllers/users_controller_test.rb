@@ -6,20 +6,15 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @other_team = create(:team)
     @user = create(:user, role: :user, teams: [ @team ])
     @other_user = create(:user, role: :user, teams: [ @other_team ])
+    @other_team_user = create(:user, role: :user, teams: [ @team ])
     @team_admin = create(:user, role: :team_admin, teams: [ @team ])
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
   end
 
-  test "should not get show" do
-    assert_raises(ActionController::RoutingError) {
-      get team_user_url(@team, @user)
-    }
-  end
-
-  test "should not get index" do
-    assert_raises(ActionController::RoutingError) {
-      delete team_user_url(@team, @user)
-    }
+  test "should get show" do
+    sign_in @user
+    get team_user_url(@team, @user)
+    assert_response :success
   end
 
   test "normal users should be able to access their team" do
@@ -40,6 +35,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in @site_admin
     get team_url(@team, @user)
     assert_response :success
+
     get team_url(@other_team, @site_admin)
     assert_response :success
     sign_out @site_admin
@@ -59,6 +55,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_out @team_admin
   end
 
+  test "should update user" do
+    sign_in @team_admin
+    patch team_user_url(@team, @user), params: { user: { id: @user.id, name: "Update Name" } }
+
+    assert_redirected_to team_url(@team)
+    assert_equal I18n.t("users.update.user_updated"), flash[:notice]
+
+    @user.reload
+    assert_equal(@user.name, "Update Name")
+  end
+
   test "should be able edit user when self" do
     sign_in @user
     get edit_team_user_url(@team, @user)
@@ -70,6 +77,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in @team_admin
     get edit_team_user_url(@team, @user)
     assert_response :success
+
     get edit_team_user_url(@team, @other_user)
     assert_response :forbidden
     sign_out @team_admin
@@ -79,6 +87,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     sign_in @site_admin
     get edit_team_user_url(@other_team, @other_user)
     assert_response :success
+
     get edit_team_user_url(@team, @team_admin)
     assert_response :success
     sign_out @site_admin
@@ -103,16 +112,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     patch team_user_url(@team, @user), params: { user: { role: :site_admin } }
     assert_redirected_to team_url(@team)
     assert_equal "user", @user.reload.role
+
     patch team_user_url(@team, @user), params: { user: { role: :team_admin } }
     assert_redirected_to team_url(@team)
     assert_equal "user", @user.reload.role
   end
 
   test "should not allow site admin to update role" do
-    other_user = create(:user, role: :user, teams: [ @team ])
     sign_in @site_admin
-    patch team_user_url(@team, other_user), params: { user: { role: :team_admin } }
+    patch team_user_url(@team, @other_team_user), params: { user: { role: :team_admin } }
     assert_redirected_to team_url(@team)
-    assert_equal "user", other_user.reload.role
+    assert_equal "user", @other_team_user.reload.role
   end
 end

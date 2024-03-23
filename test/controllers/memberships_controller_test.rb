@@ -14,22 +14,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     }
   end
 
-  test "should get new" do
-    get new_membership_url(team_id: @team.id)
-    assert_response :success
-  end
-
-  test "should not get new without team" do
-    assert_raises(ActiveRecord::RecordNotFound) {
-      get new_membership_url
-    }
-  end
-
-  test "should not get new without proper team" do
-    get new_membership_url(team_id: @other_team.id)
-    assert_response :forbidden
-  end
-
   test "should create membership" do
     user = create(:user)
     assert_difference("Membership.count") do
@@ -37,6 +21,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.create.added"), flash[:notice]
   end
 
   test "should not create membership in another team" do
@@ -55,6 +40,31 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.destroy.destroyed"), flash[:notice]
+  end
+
+  test "should destroy user if he is never have an active account" do
+    user = create(:user)
+    user.update(team_ids: [], confirmed_at: nil)
+    membership = create(:membership, team: @team, user: user)
+
+    assert_difference("User.count", -1) do
+      delete membership_url(membership)
+    end
+
+    assert_redirected_to team_path(@team)
+    assert_equal I18n.t("memberships.destroy.destroyed"), flash[:notice]
+  end
+
+  test "should destroy membership if invitation is revoke and user does belong to a team" do
+    user = create(:user)
+    membership = create(:membership, team: @team, user: user)
+
+    assert_difference("Membership.count", -1) do
+      assert_difference("User.count", 0) do
+        delete membership_url(membership)
+      end
+    end
   end
 
   test "should not destroy membership in another team" do

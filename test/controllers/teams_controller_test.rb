@@ -157,5 +157,6 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     with_team_admin
     patch team_url(@team), params: { team: {} }
     assert_redirected_to team_url(@team)
+    assert_equal I18n.t("teams.update.success"), flash[:notice]
   end
 end

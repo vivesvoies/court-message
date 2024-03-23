@@ -1,17 +1,11 @@
 class UsersController < ApplicationController
-  before_action :set_team, only: %i[ index edit update ]
+  before_action :set_team, only: %i[ edit update ]
   before_action :set_user, only: %i[ show edit update destroy ]
 
   authorize_resource :team
   authorize_resource
 
-  # GET /teams/:team_slug/users/new
-  def create
-  end
-
-  def index
-  end
-
+  # GET /teams/:team_slug/users/:id
   def show
   end
 
@@ -23,16 +17,13 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to team_url(@team), notice: I18n.t("users.update.user_updated") }
+        format.html { redirect_to team_path(@team), notice: I18n.t("users.update.user_updated") }
         format.turbo_stream
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@user) }
       end
     end
-  end
-
-  def destroy
   end
 
   private

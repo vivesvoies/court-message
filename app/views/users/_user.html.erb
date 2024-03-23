@@ -1,6 +1,5 @@
 <%= turbo_frame_tag user do %>
   <div class="cm-container" id="<%= dom_id user %>">
-  
     <div class="cm-column User__body">
       <div class="User__name">
           <%= user.name %> <% if Current.user == user %><%= t(:me) %><% end %>
