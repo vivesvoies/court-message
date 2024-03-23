@@ -1,2 +1,3 @@
-<%# only used with the `/detail` route %>
-<%= render partial: "contact_detail", locals: { contact: @contact } %>
+<% content_for :primary do %>
+  <%= render partial: "contact_detail", locals: { contact: @contact } %>
+<% end %>

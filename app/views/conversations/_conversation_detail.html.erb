@@ -1,23 +1,24 @@
 <%= render "turbo_flash" %>
 <%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
-<%# TODO: add the tab-bar toggler here %>
-<%# TODO: add it too on contact#show or _contact_detail %>
-<%# TODO: make it sth that publishes to :primary frame %>
-<header class="ConversationDetail__header">
-  <nav class="ConversationDetail__main-nav">
-    <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn fr-icon-arrow-left-line cm-btn--icon-left" %>
-  </nav>
-  <h2 class="ConversationDetail__title">
-    <%= conversation.title %>
-  </h2>
-</header>
 
-<div class="ConversationDetail__scroller" data-controller="message-list">
-  <ol id="messages" class="MessageList">
-    <%= render partial: "messages/message", collection: conversation.messages %>
-  </ol>
-  
-  <footer class="ConversationDetail__footer">
-    <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: conversation.id), target: "_top" %>
-  </footer>
+<div id="conversation_detail" class="ConversationDetail" data-controller="conversation-detail">
+  <%= render partial: "viewer_detail_tab_bar", locals: { conversation:, team: @team, active: :conversation } %>
+  <header class="ConversationDetail__header">
+    <nav class="ConversationDetail__main-nav">
+      <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn fr-icon-arrow-left-line cm-btn--icon-left" %>
+    </nav>
+    <h2 class="ConversationDetail__title">
+      <%= conversation.title %>
+    </h2>
+  </header>
+
+  <div class="ConversationDetail__scroller" data-controller="message-list">
+    <ol id="messages" class="MessageList">
+      <%= render partial: "messages/message", collection: conversation.messages %>
+    </ol>
+    
+    <footer class="ConversationDetail__footer">
+      <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: conversation.id), target: "_top" %>
+    </footer>
+  </div>
 </div>

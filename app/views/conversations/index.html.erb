@@ -6,7 +6,5 @@
 <% end %>
 
 <%= content_for :primary do %>
-  <%= turbo_frame_tag "conversation_detail", class: "ConversationDetail", data: { controller: "conversation-detail" } do %>
-    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
-  <% end %>
+  <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
 <% end %>

@@ -8,14 +8,15 @@
   background-color: var(--messages-bg);
   display: grid;
   grid-template-areas:
-    "header   header"
-    "messages messages";
+    "tabs"
+    "header"
+    "messages";
   
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: var(--size-tab-bar) auto 1fr;
 
   height: 100%;
-  max-height: calc(var(--size-viewer) - var(--size-tab-bar));
+  max-height: var(--size-viewer);
   margin: 0;
 }
 

@@ -1,8 +1,12 @@
 <% content_for :body_class, "has-viewer-visible" %>
 <% content_for :layout do %>
   <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList">
-    <%= turbo_frame_tag :navigation, class: "ViewerNavigation" do %>
-      <%= yield :navigation %>
+    <% if @team && !content_for?(:navigation) %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: team_conversation_path(@team) %>
+    <% elsif %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation" do %>
+        <%= yield :navigation %>
+      <% end %>
     <% end %>
 
     <%= turbo_frame_tag :primary, class: "ViewerContent" do %>
@@ -17,7 +21,7 @@
       <%= yield :secondary %>
     <% end %>
 
-    <div class="TabBar">
+    <div class="TabBar cm-tab-bar">
       <%= render partial: "tab_bar" %>
     </div>
   </div>

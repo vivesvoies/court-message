@@ -1,4 +1,6 @@
 class ContactsController < ApplicationController
+  layout "viewer"
+
   before_action :set_team, only: %i[ index show new edit update destroy ]
   before_action :set_contact, only: %i[ show edit update destroy ]
   authorize_resource :team

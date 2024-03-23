@@ -60,3 +60,9 @@
     display: none;
   }
 }
+.ViewerDetail__TabBar {
+  display: none;
+  @media screen and (min-width: $width-large) {
+    display: inherit;
+  }
+}

@@ -21,7 +21,8 @@ module ApplicationHelper
         action: "tab-bar#selectTab",
         turbo_frame: frame,
         tab_bar_label_param: label,
-        tab_bar_target: "tab"
+        tab_bar_target: "tab",
+        turbo_action: :advance
       },
       class: link_class
   end
