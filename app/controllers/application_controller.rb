@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include FlashHelper
+  helper_method :current_frame
   before_action :authenticate_user!
   before_action :set_current
   check_authorization unless: :devise_controller?
@@ -20,5 +21,9 @@ class ApplicationController < ActionController::Base
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
     Current.team = Team.find_by(slug:) if slug
+  end
+
+  def current_frame
+    request.headers["Turbo-Frame"]
   end
 end
