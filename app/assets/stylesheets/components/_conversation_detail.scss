@@ -8,16 +8,22 @@
   background-color: var(--messages-bg);
   display: grid;
   grid-template-areas:
+    "header"
+    "messages";
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+
+  max-height: calc(var(--size-viewer) - var(--size-tab-bar));
+  margin: 0;
+  @media screen and (min-width: $width-large) {
+    height: 100%;
+    grid-template-areas:
     "tabs"
     "header"
     "messages";
-  
-  grid-template-columns: 1fr;
-  grid-template-rows: var(--size-tab-bar) auto 1fr;
-
-  height: 100%;
-  max-height: var(--size-viewer);
-  margin: 0;
+    grid-template-rows: var(--size-tab-bar) auto 1fr;
+    max-height: var(--size-viewer);
+  }
 }
 
 .ConversationDetail .ContactDetail {
@@ -25,7 +31,7 @@
 }
 
 .ConversationDetail__main-nav {
-  @media (min-width: $width-small) {
+  @media (min-width: $width-large) {
     display: none;
   }
 }

@@ -20,14 +20,16 @@
 }
 
 .ViewerNavigation {
+  position: relative;
   overflow: hidden;
   grid-area: main;
+  background-color: var(--navigation-bg);
   @media screen and (min-width: $width-large) {
     grid-area: nav;
     border-right: 1px solid var(--list-border);
   }
 }
-.ViewerContent {
+.ViewerPrimary {
   grid-area: main;
   background-color: var(--primary-bg);
   @media screen and (min-width: $width-large) {
@@ -65,5 +67,28 @@
   display: none;
   @media screen and (min-width: $width-large) {
     display: inherit;
+  }
+}
+
+@media screen and (max-width: ($width-large - 1)) {
+  // Defaults to navigation for home and conversations with details closed
+  .ViewerPrimary, .ViewerSecondary { display: none; }
+
+  .Viewer--detail-visible,
+  .Viewer--tab-contacts {
+    .ViewerNavigation { display: none; }
+    .ViewerPrimary { display: inherit; }
+    .ViewerSecondary { display: none; }
+  }
+  .Viewer--tab-presents,
+  .Viewer--tab-inbox {
+    .ViewerNavigation { display: none; }
+    .ViewerPrimary { display: none; }
+    .ViewerSecondary { display: inherit; }
+  }
+  .Viewer--tab-home {
+    .ViewerNavigation { display: inherit; }
+    .ViewerPrimary { display: none; }
+    .ViewerSecondary { display: none; }
   }
 }

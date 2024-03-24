@@ -38,7 +38,7 @@
 @media screen and (max-width: $width-large) {
   .cm-tab-bar .cm-btn.cm-btn--caption[class^=cm-icon-], 
   .cm-tab-bar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
-    gap: .25rem;
+    gap: .125rem;
     :checked + &,
     &[class$=--active],
     &[class*=--active],

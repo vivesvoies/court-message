@@ -17,6 +17,7 @@ module ApplicationHelper
     link_class += " TabBarButton--active" if active
     link_to t(".#{label}"),
       destination,
+      id: "tab-btn-#{label}",
       data: {
         action: "tab-bar#selectTab",
         turbo_frame: frame,
