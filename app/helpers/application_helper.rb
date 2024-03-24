@@ -26,4 +26,8 @@ module ApplicationHelper
       },
       class: link_class
   end
+
+  def should_load_conversations?
+    @team.present? && !content_for?(:navigation) && current_frame.nil?
+  end
 end
