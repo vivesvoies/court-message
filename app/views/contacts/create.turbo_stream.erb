@@ -1,1 +1,1 @@
-<%= turbo_stream.replace "contacts", partial: "contacts/contact_detail", locals: { contact: @contact } %>
+<%= turbo_stream.replace :primary, partial: "contacts/contact_detail", locals: { contact: @contact } %>

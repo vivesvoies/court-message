@@ -1,4 +1,4 @@
-<%= turbo_frame_tag :primary do %>
+<%= content_for :primary do %>
   <div class="ContactIndex__last-contact cm-container">
     <% contact = Contact.order("created_at").last %>
     <% if contact.present? %>
@@ -15,7 +15,7 @@
   <div class="ContactIndex__actions">
     <%= link_to new_team_contact_path(@team),
       class: "cm-btn cm-btn--sm cm-btn--tertiary",
-      data: { turbo_frame: "contacts" } do %>
+      data: { turbo_frame: :primary } do %>
       <i class="cm-icon-person-add cm-icon--lg"></i>
       <%= t(".new_contact") %>
     <% end %>
