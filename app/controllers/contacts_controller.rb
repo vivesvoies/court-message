@@ -55,8 +55,6 @@ class ContactsController < ApplicationController
   # DELETE team/:team_slug/contacts/:id
   def destroy
     @team = @contact.team
-    @conversation = @contact.conversation
-
     @contact.destroy
     redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success")
   end
