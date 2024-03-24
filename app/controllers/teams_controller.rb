@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   layout "viewer", except: %i[ index ]
-  
+
   before_action :set_team, only: %i[ show edit menu update destroy ]
   authorize_resource
 
