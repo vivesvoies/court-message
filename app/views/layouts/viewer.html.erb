@@ -2,14 +2,14 @@
 <% content_for :layout do %>
   <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList" data-viewer-tab-bar-outlet=".TabBar nav">
     <% if should_load_conversations? %>
-      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: team_conversations_path(@team) %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: team_conversations_path(@team), refresh: :morph %>
     <% else %>
-      <%= turbo_frame_tag :navigation, class: "ViewerNavigation" do %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", refresh: :morph do %>
         <%= yield :navigation %>
       <% end %>
     <% end %>
 
-    <%= turbo_frame_tag :primary, class: "ViewerPrimary" do %>
+    <%= turbo_frame_tag :primary, class: "ViewerPrimary", refresh: :morph do %>
       <%= yield :primary %>
     <% end %>
 
@@ -17,11 +17,11 @@
       <%= render partial: "user_menu" %>
     </div>
 
-    <%= turbo_frame_tag :secondary, class: "ViewerSecondary" do %>
+    <%= turbo_frame_tag :secondary, class: "ViewerSecondary", refresh: :morph do %>
       <%= yield :secondary %>
     <% end %>
 
-    <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar" do %>
+    <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar", refresh: :morph do %>
       <%= render partial: "tab_bar" %>
     <% end %>
   </div>
