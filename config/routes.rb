@@ -14,22 +14,20 @@ Rails.application.routes.draw do
     get "/users/await-confirmation", to: "registrations#show", as: :await_confirmation
   end
 
-  resources :contacts, only: [ :show, :new, :edit, :create, :update, :destroy ]
   resources :messages, only: [ :new, :create ]
   resources :teams, only: [ :index, :show, :edit, :update ] do
     member do
       get :menu, to: "teams#menu"
-    end
-    member do
       get :detail, to: "teams#show", defaults: { detail: true }
     end
+
     resources :conversations, only: [ :index, :show ] do
       member do
         get :detail, to: "conversations#show", defaults: { detail: true }
-        patch "status", to: "read_status#update", as: :read_status
+        patch :status, to: "read_status#update", as: :read_status
       end
     end
-    resources :contacts do
+    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
       member do
         get :detail, to: "conversations#show", defaults: { detail: true }
       end
