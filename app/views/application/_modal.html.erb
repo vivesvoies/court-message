@@ -1,9 +1,0 @@
-<dialog aria-labelledby="cm-modal-title" id="cm-modal" class="Modal cm-modal cm-modal--opened" role="dialog"
-        data-controller="modal" data-action="turbo:submit-end->modal#submitted click->modal#clicked">
-  <div class="cm-modal__body">
-    <div class="cm-modal__header">
-      <button class="cm-link--close cm-link" aria-controls="cm-modal-2" data-action="click->modal#close"><%= t(".close") %></button>
-    </div>
-    <%= yield %>
-  </div>
-</dialog>

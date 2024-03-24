@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  layout "viewer"
+  layout :set_layout
 
   before_action :set_team, only: %i[ index show new edit update destroy ]
   before_action :set_contact, only: %i[ show edit update destroy ]
@@ -19,7 +19,7 @@ class ContactsController < ApplicationController
   def new
     @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
     @contact = Contact.new(team_id: @team.id)
-    if params[:modal]
+    if current_frame == "modal"
       render "conversations/new" and return
     end
   end
@@ -72,6 +72,10 @@ class ContactsController < ApplicationController
   end
 
   private
+
+  def set_layout
+    current_frame == "modal" ? "modal" : "viewer"
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_contact
