@@ -16,7 +16,7 @@ class TeamsController < ApplicationController
 
   # GET /teams/:team_slug/menu
   def menu
-    if request.headers["Turbo-Frame"] != "navigation"
+    if current_frame != "navigation"
       redirect_to team_conversations_path(@team)
     end
   end

@@ -37,12 +37,7 @@ class ContactsController < ApplicationController
     @team = @contact.team
 
     if @contact.save
-      respond_to do |format|
-        format.html { redirect_to team_contact_path(@team, @contact) }
-        format.turbo_stream {
-          flash.now[:notice] = I18n.t(".contacts.create.success")
-        }
-      end
+      redirect_to team_contact_path(@team, @contact), notice: I18n.t(".contacts.create.success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -63,12 +58,7 @@ class ContactsController < ApplicationController
     @conversation = @contact.conversation
 
     @contact.destroy
-    respond_to do |format|
-      format.html { redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success") }
-      format.turbo_stream {
-        flash.now[:notice] = I18n.t(".contacts.destroy.success")
-      }
-    end
+    redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success")
   end
 
   private
