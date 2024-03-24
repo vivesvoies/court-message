@@ -29,6 +29,7 @@
 }
 .ViewerContent {
   grid-area: main;
+  background-color: var(--primary-bg);
   @media screen and (min-width: $width-large) {
     grid-area: content;
   }
