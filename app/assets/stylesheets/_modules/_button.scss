@@ -502,7 +502,6 @@ a.cm-btn:not([href]) {
 
 .cm-btn.cm-btn--caption[class^=cm-icon-],
 .cm-btn.cm-btn--caption[class*=cm-icon-] {
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -525,7 +524,7 @@ a.cm-btn:not([href]) {
   &:focus,
   &:active {
     background-repeat: no-repeat;
-    background-position: 0 calc(100% - 2px);
+    background-position: 0 100%;
     background-size: 100% 3px;
     background-image: var(--underline-img);
   }
