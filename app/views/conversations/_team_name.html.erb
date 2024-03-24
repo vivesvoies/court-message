@@ -1,6 +1,6 @@
 <%# locals: (team:) %>
 <nav class="ConversationSidebar__header">
-  <%= link_to menu_link_destination(team), class: "ConversationSidebar__menuButton" do %>
+  <%= link_to_menu(team) do %>
     <h1 class="ConversationSidebar__teamName">
       <i class="cm-icon-home cm-btn"></i>
       <%= team.name %>
