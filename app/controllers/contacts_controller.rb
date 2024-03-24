@@ -31,6 +31,8 @@ class ContactsController < ApplicationController
   # POST team/:team_slug/contacts
   def create
     @contact = Contact.new(new_contact_params)
+    # INFO: Parts of the app will break if the conversation is not created.
+    # See _viewer_detail_tab_bar.html.erb for instance.
     if params[:create_conversation]
       @contact.build_conversation
     end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class ContactsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @contact = create(:contact)
+    @contact = create(:contact, :with_conversation)
     @temp = build(:contact)
     @team = @contact.team
     @user = create(:user, teams: [ @contact.team ])
