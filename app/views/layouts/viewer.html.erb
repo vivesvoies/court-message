@@ -9,7 +9,7 @@
       <% end %>
     <% end %>
 
-    <%= turbo_frame_tag :primary, class: "ViewerContent" do %>
+    <%= turbo_frame_tag :primary, class: "ViewerPrimary" do %>
       <%= yield :primary %>
     <% end %>
 
@@ -21,9 +21,9 @@
       <%= yield :secondary %>
     <% end %>
 
-    <div class="TabBar cm-tab-bar">
+    <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar" do %>
       <%= render partial: "tab_bar" %>
-    </div>
+    <% end %>
   </div>
 <% end %>
 <%= render template: "layouts/application" %>

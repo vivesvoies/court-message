@@ -1,7 +1,7 @@
 <%= render "turbo_flash" %>
-<%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
 
 <div id="conversation_detail" class="ConversationDetail" data-controller="conversation-detail">
+  <%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
   <%= render partial: "viewer_detail_tab_bar", locals: { conversation:, team: @team, active: :conversation } %>
   <header class="ConversationDetail__header">
     <nav class="ConversationDetail__main-nav">
