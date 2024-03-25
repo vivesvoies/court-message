@@ -18,20 +18,14 @@ Rails.application.routes.draw do
   resources :teams, only: [ :index, :show, :edit, :update ] do
     member do
       get :menu, to: "teams#menu"
-      get :detail, to: "teams#show", defaults: { detail: true }
     end
 
     resources :conversations, only: [ :index, :show ] do
       member do
-        get :detail, to: "conversations#show", defaults: { detail: true }
         patch :status, to: "read_status#update", as: :read_status
       end
     end
-    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
-      member do
-        get :detail, to: "conversations#show", defaults: { detail: true }
-      end
-    end
+    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
     resources :users, only: [ :show, :edit, :update ]
     devise_for :users, controllers: { invitations: "invitations" }
   end
