@@ -98,6 +98,7 @@
     text-decoration: none;
     background: unset;
   }
+  transition: background-color .1s ease;
 }
 
 .Conversation .Conversation__link:active {
