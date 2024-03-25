@@ -1,4 +1,6 @@
 class TeamsController < ApplicationController
+  layout "viewer", except: %i[ index ]
+
   before_action :set_team, only: %i[ show edit menu update destroy ]
   authorize_resource
 
@@ -14,7 +16,7 @@ class TeamsController < ApplicationController
 
   # GET /teams/:team_slug/menu
   def menu
-    if request.headers["Turbo-Frame"] != "conversation_sidebar"
+    if current_frame != "navigation"
       redirect_to team_conversations_path(@team)
     end
   end

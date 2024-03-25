@@ -5,7 +5,7 @@
   --size-header: 3rem;
   --size-viewer: 100vh;
   --size-message-box: 7rem;
-  --size-tab-bar: 3rem;
+  --size-tab-bar: 3.25rem;
   --input-overhang: 1rem;
 }
 @supports (height: 100dvh) {
@@ -19,6 +19,10 @@
   Map color names to semantic use case.
 */
 :root {
+  --viewer-bg: var(--color-sable);
+  --navigation-bg: var(--color-white);
+  --primary-bg: var(--color-white);
+
   --text-primary: var(--color-black);
   --text-secondary: var(--color-dark1);
   --text-tertiary: var(--color-mouse);
@@ -225,7 +229,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
+}
+body.has-viewer-visible {
+  -webkit-overflow-scrolling: auto;
+  overflow: hidden;
 }
 .Main {
   flex: 1;

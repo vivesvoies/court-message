@@ -3,71 +3,55 @@
 .Viewer {
   flex: 1;
   max-height: var(--size-viewer);
+  background-color: var(--viewer-bg);
 
   display: grid;
   grid-template-rows:  1fr var(--size-tab-bar);
   grid-template-areas: 
-  "main"
-  "tabs";
+    "main"
+    "tabs";
   @media screen and (min-width: $width-large) {
     grid-template-rows: var(--size-tab-bar) 1fr;
     grid-template-columns: minmax(25rem, 1fr) minmax(30rem, 2fr) minmax(25rem, 1fr);
     grid-template-areas: 
-      "left tabs right"
-      "left work right";
+      "nav content user"
+      "nav content secondary";
   }
 }
 
-.ConversationSidebar,
-.ConversationDetail,
-.Contacts,
-.Presets,
-.Inbox {
+.ViewerNavigation {
   position: relative;
-}
-
-.Viewer--tab-home {
-  .ConversationSidebar { z-index: 10; }
-}
-.Viewer--tab-conversations {
-  .ConversationDetail { z-index: 10; }
-  .Contacts { display: none; }
-}
-.Viewer--tab-contacts {
-  .Contacts { z-index: 10; }
-  .ConversationDetail { display: none; }
-}
-.Viewer--tab-presets {
-  .Presets { z-index: 10; }
-  .Inbox { display: none; }
-}
-.Viewer--tab-inbox {
-  .Inbox { z-index: 10; }
-  .Presets { display: none; }
-}
-
-.ConversationSidebar {
+  overflow: hidden;
   grid-area: main;
+  background-color: var(--navigation-bg);
   @media screen and (min-width: $width-large) {
-    grid-area: left;
+    grid-area: nav;
     border-right: 1px solid var(--list-border);
   }
 }
-.ConversationDetail, .Presets {
-  z-index: 5;
-}
-.ConversationDetail,
-.Contacts {
+.ViewerPrimary {
   grid-area: main;
+  background-color: var(--primary-bg);
   @media screen and (min-width: $width-large) {
-    grid-area: work;
+    grid-area: content;
   }
 }
-.Presets,
-.Inbox {
+.ViewerUserMenu {
+  display: none;
   grid-area: main;
   @media screen and (min-width: $width-large) {
-    grid-area: right;
+    display: inherit;
+    grid-area: user;
+    border-left: 1px solid var(--list-border);
+    border-bottom: 1px solid var(--list-border);
+  }
+}
+.ViewerSecondary {
+  display: none;
+  grid-area: main;
+  @media screen and (min-width: $width-large) {
+    display: inherit;
+    grid-area: secondary;
     border-left: 1px solid var(--list-border);
   }
 }
@@ -75,4 +59,36 @@
   grid-area: tabs;
   position: relative;
   z-index: 100;
+  @media screen and (min-width: $width-large) {
+    display: none;
+  }
+}
+.ViewerDetail__TabBar {
+  display: none;
+  @media screen and (min-width: $width-large) {
+    display: inherit;
+  }
+}
+
+@media screen and (max-width: ($width-large - 1)) {
+  // Defaults to navigation for home and conversations with details closed
+  .ViewerPrimary, .ViewerSecondary { display: none; }
+
+  .Viewer--detail-visible,
+  .Viewer--tab-contacts {
+    .ViewerNavigation { display: none; }
+    .ViewerPrimary { display: inherit; }
+    .ViewerSecondary { display: none; }
+  }
+  .Viewer--tab-presents,
+  .Viewer--tab-inbox {
+    .ViewerNavigation { display: none; }
+    .ViewerPrimary { display: none; }
+    .ViewerSecondary { display: inherit; }
+  }
+  .Viewer--tab-home {
+    .ViewerNavigation { display: inherit; }
+    .ViewerPrimary { display: none; }
+    .ViewerSecondary { display: none; }
+  }
 }

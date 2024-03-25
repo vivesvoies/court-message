@@ -1,0 +1,17 @@
+<%# locals: (conversation:, team:, active:) %>
+<div class="ViewerDetail__TabBar cm-tab-bar">
+  <nav>
+    <%= tab_for :conversations,
+      active: active == :conversation,
+      icon: :chat,
+      frame: :primary,
+      destination: team_conversation_path(team, conversation)
+    %>
+    <%= tab_for :contacts,
+      active: active == :contact,
+      icon: :"address-book",
+      frame: :primary,
+      destination: team_contact_path(team, conversation.contact)
+    %>
+  </nav>
+</div>

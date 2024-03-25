@@ -3,23 +3,39 @@
 ///
 /// Conversation left-pane
 ///
-
 .ConversationSidebar {
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  border-right: 0 solid var(--list-border);
-  overflow-y: scroll;
+}
+
+.ConversationSidebar__header,
+.ConversationHeader__actions {
+  flex-shrink: 0;
+}
+.ConversationSwitcher {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 ///
 /// Conversation list header
 ///
+.ConversationSidebar__header {
+}
+
 .ConversationSidebar__menuButton {
+  border-bottom: 1px solid var(--page-border);
   display: flex;
   height: var(--size-tab-bar);
   align-items: center;
+  background: none;
+  &:any-link {
+    --underline-hover-width: 0;
+  }
 }
 .ConversationSidebar__teamName {
   font: var(--font-subtitle);
@@ -55,12 +71,8 @@
   width: 100%;
 }
 
-.ConversationSwitcher {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
 .ConversationSwitcher h3 {
+  flex-shrink: 0;
   font: var(--font-small-bold);
   padding: 1rem;
   margin: 0;
@@ -71,7 +83,9 @@
 
 .ConversationList {
   background-color: var(--list-bg);
-  height: -webkit-fill-available;
+  flex-grow: 1;
+  // height: -webkit-fill-available;
+  overflow-y: scroll;
 }
 
 ///

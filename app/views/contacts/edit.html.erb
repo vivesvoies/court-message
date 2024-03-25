@@ -1,4 +1,4 @@
-<%= turbo_frame_tag "contacts" do %>
+<%= content_for :primary do %>
   <h1><%= @contact.name %></h1>
   <%= render "form", contact: @contact %>
 <% end %>

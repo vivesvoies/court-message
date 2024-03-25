@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include FlashHelper
+  helper_method :current_frame
   before_action :authenticate_user!
   before_action :set_current
   check_authorization unless: :devise_controller?
@@ -16,9 +17,13 @@ class ApplicationController < ActionController::Base
 
   def set_current
     Current.user = current_user
-    Current.phone_number = (Rails.env.development? || Rails.env.test?) ? "33644630057" : "33644639777"
+    Current.phone_number = (Rails.env.local?) ? "33644630057" : "33644639777"
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
     Current.team = Team.find_by(slug:) if slug
+  end
+
+  def current_frame
+    request.headers["Turbo-Frame"]
   end
 end

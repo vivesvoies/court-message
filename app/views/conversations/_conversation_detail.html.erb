@@ -1,7 +1,8 @@
-<% if conversation %>
-  <%= render "turbo_flash" %>
-  <%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
+<%= render "turbo_flash" %>
 
+<div id="conversation_detail" class="ConversationDetail" data-controller="conversation-detail">
+  <%= turbo_stream_from conversation, data: { viewer_target: "conversationIndicator" } %>
+  <%= render partial: "viewer_detail_tab_bar", locals: { conversation:, team: @team, active: :conversation } %>
   <header class="ConversationDetail__header">
     <nav class="ConversationDetail__main-nav">
       <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn fr-icon-arrow-left-line cm-btn--icon-left" %>
@@ -10,7 +11,7 @@
       <%= conversation.title %>
     </h2>
   </header>
-  
+
   <div class="ConversationDetail__scroller" data-controller="message-list">
     <ol id="messages" class="MessageList">
       <%= render partial: "messages/message", collection: conversation.messages %>
@@ -20,4 +21,4 @@
       <%= turbo_frame_tag "new_message", src: new_message_path(conversation_id: conversation.id), target: "_top" %>
     </footer>
   </div>
-<% end %>
+</div>

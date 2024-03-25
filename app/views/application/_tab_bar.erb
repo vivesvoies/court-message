@@ -1,0 +1,35 @@
+<%# conversation_destination = @conversation ? team_conversation_path(Current.team, @conversation) : team_conversations_path(Current.team) %>
+<%# conversation_frame = @conversation ? :primary : :navigation %>
+<%# contact_destination = @conversation ? team_contact_path(Current.team, @conversation.contact_id) : team_contacts_path(Current.team) %>
+
+<nav data-controller="tab-bar" data-tab-bar-viewer-outlet=".Viewer" data-tab-bar-active-tab-class="TabBarButton--active">
+  <%= tab_for :home,
+    icon: :home,
+    mobile: :only,
+    frame: :navigation,
+    destination: menu_team_path(Current.team)
+  %>
+  <%= tab_for :conversations,
+    active: true,
+    icon: :chat,
+    frame: :navigation,
+    destination: team_conversations_path(Current.team)
+  %>
+  <%= tab_for :contacts,
+    icon: :"address-book",
+    frame: :primary,
+    destination: team_contacts_path(Current.team)
+  %>
+  <%= tab_for :presets,
+    icon: :star,
+    mobile: :only,
+    frame: :secondary,
+    destination: page_path("presets")
+  %>
+  <%= tab_for :inbox,
+    icon: :"chat-bubble",
+    mobile: :only,
+    frame: :secondary,
+    destination: page_path("inbox")
+  %>
+</nav>

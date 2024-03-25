@@ -41,7 +41,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     get team_conversation_url(@team, @conversation)
     assert_response :success
     assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
-    assert_select "#conversation_sidebar .Conversation__contact", text: @conversation.title
+    assert_select "#conversations .Conversation__contact", text: @conversation.title
   end
 
   test "should select current conversation" do
@@ -59,7 +59,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   #   get detail_team_conversation_url(@team, @conversation)
   #   assert_response :success
   #   assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
-  #   assert_select "#conversation_sidebar .Conversation__contact", false
+  #   assert_select "#conversations .Conversation__contact", false
   # end
 
   test "should not get conversations that belong to another team" do

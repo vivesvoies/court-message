@@ -1,4 +1,6 @@
 class ContactsController < ApplicationController
+  layout :set_layout
+
   before_action :set_team, only: %i[ index show new edit update destroy ]
   before_action :set_contact, only: %i[ show edit update destroy ]
   authorize_resource :team
@@ -17,7 +19,7 @@ class ContactsController < ApplicationController
   def new
     @create_conversation = ActiveModel::Type::Boolean.new.cast(params[:create_conversation])
     @contact = Contact.new(team_id: @team.id)
-    if params[:modal]
+    if current_frame == "modal"
       render "conversations/new" and return
     end
   end
@@ -29,18 +31,15 @@ class ContactsController < ApplicationController
   # POST team/:team_slug/contacts
   def create
     @contact = Contact.new(new_contact_params)
+    # INFO: Parts of the app will break if the conversation is not created.
+    # See _viewer_detail_tab_bar.html.erb for instance.
     if params[:create_conversation]
       @contact.build_conversation
     end
     @team = @contact.team
 
     if @contact.save
-      respond_to do |format|
-        format.html { redirect_to team_contact_path(@team, @contact) }
-        format.turbo_stream {
-          flash.now[:notice] = I18n.t(".contacts.create.success")
-        }
-      end
+      redirect_to team_contact_path(@team, @contact), notice: I18n.t(".contacts.create.success")
     else
       render :new, status: :unprocessable_entity
     end
@@ -58,18 +57,15 @@ class ContactsController < ApplicationController
   # DELETE team/:team_slug/contacts/:id
   def destroy
     @team = @contact.team
-    @conversation = @contact.conversation
-
     @contact.destroy
-    respond_to do |format|
-      format.html { redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success") }
-      format.turbo_stream {
-        flash.now[:notice] = I18n.t(".contacts.destroy.success")
-      }
-    end
+    redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success")
   end
 
   private
+
+  def set_layout
+    current_frame == "modal" ? "modal" : "viewer"
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_contact

@@ -17,12 +17,18 @@ module ApplicationHelper
     link_class += " TabBarButton--active" if active
     link_to t(".#{label}"),
       destination,
+      id: "tab-btn-#{label}",
       data: {
         action: "tab-bar#selectTab",
         turbo_frame: frame,
         tab_bar_label_param: label,
-        tab_bar_target: "tab"
+        tab_bar_target: "tab",
+        turbo_action: :advance
       },
       class: link_class
+  end
+
+  def should_load_conversations?
+    @team.present? && !content_for?(:navigation) && current_frame.nil?
   end
 end
