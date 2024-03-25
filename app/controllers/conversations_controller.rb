@@ -16,6 +16,9 @@ class ConversationsController < ApplicationController
   # GET /conversations/1
   def show
     @conversation.mark_as_read! if @conversation.unread?
+    unless params[:detail]
+      render :index
+    end
   end
 
   private
