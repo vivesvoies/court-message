@@ -127,13 +127,6 @@ fr:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
       profile: "Fiche contact"
-    tab_bar:
-      home: "Accueil"
-      conversations: "Messagerie"
-      contacts: "Répertoire"
-      presets: "Modèles"
-      inbox: "Chat"
-
   
   contacts:
     contact:
