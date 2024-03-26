@@ -59,3 +59,10 @@
 .TemplateForm__remove {
   margin-right: auto;
 }
+
+.Template .cm-fieldset__element {
+  display: flex;
+}
+.Template .cm-fieldset__element .Template__content {
+  flex: 1;
+}
