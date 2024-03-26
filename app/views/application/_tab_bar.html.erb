@@ -23,7 +23,7 @@
   <%= tab_for :presets,
     icon: :star,
     frame: :secondary,
-    destination: team_user_templates_path(team_id: Current.team.id, user_id: Current.user.id)
+    destination: team_user_templates_path(team_id: Current.team.slug, user_id: Current.user.id)
   %>
   <%= tab_for :inbox,
     icon: :"chat-bubble",
