@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
   layout "viewer"
-  
+
   before_action :set_templates, only: %i[ show new create edit update destroy ]
   before_action :set_template, only: %i[ show edit update destroy ]
   before_action :set_team, only: %i[ index show new create edit update ]
