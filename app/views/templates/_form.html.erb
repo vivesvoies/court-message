@@ -9,9 +9,9 @@
     </div>
   </fieldset>
 
-  <div class="cm-container TemplateForm__actions">
+  <div class="TemplateForm__actions">
     <% unless template.new_record? %>
-      <div class="cm-column TemplateForm__remove">
+      <div class="TemplateForm__remove">
         <%= link_to "", team_user_template_path(@team, user_id: template.user.id, id: template.id),
             data: {
               turbo_method: :delete,
@@ -19,7 +19,7 @@
             class: "cm-btn cm-icon-bin cm-btn--secondary" %>
       </div>
     <% end %>
-      <div class="cm-column TemplateForm__submit">
+      <div class="TemplateForm__submit">
         <%= button_tag t(".update"), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
       </div>
   </div>

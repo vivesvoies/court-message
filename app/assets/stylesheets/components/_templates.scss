@@ -47,19 +47,12 @@
 .Template__actions,
 .TemplateForm__actions {
   margin: 0 2rem;
+  display: flex;
+  align-items: space-between;
+  gap: .5rem;
 }
 
-.TemplateForm__cancel,
-.TemplateForm__remove,
-.TemplateForm__submit {
-  --width: 4;
-}
-
-.Template__remove {
-  --width: 7.5;
-}
-
-.Template__copy,
-.Template__edit {
-  --width: 1.5;
+.Template__remove,
+.TemplateForm__remove {
+  margin-right: auto;
 }
