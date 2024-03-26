@@ -58,6 +58,9 @@ class User < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :teams, through: :memberships
   has_many :contacts
+  has_many :templates, dependent: :destroy
+
+  after_create :add_default_template
 
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
@@ -87,5 +90,15 @@ class User < ApplicationRecord
 
   def can_be_deleted?
     !confirmed_at.present? && teams.empty? && messages.empty?
+  end
+
+  private
+
+  def add_default_template
+    default_template = Template.create(
+      title: I18n.t("activerecord.models.user.default_template.title"),
+      content: I18n.t("activerecord.models.user.default_template.content")
+    )
+    templates << default_template
   end
 end

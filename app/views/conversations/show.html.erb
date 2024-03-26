@@ -10,3 +10,7 @@
 <%= content_for :primary do %>
   <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
 <% end %>
+
+<%= content_for :secondary do %>
+  <%= render partial: "templates/templates_list", locals: { user: Current.user, templates: @templates } %>
+<% end if @templates %>

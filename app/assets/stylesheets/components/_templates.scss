@@ -1,0 +1,68 @@
+///
+
+.Templates {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(var(--size-viewer) - var(--size-tab-bar));
+  border-right: 0 solid var(--list-border);
+  // overflow-y: auto;
+}
+
+///
+/// Template list header
+///
+.Templates__header h3 {
+  font: var(--font-small-bold);
+  padding: 1rem;
+  margin: 0;
+  width: 50%;
+  text-align: center;
+  // background-color: var(--list-bg);
+}
+.TemplatesHeader__actions {
+  display: flex;
+  margin: .5rem 0;
+  border-bottom: 1px solid var(--list-separator);
+  padding-bottom: 2rem;
+}
+.TemplatesHeader__new {
+  margin: .5rem auto;
+}
+.TemplateList {
+  overflow-y: scroll;
+}
+
+///
+/// Template
+///
+
+.Template {
+  margin: 1rem auto;
+}
+
+.Template__content {
+  margin: 2rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--list-template-bg);
+}
+
+.Template__actions,
+.TemplateForm__actions {
+  margin: 0 2rem;
+  display: flex;
+  align-items: space-between;
+  gap: .5rem;
+}
+
+.Template__remove,
+.TemplateForm__remove {
+  margin-right: auto;
+}
+
+.Template .cm-fieldset__element {
+  display: flex;
+}
+.Template .cm-fieldset__element .Template__content {
+  flex: 1;
+}

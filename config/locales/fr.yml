@@ -35,6 +35,9 @@ fr:
       user:
         one: "L’utilisateur"
         other: "Les utilisateurs"
+        default_template:
+          title: "Example de template"
+          content: "Bonjour, je suis Marte Bellemare, votre médiatrice France Service. Voici le numéro auquel me joindre par sms uniquement. N’hésitez pas si vous avez des questions. J’utiliserai ce canal pour vous transmettre toutes informations utiles vous concernant."
     attributes:
       user:
         remember_me: Se souvenir de moi
@@ -196,7 +199,6 @@ fr:
       new_team: "Ajouter une équipe"
       create_then_add: "Vous devez enregistrer votre équipe avant d’y ajouter des membres."
     form:
-      update: "Enregistrer les modifications"
       create: "Créer l’équipe"
       save_error: "L’équipe n’a pas pu être enregistrée."
     edit:
@@ -243,4 +245,16 @@ fr:
 
   invitations:
     notice:
-      user_add_to_team: "Le membre à été ajouté à votre équipe"
+      user_add_to_team: "Le membre a été ajouté à votre équipe"
+
+  templates:
+    templates_list:
+      my_templates: "Mes modèles"
+      new_template: "Nouveau modèle"
+    create:
+      success: "Nouveau template enregistré."
+      not_blank: "Impossible de crée un modèle vide"
+    update:
+      template_updated: ""
+    form:
+      update: "Enregistrer"

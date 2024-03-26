@@ -4,6 +4,7 @@ class ConversationsController < ApplicationController
   before_action :set_team, only: %i[ index show ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
+  before_action :set_templates, only: %i[ index show ]
 
   authorize_resource :team
   authorize_resource
@@ -30,6 +31,10 @@ class ConversationsController < ApplicationController
 
   def set_team
     @team = Current.team || Team.find_by(slug: params[:team_id])
+  end
+
+  def set_templates
+    @templates = Current.user.templates if current_frame.nil?
   end
 
   # # Only allow a list of trusted parameters through.
