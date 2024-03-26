@@ -22,9 +22,8 @@
   %>
   <%= tab_for :presets,
     icon: :star,
-    mobile: :only,
     frame: :secondary,
-    destination: page_path("presets")
+    destination: team_user_templates_path(team_id: Current.team.id, user_id: Current.user.id)
   %>
   <%= tab_for :inbox,
     icon: :"chat-bubble",

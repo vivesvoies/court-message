@@ -1,0 +1,4 @@
+<%# used with `templates/new`route %>
+<%= content_for :secondary do %>
+  <%= render partial: "templates/templates_list", locals: { user: Current.user, team: @team } %> 
+<% end %>
