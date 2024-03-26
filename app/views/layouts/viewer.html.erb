@@ -18,7 +18,6 @@
     </div>
 
     <%= turbo_frame_tag :secondary, class: "ViewerSecondary", refresh: :morph do %>
-      <%= render partial: "templates/templates_list", locals: { user: Current.user, team: @team } %>
       <%= yield :secondary %>
     <% end %>
 
