@@ -1,23 +1,23 @@
-  <div class="TemplatesList">
-    <header class="TemplatesList__header">
-      <h3>
-        <i class="cm-icon-star cm-icon"></i>
-        <%= t(".my_templates") %>
-      </h3>
-    </header>
-    <div class="TemplatesListHeader__actions">
-
-      <%= link_to t(".new_template"),
-            new_team_user_template_path(user_id: user.id),
-            data: { turbo_frame: "new_template" },
-            class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-plus TemplatesListHeader__new" %>
-      </div>
-
-      <div class="Template">
-        <%= turbo_frame_tag "new_template" %>
-
-        <%= turbo_frame_tag "templates" do %>
-          <%= render user.templates %>
-        <% end %>
-      </div>
+<%# locals: (user:, templates:) %>
+<div class="Templates">
+  <header class="Templates__header">
+    <h3>
+      <i class="cm-icon-star cm-icon"></i>
+      <%= t(".my_templates") %>
+    </h3>
+  </header>
+  <div class="TemplatesHeader__actions">
+    <%= link_to t(".new_template"),
+          new_team_user_template_path(user_id: user.id),
+          data: { turbo_frame: "new_template" },
+          class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-plus TemplatesHeader__new"
+    %>
   </div>
+  <div class="TemplateList">
+    <%= turbo_frame_tag "new_template" %>
+
+    <%= turbo_frame_tag "templates" do %>
+      <%= render templates %>
+    <% end %>
+  </div>
+</div>
