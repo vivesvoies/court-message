@@ -37,10 +37,19 @@
   display: grid;
   justify-content: space-between;
   grid-auto-flow: column;
+  padding: 2.5rem;
 }
 
 .TeamShow__title {
   font: var(--font-subtitle);
   font-weight: bold;
   margin: 0;
+}
+
+.TeamShow__members-list {
+  padding: 2.5rem;
+  padding-top: 0;
+  overflow-y: scroll;
+  height: 100%;
+  margin-bottom: 50px;
 }

@@ -1,4 +1,8 @@
 <%= content_for :primary do %>
-  <h1><%= t(".new_contact") %></h1>
-  <%= render "form", contact: @contact %>
+  <header class="ContactNew__header">
+    <h1 class="ContactNew__title">
+      <%= t(".new_contact") %>
+    </h1>
+  </header>
+    <%= render "form", contact: @contact %>
 <% end %>

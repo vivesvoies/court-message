@@ -7,7 +7,7 @@
   <%= form.hidden_field :team_id %>
 
   <% if @contact.new_record? %>
-    <div class="ContactForm__actions">
+    <div class="ContactFormNew__actions">
       <%= button_tag t(".create"), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
       <p><%= t(".info") %></p>
     </div>
@@ -45,11 +45,13 @@
   </fieldset>
 
   <% unless @contact.new_record? %>
-    <%= button_tag contact.new_record? ? t(".create") : t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
-    <%= link_to t(:cancel), team_contact_path(@team, @contact), class: "cm-btn cm-btn--tertiary" %> 
-    <%= button_to t(".remove"), team_contact_path(@team, @contact),
-        method: :delete,
-        "data-turbo" => "false",
-        class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-bin" %>
+    <div class="ContactForm__actions">
+      <%= button_tag contact.new_record? ? t(".create") : t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+      <%= link_to t(:cancel), team_contact_path(@team, @contact), class: "cm-btn cm-btn--tertiary" %> 
+      <%= button_to t(".remove"), team_contact_path(@team, @contact),
+          method: :delete,
+          "data-turbo" => "false",
+          class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-bin" %>
+    </div>
   <% end %>
 <% end %>

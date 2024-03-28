@@ -1,7 +1,11 @@
 <div id="contact_detail" class="ContactDetail">
   <%#- NOTE: could be made more resilient by checking that a conversation object exists. %>
   <%= render partial: "viewer_detail_tab_bar", locals: { conversation: contact.conversation, team: @team, active: :contact } %>
-  <h1><%= contact.name  %></h1>
+  <header class="ContactDetail__header">
+    <h1 class="ContactDetail__title">
+      <%= contact.name %>
+    </h1>
+  </header>
   <div class="ContactDetail__actions">
     <%= link_to t(".edit"), edit_team_contact_path(@team, contact.id), class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-settings" %>
   </div>
