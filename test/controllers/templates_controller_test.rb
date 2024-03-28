@@ -33,7 +33,7 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
 
   test "should show template" do
     get team_user_template_path(@team, @user, @template)
-    assert_response :success
+    assert_redirected_to(team_user_templates_path(@team, @user))
   end
 
   test "should get edit" do
