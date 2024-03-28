@@ -48,7 +48,7 @@ class ContactsController < ApplicationController
   # PATCH/PUT team/:team_slug/contacts/:id
   def update
     if @contact.update(contact_params)
-      redirect_to edit_team_contact_path(@team, @contact), notice: I18n.t(".contacts.update.success")
+      redirect_to edit_team_contact_path(@team, @contact), notice: I18n.t("contacts.update.success")
     else
       render :edit, status: :unprocessable_entity
     end
