@@ -1,3 +1,132 @@
 .Contacts {
   background-color: var(--messages-bg);
 }
+
+.Contact {
+  margin-right: .5rem;
+  --underline-img: none;
+}
+
+.Contact a {
+  color: var(--text-tertiary);
+}
+
+.Contact a:hover {
+  color: var(--text-tertiary-hover);
+}
+
+.Contact label {
+  font-weight: bold;
+}
+
+.ContactDetail {
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.Contact__info {
+  margin-bottom: 1rem;
+}
+
+.Contact__name {
+  font-weight: bold;
+}
+
+.Contact__info [class*="--missing"] {
+  font-style: italic;
+}
+
+.ContactFormNew__actions {
+  margin-left: auto;
+  margin-right: auto;
+  margin-block-end: 0;
+  width: 40%;
+}
+
+.ContactForm p,
+.ContactDetail__notes p {
+  color: var(--text-format);
+  margin-block-start: 0;
+}
+
+.ContactDetail__notes,
+.ContactForm__notes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ContactIndex_input,
+.ContactIndex__actions,
+.ContactFormNew__actions,
+.ContactDetail__actions{
+  margin-block-start: 2.2em;
+  margin-block-end: 2.4em;
+}
+
+.ContactIndex__last-contact {
+  margin: initial;
+  margin-block-start: 2.2em;
+  margin-block-end: 2.4em;
+  height: 5rem;
+}
+
+.ContactIndex__last-contact-text {
+  --width: 3.8;
+  padding: 1rem;
+}
+
+.ContactIndex__last-contact-data {
+  --width: 7;
+  padding: 1.5rem;
+}
+
+.ContactIndex__header {
+  padding: 0rem 2.5rem 0rem 2.5rem;
+}
+
+.ContactNew__header,
+.ContactEdit__header,
+.ContactDetail__header {
+  grid-area: header;
+  
+  display: grid;
+  justify-content: space-between;
+  grid-auto-flow: column;
+  padding: 2.5rem 2.5rem 1rem 2.5rem;
+}
+
+.Contacts__title,
+.ContactNew__title,
+.ContactEdit__title,
+.ContactDetail__title {
+  font: var(--font-subtitle);
+  font-weight: bold;
+  margin: 0;
+}
+
+.ContactDetail__actions {
+  padding-left: 2.5rem;
+  margin-block-end: 0;
+}
+
+.ContactDetail__info,
+.ContactForm__actions,
+.ContactForm {
+  padding: 2.5rem;
+}
+
+.ContactForm__actions {
+  position: sticky;
+  padding-top: 0;
+  bottom: 0;
+  top: 100%;
+  width: 100%;
+}
+
+.ContactIndex__list {
+  padding: 2.5rem;
+  padding-top: 0;
+  overflow-y: scroll;
+  height: 60%;
+  margin-bottom: 50px;
+}

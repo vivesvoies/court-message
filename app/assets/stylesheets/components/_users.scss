@@ -41,8 +41,11 @@
   --width: 5;
 }
 
-.UserForm__cancel,
 .UserForm__remove,
 .UserForm__submit {
-  --width: 4;
+  --width: 4.5;
+}
+
+.UserForm__cancel {
+  --width: 3;
 }
