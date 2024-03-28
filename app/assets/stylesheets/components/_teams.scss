@@ -50,6 +50,11 @@
   padding: 2.5rem;
   padding-top: 0;
   overflow-y: scroll;
-  height: 100%;
+  height: 90%;
   margin-bottom: 50px;
+}
+
+.TeamShow__actions {
+  padding: 2.5rem 0rem;
+  border-top: 1px solid var(--list-border);
 }

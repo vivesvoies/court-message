@@ -29,6 +29,7 @@ class Ability
     can :manage, User
     can :manage, Contact
     can :manage, Membership
+    can :manage, Conversation
     cannot :destroy, User, id: user.id
     return unless user.at_least?(:super_admin)
 
