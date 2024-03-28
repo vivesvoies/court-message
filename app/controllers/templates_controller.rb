@@ -13,6 +13,7 @@ class TemplatesController < ApplicationController
 
   # GET /teams/:team_slug/users/:id/templates/:id
   def show
+    redirect_to team_user_templates_path(@team, @user)
   end
 
   # GET /teams/:team_slug/users/:id/templates/new
