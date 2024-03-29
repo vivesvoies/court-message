@@ -37,7 +37,7 @@ fr:
         other: "Les utilisateurs"
         default_template:
           title: "Example de template"
-          content: "Bonjour, je suis Marte Bellemare, votre médiatrice France Service. Voici le numéro auquel me joindre par sms uniquement. N’hésitez pas si vous avez des questions. J’utiliserai ce canal pour vous transmettre toutes informations utiles vous concernant."
+          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d'avoir des réponses types prêtes à des demandes récurrentes"
     attributes:
       user:
         remember_me: Se souvenir de moi
