@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   get "/.internal/ui", to: "pages#show", id: "ui"
   resources :pages, only: [ :show ]
 
+  # Static pages
+  get "/legal_notice", to: "static_pages#legal_notice"
+
   authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
     mount Avo::Engine, at: Avo.configuration.root_path
   end
