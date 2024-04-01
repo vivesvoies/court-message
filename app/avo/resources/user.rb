@@ -36,14 +36,9 @@ class Avo::Resources::User < Avo::BaseResource
       field :reset_password_sent_at,
         as: :date,
         format: "yyyy-LL-dd"
-      field :confirmation_token, as: :text
-      field :reset_password_token, as: :text
-      field :unconfirmed_email, as: :text, show_on: :index
       field :messages, as: :has_many, visible: -> { resource.record.messages.any? }
       field :conversations, as: :has_and_belongs_to_many, visible: -> { resource.record.conversations.any? }
     end
-      # TODO: Password modification is possible. Could be better to just resend an email for reset password?
-      field :password, as: :password
       field :teams, as: :has_many, through: :memberships
       field :templates, as: :has_many, visible: -> { resource.record.templates.any? }
   end
