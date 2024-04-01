@@ -20,7 +20,7 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource)
-    team_path(@team)
+    team_url(@team)
   end
 
   protected
