@@ -5,9 +5,9 @@ class Avo::Actions::ResendInvitationEmail < Avo::BaseAction
     query, fields, current_user, resource = args.values_at(:query, :fields, :current_user, :resource)
 
     query.each do |record|
-      # TODO: Should resend an invitation email to join the team
+      record.invitation_sent_at = DateTime.now.utc
+      record.invite!
+      succeed "Parfait c'est envoyé à #{record.email}"
     end
-
-    succeed "Parfait c'est envoyé!"
   end
 end
