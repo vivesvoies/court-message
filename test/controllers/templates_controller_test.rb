@@ -8,6 +8,11 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
+  test "should get index" do
+    get team_user_templates_path(@team, @user)
+    assert_response :success
+  end
+
   test "should get new" do
     get new_team_user_template_path(@team, @user)
     assert_response :success
