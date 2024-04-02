@@ -4,7 +4,7 @@ Locals: model (the model object that has failed validations)
 %>
 <%= error_text = defined?(message) ? message : t(".save_error") %>
 <div id="error_explanation" class="cm-fieldset__element FormErrors">
-  <p class="fr-error-text"><%= error_text %></p>
+  <p class="cm-error-text"><%= error_text %></p>
   <ul>
     <% model.errors.each do |error| %>
       <li><%= error.full_message %></li>

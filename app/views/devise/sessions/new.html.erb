@@ -13,7 +13,7 @@
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "LoginForm cm-column" }) do |f| %>
       <%# Login fields %>
       <fieldset class="cm-fieldset">
-        <div class="cm-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element cm-input-group">
           <%= f.label :email, class: "cm-label" do %>
             <%= t("devise.shared.forms.identifier") %>
             <span class="cm-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
@@ -21,14 +21,14 @@
           <%= f.email_field :email, autofocus: true, autocomplete: "email", aria_required: true, class: "cm-input cm-input--overhang" %>        
         </div>
       
-        <div class="cm-fieldset__element fr-input-group">
+        <div class="cm-fieldset__element cm-input-group">
           <%= f.label :password, class: "cm-label" %>
-          <%= f.password_field :password, autocomplete: "current-password", class: "cm-input cm-input--overhang fr-password__input", aria_required: true %>
+          <%= f.password_field :password, autocomplete: "current-password", class: "cm-input cm-input--overhang cm-password__input", aria_required: true %>
         </div>
 
         <%# Hidden remember check %>
         <% if devise_mapping.rememberable? %>
-          <div class="cm-fieldset__element fr-checkbox-group fr-checkbox-group--sm" hidden>
+          <div class="cm-fieldset__element cm-checkbox-group cm-checkbox-group--sm" hidden>
             <%= f.check_box :remember_me, checked: true %>
             <%= f.label :remember_me %>
           </div>
