@@ -3,9 +3,13 @@ class TemplatesController < ApplicationController
 
   before_action :set_templates, only: %i[ new create edit update destroy ]
   before_action :set_template, only: %i[ edit update destroy ]
-  before_action :set_team, only: %i[ new create edit update ]
+  before_action :set_team, only: %i[ index new create edit update ]
   before_action :set_user, only: %i[ new create edit update ]
   load_and_authorize_resource
+
+  # GET /teams/:team_slug/users/:id/templates
+  def index
+  end
 
   # GET /teams/:team_slug/users/:id/templates/new
   def new
