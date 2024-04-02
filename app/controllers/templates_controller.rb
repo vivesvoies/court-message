@@ -1,20 +1,11 @@
 class TemplatesController < ApplicationController
   layout "viewer"
 
-  before_action :set_templates, only: %i[ show new create edit update destroy ]
-  before_action :set_template, only: %i[ show edit update destroy ]
-  before_action :set_team, only: %i[ index show new create edit update ]
-  before_action :set_user, only: %i[ show new create edit update ]
+  before_action :set_templates, only: %i[ new create edit update destroy ]
+  before_action :set_template, only: %i[ edit update destroy ]
+  before_action :set_team, only: %i[ new create edit update ]
+  before_action :set_user, only: %i[ new create edit update ]
   load_and_authorize_resource
-
-  # GET /teams/:team_slug/users/:id/templates
-  def index
-  end
-
-  # GET /teams/:team_slug/users/:id/templates/:id
-  def show
-    redirect_to team_user_templates_path(@team, @user)
-  end
 
   # GET /teams/:team_slug/users/:id/templates/new
   def new
