@@ -1,13 +1,13 @@
 <%= form_with(model: team_invitation) do |form| %>
   <fieldset class="cm-fieldset">
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :name, t(:name), class: "fr-label" %>
-      <%= form.text_field :name, class: "fr-input" %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :name, t(:name), class: "cm-label" %>
+      <%= form.text_field :name, class: "cm-input" %>
     </div>
 
-    <div class="cm-fieldset__element fr-input-group">
-      <%= form.label :email, t(:email), class: "fr-label" %>
-      <%= form.text_field :email, class: "fr-input" %>
+    <div class="cm-fieldset__element cm-input-group">
+      <%= form.label :email, t(:email), class: "cm-label" %>
+      <%= form.text_field :email, class: "cm-input" %>
     </div>
   </fieldset>
 

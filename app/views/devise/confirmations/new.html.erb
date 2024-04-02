@@ -10,18 +10,18 @@
       <fieldset class="cm-fieldset">
         <%= render "devise/shared/error_messages", resource: resource %>
       
-        <div class="cm-fieldset__element fr-input-group">
-          <%= f.label :email, class: "fr-label" do %>
+        <div class="cm-fieldset__element cm-input-group">
+          <%= f.label :email, class: "cm-label" do %>
             <%= t("devise.shared.forms.identifier") %>
             <span class="cm-hint-text"><%= t("devise.shared.forms.id_hint") %></span>
           <% end %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), aria_required: true, class: "fr-input" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), aria_required: true, class: "cm-input" %>
         </div>
       </fieldset>
     
       <fieldset class="cm-fieldset">
         <div class="cm-fieldset__element cm-btns-group">
-          <%= f.submit t(".resend_confirmation_instructions"), class: "cm-btn" %>
+          <%= f.submit t(".resend_confirmation_instructions"), class: "cm-btn  cm-btn--validate" %>
         </div>
       </fieldset>
     <% end %>
