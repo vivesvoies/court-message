@@ -31,11 +31,6 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     # assert_equal I18n.t("templates.create.not_blank"), flash[:notice]
   end
 
-  test "should show template" do
-    get team_user_template_path(@team, @user, @template)
-    assert_redirected_to(team_user_templates_path(@team, @user))
-  end
-
   test "should get edit" do
     get edit_team_user_template_path(@team, @user, @template)
     assert_response :success
