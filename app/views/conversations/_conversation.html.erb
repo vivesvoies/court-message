@@ -1,3 +1,4 @@
+<meta name="turbo-prefetch" content="false">
 <%= turbo_stream_from "conversation_list_item_#{conversation.id}" %>
 <li class="Conversation <%= "Conversation--active" if @conversation == conversation %> Conversation--<%= conversation.status %>"
     data-conversation-list-target="conversation"
