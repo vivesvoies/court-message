@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     end
     resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
     resources :users, only: [ :show, :edit, :update ] do
-      resources :templates, only: [ :index, :new, :create, :show, :edit, :update, :create, :destroy ]
+      resources :templates, only: [ :index, :new, :create, :edit, :update, :create, :destroy ]
     end
     devise_for :users, controllers: { invitations: "invitations" }
   end

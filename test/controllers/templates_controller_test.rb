@@ -8,6 +8,11 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
+  test "should get index" do
+    get team_user_templates_path(@team, @user)
+    assert_response :success
+  end
+
   test "should get new" do
     get new_team_user_template_path(@team, @user)
     assert_response :success
@@ -29,11 +34,6 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to team_user_templates_path(@team, @user)
     # assert_equal I18n.t("templates.create.not_blank"), flash[:notice]
-  end
-
-  test "should show template" do
-    get team_user_template_path(@team, @user, @template)
-    assert_redirected_to(team_user_templates_path(@team, @user))
   end
 
   test "should get edit" do

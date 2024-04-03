@@ -12,17 +12,17 @@
         <%= render "devise/shared/error_messages", resource: resource %>
         <%= f.hidden_field :reset_password_token %>
       
-        <div class="cm-fieldset__element fr-input-group">
-          <%= f.label :password, t(".new_password"), class: "fr-label" %>
+        <div class="cm-fieldset__element cm-input-group">
+          <%= f.label :password, t(".new_password"), class: "cm-label" %>
           <% if @minimum_password_length %>
             <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
           <% end %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
         </div>
       
-        <div class="cm-fieldset__element fr-input-group">
-          <%= f.label :password_confirmation, class: "fr-label" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "fr-input fr-password__input", aria_required: true %>
+        <div class="cm-fieldset__element cm-input-group">
+          <%= f.label :password_confirmation, class: "cm-label" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
         </div>
       </fieldset>
     
