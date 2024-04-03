@@ -9,6 +9,7 @@ gem "pg", "~> 1.5"
 gem "puma", "~> 6.4"
 gem "redis", "~> 5.0"
 gem "sprockets-rails"
+gem "solid_queue"
 
 gem "bootsnap", require: false
 
