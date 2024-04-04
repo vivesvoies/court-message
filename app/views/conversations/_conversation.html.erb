@@ -3,7 +3,7 @@
     data-conversation-list-target="conversation"
     data-conversation-status-url="<%= read_status_team_conversation_path(conversation.team, conversation.id) %>"
     id="<%= dom_id conversation %>">
-  <%= link_to [conversation.team, conversation], class: "Conversation__link", data: { turbo_frame: :primary, turbo_action: "advance", action: "conversation-list#activate" } do %>
+  <%= link_to [conversation.team, conversation], class: "Conversation__link", data: { turbo_frame: :primary, turbo_action: "advance", action: "conversation-list#activate", turbo_prefetch: false } do %>
     <div class="Conversation__latest">
       <%= time_stamp_for conversation.timestamp %>
     </div>
