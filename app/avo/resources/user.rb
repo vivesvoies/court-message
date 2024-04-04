@@ -36,6 +36,18 @@ class Avo::Resources::User < Avo::BaseResource
       field :reset_password_sent_at,
         as: :date,
         format: "yyyy-LL-dd"
+      field :invitation_created_at,
+        as: :date,
+        format: "yyyy-LL-dd HH:mm:ss"
+      field :invitation_accepted_at,
+        as: :date,
+        format: "yyyy-LL-dd"
+      field :invitation_sent_at,
+        as: :date,
+        format: "yyyy-LL-dd HH:mm:ss"
+      field "has an invitation token", as: :boolean do
+        record.invitation_token?
+      end
       field :messages, as: :has_many, visible: -> { resource.record.messages.any? }
       field :conversations, as: :has_and_belongs_to_many, visible: -> { resource.record.conversations.any? }
     end
