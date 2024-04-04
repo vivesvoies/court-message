@@ -116,11 +116,20 @@ docker network rm grid
 
 ## Lancer une instance manuellement
 
+Les instructions qui suivent sont optimisées pour un hébergeur PaaS comme Scalingo ou Heroku, mais d'autres hébergements sont possibles.
+
 ### Prérequis
 
 - Une clé d'API SendGrid.
-- Une clé d'API Vonage ou d'un autre opérateur, mais dans ce projet, nous utilisons actuellement uniquement Vonage.
-- Accès à un fournisseur de services cloud comme Scalingo, Heroku ou un autre.
+- Une clé d'API Vonage ou d'un autre opérateur, à noter que ce projet utilise Vonage et ne prend pour l'instant pas en charge d'autres opérateurs.
+   Une fois votre clé crée ajouter la à vos credentials rails sous le nom `vonage_private_key` via la command:
+   ```
+   EDITOR=vim rails credentials:edit
+   ```
+   Vous pouvez vérifiez dans la console rails que la clé est bien accessible via la commande:
+   ```
+   Rails.application.credentials.vonage_private_key
+   ```
 
 ### Étapes
 
@@ -128,21 +137,23 @@ docker network rm grid
    Vous pouvez obtenir une clé API SendGrid en vous inscrivant sur leur site web et en créant un compte. Une fois connecté à votre compte SendGrid, accédez à l'onglet "Settings" (Paramètres) et cliquez sur "API Keys" (Clés API) pour en créer une nouvelle.
 
 2. **Créer une clé API Vonage :**
-   De même, pour obtenir une clé API d'un opérateur, vous devez vous inscrire sur leur site web, créer un compte et générer une clé API dans votre tableau de bord. Ce repo utilise Vonage et ne prend pour l'instant pas en charge d'autres opérateurs.
+   De même, pour obtenir une clé API d'un opérateur, vous devez vous inscrire sur leur site web, créer un compte et générer une clé API dans votre tableau de bord.
 
 3. **Créer une nouvelle application sur un fournisseur de services cloud :**
    - Choisissez un fournisseur de services cloud comme Scalingo, Heroku ou un autre.
    - Créez une nouvelle application sur la plateforme cloud choisie.
-   - Ajoutez les addons nécessaires à votre application, notamment Postgres et Redis.
+   - Ajoutez les addons nécessaires à votre application
+      - Postgres
+      - Redis
 
 4. **Configurer les variables d'environnement :**
    - Une fois que votre application est créée, accédez à son tableau de bord sur le fournisseur de services cloud.
-   - Recherchez les paramètres ou les configurations de votre application où vous pouvez définir des variables d'environnement.
    - Configurez les variables d'environnement suivantes :
-     - `SENDGRID_API_KEY` : Utilisez la clé API SendGrid que vous avez créée.
-     - `VONAGE_API_KEY` : Utilisez la clé API Vonage que vous avez créée.
+     - `SENDGRID_API_KEY` : `ma_cle_sengrid`
+     - `VONAGE_APPLICATION_ID` : `ma_cle_vonage`
+     - `RAILS_MASTER_KEY` : `ma_cle_rails`
 
 5. **Déploiement de l'application :**
    - Déployez votre application sur la plateforme cloud en suivant les instructions spécifiques au fournisseur que vous avez choisi.
 
-Une fois que toutes ces étapes sont terminées, votre instance de l'application devrait être opérationnelle avec les configurations appropriées pour utiliser SendGrid et Vonage.
+Une fois que toutes ces étapes sont terminées, votre instance de l'application devrait être opérationnelle.
