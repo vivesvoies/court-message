@@ -5,7 +5,7 @@
   <%= render partial: "viewer_detail_tab_bar", locals: { conversation:, team: @team, active: :conversation } %>
   <header class="ConversationDetail__header">
     <nav class="ConversationDetail__main-nav">
-      <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn fr-icon-arrow-left-line cm-btn--icon-left" %>
+      <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn cm-icon-arrow-left cm-btn--icon-left" %>
     </nav>
     <h2 class="ConversationDetail__title">
       <%= conversation.title %>

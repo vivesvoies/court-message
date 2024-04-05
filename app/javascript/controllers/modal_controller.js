@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   connect() {}
   open() {
-    this.element.classList.add("fr-modal--opened");
+    this.element.classList.add("cm-modal--opened");
   }
   close() {
     this.element.remove();
