@@ -34,7 +34,7 @@
           <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--tertiary" %>
         </div>
       <% else %>
-        <div class="cm-column UserForm__cancel_invitation">
+        <div class="cm-column UserForm__cancel-invitation">
           <%= link_to t(".cancel_invitation"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
