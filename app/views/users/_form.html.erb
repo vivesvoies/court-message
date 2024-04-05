@@ -30,7 +30,7 @@
       </div>
 
       <div class="cm-column UserForm__cancel">
-        <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--secondary" if !user.awaiting_invitation_reply? %>
+        <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--tertiary" if !user.awaiting_invitation_reply? %>
       </div>
 
       <div class="cm-column UserForm__remove">
