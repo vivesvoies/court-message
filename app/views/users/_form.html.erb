@@ -29,17 +29,30 @@
             :disabled => user.awaiting_invitation_reply? %>
       </div>
 
-      <div class="cm-column UserForm__cancel">
-        <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--secondary" if !user.awaiting_invitation_reply? %>
-      </div>
+      <% if !user.awaiting_invitation_reply? %>
+        <div class="cm-column UserForm__cancel">
+          <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--tertiary" %>
+        </div>
+      <% else %>
+        <div class="cm-column UserForm__cancel_invitation">
+          <%= link_to t(".cancel_invitation"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+            data: {
+              turbo_method: :delete,
+              turbo_confirm: "Are you sure?"
+            },
+            class: "cm-btn cm-btn--tertiary" if can? :destroy, user %>
+        </div>
+      <% end %>
 
       <div class="cm-column UserForm__remove">
-        <%= link_to user.awaiting_invitation_reply? ? t(".cancel_invitation") : t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
+        <% if !user.awaiting_invitation_reply? %>
+          <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
               turbo_confirm: "Are you sure?"
             },
             class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
+        <% end %>
       </div>
     </div>
   </div>

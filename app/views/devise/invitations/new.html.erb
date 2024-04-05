@@ -1,24 +1,26 @@
 <%= turbo_frame_tag @user do %>
-  <%= form_for(resource, as: resource_name, url: user_team_invitation_path(Current.team), html: { method: :post }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
+  <section class="UserInvitation__form">
+    <%= form_for(resource, as: resource_name, url: user_team_invitation_path(Current.team), html: { method: :post }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-    <fieldset class="cm-fieldset">
-      <div class="cm-fieldset__element cm-input-group">
-        <%= f.label :name, t(:name), class: "cm-label" %>
-        <%= f.text_field :name, class: "cm-input" %>
-      </div>
-
-      <% resource.class.invite_key_fields.each do |field| -%>
+      <fieldset class="cm-fieldset">
         <div class="cm-fieldset__element cm-input-group">
-          <%= f.label field, t(:email), class: "cm-label"  %><br />
-          <%= f.text_field field, class: "cm-input" %>
+          <%= f.label :name, t(:name), class: "cm-label" %>
+          <%= f.text_field :name, class: "cm-input" %>
         </div>
-      <% end -%>
 
-      <div class="actions">
-        <%= button_tag t(".new"), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark", data: {turbo_frame: "_top"} %>
-        <%= link_to t(:cancel), team_path(Current.team), class: "cm-btn cm-btn--secondary" %>
-      </div>
-    </fieldset>
-  <% end %>
+        <% resource.class.invite_key_fields.each do |field| -%>
+          <div class="cm-fieldset__element cm-input-group">
+            <%= f.label field, t(:email), class: "cm-label"  %><br />
+            <%= f.text_field field, class: "cm-input" %>
+          </div>
+        <% end -%>
+
+        <div class="actions">
+          <%= button_tag t(".new"), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark", data: {turbo_frame: "_top"} %>
+          <%= link_to t(:cancel), team_path(Current.team), class: "cm-btn cm-btn--secondary" %>
+        </div>
+      </fieldset>
+    <% end %>
+  </section>
 <% end %>
