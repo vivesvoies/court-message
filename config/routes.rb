@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
   root to: redirect("/teams")
 
-  get "/.internal/ui", to: "pages#show", id: "ui"
-  resources :pages, only: [ :show ]
-
   # Static pages
+  get "/.internal/ui", to: "static_pages#ui", as: "ui" unless Rails.env.production?
   get "/legal_notice", to: "static_pages#legal_notice"
 
   authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do

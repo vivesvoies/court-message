@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include FlashHelper
   helper_method :current_frame
-  before_action :authenticate_user!, unless: :legal_notice_page?
+  before_action :authenticate_user!
   before_action :set_current
   check_authorization unless: :devise_controller?
 
@@ -32,9 +32,5 @@ class ApplicationController < ActionController::Base
 
   def current_frame
     request.headers["Turbo-Frame"]
-  end
-
-  def legal_notice_page?
-    params[:controller] == "static_pages" && params[:action] == "legal_notice"
   end
 end
