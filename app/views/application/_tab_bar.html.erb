@@ -25,10 +25,10 @@
     frame: :secondary,
     destination: team_user_templates_path(team_id: Current.team.slug, user_id: Current.user.id)
   %>
-  <%= tab_for :inbox,
+  <%#= tab_for :inbox,
     icon: :"chat-bubble",
     mobile: :only,
     frame: :secondary,
-    destination: page_path("inbox")
+    destination: "javascript:void(0)"
   %>
 </nav>
