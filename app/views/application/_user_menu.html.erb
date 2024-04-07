@@ -5,14 +5,14 @@
   </summary>
   <ul class="cm-menu">
     <li class="cm-menu-item">
-      <%= link_to edit_user_registration_path, data: { turbo_frame: "_top", turbo_action: :advance } do %>
+      <%= link_to edit_user_registration_path, data: { turbo_frame: "_top" , turbo_action: :advance } do %>
         <i class="cm-icon-settings"></i>
         <%= t(".edit_profile") %>
-      <% end %>
+          <% end %>
     </li>
     <li class="cm-menu-item">
-      <%= button_to t(:sign_out), destroy_user_session_path, method: :delete, class: "cm-btn cm-btn--link cm-btn--icon-left cm-icon-logout", data: { turbo_frame: "_top" } if signed_in? %>
-
+      <%= button_to t(:sign_out), destroy_user_session_path, method: :delete,
+        class: "cm-btn cm-btn--link cm-btn--icon-left cm-icon-logout" , data: { turbo_frame: "_top" } if signed_in? %>
     </li>
   </ul>
 </details>
