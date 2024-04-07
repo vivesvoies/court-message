@@ -1,15 +1,30 @@
 .NavMenu {
-  padding: .5rem 2rem;
+  padding: 0 2rem;
   display: flex;
+  height: var(--size-tab-bar);
   justify-content: flex-end;
   align-items: center;
   border-bottom: 1px solid var(--page-border);
 }
+
 .NavMenu__back {
   margin-right: auto;
 }
+
 .Menu__Title {
-  font: var(--font-subtitle);
   line-height: 1;
   margin: 0 auto 0 0;
+
+  >a.cm-btn--link {
+    font: var(--font-subtitle);
+  }
+
+  i.cm-icon--inverted::before {
+    translate: 0 5px;
+  }
+}
+
+.NavMenu .UserMenu {
+  align-self: baseline;
+  min-width: 25rem;
 }
