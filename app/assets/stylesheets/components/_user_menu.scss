@@ -1,5 +1,22 @@
-.UserMenu>summary::marker,
-.UserMenu>summary::-webkit-details-marker {
-  display: none;
-  content: "";
+.UserMenu__button {
+  height: var(--size-tab-bar);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1.5rem;
+}
+
+.UserMenu__button>i {
+  margin-left: .5rem;
+
+  [open]>& {
+    transform: rotate(180deg);
+  }
+}
+
+.UserMenu__content {
+  position: relative;
+  top: .125rem;
+  left: 1rem;
+  width: calc(100% - 1rem);
 }

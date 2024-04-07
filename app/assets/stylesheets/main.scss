@@ -2,7 +2,6 @@
 
 /* Sizes */
 :root {
-  --size-header: 3rem;
   --size-viewer: 100vh;
   --size-message-box: 7rem;
   --size-tab-bar: 3.25rem;
@@ -47,6 +46,7 @@
 
   --menu-item-bg: var(--color-white);
   --menu-item-active: var(--color-latte);
+  --menu-shadow: var(--shadow-2);
 
   --userbar-bg: var(--color-sable);
 
@@ -131,6 +131,7 @@
   --color-dark9: #e6e6e6;
 
   --shadow-1: 0 0 .25rem .0625rem rgba(0, 0, 0, .25);
+  --shadow-2: .25rem .25rem .5rem rgba(0, 0, 0, .25);
 }
 
 /*

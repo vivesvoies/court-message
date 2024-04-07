@@ -5,17 +5,32 @@
   height: -webkit-fill-available;
 }
 
-.cm-menu-item[href] {
+.cm-menu-item {
   padding: 1.5rem;
   background-color: var(--menu-item-bg);
+  list-style: none;
+}
+
+.cm-menu-item[href],
+button.cm-menu-item {
+  --hover-tint: var(--menu-item-active);
+
   background-position-x: 1.5rem;
   background-position-y: 100%;
   background-size: var(--underline-hover-width) calc(var(--underline-thickness) * 2), calc(100% - 3rem) var(--underline-thickness);
+
   &:hover,
   &:active {
     --underline-hover-width: 0;
   }
 }
+
+button.cm-menu-item {
+  width: 100%;
+  text-align: left;
+  font-size: inherit;
+}
+
 .cm-menu-item--active {
   background-color: var(--menu-item-active);
 }
