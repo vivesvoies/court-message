@@ -1,9 +1,24 @@
 <section id="icon" class="cm-container">
   <h1>Icons</h1>
   <div class="UIList">
+    <h3>Icon buttons</h3>
     <div class="UIList__sublist">
       <% @icons.each do |icon| %>
         <%= link_to icon, "javascript:void(0)", class: "cm-btn cm-icon-#{icon}" %>
+      <% end %>
+    </div>
+
+    <h3>Icons in <code>&lt;i&gt;</code> tags</h3>
+    <div class="UIList__sublist">
+      <% @icons.each do |icon| %>
+        <i class="cm-icon-<%= icon %>"></i>
+      <% end %>
+    </div>
+
+    <h3>Inverted icons in <code>&lt;i&gt;</code> tags</h3>
+    <div class="UIList__sublist">
+      <% @icons.each do |icon| %>
+        <i class="cm-icon--inverted cm-icon-<%= icon %>"></i>
       <% end %>
     </div>
   </div>
