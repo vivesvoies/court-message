@@ -26,6 +26,9 @@ fr:
       contacts: "Répertoire"
       presets: "Modèles"
       inbox: "Chat"
+    user_menu:
+      edit_profile: "Configurer mon compte"
+      sign_out: "Déconnexion"
     viewer_detail_tab_bar:
       conversations: "Messagerie"
       contacts: "Répertoire"
