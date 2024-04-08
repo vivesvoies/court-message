@@ -13,14 +13,15 @@
   content: "";
 }
 
-.cm-dropdown[open]::before {
+.cm-dropdown[open]>summary::before {
   position: fixed;
   z-index: 100;
   content: "";
   inset: 0;
+  cursor: default;
 }
 
-.cm-dropdown[open]>* {
+.cm-dropdown[open]>*:not(summary) {
   position: relative;
   z-index: 101;
 }
