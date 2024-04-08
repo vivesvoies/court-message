@@ -21,12 +21,14 @@ Rails.application.routes.draw do
       get :menu, to: "teams#menu"
     end
 
-    resources :conversations, only: [ :index, :show ] do
+    resources :conversations, only: [ :index, :show, :new ] do
       member do
         patch :status, to: "read_status#update", as: :read_status
       end
     end
-    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
+      get :search, on: :collection
+    end
     resources :users, only: [ :show, :edit, :update ] do
       resources :templates, only: [ :index, :new, :create, :edit, :update, :create, :destroy ]
     end

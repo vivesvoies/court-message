@@ -11,7 +11,7 @@ class Ability
     can :read, User, memberships: belongs_to_team
     can :update, User, id: user.id
     can [ :read, :menu ], Team, belongs_to_team
-    can :read, Conversation, belongs_to_team
+    can [ :create, :read, :update ], Conversation, belongs_to_team
     can :create, Message, belongs_to_team
     can :manage, Contact, belongs_to_team
     can :manage, Template, user_id: user.id

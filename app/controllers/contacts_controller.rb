@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   layout :set_layout
 
-  before_action :set_team, only: %i[ index show new edit update destroy ]
+  before_action :set_team, only: %i[ index show new edit update destroy search ]
   before_action :set_contact, only: %i[ show edit update destroy ]
   authorize_resource :team
   authorize_resource
@@ -13,6 +13,16 @@ class ContactsController < ApplicationController
 
   # GET team/:team_slug/contacts/:id
   def show
+  end
+
+  def search
+    @contacts = Contact.all
+    @search = params[:query]
+    @results = if @search.blank?
+                 []
+               else
+                 Contact.where('name ILIKE :search', search: "%#{@search}%")
+               end
   end
 
   # GET team/:team_slug/contacts/new

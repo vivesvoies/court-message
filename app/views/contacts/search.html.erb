@@ -1,0 +1,38 @@
+
+<%= content_for :primary do %>
+<div class="ContactSearch" role="search">
+  <header class="ContactSearch__header">
+    <h2 class="ContactSearch__title">
+      <span class="ContactSearch__title-prefix">
+        <%= t(:to) %>
+      </span>
+      <%= form_with url: search_team_contacts_path,
+            method: :get,
+            data: {
+              controller: "search_formsubmission",
+              turbo_frame: 'contact_result'
+            },
+            class: "inline-form" do |form| %>
+        <%= form.search_field :query, class: 'form-control', placeholder: "Search", data: { action: "input->search_formsubmission#search" } %>
+      <% end %>
+    </h2>
+  </header>
+
+  <%= turbo_frame_tag 'contact_result' do %>
+    <ol id="contacts" class="ContactSearchList">
+      <% if @results.present? %>
+        <% @results&.each do |contact| %>
+        <li class="ContactSearchResults">
+          <%= link_to team_conversation_path(@team, contact.conversation.id), class: "ContactSearchResults__name", data: { turbo: false} do %>
+            <%= contact.name %>
+          <% end %>
+        </li>
+        <% end %>
+      <% elsif @results.present? && !@results.any? && @search.blank? %>
+        <p>TODO: FIx it - Aucun contact trouvé</p>
+        <%= link_to "New contact", new_team_contact_path, class: "px-4 py-3 font-medium bg-orange-300 text-neutal-900 rounded inline-flex items-center cursor-pointer hover:bg-orange-400 focus:ring-4 ring-0 focus:ring-orange-100" %>
+      <% end %>
+    </ol>
+  <% end %>
+</div>
+<% end %>

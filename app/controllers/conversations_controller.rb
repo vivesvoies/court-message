@@ -13,6 +13,9 @@ class ConversationsController < ApplicationController
   def index
   end
 
+  def new
+  end
+
   # GET /conversations/1
   def show
     all_conversations if current_frame.nil? # Don't need to load conversation list on turbo-frame requests

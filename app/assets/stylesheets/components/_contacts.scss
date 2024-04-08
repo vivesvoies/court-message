@@ -24,10 +24,21 @@
   justify-content: space-between;
 }
 
+.ContactSearch__header{
+  background: var(--background-contrast-grey);
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.ContactSearchList {
+  list-style: none;
+}
+
 .Contact__info {
   margin-bottom: 1rem;
 }
 
+.ContactSearchResults__name,
 .Contact__name {
   font-weight: bold;
 }
@@ -129,4 +140,8 @@
   overflow-y: scroll;
   height: 60%;
   margin-bottom: 50px;
+}
+
+.inline-form {
+  display: inline;
 }

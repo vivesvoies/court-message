@@ -15,17 +15,26 @@
         <li><%= link_to t(".photo"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-picture" %></li>
         <li><%= link_to t(".audio"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-microphone" %></li>
       </ul>
+      <% if @message %>
       <div class="MessageForm__field cm-input-group <%= "cm-input-group--error" if @message.errors.any? %>">
         <%= form.text_area :content, class: "cm-input cm-input--line #{"cm-input--error" if @message.errors.any?}", placeholder: t(".placeholder"), data: { message_box_target: "textarea" } %>
-        <%= form.hidden_field :conversation_id %>  
+        <%= form.hidden_field :conversation_id %>
       </div>
+      <% else %>
+        <div class="MessageForm__field cm-input-group">
+          <%= form.text_area :content, class: "cm-input cm-input--line", placeholder: t(".placeholder"), data: { message_box_target: "textarea" } %>
+        </div>
+      <%end%>
       <div class="MessageForm__send">
-        <%= form.button "Envoyer", class: "cm-btn cm-icon-send", type: "submit" %>
+        <%= button_tag "Envoyer",
+            type: 'submit',
+            class: "cm-btn cm-icon-send",
+            :disabled => !@message %>
+      </div>
       </div>
       <div class="MessageForm__character_count cm-hint-text" data-message-box-target="counter"></div>
     </div>
-    
-    <% if @message.errors.any? %>
+    <% if @message && @message.errors.any? %>
       <div class="FormErrors">
         <p class="cm-error-text"><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</p>
     

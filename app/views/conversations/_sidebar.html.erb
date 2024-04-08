@@ -1,11 +1,9 @@
 <%# locals: (team:, conversations:) %>
 
 <div class="ConversationHeader__actions">
-  <%=
-    link_to t(".new"), new_team_contact_path(create_conversation: true, team_id: team, modal: true),
-            class: "cm-btn cm-btn--lg cm-icon-pencil cm-btn--icon-left ConversationHeader__new", title: t(".new"),
-            data: { turbo_frame: "modal" }
-  %>
+  <%= link_to t(".new"), new_team_conversation_path(team_id: team),
+        class: "cm-btn cm-btn--lg cm-icon-pencil cm-btn--icon-left ConversationHeader__new",
+        data: { turbo_frame: :primary,} %>
 </div>
 
 <% if false %>

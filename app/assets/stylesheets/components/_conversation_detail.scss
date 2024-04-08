@@ -3,7 +3,8 @@
 ///
 /// Conversation detail view
 ///
-.ConversationDetail {
+.ConversationDetail,
+.ContactSearch {
   position: relative;
   background-color: var(--messages-bg);
   display: grid;
@@ -50,10 +51,16 @@
   justify-content: space-between;
   grid-auto-flow: column;
 }
+.ContactSearch__title,
 .ConversationDetail__title {
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
+  --underline-img: none;
+}
+.ContactSearch__title-prefix,
+.ConversationDetail__title-prefix {
+  font-weight: normal;
 }
 
 .ConversationDetail__scroller {

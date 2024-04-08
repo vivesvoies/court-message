@@ -11,6 +11,7 @@ fr:
   last_updated: "dernière modification le"
   by: "par "
   me: "moi"
+  to: "À : "
 
   application:
     model_errors:

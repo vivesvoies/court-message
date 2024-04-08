@@ -1,4 +1,22 @@
-<div class="Block Block__new-conversation">
-  <h1><%= t("conversations.new.new_conversation") %></h1>
-  <%= render partial: "contacts/form", locals: { contact: @contact } %>
-</div>
+<%#- Used only on original page load or when hitting refresh %>
+<% content_for :navigation do %>
+  <div class="ConversationSidebar">
+    <%= render partial: "conversations/team_name", locals: { team: @team } %>
+    <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @conversations } %>
+  </div>
+<% end if @conversations %>
+
+<%#- Will get used for turbo-frame navigation %>
+<%= content_for :primary do %>
+  <div class="ConversationHeader__search" role="search">
+    <%= render template: "contacts/search" %>
+  </div>
+  <footer class="ConversationDetail__footer">
+    <%= turbo_frame_tag "new_message", src: new_message_path(), target: "_top" %>
+  </footer>
+<% end %>
+
+
+<%= content_for :secondary do %>
+  <%= render partial: "templates/templates_list", locals: { user: Current.user, templates: @templates } %>
+<% end if @templates %>
