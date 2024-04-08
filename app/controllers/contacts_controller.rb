@@ -20,9 +20,9 @@ class ContactsController < ApplicationController
     @search = params[:query]
     @results = if @search.blank?
                  []
-               else
-                 Contact.where('name ILIKE :search', search: "%#{@search}%")
-               end
+    else
+                 Contact.where("name ILIKE :search", search: "%#{@search}%")
+    end
   end
 
   # GET team/:team_slug/contacts/new
