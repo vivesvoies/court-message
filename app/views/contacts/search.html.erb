@@ -23,7 +23,7 @@
       <% if @results.present? %>
         <% @results&.each do |contact| %>
         <li class="ContactSearchResults">
-          <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact), class: "ContactSearchResults__name", data: { turbo: false } do %>
+          <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResults__name", data: { turbo: false } do %>
             <%= contact.name %>
           <% end %>
         <% end %>

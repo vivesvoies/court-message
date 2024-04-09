@@ -134,7 +134,9 @@ fr:
       new_conversation: "Nouvelle conversation"
     conversation_detail:
       profile: "Fiche contact"
-  
+    create:
+      success: "Conversation crée."
+
   contacts:
     contact:
       missing_name: "Nom non renseigné"

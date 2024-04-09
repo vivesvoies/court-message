@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   layout "viewer"
 
-  before_action :set_team, only: %i[ index show ]
+  before_action :set_team, only: %i[ index show new ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
   before_action :set_templates, only: %i[ index show ]
@@ -14,6 +14,12 @@ class ConversationsController < ApplicationController
   end
 
   def new
+    if params[:contact]
+      contact = Contact.find(params[:contact])
+      contact.build_conversation
+      contact.save
+      redirect_to team_conversation_path(@team, contact.conversation), notice: I18n.t(".conversations.create.success")
+    end
   end
 
   # GET /conversations/1
