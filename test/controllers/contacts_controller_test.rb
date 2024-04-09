@@ -153,20 +153,23 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should search contacts by name" do
     get search_team_contacts_url(@team), params: { query: @contact.name }
     assert_response :success
-    assert_select "li.ContactSearchResults" do
+    assert_select "li.ContactSearchResult__name" do
       assert_select "a", text: @contact.name
     end
+    assert_select "li.ContactSearchResult__name", count: 1
   end
 
   test "should not return contacts if search query is empty" do
     get search_team_contacts_url(@team), params: { query: "" }
     assert_response :success
-    assert_select "li.ContactSearchResults", count: 0
+    assert_select "li.ContactSearchResult__name", count: 0
+    assert_select "li.ContactSearchResult__no-contact", count: 0
   end
 
   test "should return no contacts if search query does not match any name" do
     get search_team_contacts_url(@team), params: { query: "NonExistentName" }
     assert_response :success
-    assert_select "li.ContactSearchResults", count: 0
+    assert_select "li.ContactSearchResult__name", count: 0
+    assert_select "li.ContactSearchResult__no-contact", count: 1
   end
 end
