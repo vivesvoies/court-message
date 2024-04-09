@@ -3,8 +3,7 @@
 ///
 /// Conversation detail view
 ///
-.ConversationDetail,
-.ContactSearch {
+.ConversationDetail {
   position: relative;
   background-color: var(--messages-bg);
   display: grid;
@@ -70,6 +69,7 @@
   height: 100%;
 }
 
+.ContactSearch__footer,
 .ConversationDetail__footer {
   position: sticky;
   min-height: var(--size-message-box);

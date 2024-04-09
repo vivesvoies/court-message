@@ -1,42 +1,45 @@
 
 <%= content_for :primary do %>
-<div class="ContactSearch" role="search">
-  <header class="ContactSearch__header">
-    <h2 class="ContactSearch__title">
-      <span class="ContactSearch__title-prefix">
-        <%= t(:to) %>
-      </span>
-      <%= form_with url: search_team_contacts_path,
-            method: :get,
-            data: {
-              controller: "search-form",
-              turbo_frame: "contact_result"
-            },
-            class: "inline-form" do |form| %>
-        <%= form.search_field :query, class: "ContactSearch__form form-control", placeholder: "Search", data: { action: "input->search-form#search" } %>
-      <% end %>
-    </h2>
-  </header>
+  <div class="ContactSearch" role="search">
+    <header class="ContactSearch__header">
+      <h2 class="ContactSearch__title">
+        <span class="ContactSearch__title-prefix">
+          <%= t(:to) %>
+        </span>
+        <%= form_with url: search_team_contacts_path,
+              method: :get,
+              data: {
+                controller: "search-form",
+                turbo_frame: "contact_result"
+              },
+              class: "inline-form" do |form| %>
+          <%= form.search_field :query, class: "ContactSearch__form form-control", placeholder: "Search", data: { action: "input->search-form#search" } %>
+        <% end %>
+      </h2>
+    </header>
 
-  <%= turbo_frame_tag "contact_result" do %>
-    <ol id="contacts" class="ContactSearchList">
-      <li class="ContactSearchResults">
-        <% if @results.present? %>
-          <% @results&.each do |contact| %>
-            <div class="ContactSearchResults__name">
-              <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResults__action", data: { turbo: false } do %>
-                <%= contact.name %>
-              <% end %>
+    <%= turbo_frame_tag "contact_result" do %>
+      <ol id="contacts" class="ContactSearchList">
+        <li class="ContactSearchResults">
+          <% if @results.present? %>
+            <% @results&.each do |contact| %>
+              <div class="ContactSearchResults__name">
+                <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResults__action", data: { turbo: false } do %>
+                  <%= contact.name %>
+                <% end %>
+              </div>
+            <% end %>
+          <% elsif !@results.present? && !@search.blank? %>
+            <div class="ContactSearchResults__no-contact">
+            <%= t(".no_contact") %>
+            <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-person-add", data: { turbo: false } %>
             </div>
           <% end %>
-        <% elsif !@results.present? && !@search.blank? %>
-          <div class="ContactSearchResults__no-contact">
-          <%= t(".no_contact") %>
-          <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-person-add", data: { turbo: false } %>
-          </div>
-        <% end %>
-      </li>
-    </ol>
-  <% end %>
-</div>
+        </li>
+      </ol>
+    <% end %>
+  </div>
+  <footer class="ContactSearch__footer">
+    <%= turbo_frame_tag "new_message", src: new_message_path(), target: "_top" %>
+  </footer>
 <% end %>
