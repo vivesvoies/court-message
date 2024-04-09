@@ -44,18 +44,18 @@
   font-weight: var(--font-body-bold);
 }
 
-.ContactSearchResults__name a:hover,
-.ContactSearchResults__name a:active,
-.ContactSearchResults__name a:focus {
+.ContactSearchResult__name a:hover,
+.ContactSearchResult__name a:active,
+.ContactSearchResult__name a:focus {
   background: var(--list-selected-bg);
 }
 
-.ContactSearchResults__no-contact a {
+.ContactSearchResult__no-contact a {
   margin-left: 1rem;
 }
 
-.ContactSearchResults__no-contact,
-.ContactSearchResults__action {
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action {
   padding: .5rem 2rem;
   height: 5rem;
   background-image: none;
@@ -67,8 +67,8 @@
   margin-bottom: 1rem;
 }
 
-.ContactSearchResults__no-contact,
-.ContactSearchResults__action,
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action,
 .Contact__name {
   font-weight: var(--font-body-bold);
 }
