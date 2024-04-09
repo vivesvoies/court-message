@@ -10,17 +10,17 @@
               method: :get,
               data: {
                 controller: "search-form",
-                turbo_frame: "contact_result"
+                turbo_frame: "contact_search_results"
               },
               class: "inline-form" do |form| %>
-          <%= form.search_field :query, class: "ContactSearch__form form-control", placeholder: "Search", data: { action: "input->search-form#search" } %>
+          <%= form.search_field :query, class: "ContactSearch__form", placeholder: "Search", data: { action: "input->search-form#debounceSubmit" } %>
         <% end %>
       </h2>
     </header>
 
-    <%= turbo_frame_tag "contact_result" do %>
-      <ol id="contacts" class="ContactSearchList">
-        <li class="ContactSearchResults">
+    <%= turbo_frame_tag "contact_search_results" do %>
+      <ol id="contact_results" class="ContactSearchResults">
+        <li class="ContactSearchResultsList">
           <% if @results.present? %>
             <% @results&.each do |contact| %>
               <div class="ContactSearchResults__name">
@@ -39,7 +39,4 @@
       </ol>
     <% end %>
   </div>
-  <footer class="ContactSearch__footer">
-    <%= turbo_frame_tag "new_message", src: new_message_path(), target: "_top" %>
-  </footer>
 <% end %>

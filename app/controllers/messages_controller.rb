@@ -2,11 +2,9 @@ class MessagesController < ApplicationController
   authorize_resource
 
   def new
-    if params[:conversation_id]
-      @message = Message.new
-      @message.conversation = Conversation.find(params[:conversation_id])
-      authorize! :new, @message
-    end
+    @message = Message.new
+    @message.conversation = Conversation.find(params[:conversation_id])
+    authorize! :new, @message
   end
 
   def create
