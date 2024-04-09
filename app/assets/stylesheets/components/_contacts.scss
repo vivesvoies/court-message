@@ -48,28 +48,17 @@
   box-shadow: 0px 3px 4px var(--list-contact-result-shadow);
 }
 
-.ContactSearchResults a {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.ContactSearchResults a:hover {
+.ContactSearchResults__name a:hover {
   background: var(--list-selected-bg);
 }
 
-.ContactSearchResults a:hover,
-.ContactSearchResults a:active,
-.ContactSearchResults a:focus {
-  outline: none;
-}
-
-.ContactSearchResults__name a {
+.ContactSearchResults__no-contact a {
   margin-left: 1rem;
 }
 
-.ContactSearchResults__name {
-  padding: .5rem 3rem;
+.ContactSearchResults__no-contact,
+.ContactSearchResults__action {
+  padding: .5rem 2rem;
   height: 5rem;
   background-image: none;
   display: flex;
@@ -80,7 +69,8 @@
   margin-bottom: 1rem;
 }
 
-.ContactSearchResults__name,
+.ContactSearchResults__no-contact,
+.ContactSearchResults__action,
 .Contact__name {
   font-weight: bold;
 }
