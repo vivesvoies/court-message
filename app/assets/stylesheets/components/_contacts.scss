@@ -36,7 +36,7 @@
 
 .ContactSearchList {
   list-style: none;
-  padding: 0;
+  padding-left: 2rem;
 }
 
 .ContactSearch__form {
@@ -44,8 +44,8 @@
 }
 
 .ContactSearchResults {
-  width: 50%;
-  padding-left: 2rem;
+  display: inline-block;
+  box-shadow: 0px 3px 4px var(--list-contact-result-shadow);
 }
 
 .ContactSearchResults a {
@@ -64,9 +64,16 @@
   outline: none;
 }
 
+.ContactSearchResults__name a {
+  margin-left: 1rem;
+}
+
 .ContactSearchResults__name {
   padding: .5rem 3rem;
   height: 5rem;
+  background-image: none;
+  display: flex;
+  align-items: center;
 }
 
 .Contact__info {
