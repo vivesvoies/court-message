@@ -20,22 +20,20 @@
 
     <%= turbo_frame_tag "contact_search_results" do %>
       <ol id="contact_results" class="ContactSearchResults">
-        <li class="ContactSearchResultsList">
           <% if @results.present? %>
-            <% @results&.each do |contact| %>
-              <div class="ContactSearchResults__name">
-                <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResults__action", data: { turbo: false } do %>
+            <% @results.each do |contact| %>
+              <li class="ContactSearchResults__name">
+                <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResults__action", data: { turbo_frame: :primary } do %>
                   <%= contact.name %>
                 <% end %>
-              </div>
+              </li>
             <% end %>
           <% elsif !@results.present? && !@search.blank? %>
-            <div class="ContactSearchResults__no-contact">
-            <%= t(".no_contact") %>
-            <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-person-add", data: { turbo: false } %>
-            </div>
+            <li class="ContactSearchResults__no-contact">
+              <%= t(".no_contact") %>
+              <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-person-add", data: { turbo_frame: :primary } %>
+            </li>
           <% end %>
-        </li>
       </ol>
     <% end %>
   </div>

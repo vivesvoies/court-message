@@ -35,19 +35,18 @@
 
 .ContactSearchResults {
   list-style: none;
-  padding-left: 2rem;
+  margin-left: 2rem;
+  width: fit-content;
+  box-shadow: 0px 3px 4px var(--list-contact-result-shadow);
 }
 
 .ContactSearch__form {
   font-weight: var(--font-body-bold);
 }
 
-.ContactSearchResultsList {
-  width: fit-content;
-  box-shadow: 0px 3px 4px var(--list-contact-result-shadow);
-}
-
-.ContactSearchResults__name a:hover {
+.ContactSearchResults__name a:hover,
+.ContactSearchResults__name a:active,
+.ContactSearchResults__name a:focus {
   background: var(--list-selected-bg);
 }
 
