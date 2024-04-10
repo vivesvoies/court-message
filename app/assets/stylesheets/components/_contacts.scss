@@ -24,13 +24,26 @@
   justify-content: space-between;
 }
 
-.ContactSearch__header {
-  background: var(--background-contrast-grey);
-  padding: 1rem;
+.ContactSearch {
+  height: var(--size-tab-bar);
+  margin: 0 1rem;
+  border-bottom: 1px solid var(--page-border);
 }
 
-.ContactSearch__title {
-  border-bottom: 1px solid var(--page-border);
+.ContactSearch__header {
+  background: var(--background-contrast-grey);
+  padding: 1rem 0;
+}
+
+.ContactSearch__form {
+  display: flex;
+  align-items: baseline;
+}
+
+.ContactSearch__input {
+  font: var(--font-body-bold);
+  flex: 1;
+  margin-left: .5rem;
 }
 
 .ContactSearchResults {
@@ -38,11 +51,6 @@
   margin-left: 2rem;
   width: fit-content;
   box-shadow: var(--list-contact-result-shadow);
-}
-
-.ContactSearch__form {
-  font: var(--font-body-bold);
-  width: 50%;
 }
 
 .ContactSearchResult__name a:hover,
@@ -103,7 +111,7 @@
 .ContactIndex_input,
 .ContactIndex__actions,
 .ContactFormNew__actions,
-.ContactDetail__actions{
+.ContactDetail__actions {
   margin-block-start: 2.2em;
   margin-block-end: 2.4em;
 }
@@ -133,7 +141,7 @@
 .ContactEdit__header,
 .ContactDetail__header {
   grid-area: header;
-  
+
   display: grid;
   justify-content: space-between;
   grid-auto-flow: column;
@@ -173,8 +181,4 @@
   overflow-y: scroll;
   height: 60%;
   margin-bottom: 50px;
-}
-
-.ContactSearch__inline-form {
-  display: inline;
 }

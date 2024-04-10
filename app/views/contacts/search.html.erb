@@ -3,17 +3,15 @@
   <div class="ContactSearch" role="search">
     <header class="ContactSearch__header">
       <h2 class="ContactSearch__title">
-        <span class="ContactSearch__title-prefix">
-          <%= t(:to) %>
-        </span>
         <%= form_with url: search_team_contacts_path,
               method: :get,
               data: {
                 controller: "search-form",
                 turbo_frame: "contact_search_results"
               },
-              class: "ContactSearch__inline-form" do |form| %>
-          <%= form.search_field :query, class: "ContactSearch__form", placeholder: t(".placeholder"), data: { action: "input->search-form#debounceSubmit" } %>
+              class: "ContactSearch__form" do |f| %>
+          <%= f.label :query, t(:to), class: "ContactSearch__title-prefix" %>
+          <%= f.search_field :query, class: "ContactSearch__input", placeholder: t(".placeholder"), data: { action: "input->search-form#debounceSubmit" } %>
         <% end %>
       </h2>
     </header>
