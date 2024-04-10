@@ -13,7 +13,7 @@
                 turbo_frame: "contact_search_results"
               },
               class: "ContactSearch__inline-form" do |form| %>
-          <%= form.search_field :query, class: "ContactSearch__form", placeholder: "Search", data: { action: "input->search-form#debounceSubmit" } %>
+          <%= form.search_field :query, class: "ContactSearch__form", placeholder: t(".placeholder"), data: { action: "input->search-form#debounceSubmit" } %>
         <% end %>
       </h2>
     </header>
