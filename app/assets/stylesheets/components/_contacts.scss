@@ -16,7 +16,7 @@
 }
 
 .Contact label {
-  font-weight: var(--font-body-bold);
+  font: var(--font-body-bold);
 }
 
 .ContactDetail {
@@ -37,11 +37,11 @@
   list-style: none;
   margin-left: 2rem;
   width: fit-content;
-  box-shadow: 0px 3px 4px var(--list-contact-result-shadow);
+  box-shadow: var(--list-contact-result-shadow);
 }
 
 .ContactSearch__form {
-  font-weight: var(--font-body-bold);
+  font: var(--font-body-bold);
 }
 
 .ContactSearchResult__name a:hover,
@@ -70,7 +70,7 @@
 .ContactSearchResult__no-contact,
 .ContactSearchResult__action,
 .Contact__name {
-  font-weight: var(--font-body-bold);
+  font: var(--font-body-bold);
 }
 
 .Contact__info [class*="--missing"] {
@@ -141,7 +141,7 @@
 .ContactEdit__title,
 .ContactDetail__title {
   font: var(--font-subtitle);
-  font-weight: var(--font-body-bold);
+  font-weight: bold;
   margin: 0;
 }
 

@@ -53,13 +53,13 @@
 .ContactSearch__title,
 .ConversationDetail__title {
   font-size: 1rem;
-  font-weight: var(--font-body-bold);
+  font: var(--font-body-bold);
   margin: 0;
   --underline-img: none;
 }
 .ContactSearch__title-prefix,
 .ConversationDetail__title-prefix {
-  font-weight: var(--font-body);
+  font: var(--font-body);
 }
 
 .ConversationDetail__scroller {
