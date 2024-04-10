@@ -125,13 +125,11 @@ fr:
     menu:
     sidebar:
       search: "Rechercher dans tous les messages"
-      new: "Nouvelle conversation"
+      new: "Écrire un message"
       my_conversations: "Mes conversations"
     team_picker:
       switch_team: "Changer d’équipe"
       team: "Équipes"
-    new:
-      new_conversation: "Nouvelle conversation"
     conversation_detail:
       profile: "Fiche contact"
     create:
@@ -174,6 +172,7 @@ fr:
     search:
       new_contact: "Nouveau contact"
       no_contact: "Ce contact n'existe pas"
+      placeholder: "Rechercher votre contact"
 
   memberships:
     membership:
