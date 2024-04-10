@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   layout "viewer"
 
-  before_action :set_team, only: %i[ index show new ]
+  before_action :set_team, only: %i[ index show create ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
   before_action :set_templates, only: %i[ index show ]
@@ -9,11 +9,12 @@ class ConversationsController < ApplicationController
   authorize_resource :team
   authorize_resource
 
-  # GET /conversations
+  # GET team/:team_slug/conversations
   def index
   end
 
-  def new
+  # POST team/:team_slug/conversations
+  def create
     if params[:contact]
       contact = Contact.find(params[:contact])
       contact.build_conversation
@@ -22,7 +23,7 @@ class ConversationsController < ApplicationController
     end
   end
 
-  # GET /conversations/1
+  # GET team/:team_slug//conversations/1
   def show
     all_conversations if current_frame.nil? # Don't need to load conversation list on turbo-frame requests
     @conversation.mark_as_read! if @conversation.unread?

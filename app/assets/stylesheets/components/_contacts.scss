@@ -46,7 +46,10 @@
 
 .ContactSearchResult__name a:hover,
 .ContactSearchResult__name a:active,
-.ContactSearchResult__name a:focus {
+.ContactSearchResult__name a:focus,
+.ContactSearchResult__name button:hover,
+.ContactSearchResult__name button:active,
+.ContactSearchResult__name button:focus {
   background: var(--list-selected-bg);
 }
 

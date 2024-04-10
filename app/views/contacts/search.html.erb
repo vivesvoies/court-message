@@ -21,11 +21,9 @@
     <%= turbo_frame_tag "contact_search_results" do %>
       <ol id="contact_results" class="ContactSearchResults">
           <% if @results.present? %>
-            <% @results.each do |contact| %>
+            <% @results&.each do |contact| %>
               <li class="ContactSearchResult__name">
-                <%= link_to contact.conversation.present? ? team_conversation_path(@team, contact.conversation.id) : new_team_conversation_path(@team, contact: contact.id), class: "ContactSearchResult__action", data: { turbo_frame: :primary } do %>
-                  <%= contact.name %>
-                <% end %>
+                <%= link_to_or_create_conversation(contact, @team) %>
               </li>
             <% end %>
           <% elsif !@results.present? && !@search.blank? %>
