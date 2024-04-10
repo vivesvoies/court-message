@@ -16,12 +16,11 @@ class ContactsController < ApplicationController
   end
 
   def search
-    @contacts = Contact.all
     @search = params[:query]
     @results = if @search.blank?
                  []
     else
-                 Contact.where("name ILIKE :search", search: "%#{@search}%")
+                Contact.where(team: @team).where("name ILIKE :search OR phone ILIKE :search OR email ILIKE :search", search: "%#{@search}%")
     end
   end
 
