@@ -6,7 +6,11 @@
 <% end %>
 
 <%= content_for :primary do %>
-  <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
+  <% if @conversation %>
+    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
+  <% else %>
+    <%= render partial: "contacts/search" %>
+  <% end %>
 <% end %>
 
 <%= content_for :secondary do %>

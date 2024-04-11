@@ -16,12 +16,8 @@ class ContactsController < ApplicationController
   end
 
   def search
-    @search = params[:query]
-    @results = if @search.blank?
-                 []
-    else
-                Contact.where(team: @team).where("name ILIKE :search OR phone ILIKE :search OR email ILIKE :search", search: "%#{@search}%")
-    end
+    @query = params[:query]
+    @results = @query.blank? ? [] : Contact.where(team: @team).where("name ILIKE :query OR phone ILIKE :query OR email ILIKE :query", query: "%#{@query}%")
   end
 
   # GET team/:team_slug/contacts/new
