@@ -11,7 +11,7 @@ module ConversationsHelper
 
   def link_to_or_create_conversation(contact, team)
     if contact.conversation.present?
-      link_to contact.name, team_conversation_path(team, contact.conversation.id), class: "ContactSearchResult__action", data: { turbo_frame: :primary }
+      link_to contact.name, team_conversation_path(team, contact.conversation.id), class: "ContactSearchResult__action", data: { turbo_frame: :primary, turbo_action: :advance }
     else
       button_to contact.name, team_conversations_path(@team, contact: contact.id),
           method: :post,
