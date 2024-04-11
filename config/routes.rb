@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   end
 
   # User-facing routes
-  devise_for :users, controllers: { registrations: "registrations" }
+  devise_for :users, controllers: { registrations: "registrations", invitations: "invitations" }
   devise_scope :user do
     get "/users/await-confirmation", to: "registrations#show", as: :await_confirmation
   end
@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     resources :conversations, only: [ :index, :show, :new ] do
       member do
         patch :status, to: "read_status#update", as: :read_status
-      end
+       end
     end
     resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
       get :search, on: :collection
@@ -32,7 +32,6 @@ Rails.application.routes.draw do
     resources :users, only: [ :show, :edit, :update ] do
       resources :templates, only: [ :index, :new, :create, :edit, :update, :create, :destroy ]
     end
-    devise_for :users, controllers: { invitations: "invitations" }
   end
   resources :memberships, only: [ :new, :create, :destroy ]
 

@@ -101,6 +101,12 @@ fr:
       user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
       new:
         new: "Ajouter à l’équipe"
+      edit:
+        title: "Mon compte Court-Message"
+        email_format: "Format attendu : nom@domaine.fr"
+        phone_format: "Format attendu : (+33) 6 22 33 44 55"
+        create_account: "Créer mon compte"
+        team: "Équipe"
 
   date:
     yesterday: &yesterday "hier"

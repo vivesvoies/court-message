@@ -1,0 +1,40 @@
+
+.InvitationNew__form {
+  border-bottom: 1px solid var(--page-border);
+  padding-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.InvitationEdit__actions {
+  display: flex;
+  align-items: center;
+}
+
+.InvitationEdit__phone {
+  width: 60%;
+}
+
+.InvitationEdit__submit {
+  margin-left: auto;
+  margin-top: 2rem;
+}
+
+.InvitationNew__logo {
+  height: 40%;
+}
+
+.InvitationNew__title {
+  margin-block-start: 3em;
+}
+
+.InvitationNew__team {
+  margin-block-end: 2.5em;
+}
+
+.InvitationNew {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 2rem;
+  height: 10rem;
+}

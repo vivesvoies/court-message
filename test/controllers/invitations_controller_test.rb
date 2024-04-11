@@ -11,14 +11,14 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should get new" do
     sign_in @user
-    get new_user_team_invitation_path(@team)
+    get new_user_invitation_path(team: @team)
     assert_response :success
   end
 
   test "should not get new without proper team" do
     sign_in @user
     other_team = create(:team)
-    get new_user_team_invitation_path(other_team)
+    get new_user_invitation_path(team: other_team)
     assert_response :forbidden
   end
 
@@ -26,7 +26,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     assert_difference("User.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
     end
 
     assert_redirected_to team_url(@team)
@@ -36,7 +36,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     assert_difference("Membership.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
     end
 
     assert_redirected_to team_url(@team)
@@ -46,14 +46,14 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     assert_difference("User.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
     end
 
     user = User.find_by(email: "john@example.com")
     sent_at = user.invitation_sent_at
 
     assert_no_difference("User.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
     end
     user.reload
     assert_not_equal(sent_at, user.invitation_sent_at)
@@ -65,7 +65,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     @user.update(confirmed_at: DateTime.now, invitation_sent_at: nil)
 
-    post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: @user.email } }
+    post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: @user.email } }
     @user.reload
     assert_nil(@user.invitation_sent_at)
 
@@ -78,7 +78,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     @user.update(confirmed_at: DateTime.now)
 
     assert_no_difference("User.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: @user.email } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: @user.email } }
     end
 
     assert_redirected_to team_url(@team)
@@ -89,7 +89,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     @user.update(confirmed_at: DateTime.now, invitation_token: nil)
 
-    post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: @other_user.email } }
+    post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: @other_user.email } }
     @user.reload
     assert_nil(@user.invitation_token)
 
@@ -100,7 +100,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     assert_no_difference("User.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: @other_user.email } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: @other_user.email } }
     end
 
     assert_redirected_to team_url(@team)
@@ -110,7 +110,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
 
     assert_difference("Membership.count") do
-      post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: @other_user.email } }
+      post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: @other_user.email } }
     end
 
     assert_redirected_to team_url(@team)
@@ -119,7 +119,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   test "should redirect to sign in page if not signed in" do
     sign_out :user
 
-    post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+    post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
 
     assert_redirected_to new_user_session_path
   end
@@ -127,7 +127,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   test "should not allow to invite to a team if not a member" do
     sign_in @other_user
 
-    post user_team_invitation_path(@team), params: { user: { name: "John Doe", email: "john@example.com" } }
+    post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
     assert_response :forbidden
   end
 end

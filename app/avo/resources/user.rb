@@ -21,6 +21,7 @@ class Avo::Resources::User < Avo::BaseResource
     end
     # Field template only available in page show
     if view.show?
+      field :phone, as: :text, sortable: true
       field :confirmed_at,
         as: :date,
         format: "yyyy-LL-dd"

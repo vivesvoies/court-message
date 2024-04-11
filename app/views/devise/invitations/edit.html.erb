@@ -1,9 +1,29 @@
-<%= render partial: "main_menu" %>
 <div class="Block">
-  <h2><%= t "devise.invitations.edit.header" %></h2>
+  <header class="InvitationNew cm-column cm-col--full">
+    <div>
+      <h2 class="InvitationNew__title"><%= t(".title") %></h2>
+    </div>
+    <%= image_tag "cm-logo.svg", class: "InvitationNew__logo",  alt: t(".logo-alt") %>
+  </header>
+
+  <%= t(".team") %>
+  <h4 class="InvitationNew__team">
+    <%= Team.find(User.find(resource.id).team_ids.first).name %>
+  </h4>
   <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
   <%= f.hidden_field :invitation_token, readonly: true %>
+
+    <div class="cm-fieldset__element cm-input-group">
+      <%= f.label :name, t(:name), class: "Contact__label-name cm-label" %>
+      <%= f.text_field :name, class: "cm-input" %>
+    </div>
+
+    <div class="cm-fieldset__element cm-input-group">
+      <%= f.label :email, t(:email), class: "Contact__label-email cm-label" %>
+      <span class="cm-hint-text"><%= t(".email_format") %></span>
+      <%= f.text_field :email, class: "cm-input" %>
+    </div>
 
   <% if f.object.class.require_password_on_accepting %>
     <div class="cm-fieldset__element">
@@ -16,8 +36,14 @@
     </div>
   <% end %>
 
-  <div class="actions">
-    <%= button_tag t("devise.invitations.edit.submit_button"), type: 'submit', class: "cm-btn" %>
+  <div class="InvitationEdit__actions">
+    <div class="InvitationEdit__phone cm-fieldset__element cm-input-group">
+      <%= f.label :phone, t(:phone), class: "cm-label" %>
+      <span class="cm-hint-text"><%= t(".phone_format") %></span>
+      <%= f.text_field :phone, class: "cm-input" %>
+    </div>
+      <%= button_tag t(".create_account"), type: 'submit', class: "InvitationEdit__submit cm-btn" %>
   </div>
 </div>
 <% end %>
+<%= render partial: "footer" %>

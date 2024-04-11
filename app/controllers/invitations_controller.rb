@@ -1,12 +1,26 @@
 class InvitationsController < Devise::InvitationsController
-  before_action :set_team
   before_action :configure_permitted_parameters
 
-  authorize_resource :team
+  def new
+    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
+    @team = Team.find_by(slug: params[:team])
+    unless Current.user.belongs_to_team?(@team)
+      raise CanCan::AccessDenied, "You are not authorized to invite users to this team."
+    end
+    super
+  end
 
   def create
+    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
+    @team = Team.find_by(slug: params[:team])
     user = User.find_by(email: invite_params[:email])
     part_of_team = user && user.belongs_to_team?(@team)
+
+    # This is to prevent a user from being invited to a team to which the current user does not belong
+    unless Current.user.belongs_to_team?(@team)
+      raise CanCan::AccessDenied, "You are not authorized to invite users to this team."
+    end
+
     # If the user is confirmed no invitation is sent
     if user && !user.awaiting_invitation_reply?
       if part_of_team
@@ -23,16 +37,14 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource)
-    team_url(@team)
+    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
+    team_url(Team.find_by(slug: params[:team]))
   end
 
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:invite, keys: [ :name ])
-  end
-
-  def set_team
-    @team = Team.find_by(slug: params[:team_id])
+    devise_parameter_sanitizer.permit(:invite, keys: [ :name, :phone ])
+    devise_parameter_sanitizer.permit(:accept_invitation, keys: [ :name, :email, :phone ])
   end
 end
