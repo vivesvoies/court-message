@@ -16,7 +16,7 @@
 }
 
 .Contact label {
-  font-weight: bold;
+  font: var(--font-body-bold);
 }
 
 .ContactDetail {
@@ -24,12 +24,67 @@
   justify-content: space-between;
 }
 
+.ContactSearch {
+  height: var(--size-tab-bar);
+  margin: 0 1rem;
+  border-bottom: 1px solid var(--page-border);
+}
+
+.ContactSearch__header {
+  background: var(--background-contrast-grey);
+  padding: 1rem 0;
+}
+
+.ContactSearch__form {
+  display: flex;
+  align-items: baseline;
+}
+
+.ContactSearch__input {
+  font: var(--font-body-bold);
+  flex: 1;
+  margin-left: .5rem;
+  padding: 0 .5rem;
+  border-radius: 1rem;
+}
+
+.ContactSearchResults {
+  list-style: none;
+  margin-left: 2rem;
+  width: fit-content;
+  box-shadow: var(--list-contact-result-shadow);
+}
+
+.ContactSearchResult__name a:hover,
+.ContactSearchResult__name a:active,
+.ContactSearchResult__name a:focus,
+.ContactSearchResult__name button:hover,
+.ContactSearchResult__name button:active,
+.ContactSearchResult__name button:focus {
+  background: var(--list-selected-bg);
+}
+
+.ContactSearchResult__no-contact a {
+  margin-left: 1rem;
+}
+
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action {
+  padding: .5rem 2rem;
+  height: 5rem;
+  background-image: none;
+  display: flex;
+  align-items: center;
+}
+
 .Contact__info {
   margin-bottom: 1rem;
 }
 
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action,
 .Contact__name {
-  font-weight: bold;
+  font: var(--font-body-bold);
 }
 
 .Contact__info [class*="--missing"] {
@@ -58,7 +113,7 @@
 .ContactIndex_input,
 .ContactIndex__actions,
 .ContactFormNew__actions,
-.ContactDetail__actions{
+.ContactDetail__actions {
   margin-block-start: 2.2em;
   margin-block-end: 2.4em;
 }
@@ -88,7 +143,7 @@
 .ContactEdit__header,
 .ContactDetail__header {
   grid-area: header;
-  
+
   display: grid;
   justify-content: space-between;
   grid-auto-flow: column;
@@ -100,7 +155,6 @@
 .ContactEdit__title,
 .ContactDetail__title {
   font: var(--font-subtitle);
-  font-weight: bold;
   margin: 0;
 }
 

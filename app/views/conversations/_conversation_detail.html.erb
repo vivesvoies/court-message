@@ -8,6 +8,7 @@
       <%= link_to t(:back), team_conversations_path(@team), data: { turbo_frame: "_top" }, class: "ConversationDetail__back cm-btn cm-icon-arrow-left cm-btn--icon-left" %>
     </nav>
     <h2 class="ConversationDetail__title">
+      <span class="ConversationDetail__title-prefix"><%= t(:to) %></span>
       <%= conversation.title %>
     </h2>
   </header>

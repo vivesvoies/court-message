@@ -40,7 +40,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
 
     get team_conversation_url(@team, @conversation)
     assert_response :success
-    assert_select "#conversation_detail .ConversationDetail__title", text: @conversation.title
+    assert_select "#conversation_detail .ConversationDetail__title", match: "À : " + @conversation.title
     assert_select "#conversations .Conversation__contact", text: @conversation.title
   end
 
