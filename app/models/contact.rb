@@ -39,6 +39,8 @@ class Contact < ApplicationRecord
 
   before_update :update_notes_information, if: :notes_changed?
 
+  scope :search_team, ->(team, query) { where(team:).where("name ILIKE :query OR phone ILIKE :query OR email ILIKE :query", query: "%#{query}%") }
+
   def formatted_phone
     phone.phony_formatted(format: :national)
   end
