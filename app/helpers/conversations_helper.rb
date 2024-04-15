@@ -1,4 +1,8 @@
 module ConversationsHelper
+  def current_conversation?(conversation)
+    params[:selected] || @conversation&.id.to_s == conversation.id.to_s
+  end
+
   def last_message_extract_for(conversation)
     content = conversation.last_message&.content || ""
     (content.length > 113) ? "#{content[0...110]}..." : content
