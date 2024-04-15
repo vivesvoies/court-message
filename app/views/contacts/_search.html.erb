@@ -4,12 +4,13 @@
       <%= form_with url: search_team_contacts_path,
             method: :get,
             data: {
-              controller: "search-form",
-              turbo_frame: "contact_search_results"
+              controller: "debouncer",
+              turbo_frame: "contact_search_results",
+              autofocus_input_target: ".ContactSearch__input"
             },
             class: "ContactSearch__form" do |f| %>
         <%= f.label :query, t(:to), class: "ContactSearch__title-prefix" %>
-        <%= f.search_field :query, class: "ContactSearch__input", placeholder: t(".placeholder"), data: { action: "input->search-form#debounceSubmit" } %>
+        <%= f.search_field :query, class: "ContactSearch__input", placeholder: t(".placeholder"), data: { controller: "autofocus", action: "input->debouncer#debounceSubmit" } %>
       <% end %>
     </h2>
   </header>

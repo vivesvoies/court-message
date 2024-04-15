@@ -26,20 +26,15 @@ export default class extends Controller {
     }
   }
 
-  select(target) {
+  deselect() {
     const selected = this.element.querySelectorAll(`.${this.itemClass}`);
-    
     selected.forEach(conv => conv.classList.remove(this.activeClass));
-    target.classList.add(this.activeClass);
-
-    this.selection = target.id;
   }
 
-  reselect() {
-    const target = this.element.querySelector(`#${this.selection} > .${this.linkClass}`);
-    window.setTimeout(() => {
-      Turbo.visit(target.href, { action: target.dataset.turboAction, frame: target.dataset.turboFrame });
-    }, 0);
+  select(target) {
+    this.deselect();
+    target.classList.add(this.activeClass);
+    this.selection = target.id;
   }
 
   markAsRead(target) {
