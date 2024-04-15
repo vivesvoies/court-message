@@ -15,6 +15,7 @@
     
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <%= yield(:head) %>
   </head>
 
   <body class="<%= yield(:body_class) %>">

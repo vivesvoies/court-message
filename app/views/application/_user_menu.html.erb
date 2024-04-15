@@ -1,7 +1,7 @@
 <% if signed_in? %>
   <details class="UserMenu cm-dropdown">
     <summary class="UserMenu__button cm-dropdown__btn">
-      <%= current_user.name %>
+      <%= Current.user.name %>
       <i class="cm-icon-chevron-down cm-icon--sm"></i>
     </summary>
     <div class="UserMenu__content cm-menu cm-dropdown__content">

@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include FlashHelper
   helper_method :current_frame
+  helper_method :turbo_frame_request?
+
   before_action :authenticate_user!
   before_action :set_current
   check_authorization unless: :devise_controller?
@@ -31,6 +33,6 @@ class ApplicationController < ActionController::Base
   end
 
   def current_frame
-    request.headers["Turbo-Frame"]
+    request&.headers["Turbo-Frame"]
   end
 end
