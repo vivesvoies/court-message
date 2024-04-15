@@ -13,9 +13,9 @@
       <%= yield :primary %>
     <% end %>
 
-    <div class="ViewerUserMenu">
+    <%= content_tag :div, class: "ViewerUserMenu" do %>
       <%= render partial: "user_menu" %>
-    </div>
+    <% end if !turbo_frame_request? %>
 
     <%= turbo_frame_tag :secondary, class: "ViewerSecondary", refresh: :morph do %>
       <%= yield :secondary %>
@@ -23,7 +23,7 @@
 
     <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar", refresh: :morph do %>
       <%= render partial: "tab_bar" %>
-    <% end %>
+    <% end if !turbo_frame_request? %>
   </div>
 <% end %>
-<%= render template: "layouts/application" %>
+<%= render template: "layouts/#{turbo_frame_request? ? "frame" : "application"}" %>

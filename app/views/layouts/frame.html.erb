@@ -1,0 +1,8 @@
+<html>
+  <head>
+    <%= yield :head %>
+  </head>
+  <body>
+    <%= content_for?(:layout) ? yield(:layout) : yield %>
+  </body>
+</html>

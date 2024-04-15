@@ -1,5 +1,5 @@
 class ConversationsController < ApplicationController
-  layout :set_layout
+  layout "viewer"
 
   before_action :set_team, only: %i[ index show create ]
   before_action :all_conversations, only: %i[ index ]
@@ -29,12 +29,6 @@ class ConversationsController < ApplicationController
 
   private
 
-  def set_layout
-    # Load only the conversation content when using a turbo-frame
-    return "turbo_rails/frame" if turbo_frame_request? && params[:action] == "show"
-    "viewer"
-  end
-
   def all_conversations
     @conversations = Conversation.for_team(@team)
   end
@@ -48,7 +42,7 @@ class ConversationsController < ApplicationController
   end
 
   def set_templates
-    @templates = Current.user.templates if current_frame.nil?
+    @templates = Current.user.templates if !turbo_frame_request?
   end
 
   # # Only allow a list of trusted parameters through.
