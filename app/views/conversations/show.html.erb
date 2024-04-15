@@ -6,7 +6,6 @@
   </div>
 <% end if @conversations %>
 
-<%#- Will get used for turbo-frame navigation %>
 <%= content_for :primary do %>
   <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
 <% end %>
@@ -14,3 +13,10 @@
 <%= content_for :secondary do %>
   <%= render partial: "templates/templates_list", locals: { user: Current.user, templates: @templates } %>
 <% end if @templates %>
+
+<%#- Will get used for turbo-frame navigation %>
+<% if current_frame %>
+  <%= turbo_frame_tag "primary" do %>
+    <%= render partial: "conversation_detail", locals: { conversation: @conversation } if @conversation %>
+  <% end%>
+<% end %>
