@@ -2,7 +2,7 @@
 <% content_for :layout do %>
   <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList" data-viewer-tab-bar-outlet=".TabBar nav">
     <% if should_load_conversations? %>
-      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: team_conversations_path(@team), refresh: :morph %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: lazy_loaded_conversations_path, refresh: :morph %>
     <% else %>
       <%= turbo_frame_tag :navigation, class: "ViewerNavigation", refresh: :morph do %>
         <%= yield :navigation %>
