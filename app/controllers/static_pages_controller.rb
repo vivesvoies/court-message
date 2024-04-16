@@ -1,8 +1,11 @@
 class StaticPagesController < ApplicationController
-  skip_authorization_check only: [ :legal_notice, :ui ]
-  skip_before_action :authenticate_user!, only: [ :legal_notice ]
+  skip_authorization_check only: [ :legal_notice, :terms_and_conditions, :ui ]
+  skip_before_action :authenticate_user!, only: [ :legal_notice, :terms_and_conditions ]
 
   def legal_notice
+  end
+
+  def terms_and_conditions
   end
 
   def ui
