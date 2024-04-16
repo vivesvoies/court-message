@@ -13,8 +13,8 @@
     </h2>
   </header>
 
-  <div class="ConversationDetail__scroller" data-controller="message-list">
-    <ol id="messages" class="MessageList">
+  <div class="ConversationDetail__scroller">
+    <ol id="messages" class="MessageList" data-controller="message-list">
       <%= render partial: "messages/message", collection: conversation.messages %>
     </ol>
     
