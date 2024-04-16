@@ -21,7 +21,9 @@
         <%= t(".new_contact") %>
       <% end %>
     </div>
-    <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
+    <% if false %>
+      <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
+    <% end %>
   </header>
   <div class="ContactIndex__list">
     <%= render partial: @contacts, team: @team %> 
