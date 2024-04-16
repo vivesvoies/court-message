@@ -15,9 +15,9 @@
     </div>
     <div class="ContactIndex__actions">
       <%= link_to new_team_contact_path(@team),
-        class: "cm-btn cm-btn--sm cm-btn--tertiary",
+        class: "cm-btn cm-btn--tertiary",
         data: { turbo_frame: :primary } do %>
-        <i class="cm-icon-person-add cm-icon--lg"></i>
+        <i class="cm-icon-contact cm-icon--sm cm-icon--inverted"></i>
         <%= t(".new_contact") %>
       <% end %>
     </div>
