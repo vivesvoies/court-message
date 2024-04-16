@@ -2,29 +2,39 @@
 /// New message form
 ///
 .MessageForm {}
+
 .MessageForm__input-group {
   display: grid;
   align-items: stretch;
-  justify-content: end;;
+  justify-content: end;
+  ;
   grid-template-columns: auto 1fr auto;
   column-gap: 1rem;
 }
+
 .MessageForm__input-group .MessageForm__field {
   flex: 1;
   margin-bottom: 0;
+
+  &:first-child {
+    grid-column: span 2;
+  }
 }
+
 .MessageForm__field textarea {
   resize: vertical;
   height: auto;
   background-color: var(--messages-bg);
 }
+
 .MessageForm__media-btns {
   &.cm-btns-group.cm-btns-group--inline .cm-btn {
     margin: 0;
   }
 }
 
-.MessageForm__media-btns, .MessageForm__send {
+.MessageForm__media-btns,
+.MessageForm__send {
   align-self: end;
 }
 
