@@ -10,11 +10,13 @@
   ) do |form| %>
     
     <div class="MessageForm__input-group">
-      <ul class="MessageForm__media-btns cm-btns-group cm-btns-group--inline">
-        <li><%= link_to t(".attachment"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-attachment" %></li>
-        <li><%= link_to t(".photo"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-picture" %></li>
-        <li><%= link_to t(".audio"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-microphone" %></li>
-      </ul>
+      <% if false %>
+        <ul class="MessageForm__media-btns cm-btns-group cm-btns-group--inline">
+          <li><%= link_to t(".attachment"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-attachment" %></li>
+          <li><%= link_to t(".photo"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-picture" %></li>
+          <li><%= link_to t(".audio"), "javascript:void(0)", class: "cm-btn cm-btn--tertiary cm-icon-microphone" %></li>
+        </ul>
+      <% end %>
       <div class="MessageForm__field cm-input-group <%= "cm-input-group--error" if @message.errors.any? %>">
         <%= form.text_area :content, class: "cm-input cm-input--line #{"cm-input--error" if @message.errors.any?}", placeholder: t(".placeholder"), data: { message_box_target: "textarea" } %>
         <%= form.hidden_field :conversation_id %>  
