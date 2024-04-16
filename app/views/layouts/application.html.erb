@@ -27,7 +27,9 @@
 
   <body class="<%= yield(:body_class) %>">
     <%= turbo_frame_tag "modal" %>
-    <div class="FlashContainer" id="flash"><%= render "flash" %></div>
+    <%= turbo_frame_tag "flash", class: "FlashContainer" do %>
+      <%= render "flash" %>
+    <% end %>
     <main class="Main">
       <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>
