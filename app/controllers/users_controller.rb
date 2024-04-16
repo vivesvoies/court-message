@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to team_path(@team), notice: I18n.t("users.update.user_updated") }
-        format.turbo_stream
+        format.turbo_stream { flash.now[:notice] = I18n.t("users.update.user_updated") }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.turbo_stream { render turbo_stream: turbo_stream.replace(@user) }
