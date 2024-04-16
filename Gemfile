@@ -46,7 +46,7 @@ group :development do
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
   # gem "web-console"
-  gem "better_errors"
+  gem "better_errors", git: "https://github.com/zinc-collective/better_errors/", branch: "zs/tell-turbo-to-reload-the-page"
   gem "binding_of_caller"
   gem "rubocop-rails-omakase", require: false
 end
