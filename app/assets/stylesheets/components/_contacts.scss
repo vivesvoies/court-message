@@ -55,13 +55,17 @@
   box-shadow: var(--list-contact-result-shadow);
 }
 
-.ContactSearchResult__name a:hover,
-.ContactSearchResult__name a:active,
-.ContactSearchResult__name a:focus,
-.ContactSearchResult__name button:hover,
-.ContactSearchResult__name button:active,
-.ContactSearchResult__name button:focus {
-  background: var(--list-selected-bg);
+.ContactSearchResult__name {
+
+  a,
+  button {
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: var(--list-selected-bg);
+    }
+  }
 }
 
 .ContactSearchResult__no-contact a {
@@ -170,12 +174,17 @@
 }
 
 .ContactForm__actions {
-  position: sticky;
+  display: flex;
+  align-items: center;
   padding-top: 0;
-  bottom: 0;
-  top: 100%;
   width: 100%;
+  gap: .5rem;
 }
+
+.ContactForm__actions .cm-btn--danger {
+  margin-right: auto;
+}
+
 
 .ContactIndex__list {
   padding: 2.5rem;
