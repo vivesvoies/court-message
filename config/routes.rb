@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   # Static pages
   get "/.internal/ui", to: "static_pages#ui", as: "ui" unless Rails.env.production?
+  get "/terms_and_conditions", to: "static_pages#terms_and_conditions"
   get "/legal_notice", to: "static_pages#legal_notice"
 
   authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
