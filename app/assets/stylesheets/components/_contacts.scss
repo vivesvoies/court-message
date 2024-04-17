@@ -1,24 +1,3 @@
-.Contacts {
-  background-color: var(--messages-bg);
-}
-
-.Contact {
-  margin-right: .5rem;
-  --underline-img: none;
-}
-
-.Contact a {
-  color: var(--text-tertiary);
-}
-
-.Contact a:hover {
-  color: var(--text-tertiary-hover);
-}
-
-.Contact label {
-  font: var(--font-body-bold);
-}
-
 .ContactDetail {
   flex-direction: column;
   justify-content: space-between;
@@ -114,34 +93,7 @@
   justify-content: space-between;
 }
 
-.ContactIndex_input,
-.ContactIndex__actions,
-.ContactFormNew__actions,
-.ContactDetail__actions {
-  margin-block-start: 2.2em;
-  margin-block-end: 2.4em;
-}
 
-.ContactIndex__last-contact {
-  margin: initial;
-  margin-block-start: 2.2em;
-  margin-block-end: 2.4em;
-  height: 5rem;
-}
-
-.ContactIndex__last-contact-text {
-  --width: 3.8;
-  padding: 1rem;
-}
-
-.ContactIndex__last-contact-data {
-  --width: 7;
-  padding: 1.5rem;
-}
-
-.ContactIndex__header {
-  padding: 0rem 2.5rem 0rem 2.5rem;
-}
 
 .ContactNew__header,
 .ContactEdit__header,
@@ -183,13 +135,4 @@
 
 .ContactForm__actions .cm-btn--danger {
   margin-right: auto;
-}
-
-
-.ContactIndex__list {
-  padding: 2.5rem;
-  padding-top: 0;
-  overflow-y: scroll;
-  height: 60%;
-  margin-bottom: 50px;
 }

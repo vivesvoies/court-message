@@ -8,7 +8,8 @@ class ContactsController < ApplicationController
 
   # GET team/:team_slug/contacts
   def index
-    @contacts = @team.contacts
+    @contacts = @team.contacts.order(name: :asc)
+    @last = @contacts.order("created_at").last
   end
 
   # GET team/:team_slug/contacts/:id
