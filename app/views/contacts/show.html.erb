@@ -1,3 +1,11 @@
 <% content_for :primary do %>
-  <%= render partial: "contact_detail", locals: { contact: @contact } %>
+  <%#- NOTE: could be made more resilient by checking that a conversation object exists. %>
+  <%= render partial: "viewer_detail_tab_bar", locals: { conversation: @contact.conversation, team: @team, active: :contact } %>
+  <div class="ContactPage">
+    <%= render "header_tab_bar" do %>
+      <i class="cm-icon-contact"></i>
+      <%= @contact.name %>
+    <% end %>
+    <%= render partial: "contact_detail", locals: { contact: @contact } %>
+  </div>
 <% end %>

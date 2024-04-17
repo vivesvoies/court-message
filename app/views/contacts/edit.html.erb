@@ -1,9 +1,12 @@
 <%= content_for :primary do %>
   <%= render partial: "viewer_detail_tab_bar", locals: { conversation: @contact.conversation, team: @team, active: :contact } %>
-  <header class="ContactEdit__header">
-    <h1 class="ContactEdit__title">
+  <div class="ContactPage">
+    <%= render "header_tab_bar" do %>
+      <i class="cm-icon-contact"></i>
       <%= @contact.name %>
-    </h1>
-  </header>
-  <%= render "form", contact: @contact %>
+    <% end %>
+    <div class="ContactPage__body ContactEdit">
+      <%= render "form", contact: @contact %>
+    </div>
+  </div>
 <% end %>

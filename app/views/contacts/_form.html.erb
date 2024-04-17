@@ -6,13 +6,6 @@
   <%= hidden_field_tag :create_conversation, @create_conversation %>
   <%= form.hidden_field :team_id %>
 
-  <% if @contact.new_record? %>
-    <div class="ContactFormNew__actions">
-      <%= button_tag t(".create"), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
-      <p><%= t(".info") %></p>
-    </div>
-  <% end %>
-
   <fieldset class="cm-fieldset ContactForm">
     <div class="cm-fieldset__element cm-input-group">
       <%= form.label :name, t(:name), class: "Contact__label-name cm-label" %>
@@ -44,14 +37,17 @@
     </div>
   </fieldset>
 
-  <% unless @contact.new_record? %>
-    <div class="ContactForm__actions">
+  <div class="ContactForm__actions">
+    <% if contact.persisted? %>
       <%= button_to t(".remove"), team_contact_path(@team, @contact),
-          method: :delete,
-          "data-turbo" => "false",
-          class: "cm-btn cm-btn--danger cm-btn--icon-left cm-icon-bin" %>
-      <%= link_to t(:cancel), team_contact_path(@team, @contact), class: "cm-btn cm-btn--tertiary" %> 
-      <%= button_tag contact.new_record? ? t(".create") : t(:update), type: 'submit', class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
-    </div>
-  <% end %>
+        method: :delete,
+        "data-turbo" => "false",
+        class: "cm-btn cm-btn--danger cm-btn--icon-left cm-icon-bin" if contact.persisted? %>
+      <%= link_to t(:cancel), team_contact_path(@team, @contact), class: "cm-btn cm-btn--secondary", data: { turbo_action: :advance } %>
+    <% else %>
+      <%= link_to t(:cancel), team_contacts_path(@team), class: "cm-btn cm-btn--secondary", data: { turbo_action: :advance } %>
+    <% end %>
+    <%= button_tag contact.new_record? ? t(".create") : t(:update), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark" %>
+    <%= tag.p t(".info") if contact.new_record? %>
+  </div>
 <% end %>

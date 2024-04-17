@@ -1,8 +1,11 @@
 <%= content_for :primary do %>
-  <header class="ContactNew__header">
-    <h1 class="ContactNew__title">
-      <%= t(".new_contact") %>
-    </h1>
-  </header>
-    <%= render "form", contact: @contact %>
+  <div class="ContactPage ContactNew">
+    <%= render "header_tab_bar" do %>
+      <i class="cm-icon-contact"></i>
+      <%= t("contacts.new.new_contact") %>
+    <% end %>
+    <div class="ContactPage__body">
+      <%= render "form", contact: @contact %>
+    </div>
+  </div>
 <% end %>
