@@ -1,45 +1,35 @@
-<div id="contact_detail" class="ContactDetail">
-  <%#- NOTE: could be made more resilient by checking that a conversation object exists. %>
-  <%= render partial: "viewer_detail_tab_bar", locals: { conversation: contact.conversation, team: @team, active: :contact } %>
-  <header class="ContactDetail__header">
-    <h1 class="ContactDetail__title">
-      <%= contact.name %>
-    </h1>
-  </header>
+<div id="contact_detail" class="ContactPage__body ContactDetail">
   <div class="ContactDetail__actions">
-    <%= link_to t(".edit"), edit_team_contact_path(@team, contact.id), class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-settings" %>
+    <%= link_to t(".edit"), edit_team_contact_path(@team, contact.id), data: { turbo_action: :advance }, class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-settings" %>
   </div>
 
-  <div class="ContactDetail">
-    <div class="ContactDetail__info">
-
-      <div class="cm-fieldset__element cm-input-group">
-        <label class="cm-label"><%= t(:phone) %></label>
-        <div class="Contact__phone cm-input">
-          <%= contact.phone %>
-        </div>
+  <div class="ContactDetail__info">
+    <div class="cm-fieldset__element cm-input-group">
+      <label class="cm-label"><%= t(:phone) %></label>
+      <div class="Contact__phone cm-input">
+        <%= contact.phone %>
       </div>
+    </div>
 
-      <div class="cm-fieldset__element cm-input-group">
-        <label class="cm-label"><%= t(:email) %></label>
-        <div class="Contact__email cm-input">
-          <%= contact.email %>
-        </div>
+    <div class="cm-fieldset__element cm-input-group">
+      <label class="cm-label"><%= t(:email) %></label>
+      <div class="Contact__email cm-input">
+        <%= contact.email %>
       </div>
+    </div>
 
-      <div class="cm-fieldset__element cm-input-group ContactDetails__label">
-        <label class="cm-label"><%= t(".notes") %></label>
-        <div class="ContactDetail__notes">
-          <% unless !contact.notes_updated_at? %>
-            <p><%= t(:last_updated) %><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></p>
-          <% end %>
-          <% unless !contact.notes_last_editor_id? %>
-            <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(:me) : User.find(contact.notes_last_editor_id).name %></p>
-          <% end %>
-        </div>
-        <div class="cm-input cm-input--text">
-          <%= contact.notes %>
-        </div>
+    <div class="cm-fieldset__element cm-input-group ContactDetails__label">
+      <label class="cm-label"><%= t(".notes") %></label>
+      <div class="ContactDetail__notes">
+        <% unless !contact.notes_updated_at? %>
+          <p><%= t(:last_updated) %><%= l(contact.notes_updated_at, format: ' %d %B %Y') %></p>
+        <% end %>
+        <% unless !contact.notes_last_editor_id? %>
+          <p class="cm-label"><%= t(:by) %><%= Current.user == User.find(contact.notes_last_editor_id) ? t(:me) : User.find(contact.notes_last_editor_id).name %></p>
+        <% end %>
+      </div>
+      <div class="cm-input cm-input--text">
+        <%= contact.notes %>
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <div class="Contact">
-  <%= link_to team_contact_path(@team, contact.id) do %>
+  <%= link_to team_contact_path(@team, contact.id), data: { turbo_action: :advance } do %>
     <span class="Contact__name">
       <%= contact.name %>
     </span>

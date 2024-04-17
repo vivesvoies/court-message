@@ -1,27 +1,26 @@
 <%= content_for :primary do %>
-  <nav class="cm-tab-bar ContactIndex__tab-bar">
-    <h2 class="ContactIndex__title">
+  <div class="ContactPage ContactIndex">
+    <%= render "header_tab_bar" do %>
       <i class="cm-icon-address-book"></i>
       <%= t(".contacts") %>
-    </h2>
-  </nav>
-  <div class="ContactIndex">
-    <header class="ContactIndex__header">
-      <div class="ContactIndex__actions">
-        <%= render partial: "last_contact", locals: { contact: @last } if @last %>
-        <%= link_to new_team_contact_path(@team),
-          class: "cm-btn cm-btn--secondary",
-          data: { turbo_frame: :primary } do %>
-          <i class="cm-icon-contact cm-icon--sm cm-icon--inverted"></i>
-          <%= t(".new_contact") %>
+    <% end %>
+
+    <div class="ContactPage__body">
+      <header class="ContactIndex__header">
+        <div class="ContactIndex__actions">
+          <%= render partial: "last_contact", locals: { contact: @last } if @last %>
+          <%= link_to new_team_contact_path(@team), class: "cm-btn cm-btn--secondary", data: { turbo_action: :advance } do %>
+            <i class="cm-icon-contact cm-icon--sm cm-icon--inverted"></i>
+            <%= t(".new_contact") %>
+          <% end %>
+        </div>
+        <% if false %>
+          <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
         <% end %>
+      </header>
+      <div class="ContactIndex__list">
+        <%= render partial: @contacts, team: @team %> 
       </div>
-      <% if false %>
-        <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
-      <% end %>
-    </header>
-    <div class="ContactIndex__list">
-      <%= render partial: @contacts, team: @team %> 
     </div>
   </div>
 <% end %> 

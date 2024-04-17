@@ -11,6 +11,19 @@
   }
 }
 
+.cm-tab-bar__header {
+  display: flex;
+  align-items: center;
+  padding: 0 2.5rem;
+  border-top: none;
+  border-bottom: 1px solid var(--page-border);
+}
+
+.cm-tab-bar__title {
+  font: var(--font-subtitle);
+  margin: 0;
+}
+
 .cm-tab-bar nav {
   position: relative;
   padding: 0 .5rem;
