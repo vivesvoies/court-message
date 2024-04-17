@@ -1,8 +1,10 @@
 @import "variables";
 
 .cm-tab-bar {
+  height: var(--size-tab-bar);
   max-height: var(--size-tab-bar);
   border-top: 1px solid var(--page-border);
+
   @media screen and (min-width: $width-large) {
     border-top: none;
     border-bottom: 1px solid var(--page-border);
@@ -16,6 +18,7 @@
   justify-content: space-evenly;
   align-items: center;
 }
+
 .cm-tab-bar .TabBarButton--active.cm-btn.cm-btn--caption {
   background-size: 100% 5px;
 }
@@ -25,8 +28,9 @@
   .cm-tab-bar .cm-small-only.cm-btn {
     display: none;
   }
-  .cm-tab-bar .cm-btn.cm-btn--caption[class^=cm-icon-], 
-  .cm-tab-bar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
+
+  .cm-tab-bar .cm-btn.cm-btn--caption[class^=cm-icon-],
+  .cm-tab-bar .cm-btn.cm-btn--caption[class*=cm-icon-] {
     overflow: hidden;
     max-height: 3rem;
     max-width: 2.5rem;
@@ -36,10 +40,12 @@
 
 // border on top on small screens
 @media screen and (max-width: $width-large) {
-  .cm-tab-bar .cm-btn.cm-btn--caption[class^=cm-icon-], 
-  .cm-tab-bar .cm-btn.cm-btn--caption[class*=cm-icon-] {  
+
+  .cm-tab-bar .cm-btn.cm-btn--caption[class^=cm-icon-],
+  .cm-tab-bar .cm-btn.cm-btn--caption[class*=cm-icon-] {
     gap: .125rem;
-    :checked + &,
+
+    :checked+&,
     &[class$=--active],
     &[class*=--active],
     &:hover,
