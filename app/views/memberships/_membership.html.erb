@@ -1,5 +1,5 @@
-<section class="Membership" id=<%= dom_id(membership) %>>
+<div class="Membership" id=<%= dom_id(membership) %>>
   <%= turbo_frame_tag "users" do %>
     <%= render membership.user %>
   <% end %> 
-</section>
+</div>

@@ -33,8 +33,8 @@ class MembershipsController < ApplicationController
 
     # Delete the invitation if the user has been invited
     respond_to do |format|
-      format.turbo_stream
       format.html { redirect_to user.awaiting_invitation_reply? ? remove_user_invitation_path(@team, user.invitation_token) : team_path(@team), status: :see_other, notice: I18n.t("memberships.destroy.destroyed") }
+      format.turbo_stream { flash.now[:notice] = I18n.t("memberships.destroy.destroyed") }
     end
   end
 

@@ -657,7 +657,7 @@ a.cm-btn--validate:not([href]) {
 
 /* #region Cancel */
 
-.cm-btn--cancel {
+.cm-btn--danger {
   background-color: transparent;
   box-shadow: inset 0 0 0 1px var(--action-cancel-bg);
   color: var(--action-cancel-text);

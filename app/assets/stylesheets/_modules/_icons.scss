@@ -12,6 +12,7 @@ $icon-names: (
   "chevron-down",
   "chevrons-left",
   "close-line",
+  "contact",
   "copy",
   "cross",
   "download",
@@ -97,6 +98,7 @@ $icon-names: (
 }
 
 @each $icon-name in $icon-names {
+
   .cm-icon-#{$icon-name}::before,
   .cm-icon-#{$icon-name}::after {
     mask-image: image-url("icons/#{$icon-name}.svg");
@@ -114,12 +116,13 @@ $icon-names: (
   --box-size: calc(var(--icon-size) * 1.5);
   --offset: calc((var(--icon-size) - var(--box-size)) / 2);
 }
+
 .cm-icon--inverted::before {
   content: "";
 
   position: absolute;
   transform: translate(var(--offset), var(--offset));
-  
+
   z-index: 0;
   height: var(--box-size);
   width: var(--box-size);
@@ -127,6 +130,11 @@ $icon-names: (
   background-color: currentColor;
   mask-image: none;
 }
+
+.cm-icon--sm.cm-icon--inverted::before {
+  transform: translate(var(--offset), calc(var(--offset) - (0.75em - var(--icon-size)) * 0.5));
+}
+
 .cm-icon--inverted::after {
   position: relative;
   z-index: 1;

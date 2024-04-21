@@ -1,6 +1,6 @@
-section + section {
+.UIPage section+section {
   border-top: 1px solid var(--page-border);
-  padding: 1rem 0;  
+  padding: 1rem 0;
   margin: 1rem 0;
 }
 
@@ -8,13 +8,16 @@ section + section {
   padding-bottom: 3rem;
   position: relative;
 }
+
 .UIPage__toc {
   --width-all: 2;
 }
+
 .UIPage__toc-list {
   top: 4rem;
   position: sticky;
   list-style: none;
+
   li {
     line-height: 2rem;
   }
@@ -23,25 +26,30 @@ section + section {
 .UIPage__examples {
   --width-all: 10;
 }
+
 .UIPage__examples section.cm-container {
   margin-left: 0;
   margin-bottom: 2rem;
 }
+
 .UIPage h1 {
   margin-top: 2rem;
   font: var(--font-subtitle);
   width: 100%;
 }
+
 .UIPage h2 {
   font-size: 1rem;
   margin: 1rem 0 0;
 }
+
 .UIList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
 }
+
 .UIList__sublist {
   display: flex;
   flex-direction: row;

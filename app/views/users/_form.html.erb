@@ -51,7 +51,7 @@
               turbo_method: :delete,
               turbo_confirm: "Are you sure?"
             },
-            class: "cm-btn cm-btn--cancel cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
+            class: "cm-btn cm-btn--danger cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
         <% end %>
       </div>
     </div>

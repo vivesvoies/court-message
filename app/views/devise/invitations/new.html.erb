@@ -1,5 +1,5 @@
 <%= turbo_frame_tag @user do %>
-  <section class="InvitationNew__form">
+  <div class="UserInvitation__form">
     <%= form_for(resource, as: resource_name, url: user_invitation_path(team: params[:team]), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -16,11 +16,11 @@
           </div>
         <% end -%>
 
-        <div class="actions">
+        <div class="UserInvitation__actions">
           <%= button_tag t(".new"), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark", data: {turbo_frame: "_top"} %>
           <%= link_to t(:cancel), team_path(Team.find_by(slug: params[:team])), class: "cm-btn cm-btn--secondary" %> 
         </div>
       </fieldset>
     <% end %>
-  </section>
+  </div>
 <% end %>

@@ -1,29 +1,26 @@
 <%= content_for :primary do %>
-  <header class="ContactIndex__header">
-    <div class="ContactIndex__last-contact cm-container">
-      <% contact = Contact.order("created_at").last %>
-      <% if contact.present? %>
-        <div class="cm-column ContactIndex__last-contact-text">
-        <%= t(".last_contact")%>
+  <div class="ContactPage ContactIndex">
+    <%= render "header_tab_bar" do %>
+      <i class="cm-icon-address-book"></i>
+      <%= t(".contacts") %>
+    <% end %>
+
+    <div class="ContactPage__body">
+      <header class="ContactIndex__header">
+        <div class="ContactIndex__actions">
+          <%= render partial: "last_contact", locals: { contact: @last } if @last %>
+          <%= link_to new_team_contact_path(@team), class: "cm-btn cm-btn--secondary", data: { turbo_action: :advance } do %>
+            <i class="cm-icon-contact cm-icon--sm cm-icon--inverted"></i>
+            <%= t(".new_contact") %>
+          <% end %>
         </div>
-        <div class="cm-column ContactIndex__last-contact-data">
-        <%= link_to team_contact_path(@team, contact.id) do %>
-          <%= contact.name %>
+        <% if false %>
+          <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
         <% end %>
-        </div>
-      <% end %>
+      </header>
+      <div class="ContactIndex__list">
+        <%= render partial: @contacts, team: @team %> 
+      </div>
     </div>
-    <div class="ContactIndex__actions">
-      <%= link_to new_team_contact_path(@team),
-        class: "cm-btn cm-btn--sm cm-btn--tertiary",
-        data: { turbo_frame: :primary } do %>
-        <i class="cm-icon-person-add cm-icon--lg"></i>
-        <%= t(".new_contact") %>
-      <% end %>
-    </div>
-    <input type="text" class="cm-input cm-input--line cm-input-search ContactIndex_input" placeholder="">
-  </header>
-  <div class="ContactIndex__list">
-    <%= render partial: @contacts, team: @team %> 
   </div>
 <% end %> 

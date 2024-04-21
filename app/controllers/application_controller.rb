@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include FlashHelper
   helper_method :current_frame
   helper_method :turbo_frame_request?
+  helper_method :turbo_stream_request?
 
   before_action :authenticate_user!
   before_action :set_current
@@ -34,5 +35,9 @@ class ApplicationController < ActionController::Base
 
   def current_frame
     request&.headers["Turbo-Frame"]
+  end
+
+  def turbo_stream_request?
+    "text/vnd.turbo-stream.html".in? request&.accept
   end
 end

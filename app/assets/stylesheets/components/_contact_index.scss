@@ -1,0 +1,67 @@
+@import "variables";
+
+.ContactIndex .ContactPage__body {
+  padding-top: 1.5rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header"
+    "list";
+}
+
+.ContactIndex__header {
+  padding: 0 2.5rem 1.5rem;
+  border-bottom: 1px solid var(--page-border);
+}
+
+.ContactIndex__last-contact {
+  margin-bottom: 1rem;
+}
+
+@media (min-width: $width-mid) {
+  .ContactIndex__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    :last-child {
+      margin-left: auto;
+    }
+  }
+
+  .ContactIndex__last-contact {
+    margin: 0;
+  }
+}
+
+.ContactIndex__list {
+  overflow-y: auto;
+  padding: 1rem 0 3.5rem;
+}
+
+.Contacts {
+  background-color: var(--messages-bg);
+}
+
+.Contact {
+  --underline-img: none;
+  border-bottom: 1px solid var(--page-border);
+  padding: 1rem 0;
+  margin: 0 3.5rem 0 2.5rem;
+}
+
+.Contact a {
+  color: var(--text-tertiary);
+}
+
+.Contact a:hover {
+  color: var(--text-tertiary-hover);
+}
+
+.Contact__name {
+  font: var(--font-body-bold);
+}
+
+.Contact__created-at {
+  font: var(--font-medium);
+}

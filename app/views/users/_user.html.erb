@@ -1,6 +1,6 @@
 <%= turbo_frame_tag user do %>
-  <div class="cm-container" id="<%= dom_id user %>">
-    <div class="cm-column User__body">
+  <div class="User" id="<%= dom_id user %>">
+    <div class="User__body">
       <div class="User__name">
           <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
       </div>
@@ -16,7 +16,7 @@
         <%= user.email %>
       </div>
     </div>
-    <div class="cm-column User__actions">
+    <div class="User__actions">
         <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings" do %>
           <i class="cm-icon-settings cm-icon--sm"></i>
         <% end if can? :update, user %>

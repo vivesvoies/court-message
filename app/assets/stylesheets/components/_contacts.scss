@@ -1,101 +1,41 @@
-.Contacts {
-  background-color: var(--messages-bg);
+@import "variables";
+
+.ContactPage__body {
+  display: grid;
+  max-height: calc(var(--size-viewer) - var(--size-tab-bar) * 2);
+  overflow-y: auto;
 }
 
-.Contact {
-  margin-right: .5rem;
-  --underline-img: none;
+@media (min-width: $width-mid) {
+  .ContactPage__body {
+    max-height: calc(var(--size-viewer) - var(--size-tab-bar));
+  }
 }
 
-.Contact a {
-  color: var(--text-tertiary);
-}
-
-.Contact a:hover {
-  color: var(--text-tertiary-hover);
-}
-
-.Contact label {
-  font: var(--font-body-bold);
-}
 
 .ContactDetail {
-  flex-direction: column;
-  justify-content: space-between;
+  padding-top: 1rem;
 }
 
-.ContactSearch {
-  height: var(--size-tab-bar);
-  margin: 0 1rem;
-  border-bottom: 1px solid var(--page-border);
-}
-
-.ContactSearch__header {
-  background: var(--background-contrast-grey);
-  padding: 1rem 0;
-}
-
-.ContactSearch__form {
-  display: flex;
-  align-items: center;
-}
-
-.ContactSearch__input {
-  font: var(--font-body-bold);
-  flex: 1;
-  margin-left: .5rem;
-  padding: 0 .5rem;
-  border-radius: 1rem;
-}
-
-.ContactSearchResults {
-  list-style: none;
-  margin-left: 2rem;
-  width: fit-content;
-  box-shadow: var(--list-contact-result-shadow);
-}
-
-.ContactSearchResult__name a:hover,
-.ContactSearchResult__name a:active,
-.ContactSearchResult__name a:focus,
-.ContactSearchResult__name button:hover,
-.ContactSearchResult__name button:active,
-.ContactSearchResult__name button:focus {
-  background: var(--list-selected-bg);
-}
-
-.ContactSearchResult__no-contact a {
-  margin-left: 1rem;
-}
-
-.ContactSearchResult__no-contact,
-.ContactSearchResult__action {
-  padding: .5rem 2rem;
-  height: 5rem;
-  background-image: none;
-  display: flex;
-  align-items: center;
-}
-
-.Contact__info {
+.ContactDetail .cm-tab-bar__header {
   margin-bottom: 1rem;
 }
 
-.ContactSearchResult__no-contact,
-.ContactSearchResult__action,
-.Contact__name {
-  font: var(--font-body-bold);
+.ContactDetail__header,
+.ContactEdit__header {
+  display: none;
 }
 
-.Contact__info [class*="--missing"] {
-  font-style: italic;
-}
+@media (min-width: $width-mid) {
 
-.ContactFormNew__actions {
-  margin-left: auto;
-  margin-right: auto;
-  margin-block-end: 0;
-  width: 40%;
+  .ContactPage:not(.ContactNew) .cm-tab-bar__header {
+    border: none;
+    padding: 2.5rem;
+
+    i {
+      display: none;
+    }
+  }
 }
 
 .ContactForm p,
@@ -110,54 +50,6 @@
   justify-content: space-between;
 }
 
-.ContactIndex_input,
-.ContactIndex__actions,
-.ContactFormNew__actions,
-.ContactDetail__actions {
-  margin-block-start: 2.2em;
-  margin-block-end: 2.4em;
-}
-
-.ContactIndex__last-contact {
-  margin: initial;
-  margin-block-start: 2.2em;
-  margin-block-end: 2.4em;
-  height: 5rem;
-}
-
-.ContactIndex__last-contact-text {
-  --width: 3.8;
-  padding: 1rem;
-}
-
-.ContactIndex__last-contact-data {
-  --width: 7;
-  padding: 1.5rem;
-}
-
-.ContactIndex__header {
-  padding: 0rem 2.5rem 0rem 2.5rem;
-}
-
-.ContactNew__header,
-.ContactEdit__header,
-.ContactDetail__header {
-  grid-area: header;
-
-  display: grid;
-  justify-content: space-between;
-  grid-auto-flow: column;
-  padding: 2.5rem 2.5rem 1rem 2.5rem;
-}
-
-.Contacts__title,
-.ContactNew__title,
-.ContactEdit__title,
-.ContactDetail__title {
-  font: var(--font-subtitle);
-  margin: 0;
-}
-
 .ContactDetail__actions {
   padding-left: 2.5rem;
   margin-block-end: 0;
@@ -170,17 +62,30 @@
 }
 
 .ContactForm__actions {
-  position: sticky;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 0;
-  bottom: 0;
-  top: 100%;
+  width: 100%;
+  gap: .5rem;
+}
+
+.ContactForm__actions .cm-btn {
   width: 100%;
 }
 
-.ContactIndex__list {
-  padding: 2.5rem;
-  padding-top: 0;
-  overflow-y: scroll;
-  height: 60%;
-  margin-bottom: 50px;
+@media (min-width: $width-mid) {
+  .ContactForm__actions .cm-btn {
+    width: auto;
+  }
+}
+
+.ContactForm__actions .cm-btn--danger {
+  margin-right: auto;
+}
+
+.ContactForm__actions p {
+  width: 100%;
+  font: var(--font-medium);
 }

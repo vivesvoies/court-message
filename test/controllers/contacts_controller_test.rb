@@ -25,8 +25,8 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     get team_contacts_url(@user.teams.first)
 
     assert_response :success
-    assert_select "section.Contact" do |name_elements|
-      displayed_contact_names = name_elements.map { |element| element.at_css("label").text.strip }
+    assert_select ".Contact" do |name_elements|
+      displayed_contact_names = name_elements.map { |element| element.at_css(".Contact__name").text.strip }
 
       user_team_contact_names = @user.teams.first.contacts.pluck(:name)
 

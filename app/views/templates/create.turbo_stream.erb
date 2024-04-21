@@ -1,2 +1,3 @@
 <%= turbo_stream.append "templates", partial: "templates/template", locals: { template: @template } %>
 <%= turbo_stream.update "new_template" %>
+<%= render "turbo_flash" %>
