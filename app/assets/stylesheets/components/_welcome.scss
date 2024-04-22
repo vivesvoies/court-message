@@ -19,6 +19,10 @@
   align-self: flex-end; 
 }
 
+.Welcome__actions-create:not(.Welcome__actions-connect) {
+  margin: 2em 0;
+}
+
 .Welcome__actions-connect a {
   margin-top: 1em;
 }
