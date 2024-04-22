@@ -33,6 +33,8 @@ fr:
     viewer_detail_tab_bar:
       conversations: "Messagerie"
       contacts: "Répertoire"
+    header_tab_bar:
+      create_account: "Créer mon compte"
 
   activerecord:
     models:
