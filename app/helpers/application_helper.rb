@@ -31,4 +31,13 @@ module ApplicationHelper
   def should_load_conversations?
     @team.present? && !content_for?(:navigation) && current_frame.nil?
   end
+
+  def lazy_loaded_conversations_path
+    conversation = @conversation || @contact&.conversation
+    team_conversations_path(@team, selected: conversation&.id)
+  end
+
+  def content_and_flash_for(frame)
+    content_for(frame) + content_for(:flash_stream) if content_for? frame
+  end
 end

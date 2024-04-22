@@ -1,29 +1,32 @@
+<% content_for :flash_stream do %>
+  <%= render "turbo_flash" %>
+<% end %>
 <% content_for :body_class, "has-viewer-visible" %>
 <% content_for :layout do %>
   <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList" data-viewer-tab-bar-outlet=".TabBar nav">
     <% if should_load_conversations? %>
-      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: team_conversations_path(@team), refresh: :morph %>
+      <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: lazy_loaded_conversations_path, refresh: :morph %>
     <% else %>
       <%= turbo_frame_tag :navigation, class: "ViewerNavigation", refresh: :morph do %>
-        <%= yield :navigation %>
+        <%= content_and_flash_for(:navigation) %>
       <% end %>
     <% end %>
 
     <%= turbo_frame_tag :primary, class: "ViewerPrimary", refresh: :morph do %>
-      <%= yield :primary %>
+      <%= content_and_flash_for(:primary) %>
     <% end %>
 
-    <div class="ViewerUserMenu">
+    <%= content_tag :div, class: "ViewerUserMenu" do %>
       <%= render partial: "user_menu" %>
-    </div>
+    <% end if !turbo_frame_request? %>
 
     <%= turbo_frame_tag :secondary, class: "ViewerSecondary", refresh: :morph do %>
-      <%= yield :secondary %>
+      <%= content_and_flash_for(:secondary) %>
     <% end %>
 
     <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar", refresh: :morph do %>
       <%= render partial: "tab_bar" %>
-    <% end %>
+    <% end if !turbo_frame_request? %>
   </div>
 <% end %>
-<%= render template: "layouts/application" %>
+<%= render template: "layouts/#{turbo_frame_request? ? "frame" : "application"}" %>

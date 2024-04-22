@@ -1,0 +1,9 @@
+<%# locals: (contact:) %> 
+<div class="ContactIndex__last-contact">
+  <span class="ContactIndex__last-contact-label">
+    <%= t(".last_contact")%>
+  </span>
+  <span class="ContactIndex__last-contact-link">
+    <%= link_to contact.name, team_contact_path(@team, contact) %>
+  </span>
+</div>

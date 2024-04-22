@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="turbo-refresh-method" content="morph">
     <meta name="turbo-refresh-scroll" content="preserve">
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/icons/icon-mini-180.png" sizes="180x180">
+    <link rel="icon" href="/icons/icon-large.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -15,11 +22,14 @@
     
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <%= yield(:head) %>
   </head>
 
   <body class="<%= yield(:body_class) %>">
     <%= turbo_frame_tag "modal" %>
-    <div class="FlashContainer" id="flash"><%= render "flash" %></div>
+    <%= turbo_frame_tag "flash", class: "FlashContainer" do %>
+      <%= render "flash" %>
+    <% end %>
     <main class="Main">
       <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>

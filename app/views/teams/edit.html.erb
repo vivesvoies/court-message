@@ -1,11 +1,10 @@
-<%= content_for :back do %>
-  <%= link_to t(".back"), teams_path, class: "cm-btn cm-btn--icon-left fr-icon-arrow-left-line" %>
-<% end %>
-<%= render partial: "main_menu" %>
-<div class="Page Page__edit-team">
-  <div class="Block Block__edit-team">
-    <header class="Teams__header">
-      <h2><%= t(".edit") %></h2>
-    </header>
+<%= content_for :primary do %>
+  <header class="TeamEdit__header">
+    <h1 class="TeamEdit__title">
+      <%= t(".edit") %>
+    </h1>
+  </header>
+  <div class="TeamEdit__body">
     <%= render "form", team: @team %>
-</div>
+  </div>
+<% end %>

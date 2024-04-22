@@ -11,46 +11,60 @@
   content: " | ";
 }
 
-.LegalNotice h3, p, ul {
+.LegalNotice h3,
+.LegalNotice p,
+.LegalNotice ul,
+.TermsAndConditions h3,
+.TermsAndConditions p,
+.TermsAndConditions ul {
   margin: 2rem 0;
 }
 
-.LegalNotice ul {
+.TermsAndConditions ul {
   margin-left: 3rem;
 }
 
-.LegalNotice h1 {
+.LegalNotice h1,
+.TermsAndConditions h1 {
   margin-block-end: 0;
 }
 
-.LegalNotice__logo {
+.LegalNotice__logo,
+.TermsAndConditions__logo {
   width: 20%;
   height: auto;
   margin: 5rem 0 .5rem 1.5rem;
 }
 
-.LegalNotice__title {
+.LegalNotice__title,
+.TermsAndConditions__title {
   padding: 1.5rem 0 3rem 0;
   border-top: 1px solid var(--page-border);
   border-bottom: 1px solid var(--page-border);
 }
 
-.LegalNotice__subtitle {
+.TermsAndConditions__subtitle {
   margin: 0;
 }
 
-.LegalNotice__header > li {
+.LegalNotice__header > li,
+.TermsAndConditions__header > li {
   flex: 2;
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.LegalNoticePartner__logo {
+.LegalNoticePartner__logo,
+.TermsAndConditionsPartner__logo {
   gap: 7rem !important; 
 }
 
-.LegalNoticeVersion__content {
+.TermsAndConditionsVersion__content {
   font: var(--font-body-italic);
   margin-top: .5rem;
+}
+
+.LegalNotice ul {
+  list-style: none;
 }

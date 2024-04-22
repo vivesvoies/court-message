@@ -1,15 +1,13 @@
 <%# locals: (team:, conversations:) %>
 
-<div class="ConversationHeader__actions">
-  <%=
-    link_to t(".new"), new_team_contact_path(create_conversation: true, team_id: team, modal: true),
-            class: "cm-btn cm-btn--lg cm-icon-pencil cm-btn--icon-left ConversationHeader__new", title: t(".new"),
-            data: { turbo_frame: "modal" }
-  %>
+<div class="ConversationHeader__actions" data-controller="search-contact" data-search-contact-conversation-list-outlet="#conversations">
+  <%= link_to t(".new"), team_conversations_path(@team),
+        class: "cm-btn cm-btn--lg cm-icon-pencil cm-btn--icon-left ConversationHeader__new",
+        data: { turbo_frame: :primary, action: "search-contact#deselect", turbo_action: :advance } %>
 </div>
 
 <% if false %>
-  <div class="ConversationHeader__search fr-search-bar" role="search">
+  <div class="ConversationHeader__search" role="search">
     <%= text_field_tag :search_query, nil, placeholder: t(".search"), class: "cm-input-search", type: :search %>
     <%#= button_tag t(".search"), title: t(".search"), class: "cm-btn cm-btn--tertiary-no-outline" %>
   </div>

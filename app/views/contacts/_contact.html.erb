@@ -1,7 +1,11 @@
-<section class="Contact">
-  <%= link_to team_contact_path(@team, contact.id) do %>
-    <label><%= contact.name if contact.name?%></label>
-    <%= t(".created") %>
-    <%= contact.created_at.strftime('%d/%m/%Y') %>
+<div class="Contact">
+  <%= link_to team_contact_path(@team, contact.id), data: { turbo_action: :advance } do %>
+    <span class="Contact__name">
+      <%= contact.name %>
+    </span>
+    <span class="Contact__created-at">
+      <%= t(".created") %>
+      <%= contact.created_at.strftime('%d/%m/%Y') %>
+    </span>
   <% end %>
-</section>
+</div>

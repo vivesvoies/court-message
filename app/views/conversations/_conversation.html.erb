@@ -1,5 +1,5 @@
 <%= turbo_stream_from "conversation_list_item_#{conversation.id}" %>
-<li class="Conversation <%= "Conversation--active" if @conversation == conversation %> Conversation--<%= conversation.status %>"
+<li class="Conversation <%= "Conversation--active" if current_conversation?(conversation) %> Conversation--<%= conversation.status %>"
     data-conversation-list-target="conversation"
     data-conversation-status-url="<%= read_status_team_conversation_path(conversation.team, conversation.id) %>"
     id="<%= dom_id conversation %>">

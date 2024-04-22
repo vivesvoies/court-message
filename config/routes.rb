@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
   root to: redirect("/teams")
 
-  get "/.internal/ui", to: "pages#show", id: "ui"
-  resources :pages, only: [ :show ]
-
   # Static pages
+  get "/.internal/ui", to: "static_pages#ui", as: "ui" unless Rails.env.production?
+  get "/terms_and_conditions", to: "static_pages#terms_and_conditions"
   get "/legal_notice", to: "static_pages#legal_notice"
 
   authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
@@ -23,12 +22,14 @@ Rails.application.routes.draw do
       get :menu, to: "teams#menu"
     end
 
-    resources :conversations, only: [ :index, :show ] do
+    resources :conversations, only: [ :index, :show, :new ] do
       member do
         patch :status, to: "read_status#update", as: :read_status
       end
     end
-    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+    resources :contacts, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] do
+      get :search, on: :collection
+    end
     resources :users, only: [ :show, :edit, :update ] do
       resources :templates, only: [ :index, :new, :create, :edit, :update, :create, :destroy ]
     end

@@ -2,12 +2,12 @@
 
 /* Sizes */
 :root {
-  --size-header: 3rem;
   --size-viewer: 100vh;
   --size-message-box: 7rem;
   --size-tab-bar: 3.25rem;
   --input-overhang: 1rem;
 }
+
 @supports (height: 100dvh) {
   :root {
     --size-viewer: 100dvh;
@@ -34,7 +34,7 @@
   --messages-bg: var(--color-white);
   --message-box-bg: var(--color-white-transparentish);
   --text-format: var(--color-mouse);
-  
+
   --list-bg: var(--color-latte);
   --list-header-bg: var(--color-white);
   --list-separator: var(--color-brown);
@@ -44,9 +44,12 @@
   --list-active-bg: var(--color-peach-intense);
   --text-list-selected: var(--color-black);
   --list-template-bg: var(--color-white);
+  --list-contact-result-shadow: var(--shadow-2);
 
   --menu-item-bg: var(--color-white);
   --menu-item-active: var(--color-latte);
+  --dropdown-btn-active: var(--color-peach);
+  --menu-shadow: var(--shadow-2);
 
   --userbar-bg: var(--color-sable);
 
@@ -71,7 +74,7 @@
   --action-cancel-bg: var(--color-robin);
   --action-cancel-text: var(--color-robin);
   --action-cancel-hover: var(--color-robin);
-  --action-cancel-active: var(--color-sable);
+  --action-cancel-active: var(--color-peach);
 
   --input-text: var(--color-ochre);
   --input-bg: var(--color-latte);
@@ -131,47 +134,49 @@
   --color-dark9: #e6e6e6;
 
   --shadow-1: 0 0 .25rem .0625rem rgba(0, 0, 0, .25);
+  --shadow-2: .25rem .25rem .5rem rgba(0, 0, 0, .25);
 }
 
 /*
   Font styles
 */
 :root {
-  --family:           var(--open-sans);
+  --family: var(--open-sans);
 
-  --font-hero:        normal 700 var(--font-size-large)   var(--family);
-  --font-subtitle:    normal 700 var(--font-size-big)     var(--family);
+  --font-hero: normal 700 var(--font-size-large) var(--family);
+  --font-subtitle: normal 700 var(--font-size-big) var(--family);
 
-  --font-message:     normal 400 var(--font-size-regular) var(--family);
+  --font-message: normal 400 var(--font-size-regular) var(--family);
 
-  --font-body:        normal 400 var(--font-size-small)   var(--family);
-  --font-body-bold:   normal 700 var(--font-size-small)   var(--family);
+  --font-body: normal 400 var(--font-size-small) var(--family);
+  --font-body-bold: normal 700 var(--font-size-small) var(--family);
   --font-body-italic: normal italic var(--font-size-regular) var(--family);
 
-  --font-medium-bold: normal 700 var(--font-size-tiny)    var(--family); 
+  --font-medium-bold: normal 700 var(--font-size-tiny) var(--family);
+  --font-medium: normal 400 var(--font-size-tiny) var(--family);
 
-  --font-small:       normal 400 var(--font-size-micro)   var(--family);
-  --font-small-bold:  normal 700 var(--font-size-micro)   var(--family);
+  --font-small: normal 400 var(--font-size-micro) var(--family);
+  --font-small-bold: normal 700 var(--font-size-micro) var(--family);
 
-  --font-micro:       normal 400 var(--font-size-micro)   var(--family);  
+  --font-micro: normal 400 var(--font-size-micro) var(--family);
 }
 
 @media (min-width: $width-mid) {
   :root {
-    --font-hero:        normal 700 var(--font-size-huge)    var(--family);
-    --font-subtitle:    normal 700 var(--font-size-large)   var(--family);
+    --font-hero: normal 700 var(--font-size-huge) var(--family);
+    --font-subtitle: normal 700 var(--font-size-large) var(--family);
 
-    --font-message:     normal 400 var(--font-size-big)     var(--family);
+    --font-message: normal 400 var(--font-size-big) var(--family);
 
-    --font-body:        normal 400 var(--font-size-regular) var(--family);
-    --font-body-bold:   normal 700 var(--font-size-regular) var(--family);
+    --font-body: normal 400 var(--font-size-regular) var(--family);
+    --font-body-bold: normal 700 var(--font-size-regular) var(--family);
 
-    --font-medium-bold: normal 700 var(--font-size-small)   var(--family);
+    --font-medium-bold: normal 700 var(--font-size-small) var(--family);
 
-    --font-small:       normal 400 var(--font-size-tiny)    var(--family);
-    --font-small-bold:  normal 700 var(--font-size-tiny)    var(--family);
+    --font-small: normal 400 var(--font-size-tiny) var(--family);
+    --font-small-bold: normal 700 var(--font-size-tiny) var(--family);
 
-    --font-micro:       normal 400 var(--font-size-micro)   var(--family);
+    --font-micro: normal 400 var(--font-size-micro) var(--family);
   }
 }
 
@@ -181,14 +186,14 @@
   Should only be used when setting up variables in this file.
 */
 :root {
-  --open-sans:         OpenSans, sans-serif;
-  --font-size-huge:    4rem;     // 64px
-  --font-size-large:   1.5rem;   // 24px
-  --font-size-big:     1.125rem; // 18px
-  --font-size-regular: 1rem;     // 16px
-  --font-size-small:   .875rem;  // 14px
-  --font-size-tiny:    .75rem;   // 12px
-  --font-size-micro:   .625rem;  // 10px
+  --open-sans: OpenSans, sans-serif;
+  --font-size-huge: 4rem; // 64px
+  --font-size-large: 1.5rem; // 24px
+  --font-size-big: 1.125rem; // 18px
+  --font-size-regular: 1rem; // 16px
+  --font-size-small: .875rem; // 14px
+  --font-size-tiny: .75rem; // 12px
+  --font-size-micro: .625rem; // 10px
 }
 
 /*
@@ -203,7 +208,9 @@
   --underline-img: linear-gradient(0deg, currentColor, currentColor);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -218,6 +225,7 @@ select,
 textarea {
   font: var(--font-body);
 }
+
 body {
   display: flex;
   flex-direction: column;
@@ -232,10 +240,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
 body.has-viewer-visible {
   -webkit-overflow-scrolling: auto;
   overflow: hidden;
 }
+
 .Main {
   flex: 1;
   display: flex;

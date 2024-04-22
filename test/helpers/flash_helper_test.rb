@@ -9,11 +9,9 @@ class FlashHelperTest < ActiveSupport::TestCase
     assert_equal(flash_id(type, message), e)
   end
 
-  def test_flash_dsrf_class
-    assert_equal("fr-alert--info", flash_dsfr_class("notice"))
-    assert_equal("fr-alert--info", flash_dsfr_class(:notice))
-    assert_equal("fr-alert--error", flash_dsfr_class("alert"))
-    assert_equal("fr-alert--success", flash_dsfr_class("success"))
-    assert_equal("fr-alert--anything-really", flash_dsfr_class("anything, really"))
+  def test_flash_cm_class
+    assert_equal("cm-alert--notice cm-alert--info", flash_cm_class("notice"))
+    assert_equal("cm-alert--alert cm-alert--warn", flash_cm_class("alert"))
+    assert_equal("cm-alert--anything-really", flash_cm_class("anything, really"))
   end
 end

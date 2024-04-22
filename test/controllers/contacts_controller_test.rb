@@ -25,8 +25,8 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     get team_contacts_url(@user.teams.first)
 
     assert_response :success
-    assert_select "section.Contact" do |name_elements|
-      displayed_contact_names = name_elements.map { |element| element.at_css("label").text.strip }
+    assert_select ".Contact" do |name_elements|
+      displayed_contact_names = name_elements.map { |element| element.at_css(".Contact__name").text.strip }
 
       user_team_contact_names = @user.teams.first.contacts.pluck(:name)
 
@@ -148,5 +148,55 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to team_contacts_url(team)
+  end
+
+  test "should search contacts by name" do
+    get search_team_contacts_url(@team), params: { query: @contact.name }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name" do
+      assert_select "a", text: @contact.name
+    end
+    assert_select "li.ContactSearchResult__name", count: 1
+  end
+
+  test "should search contacts by email" do
+    get search_team_contacts_url(@team), params: { query: @contact.email }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name" do
+      assert_select "a", text: @contact.name
+    end
+    assert_select "li.ContactSearchResult__name", count: 1
+  end
+
+  test "should search contacts by phone" do
+    get search_team_contacts_url(@team), params: { query: @contact.phone }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name" do
+      assert_select "a", text: @contact.name
+    end
+    assert_select "li.ContactSearchResult__name", count: 1
+  end
+
+  test "should not return contacts if search query is empty" do
+    get search_team_contacts_url(@team), params: { query: "" }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name", count: 0
+    assert_select "li.ContactSearchResult__no-contact", count: 0
+  end
+
+  test "should return no contacts if search query does not match any name" do
+    get search_team_contacts_url(@team), params: { query: "NonExistentName" }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name", count: 0
+    assert_select "li.ContactSearchResult__no-contact", count: 1
+  end
+
+  test "should return no contacts if contact is not in the team" do
+    contact = create(:contact, :with_conversation)
+    build(:contact)
+    get search_team_contacts_url(@team), params: { query: contact.name }
+    assert_response :success
+    assert_select "li.ContactSearchResult__name", count: 0
+    assert_select "li.ContactSearchResult__no-contact", count: 1
   end
 end

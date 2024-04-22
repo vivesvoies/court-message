@@ -21,10 +21,6 @@ export default class extends Controller {
     this.element.className = this.element.className.replace(/\bViewer--detail-\S+/g, "");
     this.element.className = this.element.className.replace(/\bViewer--tab-\S+/g, "");
     this.element.classList.add(`Viewer--tab-${params.label}`);
-
-    // if (params.label === "conversations") {
-    //   this.conversationListOutlet.reselect();
-    // }
   }
 
   showDetailView() {

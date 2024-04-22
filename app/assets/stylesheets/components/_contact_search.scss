@@ -1,0 +1,58 @@
+.ContactSearch {
+  height: var(--size-tab-bar);
+  margin: 0 1rem;
+  border-bottom: 1px solid var(--page-border);
+}
+
+.ContactSearch__header {
+  background: var(--background-contrast-grey);
+  padding: 1rem 0;
+}
+
+.ContactSearch__form {
+  display: flex;
+  align-items: center;
+}
+
+.ContactSearch__input {
+  font: var(--font-body-bold);
+  flex: 1;
+  margin-left: .5rem;
+  padding: 0 .5rem;
+  border-radius: 1rem;
+}
+
+.ContactSearchResults {
+  list-style: none;
+  margin-left: 2rem;
+  width: fit-content;
+  box-shadow: var(--list-contact-result-shadow);
+}
+
+.ContactSearchResult__name a,
+.ContactSearchResult__name button {
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: var(--list-selected-bg);
+  }
+}
+
+.ContactSearchResult__no-contact a {
+  margin-left: 1rem;
+}
+
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action {
+  padding: .5rem 2rem;
+  height: 5rem;
+  background-image: none;
+  display: flex;
+  align-items: center;
+}
+
+.ContactSearchResult__no-contact,
+.ContactSearchResult__action {
+  font: var(--font-body-bold);
+}

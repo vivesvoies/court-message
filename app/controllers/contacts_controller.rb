@@ -1,18 +1,25 @@
 class ContactsController < ApplicationController
   layout :set_layout
 
-  before_action :set_team, only: %i[ index show new edit update destroy ]
+  before_action :set_team, only: %i[ index show new edit update destroy search ]
   before_action :set_contact, only: %i[ show edit update destroy ]
   authorize_resource :team
   authorize_resource
 
   # GET team/:team_slug/contacts
   def index
-    @contacts = @team.contacts
+    @contacts = @team.contacts.order(name: :asc)
+    @last = @contacts.order("created_at").last
   end
 
   # GET team/:team_slug/contacts/:id
   def show
+  end
+
+  # GET team/:team_slug/contacts/search?query=:query
+  def search
+    @query = params[:query]
+    @results = @query.blank? ? [] : Contact.search_team(@team, @query)
   end
 
   # GET team/:team_slug/contacts/new

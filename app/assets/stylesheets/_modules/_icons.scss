@@ -12,6 +12,7 @@ $icon-names: (
   "chevron-down",
   "chevrons-left",
   "close-line",
+  "contact",
   "copy",
   "cross",
   "download",
@@ -38,6 +39,15 @@ $icon-names: (
   "warning",
 );
 
+[class^=cm-icon-],
+[class*=" cm-icon-"],
+[class^=cm-icon-]::before,
+[class^=cm-icon-]::after,
+[class*=" cm-icon-"]::before,
+[class*=" cm-icon-"]::after {
+  --icon-size: 1.5rem;
+}
+
 [class^=cm-icon-]::before,
 [class^=cm-icon-]::after,
 [class*=" cm-icon-"]::before,
@@ -50,7 +60,6 @@ $icon-names: (
   height: var(--icon-size);
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
-  --icon-size: 1.5rem;
 }
 
 [class^=cm-icon-]::before,
@@ -58,32 +67,38 @@ $icon-names: (
   content: "";
 }
 
+.cm-icon--xs,
 .cm-icon--xs::before,
 .cm-icon--xs::after {
   --icon-size: 0.75rem;
 }
 
+.cm-icon--sm,
 .cm-icon--sm::before,
 .cm-icon--sm::after {
   --icon-size: 1rem;
 }
 
+.cm-icon--md,
 .cm-icon--md::before,
 .cm-icon--md::after {
   --icon-size: 1.5rem;
 }
 
+.cm-icon--lg,
 .cm-icon--lg::before,
 .cm-icon--lg::after {
   --icon-size: 2rem;
 }
 
+.cm-icon--xl,
 .cm-icon--xl::before,
 .cm-icon--xl::after {
   --icon-size: 4rem;
 }
 
 @each $icon-name in $icon-names {
+
   .cm-icon-#{$icon-name}::before,
   .cm-icon-#{$icon-name}::after {
     mask-image: image-url("icons/#{$icon-name}.svg");
@@ -95,4 +110,35 @@ $icon-names: (
   --icon-size: 1.25rem !important;
   margin-left: 1px !important;
   margin-right: 1rem !important;
+}
+
+.cm-icon--inverted {
+  --box-size: calc(var(--icon-size) * 1.5);
+  --offset: calc((var(--icon-size) - var(--box-size)) / 2);
+}
+
+.cm-icon--inverted::before {
+  content: "";
+
+  position: absolute;
+  transform: translate(var(--offset), var(--offset));
+
+  z-index: 0;
+  height: var(--box-size);
+  width: var(--box-size);
+  border-radius: calc(var(--box-size) / 2);
+  background-color: currentColor;
+  mask-image: none;
+}
+
+.cm-icon--sm.cm-icon--inverted::before {
+  transform: translate(var(--offset), calc(var(--offset) - (0.75em - var(--icon-size)) * 0.5));
+}
+
+.cm-icon--inverted::after {
+  position: relative;
+  z-index: 1;
+  content: "";
+  color: white;
+  margin-right: calc(var(--offset) * -2);
 }

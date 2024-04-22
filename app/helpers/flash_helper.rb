@@ -1,17 +1,6 @@
 module FlashHelper
   def flash_id(type, message) = [ type, message[0, 50] ].join("-").parameterize
 
-  def flash_dsfr_class(type)
-    case type
-    when :notice, "notice"
-      "fr-alert--info"
-    when :alert, "alert"
-      "fr-alert--error"
-    else
-      "fr-alert--#{type.to_s.parameterize}"
-    end
-  end
-
   def flash_cm_class(flash_type)
     type = flash_type.to_s.parameterize
     case type

@@ -4,13 +4,15 @@
   justify-content: flex-end;
   height: 100%;
 }
-.UserRow__actionsGroup > a + a {
+
+.UserRow__actionsGroup>a+a {
   margin-left: .5rem;
 }
 
-.User__body {
-  margin-top: 2em;
-  --width: 11
+.User {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .User__created_at {
@@ -27,9 +29,6 @@
 
 .User__actions {
   font: var(--font-small);
-  margin-top: 2em;
-  align-self: end;
-  --width: 1
 }
 
 .UserForm__phone {
@@ -48,4 +47,20 @@
 
 .UserForm__cancel {
   --width: 3;
+}
+
+.UserForm__cancel-invitation {
+  --width: 5;
+}
+
+.UserInvitation__form {
+  border-bottom: 1px solid var(--page-border);
+  padding: 0 0 1rem 0;
+  margin: 0 0 1rem 0;
+}
+
+.UserInvitation__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
