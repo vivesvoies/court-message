@@ -107,6 +107,11 @@ fr:
         phone_format: "Format attendu : (+33) 6 22 33 44 55"
         create_account: "Créer mon compte"
         team: "Équipe"
+      welcome:
+          invite_text: "%{invite_by} vous a invité à rejoindre %{team}. Créez votre compte pour utiliser Court-message."
+          sign_up: "Créer mon compte"
+          sign_in: "J’ai déjà un compte ?"
+          connect: "Je me connecte"
 
   date:
     yesterday: &yesterday "hier"

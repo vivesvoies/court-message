@@ -1,6 +1,21 @@
 class InvitationsController < Devise::InvitationsController
   before_action :configure_permitted_parameters
 
+  def welcome
+    @invitation_token = params[:invitation_token]
+    self.resource = resource_class.find_by_invitation_token(@invitation_token, true)
+
+    unless resource
+      redirect_to user_session_path(), notice: I18n.t(".devise.invitations.invitation_token_invalid")
+      return
+    end
+
+    @invited_by__name = User.find(resource.invited_by_id)
+    @team = Team.find(User.find(resource.id).team_ids.first).name
+    @is_admin = resource.role != "user"
+    render :welcome
+  end
+
   def new
     # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
     @team = Team.find_by(slug: params[:team])

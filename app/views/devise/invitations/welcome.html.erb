@@ -1,0 +1,31 @@
+<div class="cm-page">
+  <div class="cm-container">
+    <header class="SiteIntro cm-column cm-col--full">
+      <div>
+        <h1 class="SiteIntro__title"><%= t("text.welcome") %></h1>
+        <p class="SiteIntro__text">
+          <%= t("text.intro") %>
+        </p>
+      </div>
+      <%= image_tag "cm-logo.svg", class: "SiteIntro__logo",  alt: t(".logo-alt") %>
+    </header>
+
+    <p class="Welcome__text cm-column">
+      <%= t(".invite_text", invite_by: @invited_by__name, team: @team) %>
+    </p>
+
+    <div class="Welcome__actions cm-container">
+      <div class="Welcome__actions-create cm-column">
+        <%= link_to t(".sign_up"), accept_invitation_url(resource, invitation_token: @invitation_token), class: "cm-btn cm-btn--fat cm-btn--icon-left cm-icon-plus" %>
+      </div>
+      <% if @is_admin %>
+        <div class="Welcome__actions-connect cm-column">
+          <label class="cm-label"><%= t(".sign_in") %></label>
+          <%= link_to t(".connect"), user_session_path(), class: "cm-btn cm-btn--fat cm-btn--secondary cm-btn--icon-left cm-icon-arrow-right" %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
+<%= render partial: "footer" %>
