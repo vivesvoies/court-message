@@ -137,9 +137,9 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     get welcome_url(invitation_token: "valid_token")
     assert_redirected_to user_session_url
   end
-  
+
   test "should render welcome page if user is not authenticated and token is valid" do
-    new_user = User.invite!(email: 'john@example.com', name: 'John Doe') do |u|
+    new_user = User.invite!(email: "john@example.com", name: "John Doe") do |u|
       u.skip_invitation = true
       u.invited_by_id = @user.id
     end
@@ -147,7 +147,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     get welcome_url(invitation_token: new_user.raw_invitation_token)
     assert_response :success
   end
-  
+
   test "should redirect to sign in path if user is not authenticated and token is invalid" do
     get welcome_url(invitation_token: "invalid_token")
     assert_redirected_to new_user_session_path
