@@ -27,7 +27,8 @@ class InvitationsController < Devise::InvitationsController
     # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
     @team = Team.find_by(slug: params[:team])
     unless Current.user.belongs_to_team?(@team)
-      raise CanCan::AccessDenied, "You are not authorized to invite users to this team."
+      redirect_to @team, notice: I18n.t(".invitations.notice.not_authorized")
+      return
     end
     super
   end
@@ -40,7 +41,8 @@ class InvitationsController < Devise::InvitationsController
 
     # This is to prevent a user from being invited to a team to which the current user does not belong
     unless Current.user.belongs_to_team?(@team)
-      raise CanCan::AccessDenied, "You are not authorized to invite users to this team."
+      redirect_to @team, notice: I18n.t(".invitations.notice.not_authorized")
+      return
     end
 
     # If the user is confirmed no invitation is sent

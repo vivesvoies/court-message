@@ -19,7 +19,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     other_team = create(:team)
     get new_user_invitation_path(team: other_team)
-    assert_response :forbidden
+    assert_redirected_to team_url(other_team)
   end
 
   test "should create a new user when invited" do
@@ -128,7 +128,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @other_user
 
     post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
-    assert_response :forbidden
+    assert_redirected_to team_url(@team)
   end
 
   test "should redirect to team path if user is already authenticated" do
