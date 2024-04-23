@@ -43,7 +43,7 @@ fr:
         other: "Les utilisateurs"
         default_template:
           title: "Example de template"
-          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d'avoir des réponses types prêtes à des demandes récurrentes"
+          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d’avoir des réponses types prêtes à des demandes récurrentes"
     attributes:
       user:
         remember_me: Se souvenir de moi
@@ -186,7 +186,7 @@ fr:
       last_contact: "Dernier contact créé dans l’équipe :"
     search:
       new_contact: "Nouveau contact"
-      no_contact: "Ce contact n'existe pas"
+      no_contact: "Ce contact n’existe pas"
       placeholder: "Rechercher votre contact"
 
   memberships:
@@ -270,6 +270,7 @@ fr:
   invitations:
     notice:
       user_add_to_team: "Le membre a été ajouté à votre équipe"
+      not_authorized: "Vous n’êtes pas autorisé à inviter des utilisateurs dans cette équipe"
 
   templates:
     templates_list:
