@@ -5,8 +5,15 @@ class InvitationsController < Devise::InvitationsController
     @invitation_token = params[:invitation_token]
     self.resource = resource_class.find_by_invitation_token(@invitation_token, true)
 
+    # If the token isn't valid or the resource doesn't exist
     unless resource
       redirect_to user_session_path(), notice: I18n.t(".devise.invitations.invitation_token_invalid")
+      return
+    end
+
+    # Check if the user is already authenticated
+    if user_signed_in?
+      redirect_to teams_path, notice: I18n.t(".devise.failure.already_authenticated")
       return
     end
 
