@@ -26,7 +26,7 @@
         <% elsif !@results.present? && !@query.blank? %>
           <li class="ContactSearchResult__no-contact">
             <%= t(".no_contact") %>
-            <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-person-add", data: { turbo_frame: :primary } %>
+            <%= link_to t(".new_contact"), new_team_contact_path, class: "cm-btn cm-btn--icon-left cm-icon-contact", data: { turbo_frame: :primary } %>
           </li>
         <% end %>
     </ol>
