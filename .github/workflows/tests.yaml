@@ -74,7 +74,7 @@ jobs:
           bundle exec rake
 
   tests-system:
-    name: tests
+    name: tests-system
     runs-on: ubuntu-latest
 
     services:
@@ -89,8 +89,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        networks:
-          - default
 
       redis:
         image: redis:7.2.4-alpine
@@ -101,8 +99,6 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-        networks:
-          - default
 
       selenium-hub:
         image: selenium/hub
@@ -111,8 +107,6 @@ jobs:
           - 4442:4442
           - 4443:4443
           - 4444:4444
-        networks:
-          - default
         environment:
          GRID_MAX_SESSION: 10
 
@@ -122,8 +116,6 @@ jobs:
           driver: none
         links:
           - selenium-hub
-        networks:
-          - default
         depends_on:
           - selenium-hub
         ports:
