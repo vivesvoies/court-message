@@ -102,28 +102,21 @@ jobs:
 
       selenium-hub:
         image: selenium/hub
-        container_name: cm-selenium
         ports:
           - 4442:4442
           - 4443:4443
           - 4444:4444
-        environment:
+        env:
          GRID_MAX_SESSION: 10
 
       selenium-chrome:
         image: selenium/node-chrome
-        logging:
-          driver: none
-        links:
-          - selenium-hub
-        depends_on:
-          - selenium-hub
         ports:
           - "5900-5902:5900"
-        environment:
-          - SE_EVENT_BUS_HOST=selenium-hub
-          - SE_EVENT_BUS_PUBLISH_PORT=4442
-          - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+        env:
+          SE_EVENT_BUS_HOST: selenium-hub
+          SE_EVENT_BUS_PUBLISH_PORT: 4442
+          SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
 
     steps:
       - name: Checkout repository
