@@ -72,3 +72,83 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:migrate
           bundle exec rake
+
+  tests-system:
+    name: tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16.1-alpine
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        networks:
+          - default
+
+      redis:
+        image: redis:7.2.4-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+        networks:
+          - default
+
+      selenium-hub:
+        image: selenium/hub
+        container_name: cm-selenium
+        ports:
+          - 4442:4442
+          - 4443:4443
+          - 4444:4444
+        networks:
+          - default
+        environment:
+         GRID_MAX_SESSION: 10
+
+      selenium-chrome:
+        image: selenium/node-chrome
+        logging:
+          driver: none
+        links:
+          - selenium-hub
+        networks:
+          - default
+        depends_on:
+          - selenium-hub
+        ports:
+          - "5900-5902:5900"
+        environment:
+          - SE_EVENT_BUS_HOST=selenium-hub
+          - SE_EVENT_BUS_PUBLISH_PORT=4442
+          - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.0
+          bundler-cache: true
+      - name: Install dependencies
+        run: |
+          bundle install --jobs 4 --retry 3
+      - name: Run Tests
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+          bundle exec rails test:system
