@@ -3,7 +3,7 @@ require "test_helper"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Devise::Test::IntegrationHelpers
 
-  driven_by :selenium, using: :chrome, screen_size: [1400, 1400] = true
+  driven_by :selenium, using: :chrome, screen_size: [1400, 1400]
 
   def resize_to_mobile
     resize_window_to(428, 926)
