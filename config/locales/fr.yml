@@ -65,7 +65,7 @@ fr:
           attributes:
             user:
               required: "n’a pas été sélectionné"
-      
+
   errors:
     messages:
       improbable_phone: "ne ressemble pas à un numéro valide"
@@ -110,10 +110,10 @@ fr:
         create_account: "Créer mon compte"
         team: "Équipe"
       welcome:
-          invite_text: "%{invite_by} vous a invité à rejoindre %{team}. Créez votre compte pour utiliser Court-message."
-          sign_up: "Créer mon compte"
-          sign_in: "J’ai déjà un compte ?"
-          connect: "Je me connecte"
+        invite_text: "%{invited_by} vous a invité à rejoindre %{team}. Créez votre compte pour utiliser Court-message."
+        sign_up: "Créer mon compte"
+        sign_in: "J’ai déjà un compte ?"
+        connect: "Je me connecte"
 
   date:
     yesterday: &yesterday "hier"

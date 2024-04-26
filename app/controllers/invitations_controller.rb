@@ -17,10 +17,9 @@ class InvitationsController < Devise::InvitationsController
       return
     end
 
-    @invited_by__name = User.find(resource.invited_by_id)
+    @invited_by = User.find(resource.invited_by_id)
     @team = Team.find(User.find(resource.id).team_ids.first).name
     @is_admin = resource.role != "user"
-    render :welcome
   end
 
   def new
