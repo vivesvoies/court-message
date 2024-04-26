@@ -23,7 +23,6 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def new
-    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
     @team = Team.find_by(slug: params[:team])
     unless Current.user.belongs_to_team?(@team)
       redirect_to @team, notice: I18n.t(".invitations.notice.not_authorized")
@@ -33,7 +32,6 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def create
-    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
     @team = Team.find_by(slug: params[:team])
     user = User.find_by(email: invite_params[:email])
     part_of_team = user && user.belongs_to_team?(@team)
@@ -60,7 +58,6 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource)
-    # FIXME: The set_team before_action and authorize_ressource does not work for an unknown reason
     team_url(Team.find_by(slug: params[:team]))
   end
 
