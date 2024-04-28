@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "registrations", invitations: "invitations" }
   devise_scope :user do
     get "/users/await-confirmation", to: "registrations#show", as: :await_confirmation
+    get "/users/welcome", to: "invitations#welcome", as: :welcome
   end
 
   resources :messages, only: [ :new, :create ]

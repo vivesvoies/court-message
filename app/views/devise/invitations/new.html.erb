@@ -1,12 +1,12 @@
 <%= turbo_frame_tag @user do %>
-  <div class="UserInvitation__form">
+  <div class="InvitationNew__form">
     <%= form_for(resource, as: resource_name, url: user_invitation_path(team: params[:team]), html: { method: :post }) do |f| %>
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <fieldset class="cm-fieldset">
         <div class="cm-fieldset__element cm-input-group">
           <%= f.label :name, t(:name), class: "cm-label" %>
-          <%= f.text_field :name, class: "cm-input" %>
+          <%= f.text_field :name, class: "cm-input", data: { controller: "autofocus" } %>
         </div>
 
         <% resource.class.invite_key_fields.each do |field| -%>
@@ -16,7 +16,7 @@
           </div>
         <% end -%>
 
-        <div class="UserInvitation__actions">
+        <div class="InvitationNew__actions">
           <%= button_tag t(".new"), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark", data: {turbo_frame: "_top"} %>
           <%= link_to t(:cancel), team_path(Team.find_by(slug: params[:team])), class: "cm-btn cm-btn--secondary" %> 
         </div>

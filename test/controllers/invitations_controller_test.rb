@@ -19,7 +19,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
     other_team = create(:team)
     get new_user_invitation_path(team: other_team)
-    assert_response :forbidden
+    assert_redirected_to team_url(other_team)
   end
 
   test "should create a new user when invited" do
@@ -128,6 +128,28 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @other_user
 
     post user_invitation_path(team: @team), params: { user: { name: "John Doe", email: "john@example.com" } }
-    assert_response :forbidden
+    assert_redirected_to team_url(@team)
+  end
+
+  test "should redirect to team path if user is already authenticated" do
+    sign_in @user
+
+    get welcome_url(invitation_token: "valid_token")
+    assert_redirected_to user_session_url
+  end
+
+  test "should render welcome page if user is not authenticated and token is valid" do
+    new_user = User.invite!(email: "john@example.com", name: "John Doe") do |u|
+      u.skip_invitation = true
+      u.invited_by_id = @user.id
+    end
+    Membership.create(team: @team, user: new_user)
+    get welcome_url(invitation_token: new_user.raw_invitation_token)
+    assert_response :success
+  end
+
+  test "should redirect to sign in path if user is not authenticated and token is invalid" do
+    get welcome_url(invitation_token: "invalid_token")
+    assert_redirected_to new_user_session_path
   end
 end
