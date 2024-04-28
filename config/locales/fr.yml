@@ -33,6 +33,8 @@ fr:
     viewer_detail_tab_bar:
       conversations: "Messagerie"
       contacts: "Répertoire"
+    header_tab_bar:
+      create_account: "Créer mon compte"
 
   activerecord:
     models:
@@ -41,7 +43,7 @@ fr:
         other: "Les utilisateurs"
         default_template:
           title: "Example de template"
-          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d'avoir des réponses types prêtes à des demandes récurrentes"
+          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d’avoir des réponses types prêtes à des demandes récurrentes"
     attributes:
       user:
         remember_me: Se souvenir de moi
@@ -63,7 +65,7 @@ fr:
           attributes:
             user:
               required: "n’a pas été sélectionné"
-      
+
   errors:
     messages:
       improbable_phone: "ne ressemble pas à un numéro valide"
@@ -101,6 +103,17 @@ fr:
       user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
       new:
         new: "Ajouter à l’équipe"
+      edit:
+        title: "Mon compte Court-Message"
+        email_format: "Format attendu : nom@domaine.fr"
+        phone_format: "Format attendu : (+33) 6 22 33 44 55"
+        create_account: "Créer mon compte"
+        team: "Équipe"
+      welcome:
+        invite_text: "%{invited_by} vous a invité à rejoindre %{team}. Créez votre compte pour utiliser Court-message."
+        sign_up: "Créer mon compte"
+        sign_in: "J’ai déjà un compte ?"
+        connect: "Je me connecte"
 
   date:
     yesterday: &yesterday "hier"
@@ -173,7 +186,7 @@ fr:
       last_contact: "Dernier contact créé dans l’équipe :"
     search:
       new_contact: "Nouveau contact"
-      no_contact: "Ce contact n'existe pas"
+      no_contact: "Ce contact n’existe pas"
       placeholder: "Rechercher votre contact"
 
   memberships:
@@ -257,6 +270,7 @@ fr:
   invitations:
     notice:
       user_add_to_team: "Le membre a été ajouté à votre équipe"
+      not_authorized: "Vous n’êtes pas autorisé à inviter des utilisateurs dans cette équipe"
 
   templates:
     templates_list:

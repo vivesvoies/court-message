@@ -1,12 +1,47 @@
 class InvitationsController < Devise::InvitationsController
-  before_action :set_team
   before_action :configure_permitted_parameters
 
-  authorize_resource :team
+  def welcome
+    @invitation_token = params[:invitation_token]
+    self.resource = resource_class.find_by_invitation_token(@invitation_token, true)
+
+    # If the token isn't valid or the resource doesn't exist
+    unless resource
+      redirect_to user_session_path(), notice: I18n.t(".devise.invitations.invitation_token_invalid")
+      return
+    end
+
+    # Check if the user is already authenticated
+    if user_signed_in?
+      redirect_to teams_path, notice: I18n.t(".devise.failure.already_authenticated")
+      return
+    end
+
+    @invited_by = User.find(resource.invited_by_id)
+    @team = Team.find(User.find(resource.id).team_ids.first).name
+    @is_admin = resource.role != "user"
+  end
+
+  def new
+    @team = Team.find_by(slug: params[:team])
+    unless Current.user.belongs_to_team?(@team)
+      redirect_to @team, notice: I18n.t(".invitations.notice.not_authorized")
+      return
+    end
+    super
+  end
 
   def create
+    @team = Team.find_by(slug: params[:team])
     user = User.find_by(email: invite_params[:email])
     part_of_team = user && user.belongs_to_team?(@team)
+
+    # This is to prevent a user from being invited to a team to which the current user does not belong
+    unless Current.user.belongs_to_team?(@team)
+      redirect_to @team, notice: I18n.t(".invitations.notice.not_authorized")
+      return
+    end
+
     # If the user is confirmed no invitation is sent
     if user && !user.awaiting_invitation_reply?
       if part_of_team
@@ -23,16 +58,13 @@ class InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource)
-    team_url(@team)
+    team_url(Team.find_by(slug: params[:team]))
   end
 
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:invite, keys: [ :name ])
-  end
-
-  def set_team
-    @team = Team.find_by(slug: params[:team_id])
+    devise_parameter_sanitizer.permit(:invite, keys: [ :name, :phone ])
+    devise_parameter_sanitizer.permit(:accept_invitation, keys: [ :name, :email, :phone ])
   end
 end

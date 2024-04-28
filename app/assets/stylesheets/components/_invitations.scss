@@ -1,0 +1,54 @@
+@import "variables";
+
+.InvitationNew__form {
+  border-bottom: 1px solid var(--page-border);
+  padding: 0 0 1rem 0;
+  margin: 0 0 1rem 0;
+}
+
+.InvitationEdit__submit {
+  margin-left: auto;
+  margin-top: 2rem;
+}
+
+.InvitationNew__logo,
+.InvitationEdit__logo {
+  height: 40%;
+}
+
+.InvitationNew__title,
+.InvitationEdit__title {
+  margin-block-start: 3em;
+}
+
+.InvitationNew__team,
+.InvitationEdit__team {
+  margin-block-end: 2.5em;
+}
+
+.InvitationNew,
+.InvitationEdit__header {
+  display: none;
+}
+
+@media (min-width: $width-mid) {
+  .InvitationEdit .cm-tab-bar__header {
+      display: none;
+  }
+  .InvitationEdit__header {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 2rem;
+      height: 10rem;
+  }
+  .InvitationNew__actions,
+  .InvitationEdit__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .InvitationEdit__phone {
+    width: 60%;
+  }
+}

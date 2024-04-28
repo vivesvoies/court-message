@@ -1,0 +1,39 @@
+@import "variables";
+
+.Welcome__actions {
+  --gap: 1rem;
+}
+
+.Welcome__text {
+  --width-mid: 10;
+  --width-huge: 8;
+  font: var(--font-message);
+}
+
+.Welcome__actions-create,
+.Welcome__actions-connect {
+  --width: 7;
+}
+
+.Welcome__actions-create {
+  align-self: flex-end; 
+}
+
+.Welcome__actions-create:not(.Welcome__actions-connect) {
+  margin: 2em 0;
+}
+
+.Welcome__actions-connect a {
+  margin-top: 1em;
+}
+
+.Welcome__actions-connect label {
+  margin-left: 1em;
+}
+
+@media screen and (min-width: $width-mid) {
+  .Welcome__actions-create,
+  .Welcome__actions-connect {
+    --width: 3;
+  }  
+}

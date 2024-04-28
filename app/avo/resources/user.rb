@@ -21,6 +21,7 @@ class Avo::Resources::User < Avo::BaseResource
     end
     # Field template only available in page show
     if view.show?
+      field :phone, as: :text, sortable: true
       field :confirmed_at,
         as: :date,
         format: "yyyy-LL-dd"
@@ -48,6 +49,9 @@ class Avo::Resources::User < Avo::BaseResource
       field "has an invitation token", as: :boolean do
         record.invitation_token?
       end
+      field :invited_by_id, as: :id
+      # Only available on the community version see: https://docs.avohq.io/3.0/fields/record_link.html#use_resource
+      # field :invited_by_id, as: :record_link, use_resource: "Avo::Resources::User"
       field :messages, as: :has_many, visible: -> { resource.record.messages.any? }
       field :conversations, as: :has_and_belongs_to_many, visible: -> { resource.record.conversations.any? }
     end
