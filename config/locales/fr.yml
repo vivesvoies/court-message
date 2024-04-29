@@ -183,7 +183,7 @@ fr:
       new_contact: "Nouveau contact"
       search: "Rechercher un contact ou une liste de diffusion"
     last_contact:
-      last_contact: "Dernier contact créé dans l’équipe :"
+      last_contact: "Dernier contact créé par vous :"
     search:
       new_contact: "Nouveau contact"
       no_contact: "Ce contact n’existe pas"

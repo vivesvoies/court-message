@@ -15,6 +15,14 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get index with last contact created" do
+    new_contact = create(:contact, team: @team, created_by: @user)
+    get team_contacts_url(@team)
+    
+    assert_response :success
+    assert_select ".ContactIndex__last-contact-link", text: "#{new_contact.name}"
+  end
+
   test "should get index without error even with a nameless contact" do
     contact_with_no_name = Contact.create(email: "contact-mail@com", phone: "0102030405")
     get team_contacts_url(@team)
