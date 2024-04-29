@@ -16,7 +16,7 @@
           <%= link_to "", team_user_template_path(@team, user_id: template.user.id, id: template.id),
               data: {
                 turbo_method: :delete,
-                turbo_confirm: "Are you sure?" },
+                turbo_confirm: t(:confirm) },
               class: "cm-btn cm-icon-bin cm-btn--secondary" %>
         </div>
       <% end %>

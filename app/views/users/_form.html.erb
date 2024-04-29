@@ -38,7 +38,7 @@
           <%= link_to t(".cancel_invitation"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
-              turbo_confirm: "Are you sure?"
+              turbo_confirm: t(:confirm)
             },
             class: "cm-btn cm-btn--tertiary" if can? :destroy, user %>
         </div>
@@ -49,7 +49,7 @@
           <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
-              turbo_confirm: "Are you sure?"
+              turbo_confirm: t(:confirm)
             },
             class: "cm-btn cm-btn--danger cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
         <% end %>

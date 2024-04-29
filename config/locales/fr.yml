@@ -12,6 +12,7 @@ fr:
   by: "par "
   me: "moi"
   to: "À : "
+  confirm: "Êtes-vous sûre ?"
 
   application:
     model_errors:
