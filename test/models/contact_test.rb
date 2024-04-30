@@ -10,11 +10,13 @@
 #  phone                :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  created_by_id        :bigint
 #  notes_last_editor_id :bigint
 #  team_id              :bigint           not null
 #
 # Indexes
 #
+#  index_contacts_on_created_by_id         (created_by_id)
 #  index_contacts_on_notes_last_editor_id  (notes_last_editor_id)
 #  index_contacts_on_phone                 (phone)
 #  index_contacts_on_team_id               (team_id)
@@ -22,6 +24,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (created_by_id => users.id)
 #  fk_rails_...  (notes_last_editor_id => users.id)
 #  fk_rails_...  (team_id => teams.id)
 #
@@ -137,5 +140,24 @@ class ContactTest < ActiveSupport::TestCase
     other_contact = build(:contact, email: contact.email, name: contact.name, phone: contact.phone, team: other_team)
     assert other_contact.valid?
     assert_nothing_raised { other_contact.save }
+  end
+
+  def test_notes_last_editor_update
+    user = create(:user)
+    contact = create(:contact)
+
+    assert_nil contact.notes_last_editor
+
+    Current.user = user
+    contact.update(notes: "Updated notes")
+
+    assert_equal user, contact.reload.notes_last_editor
+  end
+
+  def test_created_by_association
+    user = create(:user)
+    contact = create(:contact, created_by: user)
+
+    assert_equal user, contact.created_by
   end
 end

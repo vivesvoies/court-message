@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_103044) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_29_135206) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_103044) do
     t.text "notes"
     t.datetime "notes_updated_at"
     t.bigint "notes_last_editor_id"
+    t.bigint "created_by_id"
+    t.index ["created_by_id"], name: "index_contacts_on_created_by_id"
     t.index ["notes_last_editor_id"], name: "index_contacts_on_notes_last_editor_id"
     t.index ["phone"], name: "index_contacts_on_phone"
     t.index ["team_id", "phone"], name: "index_contacts_on_team_id_and_phone", unique: true
@@ -128,6 +130,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_103044) do
   end
 
   add_foreign_key "contacts", "teams"
+  add_foreign_key "contacts", "users", column: "created_by_id"
   add_foreign_key "contacts", "users", column: "notes_last_editor_id"
   add_foreign_key "conversations", "contacts"
   add_foreign_key "conversations", "messages", column: "last_message_id"

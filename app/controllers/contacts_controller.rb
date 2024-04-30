@@ -9,7 +9,7 @@ class ContactsController < ApplicationController
   # GET team/:team_slug/contacts
   def index
     @contacts = @team.contacts.order(name: :asc)
-    @last = @contacts.order("created_at").last
+    @last = @contacts.where(created_by_id: current_user.id).order(created_at: :desc).first
   end
 
   # GET team/:team_slug/contacts/:id
@@ -38,6 +38,7 @@ class ContactsController < ApplicationController
   # POST team/:team_slug/contacts
   def create
     @contact = Contact.new(new_contact_params)
+    @contact.created_by = Current.user
     # INFO: Parts of the app will break if the conversation is not created.
     # See _viewer_detail_tab_bar.html.erb for instance.
     if params[:create_conversation]
