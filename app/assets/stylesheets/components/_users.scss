@@ -52,15 +52,3 @@
 .UserForm__cancel-invitation {
   --width: 5;
 }
-
-.UserInvitation__form {
-  border-bottom: 1px solid var(--page-border);
-  padding: 0 0 1rem 0;
-  margin: 0 0 1rem 0;
-}
-
-.UserInvitation__actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}

@@ -1,23 +1,55 @@
-<%= render partial: "main_menu" %>
-<div class="Block">
-  <h2><%= t "devise.invitations.edit.header" %></h2>
-  <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-  <%= f.hidden_field :invitation_token, readonly: true %>
-
-  <% if f.object.class.require_password_on_accepting %>
-    <div class="cm-fieldset__element">
-      <%= f.label :password, class: "cm-label" %><br />
-      <%= f.password_field :password, class: "cm-input" %>
-    </div>
-    <div class="cm-fieldset__element">
-      <%= f.label :password_confirmation, class: "cm-label" %><br />
-      <%= f.password_field :password_confirmation, class: "cm-input" %>
-    </div>
+<div class="InvitationEdit">
+  <%= render "header_tab_bar" do %>
+    <%= t(".create_account") %>
   <% end %>
+  <div class="Block">
+    <header class="InvitationEdit__header cm-column cm-col--full">
+      <div>
+        <h2 class="InvitationEdit__title"><%= t(".title") %></h2>
+      </div>
+      <%= image_tag "cm-logo.svg", class: "InvitationEdit__logo",  alt: t(".logo-alt") %>
+    </header>
 
-  <div class="actions">
-    <%= button_tag t("devise.invitations.edit.submit_button"), type: 'submit', class: "cm-btn" %>
+    <%= t(".team") %>
+    <h4 class="InvitationEdit__team">
+      <%= Team.find(User.find(resource.id).team_ids.first).name %>
+    </h4>
+
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :invitation_token, readonly: true %>
+
+      <div class="cm-fieldset__element cm-input-group">
+        <%= f.label :name, t(:name), class: "Contact__label-name cm-label" %>
+        <%= f.text_field :name, class: "cm-input" %>
+      </div>
+
+      <div class="cm-fieldset__element cm-input-group">
+        <%= f.label :email, t(:email), class: "Contact__label-email cm-label" %>
+        <span class="cm-hint-text"><%= t(".email_format") %></span>
+        <%= f.text_field :email, class: "cm-input" %>
+      </div>
+
+      <% if f.object.class.require_password_on_accepting %>
+        <div class="cm-fieldset__element">
+          <%= f.label :password, class: "cm-label" %><br />
+          <%= f.password_field :password, class: "cm-input" %>
+        </div>
+        <div class="cm-fieldset__element">
+          <%= f.label :password_confirmation, class: "cm-label" %><br />
+          <%= f.password_field :password_confirmation, class: "cm-input" %>
+        </div>
+      <% end %>
+
+      <div class="InvitationEdit__actions">
+        <div class="InvitationEdit__phone cm-fieldset__element cm-input-group">
+          <%= f.label :phone, t(:phone), class: "cm-label" %>
+          <span class="cm-hint-text"><%= t(".phone_format") %></span>
+          <%= f.text_field :phone, class: "cm-input" %>
+        </div>
+          <%= button_tag t(".create_account"), type: 'submit', class: "InvitationEdit__submit cm-btn" %>
+      </div>
+    <% end %>
   </div>
+  <%= render partial: "footer" %>
 </div>
-<% end %>

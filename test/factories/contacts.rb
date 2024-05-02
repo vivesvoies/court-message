@@ -10,11 +10,13 @@
 #  phone                :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  created_by_id        :bigint
 #  notes_last_editor_id :bigint
 #  team_id              :bigint           not null
 #
 # Indexes
 #
+#  index_contacts_on_created_by_id         (created_by_id)
 #  index_contacts_on_notes_last_editor_id  (notes_last_editor_id)
 #  index_contacts_on_phone                 (phone)
 #  index_contacts_on_team_id               (team_id)
@@ -22,6 +24,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (created_by_id => users.id)
 #  fk_rails_...  (notes_last_editor_id => users.id)
 #  fk_rails_...  (team_id => teams.id)
 #
