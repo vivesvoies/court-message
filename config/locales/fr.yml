@@ -12,6 +12,7 @@ fr:
   by: "par "
   me: "moi"
   to: "À : "
+  show: "montrer"
 
   application:
     model_errors:
@@ -109,7 +110,6 @@ fr:
         phone_format: "Format attendu : (+33) 6 22 33 44 55"
         create_account: "Créer mon compte"
         team: "Équipe"
-        show: "montrer"
       welcome:
         invite_text: "%{invited_by} vous a invité à rejoindre %{team}. Créez votre compte pour utiliser Court-message."
         sign_up: "Créer mon compte"

@@ -46,3 +46,16 @@
 .cm-input--text {
   height: 8rem;
 }
+
+.cm-password-wrapper {
+  position: relative;
+  margin-top: .5rem;
+}
+
+.cm-show-password {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  font: var(--font-small);
+}

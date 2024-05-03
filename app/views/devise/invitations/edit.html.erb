@@ -34,12 +34,15 @@
         <div data-controller="password-visibility">
           <div class="cm-fieldset__element">
             <%= f.label :password, class: "cm-label" %>
-            <div class="InvitationEdit__password-wrapper">
+            <div class="cm-password-wrapper">
               <%= f.password_field :password, class: "cm-input", data: { "password-visibility-target": "password" }, required: true %>
-              <a href="javascript:void(0)" class="button InvitationEdit__show-password" data-action="password-visibility#toggle">
-                <%= t(".show") %>
+              <a href="javascript:void(0)" class="button cm-show-password" data-action="password-visibility#toggle">
+                <%= t(:show) %>
               </a>
             </div>
+            <% if @minimum_password_length %>
+              <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
+            <% end %>
           </div>
 
           <div class="cm-fieldset__element">

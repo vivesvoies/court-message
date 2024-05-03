@@ -8,7 +8,7 @@
     
     <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
     
-      <fieldset class="cm-fieldset">
+      <fieldset class="cm-fieldset" data-controller="password-visibility">
         <%= render "devise/shared/error_messages", resource: resource %>
         <%= f.hidden_field :reset_password_token %>
       
@@ -17,12 +17,17 @@
           <% if @minimum_password_length %>
             <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
           <% end %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
+          <div class="cm-password-wrapper">
+            <%= f.password_field :password, autocomplete: "new-password", class: "cm-input cm-password__input", data: { "password-visibility-target": "password" }, aria_required: true %>
+            <a href="javascript:void(0)" class="button cm-show-password" data-action="password-visibility#toggle">
+              <%= t(:show) %>
+            </a>
+          </div>
         </div>
       
         <div class="cm-fieldset__element cm-input-group">
           <%= f.label :password_confirmation, class: "cm-label" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "cm-input cm-password__input", data: { "password-visibility-target": "passwordConfirmation" }, aria_required: true %>
         </div>
       </fieldset>
     
