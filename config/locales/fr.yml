@@ -12,7 +12,7 @@ fr:
   by: "par "
   me: "moi"
   to: "À : "
-  confirm: "Êtes-vous sûre ?"
+  confirm: "Êtes-vous sûr ?"
 
   application:
     model_errors:
@@ -284,3 +284,5 @@ fr:
       template_updated: ""
     form:
       update: "Enregistrer"
+    destroy:
+      success: "Le modèle a été supprimé."

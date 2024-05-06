@@ -34,21 +34,17 @@
       <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>
 
-    <!-- TODO: Implement CSS -->
-    <!-- not visible until a 'modal--active' class is applied to the #confirm element -->
-    <div id="confirm" class="modal">
-      <div class="modal__backdrop confirm-cancel"></div>
-      <div class="modal__content">
-        <h3 id="confirm-title">Replaced by `data-turbo-confirm` attribute</h3>
-        <div id="confirm-body">
-          <p>Default confirm message.</p>
-          <p>Optionally replaced by `data-confirm-details` attribute</p>
+    <dialog id="confirm" class="TurboConfirmModal">
+      <div class="modal__content cm-tc-modal cm-tc-modal--delete">
+        <div class="cm-tc-modal__icon" id="confirm-body">
+          <i class="cm-icon-bin cm-icon--sm"></i>
         </div>
-        <div class="modal-actions">
-          <button class="confirm-cancel">Cancel</button>
-          <button id="confirm-accept">Yes, I'm Sure</button>
+        <p class="cm-tc-modal__content">Voulez-vous vraiment supprimer le modèle ?</p>
+        <button id="confirm-accept">Supprimer</button>
+        <div class="confirm-cancel cm-tc-modal__close">
+          <i class="cm-icon-cross"></i>
         </div>
       </div>
-    </div>
+    </dialog>
   </body>
 </html>

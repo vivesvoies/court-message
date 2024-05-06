@@ -1,0 +1,108 @@
+@charset "UTF-8";
+@import "variables";
+
+/* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ *\
+  TURBO CONFIRM MODAL
+\* ˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ */
+dialog {
+  padding: 0;
+  border: none;
+}
+
+dialog:-internal-dialog-in-top-layer {
+  inset-inline-start: initial;
+  top: var(--size-tab-bar);
+  margin: 1rem 1rem 1rem auto;
+}
+
+.cm-tc-modal {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 0.5fr 3.5rem;
+  grid-template-rows: 1fr;
+  align-items: center;
+  padding: 1rem .625rem;
+  color: var(--alert-content);
+  border-radius: .25rem;
+  min-width: Min(20rem, 90%);
+  max-width: 28rem;
+
+  pointer-events: auto;
+  background: var(--background-default-grey);
+  transition: opacity .5s ease;
+  cursor: pointer;
+}
+
+// .cm-tc-modal--warn {
+//   background-color: var(--alert-warn);
+//   .cm-tc-modal__icon {
+//     color: var(--alert-warn);
+//   }
+// }
+// .cm-tc-modal--disabled {
+//   background-color: var(--alert-disabled);
+//   .cm-tc-modal__icon {
+//     color: var(--alert-disabled);
+//   }
+// }
+// .cm-tc-modal--success {
+//   background-color: var(--alert-success);
+//   .cm-tc-modal__icon {
+//     color: var(--alert-success);
+//   }
+// }
+// .cm-tc-modal--info {
+//   background-color: var(--alert-info);
+//   .cm-tc-modal__icon {
+//     color: var(--alert-info);
+//   }
+// }
+.cm-tc-modal--delete {
+  background-color: var(--tc-modal-delete);
+  .cm-tc-modal__icon {
+    color: var(--tc-modal-delete);
+  }
+}
+
+.cm-tc-modal__icon {
+  margin-left: .625rem;
+  background-color: var(--tc-modal-content);
+  border-radius: 1.25rem;
+  height: 1.75rem;
+  width: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cm-tc-modal__content {
+  margin: 0;
+}
+
+.cm-tc-modal > button {
+  color: var(--action-text);
+  border-radius: 20rem;
+  box-shadow: inset 0 0 0 1px var(--tc-modal-content);
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+
+  font: var(--font-medium-bold);
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+
+  --hover: var(--tc-modal-hover);
+  --active: var(--tc-modal-active);
+  --hover-shadow: var(--btn-hover);
+}
+
+.cm-tc-modal__close {
+  padding-left: .625rem;
+  margin-left: 1rem;
+  height: 100%;
+  border-left: 1px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
