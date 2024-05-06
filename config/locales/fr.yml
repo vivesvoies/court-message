@@ -12,6 +12,7 @@ fr:
   by: "par "
   me: "moi"
   to: "À : "
+  show: "montrer"
 
   application:
     model_errors:
