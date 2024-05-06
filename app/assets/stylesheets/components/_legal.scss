@@ -55,11 +55,6 @@
   margin-bottom: 1rem;
 }
 
-.LegalNoticePartner__logo,
-.TermsAndConditionsPartner__logo {
-  gap: 7rem !important; 
-}
-
 .TermsAndConditionsVersion__content {
   font: var(--font-body-italic);
   margin-top: .5rem;
@@ -67,4 +62,9 @@
 
 .LegalNotice ul {
   list-style: none;
+}
+
+.LegalNotice__header-subtitle,
+.TermsAndConditions__header-subtitle {
+  font: var(--font-small);
 }
