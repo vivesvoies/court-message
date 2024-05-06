@@ -39,32 +39,32 @@ fr:
   activerecord:
     models:
       user:
-        one: "L’utilisateur"
-        other: "Les utilisateurs"
+        one: "L’utilisateur.trice"
+        other: "Les utilisateur‧trice‧s"
         default_template:
           title: "Example de template"
-          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d’avoir des réponses types prêtes à des demandes récurrentes"
+          content: "Bonjour, ceci est un modèle de message. Vous pouvez me modifier et me conserver à votre guise afin d’avoir des réponses type prêtes à des demandes récurrentes."
     attributes:
       user:
-        remember_me: Se souvenir de moi
+        remember_me: "Se souvenir de moi"
       contact:
-        phone: Le numéro de téléphone
+        phone: "Le numéro de téléphone"
       message:
-        content: Le contenu du message
+        content: "Le contenu du message"
       team:
         name: "Nom de l’équipe"
         slug: "L’identifiant unique de l’équipe"
         address: "L’adresse de l’équipe"
       membership:
         user:
-          one: "L’utilisateur"
-          other: "Les utilisateurs"
+          one: "L’utilisateur.trice"
+          other: "Les utilisateur‧trice‧s"
     errors:
       models:
         membership:
           attributes:
             user:
-              required: "n’a pas été sélectionné"
+              required: "n’a pas été sélectionné.e"
 
   errors:
     messages:
@@ -84,14 +84,14 @@ fr:
       new:
         send_me_reset_password_instructions: "Réinitialisation du mot de passe"
       edit:
-        change_your_password: Changer votre mot de passe
+        change_your_password: "Changer votre mot de passe"
     registrations:
       new:
         sign_up: "Se créer un compte"
         confirm: "Valider"
       edit:
         cancel_account: "Suppression définitive du compte"
-        are_you_sure: "Êtes-vous sûr ?\nCette opération ne pourra pas être annulée."
+        are_you_sure: "Êtes-vous sûr.e ?\nCette opération ne pourra pas être annulée."
         back: "Retour"
     sessions:
       new:
@@ -100,7 +100,7 @@ fr:
         logo-alt: "Logo Court‑message"
         forgot_your_password: "J’ai oublié mon mot de passe"
     invitations:
-      user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
+      user_already_in_the_team: "Cet.te utilisateur.trice fait déjà partie de votre équipe."
       new:
         new: "Ajouter à l’équipe"
       edit:
@@ -122,10 +122,10 @@ fr:
       yesterday: *yesterday
 
   roles:
-    user: "Utilisateur"
-    team_admin: "Administrateur d’équipe"
-    site_admin: "Administrateur général"
-    super_admin: "Superutilisateur"
+    user: "Utilisateur.trice"
+    team_admin: "Administrateur.trice d’équipe"
+    site_admin: "Administrateur.trice général.e"
+    super_admin: "Superutilisateur.trice"
 
   menu:
     swap_team: Changer d’équipe
@@ -270,7 +270,7 @@ fr:
   invitations:
     notice:
       user_add_to_team: "Le membre a été ajouté à votre équipe"
-      not_authorized: "Vous n’êtes pas autorisé à inviter des utilisateurs dans cette équipe"
+      not_authorized: "Vous n’êtes pas autorisé à inviter des utilisateurs.trices dans cette équipe"
 
   templates:
     templates_list:
