@@ -29,7 +29,9 @@ module ApplicationHelper
   end
 
   def should_load_conversations?
-    @team.present? && !content_for?(:navigation) && current_frame.nil?
+    # When the layout is not loaded via turbo frame request, yet no content is provided for the navigation
+    # Typically happens when visiting a page other than the index.
+    @team.present? && !content_for?(:navigation) && !turbo_frame_request?
   end
 
   def lazy_loaded_conversations_path
