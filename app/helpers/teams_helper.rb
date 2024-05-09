@@ -7,10 +7,10 @@ module TeamsHelper
       destination,
       id: "tab-btn-#{label}",
       data: {
-        action: "navigation#selectTab",
+        action: "tab-bar#selectTab",
         turbo_frame: frame,
-        navigation_label_param: label,
-        navigation_target: "tab",
+        tab_bar_label_param: label,
+        tab_bar_target: "tab",
         turbo_action: :advance
       },
       class: link_class
