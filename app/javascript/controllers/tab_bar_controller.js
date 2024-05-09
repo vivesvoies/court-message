@@ -13,8 +13,12 @@ export default class extends Controller {
 
   setActiveTab({ currentTarget, id }) {
     let target = (currentTarget) ? currentTarget : this.tabTargets.find(tab => tab.id === `tab-btn-${id}`);
-
     this.tabTargets.forEach(tab => tab.classList.remove(this.activeTabClass));
+
+    if (!target) {
+      return;
+    }
+
     target.classList.add(this.activeTabClass);
   }
 }
