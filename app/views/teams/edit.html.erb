@@ -1,10 +1,11 @@
 <%= content_for :primary do %>
-  <header class="TeamEdit__header">
-    <h1 class="TeamEdit__title">
-      <%= t(".edit") %>
-    </h1>
-  </header>
-  <div class="TeamEdit__body">
-    <%= render "form", team: @team %>
+  <div class="TeamEdit">
+    <%= render "header_tab_bar" do %>
+      <i class="cm-icon-team"></i>
+      <%= t("teams.edit.edit") %>
+    <% end %>
+    <div class="TeamEdit__body">
+      <%= render "form", team: @team %>
+    </div>
   </div>
 <% end %>
