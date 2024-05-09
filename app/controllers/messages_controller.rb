@@ -19,6 +19,8 @@ class MessagesController < ApplicationController
     @message.save
     @conversation.messages << @message
 
+    # current_user.conversations << @conversation unless current_user.conversations.include?(@conversation)
+
     if !@message.persisted?
       # TODO: renders only the `new` frame
       # Instead show an error message.

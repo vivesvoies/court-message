@@ -17,11 +17,13 @@ class ConversationsController < ApplicationController
   def create
     contact = Contact.find(params[:contact])
     contact.build_conversation
+    # conversation = contact.build_conversation
+    # conversation.agents << current_user
     contact.save
     redirect_to team_conversation_path(@team, contact.conversation), notice: I18n.t(".conversations.create.success")
   end
 
-  # GET team/:team_slug//conversations/1
+  # GET team/:team_slug/conversations/1
   def show
     all_conversations if current_frame.nil? # Don't need to load conversation list on turbo-frame requests
     @conversation.mark_as_read! if @conversation.unread?
@@ -43,6 +45,16 @@ class ConversationsController < ApplicationController
 
   def set_templates
     @templates = Current.user.templates if !turbo_frame_request?
+  end
+
+  def load_conversations
+    if params[:show] == "all"
+      @conversations = Conversation.all
+    elsif params[:show] == "mine"
+      @conversations = current_user.conversations
+    else
+      @conversations = Conversation.for_team(@team)
+    end
   end
 
   # # Only allow a list of trusted parameters through.
