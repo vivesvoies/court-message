@@ -2,7 +2,7 @@
 <%# conversation_frame = @conversation ? :primary : :navigation %>
 <%# contact_destination = @conversation ? team_contact_path(Current.team, @conversation.contact_id) : team_contacts_path(Current.team) %>
 
-<nav data-controller="tab-bar" data-tab-bar-viewer-outlet=".Viewer" data-tab-bar-active-tab-class="TabBarButton--active">
+<nav data-controller="navigation" data-navigation-viewer-outlet=".Viewer" data-navigation-active-tab-class="TabBarButton--active">
   <%= tab_for :home,
     icon: :home,
     mobile: :only,

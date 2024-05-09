@@ -3,7 +3,7 @@
 <% end %>
 <% content_for :body_class, "has-viewer-visible" %>
 <% content_for :layout do %>
-  <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList" data-viewer-tab-bar-outlet=".TabBar nav">
+  <div class="Viewer" id="viewer" data-controller="viewer" data-viewer-conversation-list-outlet=".ConversationList" data-viewer-navigation-outlet=".TabBar nav">
     <% if should_load_conversations? %>
       <%= turbo_frame_tag :navigation, class: "ViewerNavigation", src: lazy_loaded_conversations_path, refresh: :morph %>
     <% else %>

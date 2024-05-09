@@ -19,10 +19,10 @@ module ApplicationHelper
       destination,
       id: "tab-btn-#{label}",
       data: {
-        action: "tab-bar#selectTab",
+        action: "navigation#selectTab",
         turbo_frame: frame,
-        tab_bar_label_param: label,
-        tab_bar_target: "tab",
+        navigation_label_param: label,
+        navigation_target: "tab",
         turbo_action: :advance
       },
       class: link_class
