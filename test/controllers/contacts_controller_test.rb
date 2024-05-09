@@ -24,7 +24,7 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index without error even with a nameless contact" do
-    contact_with_no_name = Contact.create(email: "contact-mail@com", phone: "0102030405")
+    Contact.create(email: "contact-mail@com", phone: "0102030405")
     get team_contacts_url(@team)
     assert_response :success
   end
