@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Connects to data-controller="tab-bar"
+// Connects to data-controller="navigation"
 export default class extends Controller {
   static targets = [ "tab" ];
   static outlets = [ "viewer" ];

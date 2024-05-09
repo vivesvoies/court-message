@@ -3,18 +3,18 @@ import { Controller } from "@hotwired/stimulus"
 // Connects to data-controller="viewer"
 export default class extends Controller {
   static targets = [ "conversationIndicator" ];
-  static outlets = [ "conversation-list", "tab-bar" ];
+  static outlets = [ "conversation-list", "navigation" ];
 
   connect() {
     this.element.addEventListener("tabbarchange", this.tabBarChange.bind(this));
   }
 
   menuOpen() {
-    this.tabBarOutlet.setActiveTab({ id: "home" });
+    this.navigationOutlet.setActiveTab({ id: "home" });
   }
 
   menuClose() {
-    this.tabBarOutlet.setActiveTab({ id: "conversations" });
+    this.navigationOutlet.setActiveTab({ id: "conversations" });
   }
 
   tabBarChange(params) {
