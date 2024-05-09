@@ -1,3 +1,11 @@
+@import "variables";
+
+@media screen and (min-width: $width-large) {
+  .cm-menu.ConversationSidebar__user-menu {
+    display: none;
+  }
+}
+
 .cm-menu {
   display: flex;
   flex-direction: column;

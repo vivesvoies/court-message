@@ -8,6 +8,9 @@
 
       <%= menu_for(:team, icon: :team, destination: team_path(@team)) %>
       <%= menu_for(:edit_team, icon: :settings, destination: edit_team_path(@team)) if can? :update, Team %>
+      <div class="ConversationSidebar__user-menu">
+        <%= render partial: "user_menu_items" %>
+      </div>
     </div>
   </div>
 <% end %>
