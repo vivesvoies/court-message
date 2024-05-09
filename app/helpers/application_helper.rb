@@ -11,23 +11,6 @@ module ApplicationHelper
     end
   end
 
-  def tab_for(label, icon:, destination:, frame: nil, mobile: false, active: false, **attr)
-    link_class = "TabBarButton cm-btn cm-btn--caption cm-icon-#{icon}"
-    link_class += " cm-small-only" if mobile == :only
-    link_class += " TabBarButton--active" if active
-    link_to t(".#{label}"),
-      destination,
-      id: "tab-btn-#{label}",
-      data: {
-        action: "navigation#selectTab",
-        turbo_frame: frame,
-        navigation_label_param: label,
-        navigation_target: "tab",
-        turbo_action: :advance
-      },
-      class: link_class
-  end
-
   def should_load_conversations?
     # When the layout is not loaded via turbo frame request, yet no content is provided for the navigation
     # Typically happens when visiting a page other than the index.
