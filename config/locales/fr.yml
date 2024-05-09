@@ -28,9 +28,6 @@ fr:
       contacts: "Répertoire"
       presets: "Modèles"
       inbox: "Chat"
-    user_menu:
-      edit_profile: "Configurer mon compte"
-      sign_out: "Déconnexion"
     viewer_detail_tab_bar:
       conversations: "Messagerie"
       contacts: "Répertoire"
@@ -134,9 +131,11 @@ fr:
     contacts: Répertoire
     team: Équipe
     edit_team: Configurer
+    edit_profile: "Configurer mon compte"
+    sign_out: "Déconnexion"
+
 
   conversations:
-    menu:
     sidebar:
       search: "Rechercher dans tous les messages"
       new: "Écrire un message"

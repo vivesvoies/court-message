@@ -1,0 +1,5 @@
+<%= render partial: "menu_item", locals: { label: :edit_profile, icon: :contact, destination: edit_user_registration_path, frame: "_top" } %>
+<%= button_to destroy_user_session_path, method: :delete, class: "cm-menu-item", data: { turbo_frame: "_top" } do %>
+  <i class="cm-icon-logout cm-icon--inverted"></i>
+  <%= t("menu.sign_out") %>
+<% end %>
