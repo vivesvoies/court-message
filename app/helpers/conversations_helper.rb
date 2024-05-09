@@ -1,6 +1,6 @@
 module ConversationsHelper
   def current_conversation?(conversation)
-    params[:selected] || @conversation&.id.to_s == conversation.id.to_s
+    params[:selected] == conversation.id.to_s or @conversation == conversation
   end
 
   def last_message_extract_for(conversation)
