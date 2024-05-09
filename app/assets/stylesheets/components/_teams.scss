@@ -1,6 +1,4 @@
-.Teams__header h1 {
-  font: var(--font-hero);
-}
+@import "variables";
 
 .Teams__list {
   --gap: 2rem;
@@ -30,8 +28,30 @@
   margin-bottom: 1rem;
 }
 
-.TeamEdit__header,
-.TeamShow__header {
+.TeamShow__body {
+  height: calc(var(--size-viewer) - var(--size-tab-bar) * 2);
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
+  @media screen and (min-width: $width-large) {
+    height: calc(var(--size-viewer) - var(--size-tab-bar));
+  }
+}
+
+
+.TeamShow__members-list {
+  overflow-y: auto;
+  padding-bottom: 3.5rem;
+}
+
+.TeamShow__members-list .Membership {
+  margin-inline: 3.5rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--page-border);
+}
+
+
+.TeamEdit__header {
   grid-area: header;
 
   background: var(--background-contrast-grey);
@@ -48,22 +68,16 @@
   margin: 0;
 }
 
-.TeamEdit__body,
-.TeamShow__members-list {
+.TeamEdit__body {
   padding: 2.5rem;
   padding-top: 0;
   overflow-y: scroll;
-  height: 90%;
   margin-bottom: 50px;
 }
 
-.Membership {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--page-border);
-}
-
 .TeamShow__actions {
-  margin-top: 1rem;
+  padding: 1rem 3.5rem;
+  border-bottom: 1px solid var(--page-border);
 }
 
 .TeamForm__textarea {
