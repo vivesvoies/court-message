@@ -3,12 +3,12 @@
 /* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ *\
   TURBO CONFIRM
 \* ˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ */
-.cm-alert--turbo-confirm-dialog {
+.cm-modal--turbo-confirm {
   padding: 0;
   border: none;
 }
 
-.cm-alert--turbo-confirm-dialog:-internal-dialog-in-top-layer {
+.cm-modal--turbo-confirm:-internal-dialog-in-top-layer {
   inset-inline-start: initial;
   top: var(--size-tab-bar);
   margin: 1rem 1rem 1rem auto;
