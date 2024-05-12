@@ -289,6 +289,8 @@ fr:
       template_updated: ""
     form:
       update: "Enregistrer"
+      confirm_delete: "Voulez-vous vraiment supprimer le modèle ?"
+      delete: "Supprimer"
     destroy:
       success: "Le modèle a été supprimé."
     template:
