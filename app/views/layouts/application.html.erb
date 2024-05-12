@@ -34,14 +34,14 @@
       <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>
 
-    <dialog id="confirm" class="TurboConfirmModal">
-      <div class="modal__content cm-tc-modal cm-tc-modal--delete">
-        <div class="cm-tc-modal__icon" id="confirm-body">
+    <dialog id="confirm" class="cm-alert--turbo-confirm-dialog">
+      <div class="modal__content cm-alert cm-alert--turbo-confirm cm-alert--delete">
+        <div class="cm-alert__icon" id="confirm-body">
           <i class="cm-icon-bin cm-icon--sm"></i>
         </div>
-        <p class="cm-tc-modal__content">Voulez-vous vraiment supprimer le modèle ?</p>
+        <p class="cm-alert__content">Voulez-vous vraiment supprimer le modèle ?</p>
         <button id="confirm-accept">Supprimer</button>
-        <div class="confirm-cancel cm-tc-modal__close">
+        <div class="confirm-cancel cm-alert__close">
           <i class="cm-icon-cross"></i>
         </div>
       </div>
