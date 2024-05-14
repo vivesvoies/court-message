@@ -15,7 +15,8 @@
 
 <div class="ConversationSwitcher">
   <%= turbo_stream_from "team_conversations_list_#{team.id}" %>
-  <h3><%= t(".my_conversations") %></h3>
+  <h3><%= button_to t(".my_conversations"), team_conversations_path(), params: { :show => "mine" }, method: :get %></h3>
+  <h3><%= button_to t(".all_conversations"), team_conversations_path(), params: { :show => "all" }, method: :get %></h3>
   <ol id="conversations"
       class="ConversationList"
       data-controller="conversation-list"
