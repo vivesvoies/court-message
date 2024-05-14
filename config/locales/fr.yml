@@ -12,6 +12,7 @@ fr:
   by: "par "
   me: "moi"
   to: "À : "
+  confirm: "Êtes-vous sûr ?"
   show: "montrer"
 
   application:
@@ -251,6 +252,10 @@ fr:
       invitation_send: "Invitation envoyée"
       cancel_invitation: "Annuler l’invitation"
       phone: "Téléphone"
+      confirm_delete: "Voulez-vous vraiment retirer l'utilisateur de l'équipe ?"
+      confirm_uninvite: "Voulez-vous vraiment annuler l'invitation ?"
+      remove_button: "Retirer"
+      cancel_button: "Désinviter"
     edit:
       me: "Moi"
 
@@ -283,3 +288,10 @@ fr:
       template_updated: ""
     form:
       update: "Enregistrer"
+      confirm_delete: "Voulez-vous vraiment supprimer le modèle ?"
+      delete: "Supprimer"
+    destroy:
+      success: "Le modèle a été supprimé."
+    template:
+      confirm_delete: "Voulez-vous vraiment supprimer le modèle ?"
+      delete: "Supprimer"
