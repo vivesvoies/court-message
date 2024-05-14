@@ -33,5 +33,16 @@
     <main class="Main">
       <%= content_for?(:layout) ? yield(:layout) : yield %>
     </main>
+
+    <dialog id="confirm" class="cm-modal--turbo-confirm">
+      <div class="modal__content cm-alert cm-alert--turbo-confirm cm-alert--delete">
+        <i class="cm-alert__icon cm-icon-bin cm-icon--sm"></i>
+        <div  id="confirm-body">
+          <p class="cm-alert__content">Êtes-vous sûr ?</p>
+        </div>
+        <button id="confirm-accept" class="cm-alert--button">Supprimer</button>
+        <button class="confirm-cancel cm-alert__close cm-icon-cross"></button>
+      </div>
+    </dialog>
   </body>
 </html>

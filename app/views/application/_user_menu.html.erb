@@ -5,14 +5,7 @@
       <i class="cm-icon-chevron-down cm-icon--sm"></i>
     </summary>
     <div class="UserMenu__content cm-menu cm-dropdown__content">
-      <%= link_to edit_user_registration_path, class: "cm-menu-item", data: { turbo_frame: "_top" , turbo_action: :advance } do %>
-        <i class="cm-icon-settings cm-icon--inverted"></i>
-        <%= t(".edit_profile") %>
-      <% end %>
-      <%= button_to destroy_user_session_path, method: :delete, class: "cm-menu-item", data: { turbo_frame: "_top" } do %>
-        <i class="cm-icon-logout cm-icon--inverted"></i>
-        <%= t(".sign_out") %>
-      <% end %>
-    </ul>
+      <%= render partial: "user_menu_items" %>
+    </div>
   </details>
 <% end %>

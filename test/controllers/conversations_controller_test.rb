@@ -52,6 +52,14 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation--active .Conversation__contact", text: @conversation.title
   end
 
+  test "should select conversation marked as :selected" do
+    create_list(:conversation, 3, contact: @contact)
+    @conversation = create(:conversation, contact: @contact)
+
+    get team_conversations_url(@team, selected: @conversation.id)
+    assert_select ".Conversation--active .Conversation__contact", text: @conversation.title
+  end
+
   # TODO: conversation_detail could be delete
   # test "should show conversation detail without sidebar" do
   #   @conversation = create(:conversation, contact: @contact)

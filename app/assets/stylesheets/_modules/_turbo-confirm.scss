@@ -1,0 +1,35 @@
+@import "variables";
+
+/* ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯ *\
+  TURBO CONFIRM
+\* ˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ */
+.cm-modal--turbo-confirm {
+  padding: 0;
+  border: none;
+  top: var(--size-tab-bar);
+  margin: 1rem 1rem 1rem auto;
+}
+
+.cm-alert--turbo-confirm {
+  grid-template-columns: 3.5rem 1fr 0.5fr 3.5rem;
+}
+
+.cm-alert--button {
+  color: var(--action-text);
+  border-radius: 20rem;
+  box-shadow: inset 0 0 0 1px var(--alert-content);
+
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: fit-content;
+
+  font: var(--font-medium-bold);
+  line-height: 1.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+
+  --hover: var(--alert-button-hover);
+  --active: var(--alert-button-active);
+  --hover-shadow: var(--btn-hover);
+}

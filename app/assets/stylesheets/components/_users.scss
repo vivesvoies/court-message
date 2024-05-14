@@ -1,3 +1,9 @@
+@import "variables";
+
+.UserForm {
+  --gap: 1rem;
+}
+
 .UserRow__actionsGroup {
   flex-wrap: nowrap;
   align-items: center;
@@ -27,28 +33,23 @@
   text-decoration: underline;
 }
 
-.User__actions {
+.UserForm__actions {
   font: var(--font-small);
+  --gap: 1rem;
 }
 
-.UserForm__phone {
-  --width: 5;
-  margin-right: 1rem;
-}
+@media screen and (min-width: $width-large) {
 
-.UserForm__email {
-  --width: 5;
-}
+  .UserForm__name {
+    --width: 12;
+  }
 
-.UserForm__remove,
-.UserForm__submit {
-  --width: 4.5;
-}
-
-.UserForm__cancel {
-  --width: 3;
-}
-
-.UserForm__cancel-invitation {
-  --width: 5;
+  .UserForm__phone,
+  .UserForm__email,
+  .UserForm__remove,
+  .UserForm__submit,
+  .UserForm__cancel-invitation,
+  .UserForm__cancel {
+    --width: 6;
+  }
 }

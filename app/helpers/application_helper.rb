@@ -11,25 +11,10 @@ module ApplicationHelper
     end
   end
 
-  def tab_for(label, icon:, destination:, frame: nil, mobile: false, active: false, **attr)
-    link_class = "TabBarButton cm-btn cm-btn--caption cm-icon-#{icon}"
-    link_class += " cm-small-only" if mobile == :only
-    link_class += " TabBarButton--active" if active
-    link_to t(".#{label}"),
-      destination,
-      id: "tab-btn-#{label}",
-      data: {
-        action: "tab-bar#selectTab",
-        turbo_frame: frame,
-        tab_bar_label_param: label,
-        tab_bar_target: "tab",
-        turbo_action: :advance
-      },
-      class: link_class
-  end
-
   def should_load_conversations?
-    @team.present? && !content_for?(:navigation) && current_frame.nil?
+    # When the layout is not loaded via turbo frame request, yet no content is provided for the navigation
+    # Typically happens when visiting a page other than the index.
+    @team.present? && !content_for?(:navigation) && !turbo_frame_request?
   end
 
   def lazy_loaded_conversations_path
