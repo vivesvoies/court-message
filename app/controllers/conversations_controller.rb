@@ -22,8 +22,6 @@ class ConversationsController < ApplicationController
   def create
     contact = Contact.find(params[:contact])
     contact.build_conversation
-    # conversation = contact.build_conversation
-    # conversation.agents << current_user
     contact.save
     redirect_to team_conversation_path(@team, contact.conversation), notice: I18n.t(".conversations.create.success")
   end
