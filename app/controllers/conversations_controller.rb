@@ -11,8 +11,6 @@ class ConversationsController < ApplicationController
 
   # GET team/:team_slug/conversations
   def index
-    # if params[:show] == "all"
-    #   @conversations = Conversation.all
     if params[:show] == "mine"
       @conversations = current_user.conversations
     else
