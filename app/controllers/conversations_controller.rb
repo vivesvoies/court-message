@@ -50,16 +50,6 @@ class ConversationsController < ApplicationController
     @templates = Current.user.templates if !turbo_frame_request?
   end
 
-  def load_conversations
-    if params[:show] == "all"
-      @conversations = Conversation.all
-    elsif params[:show] == "mine"
-      @conversations = current_user.conversations
-    else
-      @conversations = Conversation.for_team(@team)
-    end
-  end
-
   # # Only allow a list of trusted parameters through.
   # def conversation_params
   #   params.fetch(:conversation, {})
