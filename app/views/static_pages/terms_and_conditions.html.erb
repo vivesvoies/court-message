@@ -3,13 +3,14 @@
   <div class="TermsAndConditions">
     <header class="TermsAndConditions__header">
       <%= image_tag "cm-logo.svg", class: "TermsAndConditions__logo",  alt: t(".logo-alt") %>
-      <li class="TermsAndConditionsPartner__logo">
-        un outil libre et collaboratif de médiation numérique par SMS porté par 
-        <img class="Partner__logo" alt="<span class=&quot;translation_missing&quot; title=&quot;translation missing: fr.application.footer.logo-vv-alt&quot;>Logo Vv Alt</span>" src="/assets/vv-logo-88f4705169ba9bdfc9fef5766748a504b7bfeb63e2cbc277966343b1aabea588.svg">
-      </li>
       <li>
+        un outil libre et collaboratif de médiation numérique par SMS porté par 
+        <%= image_tag "vv-logo.svg", class: "Partner__logo",  alt: t(".logo-anct-alt") %>
+      </li>
+      <li class="TermsAndConditions__header-subtitle">
         projet lauréat de l’AMI 2022 « Outiller la médiation numérique » porté par
-        <img class="Partner__logo" alt="<span class=&quot;translation_missing&quot; title=&quot;translation missing: fr.application.footer.logo-anct-alt&quot;>Logo Anct Alt</span>" src="/assets/anct-logo-societe-numerique-7da4ae2a5bc8be73f33f133d606b86b27ec8db91bf59f88707219584cce3d255.svg">
+        <%= image_tag "bloc-marque-republique-francaise--logo.svg", class: "Partner__logo",  alt: t(".logo-anct-alt") %>
+        <%= image_tag "anct-logo-societe-numerique.svg", class: "Partner__logo",  alt: t(".logo-anct-alt") %>
       </li>
     </header>
     <div class="TermsAndConditions__title">

@@ -142,3 +142,8 @@ $icon-names: (
   color: white;
   margin-right: calc(var(--offset) * -2);
 }
+
+.cm-icon--tint-positive {
+  background-color: var(--positive-bg);
+  color: var(--positive-text);
+}

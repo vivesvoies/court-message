@@ -1,3 +1,11 @@
+@import "variables";
+
+@media screen and (min-width: $width-large) {
+  .cm-menu.ConversationSidebar__user-menu {
+    display: none;
+  }
+}
+
 .cm-menu {
   display: flex;
   flex-direction: column;
@@ -9,6 +17,9 @@
   padding: 1.5rem;
   background-color: var(--menu-item-bg);
   list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
 }
 
 .cm-menu-item[href],

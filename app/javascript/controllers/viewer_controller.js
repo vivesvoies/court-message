@@ -16,11 +16,20 @@ export default class extends Controller {
   menuClose() {
     this.tabBarOutlet.setActiveTab({ id: "conversations" });
   }
-
+  
   tabBarChange(params) {
+    this.visit(params.label);
+  }
+
+  menuVisit(label) {
+    this.visit(label);
+    this.tabBarOutlet.setActiveTab({ id: label });
+  }
+
+  visit(label) {
     this.element.className = this.element.className.replace(/\bViewer--detail-\S+/g, "");
     this.element.className = this.element.className.replace(/\bViewer--tab-\S+/g, "");
-    this.element.classList.add(`Viewer--tab-${params.label}`);
+    this.element.classList.add(`Viewer--tab-${label}`);
   }
 
   showDetailView() {

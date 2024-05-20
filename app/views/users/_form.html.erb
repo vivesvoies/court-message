@@ -4,12 +4,14 @@
   <% end %>  
   <div class="cm-container UserForm">
 
-    <div class="cm-fieldset__element">
-      <%= form.label :name, t(:name), class: "cm-label" %>
-      <%= form.text_field :name, class: "cm-input" %>
+    <div class="cm-container">
+      <div class="cm-fieldset__element cm-column UserForm__name">
+        <%= form.label :name, t(:name), class: "cm-label" %>
+        <%= form.text_field :name, class: "cm-input" %>
+      </div>
     </div>
 
-    <article class="cm-container">
+    <div class="cm-container">
       <div class="cm-column cm-fieldset__element UserForm__phone">
         <%= form.label :phone, t(".phone"), class: "cm-label" %>
         <%= form.text_field :phone, class: "cm-input" %>
@@ -19,28 +21,30 @@
         <%= form.label :email, t(:email), class: "cm-label" %>
         <%= form.text_field :email, class: "cm-input" %>
       </div>
-    </article>
+    </div>
 
     <div class="cm-container UserForm__actions">
       <div class="cm-column UserForm__submit">
         <%= button_tag user.awaiting_invitation_reply? ? t(".invitation_send") : t(:update),
-            type: 'submit',
+            type: "submit",
             class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark",
             :disabled => user.awaiting_invitation_reply? %>
       </div>
 
       <% if !user.awaiting_invitation_reply? %>
         <div class="cm-column UserForm__cancel">
-          <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--tertiary" %>
+          <%= link_to t(:cancel), team_user_path(@team, user), class: "cm-btn cm-btn--secondary" %>
         </div>
       <% else %>
         <div class="cm-column UserForm__cancel-invitation">
           <%= link_to t(".cancel_invitation"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
-              turbo_confirm: "Are you sure?"
+              turbo_confirm: t(:confirm),
+              confirm_details: t(".confirm_uninvite"),
+              confirm_button: t(".cancel_button")
             },
-            class: "cm-btn cm-btn--tertiary" if can? :destroy, user %>
+            class: "cm-btn cm-btn--secondary" if can? :destroy, user %>
         </div>
       <% end %>
 
@@ -49,7 +53,9 @@
           <%= link_to t("users.form.remove"), membership_path(Membership.find_by(user: user.id, team: @team.id).id),
             data: {
               turbo_method: :delete,
-              turbo_confirm: "Are you sure?"
+              turbo_confirm: t(:confirm),
+              confirm_details: t(".confirm_delete"),
+              confirm_button: t(".remove_button")
             },
             class: "cm-btn cm-btn--danger cm-btn--icon-left cm-icon-cross" if can? :destroy, user %>
         <% end %>

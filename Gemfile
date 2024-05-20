@@ -24,7 +24,9 @@ gem "bundler-audit" # Check dependencies for vulnerabilities
 gem "cancancan"
 gem "devise", "~> 4.9"
 gem "devise-i18n"
-gem "devise_invitable", "~> 2.0.0"
+# FIXME: See https://github.com/vivesvoies/court-message/issues/227
+# gem "devise_invitable", "~> 2.0.0"
+gem "devise_invitable", git: "https://github.com/scambra/devise_invitable.git", ref: "d2b93edb8bf6e4ac81fa15ff4b948eafe1d456fc"
 gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
 gem "rails-i18n", "~> 7.0.8"

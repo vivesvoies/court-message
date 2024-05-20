@@ -8,7 +8,7 @@
     
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     
-      <fieldset class="cm-fieldset">
+      <fieldset class="cm-fieldset" data-controller="password-visibility">
         <%= render "devise/shared/error_messages", resource: resource %>
       
         <div class="cm-fieldset__element cm-input-group">
@@ -26,7 +26,12 @@
         <div class="cm-fieldset__element cm-input-group">
           <%= f.label :password %>
           <span class="cm-hint-text"><%= t(".leave_blank_if_you_don_t_want_to_change_it") %></span>
-          <%= f.password_field :password, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
+          <div class="cm-password-wrapper">
+            <%= f.password_field :password, autocomplete: "new-password", class: "cm-input cm-password__input", data: { "password-visibility-target": "password" }, aria_required: true %>
+            <a href="javascript:void(0)" class="button cm-show-password" data-action="password-visibility#toggle">
+              <%= t(:show) %>
+            </a>
+          </div>
           <% if @minimum_password_length %>
             <span class="cm-hint-text">(<%= @minimum_password_length %> <%= t("devise.shared.forms.min_char") %>)</span>
           <% end %>
@@ -34,14 +39,15 @@
       
         <div class="cm-fieldset__element cm-input-group">
           <%= f.label :password_confirmation, class: "cm-label" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "cm-input cm-password__input", aria_required: true %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "cm-input cm-password__input", data: { "password-visibility-target": "passwordConfirmation" }, aria_required: true %>
         </div>
       
         <div class="cm-fieldset__element cm-input-group">
           <%= f.label :current_password %>
           <span class="cm-hint-text"><%= t(".we_need_your_current_password_to_confirm_your_changes") %></span>
-          <%= f.password_field :current_password, autocomplete: "current-password", class: "cm-input cm-password__input", aria_required: true %>
+          <%= f.password_field :current_password, autocomplete: "current-password", class: "cm-input cm-password__input", data: { "password-visibility-target": "currentPassword" }, aria_required: true %>
         </div>
+
       </fieldset>
       <fieldset class="cm-fieldset">
         <div class="cm-fieldset__element cm-btns-group cm-btns-group--right cm-btns-group--inline">
