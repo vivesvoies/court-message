@@ -33,6 +33,10 @@ class Conversation < ApplicationRecord
                      includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order(Arel.sql("COALESCE(messages.updated_at, conversations.updated_at) DESC"))
                    }
 
+  scope :for_user, ->(user, team) {
+                    includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }, id: user.conversation_ids).order(Arel.sql("COALESCE(messages.updated_at, conversations.updated_at) DESC"))
+                  }
+
   def self.find_preloaded(id)
     includes({ messages: :sender }, :contact, :agents).find(id)
   end

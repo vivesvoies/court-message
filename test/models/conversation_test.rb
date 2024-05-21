@@ -120,6 +120,79 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal([ oldest.id, newest.id, middle.id ], preloaded)
   end
 
+  def test_user_scope
+    team = create(:team)
+    user = create(:user)
+    other_user = create(:user)
+  
+    team_conversations = create_list(:conversation, 3, contact: create(:contact, team: team))
+  
+    user_conversations = team_conversations[0..1]
+    user.conversations << user_conversations
+  
+    result = Conversation.for_user(user, team)
+    assert_equal(user_conversations.sort, result.sort)
+    assert_not_includes(result, team_conversations[2])
+  end
+  
+  def test_user_scope_ordering
+    team = create(:team)
+    user = create(:user)
+  
+    convos = create_list(:conversation, 3, contact: create(:contact, team: team))
+    user.conversations << convos
+  
+    convos.each { |convo| convo.messages << create(:inbound_message) }
+  
+    preloaded = Conversation.for_user(user, team)
+    assert_equal(preloaded, convos.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, convos.last)
+  
+    convos.first.messages << create(:outbound_message)
+    preloaded = Conversation.for_user(user, team)
+    assert_equal(preloaded, convos.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, convos.first)
+  
+    convos.second.touch
+    preloaded = Conversation.for_user(user, team)
+    assert_not_equal(preloaded.first, convos.second)
+  end
+  
+  def test_complex_user_scope_ordering
+    team = create(:team)
+    user = create(:user)
+  
+    oldest = create(:conversation, contact: create(:contact, team: team), updated_at: 1.day.ago)
+    middle = create(:conversation, contact: create(:contact, team: team), updated_at: 1.hour.ago)
+    newest = create(:conversation, contact: create(:contact, team: team), updated_at: 1.minute.ago)
+  
+    user.conversations << [oldest, middle, newest]
+  
+    preloaded = Conversation.for_user(user, team).pluck(:id)
+    assert_equal([newest.id, middle.id, oldest.id], preloaded)
+  
+    oldest.messages << create(:inbound_message)
+    preloaded = Conversation.for_user(user, team).pluck(:id)
+    assert_equal([oldest.id, newest.id, middle.id], preloaded)
+  end
+
+  def test_user_scope_with_multiple_teams
+    team_1 = create(:team)
+    team_2 = create(:team)  
+    user = create(:user)
+  
+    team_1_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_1))
+    team_2_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_2))
+
+    user.conversations << team_1_conversations
+    user.conversations << team_2_conversations
+  
+    result = Conversation.for_user(user, team_1)
+    assert_equal(team_1_conversations.sort, result.sort)
+    assert_not_includes(result, team_2_conversations[0])
+    assert_not_includes(result, team_2_conversations[1])
+  end
+
   def test_preloading_query
     c = create(:conversation) do |conversation|
       create_list(:inbound_message, 10, conversation:)

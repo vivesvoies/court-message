@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   layout "viewer"
 
-  before_action :set_team, only: %i[ index show create ]
+  before_action :set_team, only: %i[ index show create update ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
   before_action :set_templates, only: %i[ index show ]
@@ -12,7 +12,7 @@ class ConversationsController < ApplicationController
   # GET team/:team_slug/conversations
   def index
     if params[:show] == "mine"
-      @conversations = current_user.conversations
+      @conversations = Conversation.for_user(current_user, @team)
     else
       @conversations = Conversation.for_team(@team)
     end
