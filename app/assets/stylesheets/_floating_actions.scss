@@ -1,0 +1,14 @@
+@import "variables";
+
+.Viewer__FloatingActions {
+  display: none;
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+}
+
+@media screen and (min-width: $width-large) {
+  .Viewer__FloatingActions {
+    display: block;
+  }
+}
