@@ -35,6 +35,10 @@ gem "vonage", "~> 7.19"
 
 gem "avo", ">= 3.2.1"
 
+gem "stackprof"
+gem "sentry-ruby"
+gem "sentry-rails"
+
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "factory_bot_rails"
