@@ -83,6 +83,8 @@
   --focus-ring: var(--color-peach);
 
   --btn-hover: var(--shadow-1);
+  --btn-floating: var(--shadow-3);
+  --btn-floating-hover: var(--shadow-4);
 
   --notif-conversation-unread: var(--color-robin);
 
@@ -140,6 +142,8 @@
 
   --shadow-1: 0 0 .25rem .0625rem rgba(0, 0, 0, .25);
   --shadow-2: .25rem .25rem .5rem rgba(0, 0, 0, .25);
+  --shadow-3: 0 0 .25rem .125rem rgba(0, 0, 0, .25);
+  --shadow-4: 0 0 .5rem .125rem rgba(0, 0, 0, .25);
 }
 
 /*
