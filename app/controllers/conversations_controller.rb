@@ -13,8 +13,10 @@ class ConversationsController < ApplicationController
   def index
     if params[:show] == "mine"
       @conversations = Conversation.for_user(current_user, @team)
+      @turbo_stream_name = "user_conversations_list_#{current_user.id}"
     else
       @conversations = Conversation.for_team(@team)
+      @turbo_stream_name = "team_conversations_list_#{@team.id}"
     end
   end
 
