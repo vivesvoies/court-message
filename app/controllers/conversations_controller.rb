@@ -11,6 +11,13 @@ class ConversationsController < ApplicationController
 
   # GET team/:team_slug/conversations
   def index
+    if params[:show] == "mine"
+      @conversations = Conversation.for_user(current_user, @team)
+      @turbo_stream_name = "user_conversations_list_#{current_user.id}"
+    else
+      @conversations = Conversation.for_team(@team)
+      @turbo_stream_name = "team_conversations_list_#{@team.id}"
+    end
   end
 
   # POST team/:team_slug/conversations
@@ -21,7 +28,7 @@ class ConversationsController < ApplicationController
     redirect_to team_conversation_path(@team, contact.conversation), notice: I18n.t(".conversations.create.success")
   end
 
-  # GET team/:team_slug//conversations/1
+  # GET team/:team_slug/conversations/1
   def show
     all_conversations if current_frame.nil? # Don't need to load conversation list on turbo-frame requests
     @conversation.mark_as_read! if @conversation.unread?

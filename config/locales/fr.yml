@@ -141,6 +141,7 @@ fr:
       search: "Rechercher dans tous les messages"
       new: "Écrire un message"
       my_conversations: "Mes conversations"
+      all_conversations: "Toutes les conversations"
     team_picker:
       switch_team: "Changer d’équipe"
       team: "Équipes"

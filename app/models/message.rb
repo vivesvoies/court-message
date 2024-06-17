@@ -36,6 +36,7 @@ class Message < ApplicationRecord
   belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
   delegate :team, to: :conversation
+  after_create :associate_user_with_conversation
 
   validates_presence_of :content
 
@@ -43,5 +44,13 @@ class Message < ApplicationRecord
 
   def direction
     inbound_status? ? :inbound : :outbound
+  end
+
+  private
+
+  def associate_user_with_conversation
+    if sender_type == "User"
+      conversation.agents << sender unless conversation.agents.include?(sender)
+    end
   end
 end
