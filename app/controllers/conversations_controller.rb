@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   layout "viewer"
 
-  before_action :set_team, only: %i[ index show create update ]
+  before_action :set_team, only: %i[ index show create ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
   before_action :set_templates, only: %i[ index show ]
