@@ -92,6 +92,10 @@ class User < ApplicationRecord
     !confirmed_at.present? && teams.empty? && messages.empty?
   end
 
+  def send_reset_password_instructions
+    super if invitation_token.nil?
+  end
+
   private
 
   def add_default_template
