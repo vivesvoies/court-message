@@ -38,7 +38,6 @@ class Contact < ApplicationRecord
 
   phony_normalize :phone
   validates :phone, presence: true, uniqueness: { scope: :team_id }, phony_plausible: true
-
   validates :email, uniqueness: { scope: :team_id }, allow_blank: true
 
   before_update :update_notes_information, if: :notes_changed?

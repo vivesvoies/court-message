@@ -66,7 +66,7 @@ class Conversation < ApplicationRecord
     if unread? # broadcast a new message
       broadcast_remove_to "conversation_list_item_#{id}"
       broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
-    else # broadcast another upddate (such as change in read / unread status)
+    else # broadcast another update (such as change in read / unread status)
       broadcast_replace_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
     end
   end
