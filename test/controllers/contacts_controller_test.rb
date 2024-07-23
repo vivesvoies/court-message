@@ -162,15 +162,15 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
   test "should destroy contact and associated records" do
     @message = create(:inbound_message, content: "0123456789" * 15)
     @contact.conversation.messages << @message
-  
+
     assert_not_nil Contact.find_by(id: @contact.id)
     assert_not_nil Conversation.find_by(id: @contact.conversation.id)
     assert_not_nil Message.find_by(id: @message.id)
     assert_not_nil @contact.conversation.last_message_id
-  
-    assert_difference('Contact.count', -1) do
-      assert_difference('Conversation.count', -1) do
-        assert_difference('Message.count', -1) do
+
+    assert_difference("Contact.count", -1) do
+      assert_difference("Conversation.count", -1) do
+        assert_difference("Message.count", -1) do
           delete team_contact_url(@team, @contact)
           assert_response :redirect
           follow_redirect!
