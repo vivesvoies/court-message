@@ -2,7 +2,7 @@
   <div class="User" id="<%= dom_id user %>">
     <div class="User__body">
       <div class="User__name">
-          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %>
+          <%= user.name %> <% if Current.user == user %><%= t(".me") %><% end %> <% if user.role != "user" %><%= t(".admin") %><% end %>
       </div>
       <div class="User__created_at">
         <%= t(".join") %> <%= user.created_at.year.to_s %>
