@@ -242,6 +242,7 @@ fr:
       join: "a rejoint l’équipe en"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
       me: "(moi)"
+      admin: "(admin)"
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."

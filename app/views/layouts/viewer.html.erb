@@ -1,3 +1,6 @@
+<% content_for(:head) do %>
+  <script async src="https://tally.so/widgets/embed.js"></script>
+<% end %>
 <% content_for :flash_stream do %>
   <%= render "turbo_flash" %>
 <% end %>
@@ -26,6 +29,10 @@
 
     <%= turbo_frame_tag :tab_bar, class: "TabBar cm-tab-bar", refresh: :morph do %>
       <%= render partial: "tab_bar" %>
+    <% end if !turbo_frame_request? %>
+
+    <%= content_tag :div, class: "Viewer__FloatingActions" do %>
+      <%= render partial: "feedback_button" %>
     <% end if !turbo_frame_request? %>
   </div>
 <% end %>

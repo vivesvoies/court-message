@@ -77,7 +77,7 @@ class Conversation < ApplicationRecord
       agents.each do |agent|
         broadcast_prepend_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
       end
-    else # broadcast another upddate (such as change in read / unread status)
+    else # broadcast another update (such as change in read / unread status)
       broadcast_replace_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
       agents.each do |agent|
         broadcast_replace_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
