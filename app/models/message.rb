@@ -47,15 +47,16 @@ class Message < ApplicationRecord
     inbound_status? ? :inbound : :outbound
   end
 
+  def nullify_last_message
+    self.conversation.update_column(:last_message_id, nil)
+    save!
+  end
+
   private
 
   def associate_user_with_conversation
     if sender_type == "User"
       conversation.agents << sender unless conversation.agents.include?(sender)
     end
-
-  def nullify_last_message
-    self.conversation.update_column(:last_message_id, nil)
-    save!
   end
 end
