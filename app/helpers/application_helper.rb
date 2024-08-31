@@ -27,6 +27,6 @@ module ApplicationHelper
   end
 
   def umami_tracking_code
-    raw %[<script defer src="https://cloud.umami.is/script.js" data-website-id="89c6127c-ee17-47c2-9112-eda9494055f5"></script>]
+    raw %(<script defer src="https://cloud.umami.is/script.js" data-website-id="89c6127c-ee17-47c2-9112-eda9494055f5"></script>)
   end
 end
