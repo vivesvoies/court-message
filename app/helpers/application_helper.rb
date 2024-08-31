@@ -25,4 +25,8 @@ module ApplicationHelper
   def content_and_flash_for(frame)
     content_for(frame) + content_for(:flash_stream) if content_for? frame
   end
+
+  def umami_tracking_code
+    raw %[<script defer src="https://cloud.umami.is/script.js" data-website-id="89c6127c-ee17-47c2-9112-eda9494055f5"></script>]
+  end
 end
