@@ -43,7 +43,7 @@ class MessageTest
     def test_valid_statuses
       valid_statuses = %w[inbound unsent submitted delivered rejected undeliverable expired failed deleted]
       message = Message.new(content: "Test content", conversation: create(:conversation), sender: create(:contact))
-  
+
       valid_statuses.each do |status|
         message.status = status
         assert message.valid?
@@ -78,11 +78,11 @@ class MessageTest
     def test_nullify_last_message
       message = create(:outbound_message)
       conversation = message.conversation
-  
+
       conversation.update(last_message_id: message.id)
       message.destroy
-  
+
       assert_nil conversation.reload.last_message_id
-    end  
+    end
   end
 end
