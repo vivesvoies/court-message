@@ -4,8 +4,9 @@ class Avo::Resources::Message < Avo::BaseResource
 
   def fields
     field :id, as: :id
-    # TODO: truncate the message if more than 10-15 character
-    field :content, as: :text
+    field :content,
+      as: :text,
+      format_using: -> { value.truncate 30 }
     # TODO: Check whether the Status field in the documentation is more suitable than badge
     field :status,
       as: :badge,
