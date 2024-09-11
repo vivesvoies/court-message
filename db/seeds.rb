@@ -270,6 +270,33 @@ messages = [
   },
   {
     id: 7,
+    content: "Je suis un message de test status: expired",
+    status: "expired",
+    created_at: DateTime.now.utc,
+    conversation_id: 1,
+    sender_type: "User",
+    sender_id: 4
+  },
+  {
+    id: 8,
+    content: "Je suis un message de test status: failed",
+    status: "failed",
+    created_at: DateTime.now.utc,
+    conversation_id: 1,
+    sender_type: "User",
+    sender_id: 4
+  },
+  {
+    id: 9,
+    content: "Je suis un message de test status: deleted",
+    status: "deleted",
+    created_at: DateTime.now.utc,
+    conversation_id: 1,
+    sender_type: "User",
+    sender_id: 4
+  },
+  {
+    id: 10,
     content: "Je suis un message de test status: inbound",
     status: "inbound",
     created_at: DateTime.now.utc.years_ago(1),
@@ -278,7 +305,7 @@ messages = [
     sender_id: 6
   },
   {
-    id: 8,
+    id: 11,
     content: "Je suis un message de test status: delivered",
     status: "delivered",
     created_at: DateTime.now.utc.years_ago(1),

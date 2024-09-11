@@ -88,6 +88,8 @@
 }
 
 .Message--submitted,
+.Message--failed,
+.Message--expired,
 .Message--rejected,
 .Message--undeliverable {
   .Message__status {
