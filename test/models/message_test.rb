@@ -39,6 +39,23 @@ class MessageTest
       assert_equal(message_from_user.direction, :outbound)
       assert_equal(message_from_contact.direction, :inbound)
     end
+
+    def test_valid_statuses
+      valid_statuses = %w[inbound unsent submitted delivered rejected undeliverable expired failed deleted]
+      message = Message.new(content: "Test content", conversation: create(:conversation), sender: create(:contact))
+  
+      valid_statuses.each do |status|
+        message.status = status
+        assert message.valid?
+      end
+    end
+
+    def test_invalid_status
+      message = Message.new(content: "Test content", conversation: create(:conversation), sender: create(:contact))
+      assert_raises ArgumentError do
+        message.status = "invalid_status"
+      end
+    end
   end
 
   class MessageValidations < ActiveSupport::TestCase
@@ -57,5 +74,15 @@ class MessageTest
       assert(m.valid?)
       assert(m.content == content)
     end
+
+    def test_nullify_last_message
+      message = create(:outbound_message)
+      conversation = message.conversation
+  
+      conversation.update(last_message_id: message.id)
+      message.destroy
+  
+      assert_nil conversation.reload.last_message_id
+    end  
   end
 end
