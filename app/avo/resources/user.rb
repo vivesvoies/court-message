@@ -55,8 +55,14 @@ class Avo::Resources::User < Avo::BaseResource
       field :messages, as: :has_many, visible: -> { resource.record.messages.any? }
       field :conversations, as: :has_and_belongs_to_many, visible: -> { resource.record.conversations.any? }
     end
-      field :teams, as: :has_many, through: :memberships
-      field :templates, as: :has_many, visible: -> { resource.record.templates.any? }
+    # Field template only available in page edit
+    if view.edit?
+      field :confirmed_at,
+      as: :date,
+      format: "yyyy-LL-dd"
+    end
+    field :teams, as: :has_many, through: :memberships
+    field :templates, as: :has_many, visible: -> { resource.record.templates.any? }
   end
 
   # Actions that can be performed on user
