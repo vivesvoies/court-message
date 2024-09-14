@@ -25,4 +25,11 @@ class OutboundMessagesControllerTest < ActionDispatch::IntegrationTest
     post outbound_messages_path, params: { status: "delivered" }
     assert_response :too_early
   end
+
+  test "should handle failed outbound message submission" do
+    post outbound_messages_path, params: { message_uuid: @message.outbound_uuid, status: "failed" }
+
+    assert_equal "failed", @message.reload.status
+    assert_response :ok
+  end
 end
