@@ -270,6 +270,8 @@ fr:
       inbound: "Reçu"
       undeliverable: &message_error "Message non distribué"
       rejected: *message_error
+      failed: *message_error
+      expired: *message_error
       submitted: "Envoi en cours..."
       delivered: "Envoyé"
 

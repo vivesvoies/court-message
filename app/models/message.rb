@@ -30,7 +30,10 @@ class Message < ApplicationRecord
     submitted: "submitted",
     delivered: "delivered",
     rejected: "rejected",
-    undeliverable: "undeliverable"
+    undeliverable: "undeliverable",
+    expired: "expired",
+    failed: "failed",
+    deleted: "deleted"
   }, suffix: true
 
   belongs_to :conversation, touch: true

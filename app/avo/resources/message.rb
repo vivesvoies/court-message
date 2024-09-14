@@ -14,8 +14,8 @@ class Avo::Resources::Message < Avo::BaseResource
         info: :submitted, # blue
         success: [ :delivered, :inbound ], # green
         warning: :undeliverable, # yellow
-        danger: :rejected, # red
-        neutral: :unsent # gray
+        danger: [ :rejected, :failed, :expired ], # red
+        neutral: [ :unsent, :deleted ] # gray
       },
       sortable: true
     field :conversation, as: :belongs_to
