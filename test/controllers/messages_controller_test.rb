@@ -53,6 +53,41 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test "should not create message with blank content" do
+    assert_no_difference("Message.count") do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "" } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_match /Le contenu du message ne peut être vide/, flash[:notice]
+  end
+
+  test "should not create message with only spaces" do
+    assert_no_difference("Message.count") do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "   " } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_match /Le contenu du message ne peut être vide/, flash[:notice]
+  end
+
+  test "should not create message with only tabs" do
+    assert_no_difference("Message.count") do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "\t\t\t" } }
+    end
+
+    assert_response :unprocessable_entity
+    assert_match /Le contenu du message ne peut être vide/, flash[:notice]
+  end
+
+  test "should create message with valid content" do
+    assert_difference("Message.count", 1) do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Valid message content" } }
+    end
+
+    assert_redirected_to team_conversation_url(@team, @conversation)
+  end
+
   test "should not show message" do
     assert_raises(NoMethodError) {
       get message_url(@message)
@@ -81,6 +116,13 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   test "should set Conversation#last_message on create" do
     post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
     assert_equal("Heya", @conversation.reload.last_message.content)
+    assert_equal(Message.last, @conversation.last_message)
+  end
+
+  test "should associate message with conversation and update last_message" do
+    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Test message" } }
+
+    assert_equal("Test message", @conversation.reload.last_message.content)
     assert_equal(Message.last, @conversation.last_message)
   end
 end
