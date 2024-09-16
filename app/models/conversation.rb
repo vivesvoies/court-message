@@ -64,10 +64,6 @@ class Conversation < ApplicationRecord
   def set_last_message(message)
     self.last_message = message
     save!
-
-    if message.sender_type == "User"
-      agents << message.sender unless agents.include?(message.sender)
-    end
   end
 
   def broadcast_conversation_update
