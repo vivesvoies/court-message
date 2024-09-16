@@ -39,6 +39,7 @@ class Message < ApplicationRecord
   belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
   delegate :team, to: :conversation
+  after_create :associate_user_with_conversation
   before_destroy :nullify_last_message
 
   validates_presence_of :content
@@ -52,5 +53,13 @@ class Message < ApplicationRecord
   def nullify_last_message
     self.conversation.update_column(:last_message_id, nil)
     save!
+  end
+
+  private
+
+  def associate_user_with_conversation
+    if sender_type == "User"
+      conversation.agents << sender unless conversation.agents.include?(sender)
+    end
   end
 end
