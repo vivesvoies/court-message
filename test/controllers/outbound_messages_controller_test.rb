@@ -20,4 +20,9 @@ class OutboundMessagesControllerTest < ActionDispatch::IntegrationTest
     post outbound_messages_path, params: { message_uuid: SecureRandom.uuid, status: "delivered" }
     assert_response :too_early
   end
+
+  test "should return too early if message_uuid is missing" do
+    post outbound_messages_path, params: { status: "delivered" }
+    assert_response :too_early
+  end
 end

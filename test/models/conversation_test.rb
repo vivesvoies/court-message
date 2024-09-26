@@ -120,6 +120,119 @@ class ConversationTest < ActiveSupport::TestCase
     assert_equal([ oldest.id, newest.id, middle.id ], preloaded)
   end
 
+  def test_user_scope
+    team = create(:team)
+    user = create(:user)
+    other_user = create(:user)
+
+    team_conversations = create_list(:conversation, 3, contact: create(:contact, team: team))
+
+    user_conversations = team_conversations[0..1]
+    user.conversations << user_conversations
+
+    result = Conversation.for_user(user, team)
+    assert_equal(user_conversations.sort, result.sort)
+    assert_not_includes(result, team_conversations[2])
+  end
+
+  def test_user_scope_ordering
+    team = create(:team)
+    user = create(:user)
+
+    convos = create_list(:conversation, 3, contact: create(:contact, team: team))
+    user.conversations << convos
+
+    convos.each { |convo| convo.messages << create(:inbound_message) }
+
+    preloaded = Conversation.for_user(user, team)
+    assert_equal(preloaded, convos.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, convos.last)
+
+    convos.first.messages << create(:outbound_message)
+    preloaded = Conversation.for_user(user, team)
+    assert_equal(preloaded, convos.sort_by(&:timestamp).reverse)
+    assert_equal(preloaded.first, convos.first)
+
+    convos.second.touch
+    preloaded = Conversation.for_user(user, team)
+    assert_not_equal(preloaded.first, convos.second)
+  end
+
+  def test_complex_user_scope_ordering
+    team = create(:team)
+    user = create(:user)
+
+    oldest = create(:conversation, contact: create(:contact, team: team), updated_at: 1.day.ago)
+    middle = create(:conversation, contact: create(:contact, team: team), updated_at: 1.hour.ago)
+    newest = create(:conversation, contact: create(:contact, team: team), updated_at: 1.minute.ago)
+
+    user.conversations << [ oldest, middle, newest ]
+
+    preloaded = Conversation.for_user(user, team).pluck(:id)
+    assert_equal([ newest.id, middle.id, oldest.id ], preloaded)
+
+    oldest.messages << create(:inbound_message)
+    preloaded = Conversation.for_user(user, team).pluck(:id)
+    assert_equal([ oldest.id, newest.id, middle.id ], preloaded)
+  end
+
+  def test_user_scope_with_multiple_teams
+    team_1 = create(:team)
+    team_2 = create(:team)
+    user = create(:user)
+
+    team_1_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_1))
+    team_2_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_2))
+
+    user.conversations << team_1_conversations
+    user.conversations << team_2_conversations
+
+    result = Conversation.for_user(user, team_1)
+    assert_equal(team_1_conversations.sort, result.sort)
+    assert_not_includes(result, team_2_conversations[0])
+    assert_not_includes(result, team_2_conversations[1])
+  end
+
+  def test_broadcast_to_user_conversations_on_new_message
+    team = create(:team)
+    user = create(:user)
+    other_user = create(:user)
+
+    conversation_1 = create(:conversation, contact: create(:contact, team: team))
+    conversation_2 = create(:conversation, contact: create(:contact, team: team))
+
+    user.conversations << conversation_1
+    other_user.conversations << conversation_2
+
+    inbound_message = create(:inbound_message, conversation: conversation_1)
+
+    # Add a message to conversation_1 and check broadcast for user
+    assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
+      conversation_1.messages << inbound_message
+    end
+
+    # Verify that conversation_2 does not broadcast to user
+    assert_no_turbo_stream_broadcasts("user_conversations_list_#{other_user.id}") do
+      conversation_1.messages << create(:inbound_message)
+    end
+  end
+
+  def test_broadcast_to_multiple_users_with_shared_conversation
+    team = create(:team)
+    user = create(:user)
+    other_user = create(:user)
+
+    conversation = create(:conversation, contact: create(:contact, team: team))
+    user.conversations << conversation
+    other_user.conversations << conversation
+
+    assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
+      assert_turbo_stream_broadcasts "user_conversations_list_#{other_user.id}" do
+        conversation.messages << create(:inbound_message)
+      end
+    end
+  end
+
   def test_preloading_query
     c = create(:conversation) do |conversation|
       create_list(:inbound_message, 10, conversation:)

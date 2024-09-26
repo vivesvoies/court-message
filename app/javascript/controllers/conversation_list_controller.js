@@ -6,15 +6,19 @@ export default class extends Controller {
   static classes = ["item", "active", "unread", "link"];
 
   initialize() {
-    const selected = this.conversationTargets.filter(conv => conv.classList.contains(this.activeClass));
-    if (selected.length > 0) {
-      this.selection = selected[0].id;
+    const selectedId = sessionStorage.getItem('activeConversation');
+    if (selectedId) {
+      const selected = this.conversationTargets.find(conv => conv.id === selectedId);
+      if (selected) {
+        this.select(selected);
+      }
     }
   }
 
   activate(event) {
     const target = event.target.closest(`.${this.itemClass}`);
     this.select(target);
+    sessionStorage.setItem('activeConversation', target.id);
   }
 
   conversationTargetConnected(target) {

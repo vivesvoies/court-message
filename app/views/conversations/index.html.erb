@@ -1,7 +1,7 @@
 <% content_for :navigation do %>
   <div class="ConversationSidebar">
     <%= render partial: "conversations/team_name", locals: { team: @team } %>
-    <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @conversations } %>
+    <%= render partial: "conversations/sidebar", locals: { team: @team, conversations: @conversations, turbo_stream_name: @turbo_stream_name } %>
   </div>
 <% end %>
 

@@ -71,13 +71,24 @@
   width: 100%;
 }
 
-.ConversationSwitcher h3 {
+.ConversationSwitcher__header {
+  display: flex;
+  flex-direction: row;
+}
+
+.ConversationSwitcher__header h3 {
   flex-shrink: 0;
-  font: var(--font-small-bold);
-  padding: 1rem;
+  padding: 1rem 0;
   margin: 0;
   width: 50%;
   text-align: center;
+}
+
+.ConversationSwitcher button {
+  font: var(--font-medium-bold);
+}
+
+.ConversationSwitcher__header .active {
   background-color: var(--list-bg);
 }
 

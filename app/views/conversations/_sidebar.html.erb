@@ -1,4 +1,4 @@
-<%# locals: (team:, conversations:) %>
+<%# locals: (team:, conversations:, turbo_stream_name:) %>
 
 <div class="ConversationHeader__actions" data-controller="search-contact" data-search-contact-conversation-list-outlet="#conversations">
   <%= link_to t(".new"), team_conversations_path(@team),
@@ -14,8 +14,15 @@
 <% end %>
 
 <div class="ConversationSwitcher">
-  <%= turbo_stream_from "team_conversations_list_#{team.id}" %>
-  <h3><%= t(".my_conversations") %></h3>
+  <%= turbo_stream_from turbo_stream_name %>
+  <div class="ConversationSwitcher__header">
+    <h3 class="<%= "active" if params[:show] == "mine" %>">
+      <%= button_to t(".my_conversations"), team_conversations_path(), params: { show: "mine" }, method: :get %>
+    </h3>
+    <h3 class="<%= "active" if params[:show] == "all"|| params[:show].nil? %>">
+      <%= button_to t(".all_conversations"), team_conversations_path(), params: { show: "all" }, method: :get %>
+    </h3>
+  </div>
   <ol id="conversations"
       class="ConversationList"
       data-controller="conversation-list"
