@@ -18,11 +18,11 @@
         </ul>
       <% end %>
       <div class="MessageForm__field cm-input-group <%= "cm-input-group--error" if @message.errors.any? %>">
-        <%= form.text_area :content, class: "cm-input cm-input--line #{"cm-input--error" if @message.errors.any?}", placeholder: t(".placeholder"), data: { message_box_target: "textarea" } %>
+        <%= form.text_area :content, class: "cm-input cm-input--line #{"cm-input--error" if @message.errors.any?}", placeholder: t(".placeholder"), data: { message_box_target: "textarea" }, aria_label: t(".placeholder"), title: t(".placeholder") %>
         <%= form.hidden_field :conversation_id %>  
       </div>
       <div class="MessageForm__send">
-        <%= form.button "Envoyer", class: "cm-btn cm-icon-send", type: "submit" %>
+        <%= form.button "Envoyer", class: "cm-btn cm-icon-send", type: "submit", aria_label: t(".send"), title: t(".send") %>
       </div>
       <div class="MessageForm__character_count cm-hint-text" data-message-box-target="counter"></div>
     </div>
@@ -31,7 +31,7 @@
       <div class="FormErrors">
         <p class="cm-error-text"><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</p>
     
-        <ul class="">
+        <ul>
           <% @message.errors.each do |error| %>
             <li><%= error.full_message %></li>
           <% end %>

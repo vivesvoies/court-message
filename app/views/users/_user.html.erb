@@ -17,7 +17,9 @@
       </div>
     </div>
     <div class="User__actions">
-        <%= link_to edit_team_user_path(Current.team, user.id), class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings" do %>
+        <%= link_to edit_team_user_path(Current.team, user.id),
+            class: "cm-btn cm-btn--sm cm-btn--secondary cm-icon-settings",
+            aria_label: t(".edit"), title: t(".edit") do %>
           <i class="cm-icon-settings cm-icon--sm"></i>
         <% end if can? :update, user %>
     </div>

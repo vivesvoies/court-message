@@ -34,6 +34,8 @@ fr:
       contacts: "Répertoire"
     header_tab_bar:
       create_account: "Créer mon compte"
+    feedback_button:
+      feedback: "Signaler un problème"
 
   activerecord:
     models:
@@ -160,9 +162,9 @@ fr:
       message: "Écrire un message"
       confirm_destroy: "Supprimer la conversation et tous les messages ?\nCette opération ne pourra pas être annulée."
       destroy: "Supprimer la conversation"
-      notes: "Notes"
     contact_detail:
       edit: "Modifier la fiche"
+      notes: "Notes"
     new:
       new_list: "Nouvelle liste de diffusion"
       new_contact: "Nouveau contact"
@@ -243,6 +245,7 @@ fr:
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
       me: "(moi)"
       admin: "(admin)"
+      edit: "Modifier"
     show:
       edit_user: "Modifier le compte"
       delete_user_confirm: "Supprimer le compte ?\nCette opération ne pourra pas être annulée."
@@ -267,6 +270,7 @@ fr:
       attachment: "Ajouter une pièce jointe"
       photo: "Prendre une photo"
       audio: "Enregistrer un message audio"
+      send: "Envoyer"
     status:
       inbound: "Reçu"
       undeliverable: &message_error "Message non distribué"
@@ -299,3 +303,5 @@ fr:
     template:
       confirm_delete: "Voulez-vous vraiment supprimer le modèle ?"
       delete: "Supprimer"
+      copy: "Copier"
+      edit: "Modifier"
