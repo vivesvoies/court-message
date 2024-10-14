@@ -136,4 +136,11 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  test "should handle failed outbound message submission" do
+    post outbound_messages_path, params: { message_uuid: @message.outbound_uuid, status: "failed" }
+
+    assert_equal "failed", @message.reload.status
+    assert_response :ok
+  end
 end

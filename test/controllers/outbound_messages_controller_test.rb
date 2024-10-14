@@ -27,9 +27,6 @@ class OutboundMessagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle failed outbound message submission" do
-    dummy_provider = DummyProvider.new(success: false, error_code: 403)
-    outbound_service = OutboundMessagesService.new(@message, dummy_provider)
-
     post outbound_messages_path, params: { message_uuid: @message.outbound_uuid, status: "failed" }
 
     assert_equal "failed", @message.reload.status
