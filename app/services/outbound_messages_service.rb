@@ -23,10 +23,12 @@ class OutboundMessagesService
     if result.http_response.is_a?(Net::HTTPSuccess)
       true
     else
-      Sentry.capture_message(
-        "Outbound message failed in OutboundMessagesService: Message UUID #{result.message_uuid}, " \
-        "HTTP Status: #{result.http_response.code}, Response Body: #{result.http_response.body}."
-      )
+      if result.http_response?
+        Sentry.capture_message(
+          "Outbound message failed in OutboundMessagesService: Message UUID #{result.message_uuid}, " \
+          "HTTP Status: #{result.http_response.code}, Response Body: #{result.http_response.body}."
+        )
+      end
       false
     end
   end
