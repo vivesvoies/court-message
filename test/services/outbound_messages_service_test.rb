@@ -18,10 +18,9 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
   end
 
   def test_submits_message_to_service
-    expected_uuid = SecureRandom.uuid
     @provider.expect(
       :send,
-      OpenStruct.new(message_uuid: expected_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
+      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
       from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
     )
 
