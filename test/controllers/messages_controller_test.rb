@@ -125,4 +125,15 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal("Test message", @conversation.reload.last_message.content)
     assert_equal(Message.last, @conversation.last_message)
   end
+
+  test "should create message if provider fails" do
+    dummy_provider = DummyProvider.new(success: false, error_code: 403)
+    outbound_service = OutboundMessagesService.new(@message, dummy_provider)
+
+    assert_difference("Message.count", 1) do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Hello" } }
+    end
+
+    assert_response :unprocessable_entity
+  end
 end
