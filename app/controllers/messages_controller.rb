@@ -25,18 +25,10 @@ class MessagesController < ApplicationController
           format.html { redirect_to [ @conversation.team, @conversation ] }
         end
       else
-        render :new, status: :unprocessable_entity
+        handle_response_with_errors
       end
     else
-      respond_to do |format|
-        format.html {
-          flash.now[:notice] = @message.errors.full_messages.join(", ")
-          render :new, status: :unprocessable_entity
-        }
-        format.turbo_stream {
-          flash.now[:notice] = @message.errors.full_messages.join(", ")
-        }
-      end
+      handle_response_with_errors
     end
   end
 
@@ -44,5 +36,17 @@ class MessagesController < ApplicationController
 
   def message_params
     params.fetch(:message).permit(:conversation_id, :content)
+  end
+
+  def handle_response_with_errors
+    respond_to do |format|
+      format.html {
+        flash.now[:notice] = @message.errors.full_messages.join(", ")
+        render :new, status: :unprocessable_entity
+      }
+      format.turbo_stream {
+        flash.now[:notice] = @message.errors.full_messages.join(", ")
+      }
+    end
   end
 end

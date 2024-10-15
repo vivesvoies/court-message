@@ -9,6 +9,17 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     @message = create(:outbound_message, conversation: @conversation)
 
+    Current.phone_number = "33644630057"
+
+    @expected_uuid = SecureRandom.uuid
+
+    @provider_success = Minitest::Mock.new
+    @provider_success.expect(
+      :send,
+      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
+      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+    )
+
     sign_in(@user)
   end
 
@@ -37,11 +48,15 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create message" do
-    assert_difference("Message.count") do
-      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Hello" } }
+    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
+      assert_difference("Message.count", 1) do
+        post messages_url, params: { message: { conversation_id: @conversation.id, content: @message.content } }
+      end
+
+      assert_redirected_to team_conversation_url(@team, @conversation)
     end
 
-    assert_redirected_to team_conversation_url(@team, @conversation)
+    @provider_success.verify
   end
 
   test "should not create message in conversations the user does not have access to" do
@@ -80,14 +95,6 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_match /Le contenu du message ne peut être vide/, flash[:notice]
   end
 
-  test "should create message with valid content" do
-    assert_difference("Message.count", 1) do
-      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Valid message content" } }
-    end
-
-    assert_redirected_to team_conversation_url(@team, @conversation)
-  end
-
   test "should not show message" do
     assert_raises(NoMethodError) {
       get message_url(@message)
@@ -114,27 +121,46 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should set Conversation#last_message on create" do
-    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
-    assert_equal("Heya", @conversation.reload.last_message.content)
-    assert_equal(Message.last, @conversation.last_message)
+    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
+      assert_equal("Heya", @conversation.reload.last_message.content)
+      assert_equal(Message.last, @conversation.last_message)
+
+      assert_redirected_to team_conversation_url(@team, @conversation)
+    end
+
+    @provider_success.verify
   end
 
   test "should associate message with conversation and update last_message" do
-    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Test message" } }
+    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Test message" } }
 
-    assert_equal("Test message", @conversation.reload.last_message.content)
-    assert_equal(Message.last, @conversation.last_message)
+      assert_equal("Test message", @conversation.reload.last_message.content)
+      assert_equal(Message.last, @conversation.last_message)
+    end
+
+    @provider_success.verify
   end
 
   test "should create message if provider fails" do
-    dummy_provider = DummyProvider.new(success: false, error_code: 403)
-    outbound_service = OutboundMessagesService.new(@message, dummy_provider)
+    @provider_fail = Minitest::Mock.new
 
-    assert_difference("Message.count", 1) do
-      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Hello" } }
+    @provider_fail.expect(
+      :send,
+      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPServiceUnavailable.new(1.1, "503", "Service Unavailable")),
+      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+    )
+
+    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_fail)) do
+      assert_difference("Message.count", 1) do
+        post messages_url, params: { message: { conversation_id: @conversation.id, content: @message.content } }
+      end
+
+      assert_response :unprocessable_entity
     end
 
-    assert_response :unprocessable_entity
+    @provider_fail.verify
   end
 
   test "should handle failed outbound message submission" do
