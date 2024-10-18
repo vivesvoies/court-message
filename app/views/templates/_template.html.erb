@@ -14,16 +14,18 @@
                 confirm_details: t(".confirm_delete"),
                 confirm_button: t(".delete")
               },
-              class: "cm-btn cm-icon-bin cm-btn--secondary" %>
+              class: "cm-btn cm-icon-bin cm-btn--secondary",
+              aria_label: t(".delete"), title: t(".delete") %>
         </div>
 
         <div class="Template__copy">
-          <button data-action="clipboard#copy" class="cm-btn cm-icon-copy cm-btn--validate"></button>
+          <button data-action="clipboard#copy" class="cm-btn cm-icon-copy cm-btn--validate" aria-label="<%= t(".copy") %>" title="<%= t(".copy") %>"></button>
         </div>
 
         <div class="Template__edit">
           <%= link_to "", edit_team_user_template_path(@team, user_id: template.user.id, id: template.id),
-              class: "cm-btn cm-icon-pencil cm-btn--validate" %>
+              class: "cm-btn cm-icon-pencil cm-btn--validate",
+              aria_label: t(".edit"), title: t(".edit") %>
         </div>
       </div>
     </div>

@@ -13,7 +13,9 @@ module TeamsHelper
         tab_bar_target: "tab",
         turbo_action: :advance
       },
-      class: link_class
+      class: link_class,
+      aria_label: t(".#{label}"),
+      title: t(".#{label}")
   end
 
   def menu_for(label, icon:, destination:, frame: :primary)

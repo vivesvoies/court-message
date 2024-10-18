@@ -19,7 +19,9 @@
     <%# <link href="/dsfr/dsfr.css" rel="stylesheet"> %>
     <%# <link href="/dsfr/utility/utility.css" rel="stylesheet"> %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    
+
+    <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js" crossorigin="anonymous"></script>
+
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
     <%= umami_tracking_code if Rails.env.production? %>
