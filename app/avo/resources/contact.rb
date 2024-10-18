@@ -2,11 +2,11 @@ class Avo::Resources::Contact < Avo::BaseResource
   self.includes = []
 
   def fields
-    field :id, ad: :id
+    field :id, as: :id
     field :name, as: :text
     field :email, as: :text
     field :phone, as: :text
-    field "team", as: :text do
+    field "team", as: :text, link_to_record: true do
       record.team.name
     rescue
       false

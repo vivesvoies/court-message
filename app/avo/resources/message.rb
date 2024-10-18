@@ -33,5 +33,10 @@ class Avo::Resources::Message < Avo::BaseResource
       field :sender_id, as: :number
       field :outbound_uuid, as: :text
     end
+    field :team, as: :text, link_to_record: true do
+      record.team.name
+    rescue
+      false
+    end
   end
 end
