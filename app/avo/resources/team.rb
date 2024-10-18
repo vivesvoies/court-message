@@ -17,6 +17,11 @@ class Avo::Resources::Team < Avo::BaseResource
     rescue
       0
     end
+    field "Total Users", as: :number do
+      record.users.count
+    rescue
+      0
+    end
     field "Last Message Sent At", as: :date, format: "yyyy-LL-dd HH:mm" do
       record.conversations.joins(:messages).order("messages.created_at DESC").limit(1).pluck("messages.created_at").first
     rescue
