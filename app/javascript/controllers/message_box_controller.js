@@ -11,22 +11,22 @@ export default class extends Controller {
       case "Enter":
         if (!event.altKey && !event.shiftKey) {
           event.preventDefault();
-          this.submit();
+          this.element.requestSubmit();
           return;
         }
         break;
     }
   }
-  input(event) {
+  input() {
     const stats = count(this.textareaTarget.value);
     this.counterTarget.innerHTML = this._formatStats(stats);
   }
   reset() {
     this.element.reset();
   }
-  submit(event) {
+  beforeSubmit(event) {
     if (this.textareaTarget.value.trim() === "") {
-      event.preventDefault();
+      event.detail.formSubmission.stop();
     }
   }
   
