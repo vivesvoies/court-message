@@ -17,7 +17,7 @@ class ErrorsController < ApplicationController
   def internal_server
     render_error_page(:internal_server, 500)
   rescue => e
-    render plain: '500 Internal Server Error', status: 500
+    render plain: "500 Internal Server Error", status: 500
   end
 
   private
