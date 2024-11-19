@@ -1,5 +1,6 @@
 class ErrorsController < ApplicationController
   skip_authorization_check only: [ :forbidden, :not_found, :unprocessable, :internal_server ]
+  skip_before_action :authenticate_user!, only: [ :forbidden, :not_found, :unprocessable, :internal_server ]
 
   def forbidden
     render_error_page(:forbidden, 403)
@@ -15,6 +16,8 @@ class ErrorsController < ApplicationController
 
   def internal_server
     render_error_page(:internal_server, 500)
+  rescue => e
+    render plain: '500 Internal Server Error', status: 500
   end
 
   private
