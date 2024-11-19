@@ -81,6 +81,13 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
     assert_select "header", text: I18n.t("teams.show.title")
   end
 
+  test "should NotFound on GET /team/:id with wrong team" do
+    with_normal_user
+    assert_raises(ActiveRecord::RecordNotFound) {
+      get team_url("this-team-does-not-exist")
+    }
+  end
+
   test "should not get edit" do
     with_normal_user
     get edit_team_url(@team)
