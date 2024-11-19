@@ -7,10 +7,12 @@ Rails.application.routes.draw do
   get "/legal_notice", to: "static_pages#legal_notice"
 
   # Error pages
-  get "/403", to: "errors#forbidden"
-  get "/404", to: "errors#not_found"
-  get "/422", to: "errors#unprocessable"
-  get "/500", to: "errors#internal_server"
+  if Rails.env.development? || Rails.env.test?
+    get "/403", to: "errors#forbidden"
+    get "/404", to: "errors#not_found"
+    get "/422", to: "errors#unprocessable"
+    get "/500", to: "errors#internal_server"
+  end
 
   authenticate :user, ->(user) { Ability.new(user).can?(:manage, Team) } do
     mount Avo::Engine, at: Avo.configuration.root_path
