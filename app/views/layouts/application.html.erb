@@ -24,6 +24,7 @@
 
     <%= javascript_importmap_tags %>
     <%= hotwire_livereload_tags if Rails.env.development? %>
+    <%= umami_tracking_code if Rails.env.production? %>
     <%= yield(:head) %>
   </head>
 
