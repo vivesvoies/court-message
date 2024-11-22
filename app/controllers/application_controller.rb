@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   unless Rails.env.development?
     rescue_from CanCan::AccessDenied do |_exception|
-      render plain: "403 / Not authorized", status: :forbidden
+      render plain: "403 - Accès refusé", status: :forbidden
     end
   end
 
