@@ -48,13 +48,17 @@ class ErrorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def simulate_production_error_handling
-    original_requests_local = Rails.application.config.consider_all_requests_local
-    original_show_exceptions = Rails.application.config.action_dispatch.show_exceptions
-    Rails.application.config.consider_all_requests_local = false
-    Rails.application.config.action_dispatch.show_exceptions = true
+    env_config = Rails.application.env_config
+    original_requests_local = env_config["consider_all_requests_local"]
+    original_show_exceptions = env_config["action_dispatch.show_exceptions"]
+    original_show_detailed_exceptions = env_config["action_dispatch.show_detailed_exceptions"]
+    env_config["consider_all_requests_local"] = false
+    env_config["action_dispatch.show_exceptions"] = true
+    env_config["action_dispatch.show_detailed_exceptions"] = false
     yield
   ensure
-    Rails.application.config.consider_all_requests_local = original_requests_local
-    Rails.application.config.action_dispatch.show_exceptions = original_show_exceptions
+    env_config["consider_all_requests_local"] = original_requests_local
+    env_config["action_dispatch.show_exceptions"] = original_show_exceptions
+    env_config["action_dispatch.show_detailed_exceptions"] = original_show_detailed_exceptions
   end
 end
