@@ -16,11 +16,21 @@ class OutboundMessagesService
     to = @message.conversation.contact.phone
     result = @provider.send(from: Current.phone_number, to:, content: @message.content)
 
-    @message.status = :submitted
+    @message.status = result.http_response.is_a?(Net::HTTPSuccess) ? :submitted : :failed
     @message.outbound_uuid = result.message_uuid
     @message.save
 
-    true
+    if result.http_response.is_a?(Net::HTTPSuccess)
+      true
+    else
+      if result.http_response?
+        Sentry.capture_message(
+          "Outbound message failed in OutboundMessagesService: Message UUID #{result.message_uuid}, " \
+          "HTTP Status: #{result.http_response.code}, Response Body: #{result.http_response.body}."
+        )
+      end
+      false
+    end
   end
 
   private
