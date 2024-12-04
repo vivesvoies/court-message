@@ -25,4 +25,13 @@ module ApplicationHelper
   def content_and_flash_for(frame)
     content_for(frame) + content_for(:flash_stream) if content_for? frame
   end
+
+  def error_type_from_status(status)
+    {
+      403 => :forbidden,
+      404 => :not_found,
+      422 => :unprocessable,
+      500 => :internal_server
+    }[status]
+  end
 end

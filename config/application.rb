@@ -14,6 +14,9 @@ module CourtMessage
 
     config.exceptions_app = self.routes
 
+    config.action_dispatch.rescue_responses.merge!(
+      "ForbiddenError" => :forbidden
+    )
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
