@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
   unless Rails.env.development?
     rescue_from CanCan::AccessDenied do |_exception|
-      render plain: "403 - Accès refusé", status: :forbidden
+      render "errors/error", status: 403
     end
   end
 
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     when :production
       "33644635900"
     else
-      "33644630057"
+      "33644633991"
     end
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])

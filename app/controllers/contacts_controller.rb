@@ -49,7 +49,7 @@ class ContactsController < ApplicationController
     if @contact.save
       redirect_to team_contact_path(@team, @contact), notice: I18n.t(".contacts.create.success")
     else
-      render :new, status: :unprocessable_entity
+      render "errors/error", status: 422
     end
   end
 
@@ -58,7 +58,7 @@ class ContactsController < ApplicationController
     if @contact.update(contact_params)
       redirect_to edit_team_contact_path(@team, @contact), notice: I18n.t("contacts.update.success")
     else
-      render :edit, status: :unprocessable_entity
+      render "errors/error", status: 422
     end
   end
 
