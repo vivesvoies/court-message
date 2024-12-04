@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     when :production
       "33644635900"
     else
-      "33644633991"
+      "33644630057"
     end
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
