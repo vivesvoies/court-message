@@ -40,11 +40,13 @@ class ErrorsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should render forbidden page with status 403 for unauthorized action" do
-    sign_in @user
-    get team_url(@other_team, @user)
-    assert_response :forbidden
-    assert_match /403 - Accès refusé/, response.body
-    sign_out @user
+    simulate_production_error_handling do
+      sign_in @user
+      get team_url(@other_team, @user)
+      assert_response :forbidden
+      assert_match /403 - Accès refusé/, response.body
+      sign_out @user
+    end
   end
 
   def simulate_production_error_handling
