@@ -88,6 +88,11 @@ fr:
       title: "422 - Entité non traitable"
       message_1: "La requête a été comprise, mais elle ne peut pas être traitée en raison d'erreurs de validation."
       message_2: "Veuillez vérifier les données soumises et réessayer."
+    unknown:
+      title: "An unexpected error occurred"
+      message_1: "We encountered an issue while processing your request."
+      message_2: "Please try again later or contact support if the issue persists."
+
 
   devise:
     shared:
