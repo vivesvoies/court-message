@@ -26,15 +26,6 @@ module ApplicationHelper
     content_for(frame) + content_for(:flash_stream) if content_for? frame
   end
 
-  def error_type_from_status(status)
-    {
-      403 => :forbidden,
-      404 => :not_found,
-      422 => :unprocessable,
-      500 => :internal_server
-    }[status]
-  end
-
   def umami_tracking_code
     raw %(<script defer src="https://cloud.umami.is/script.js" data-website-id="89c6127c-ee17-47c2-9112-eda9494055f5"></script>)
   end
