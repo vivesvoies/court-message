@@ -72,6 +72,27 @@ fr:
       improbable_phone: "ne ressemble pas à un numéro valide"
       blank: "ne peut être vide"
       empty: "ne peut être vide"
+    forbidden:
+      title: "403 - Accès refusé"
+      message_1: "Vous n'avez pas les autorisations nécessaires pour accéder à cette page"
+      message_2: "Si vous pensez que c'est une erreur, veuillez contacter l'administrateur du site."
+    internal_server:
+      title: "500 - Erreur interne du serveur"
+      message_1: "Une erreur inattendue s'est produite sur le serveur."
+      message_2: "Nous nous excusons pour le désagrément. Veuillez réessayer plus tard."
+    not_found:
+      title: "404 - Page non trouvée"
+      message_1: "La page que vous recherchez est introuvable."
+      message_2: "Elle a peut-être été supprimée ou l'URL est incorrecte."
+    unprocessable:
+      title: "422 - Entité non traitable"
+      message_1: "La requête a été comprise, mais elle ne peut pas être traitée en raison d'erreurs de validation."
+      message_2: "Veuillez vérifier les données soumises et réessayer."
+    unknown:
+      title: "An unexpected error occurred"
+      message_1: "We encountered an issue while processing your request."
+      message_2: "Please try again later or contact support if the issue persists."
+
 
   devise:
     shared:
