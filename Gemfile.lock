@@ -268,7 +268,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (5.0.4)
-    puma (6.4.3)
+    puma (6.5.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.8)
@@ -468,7 +468,7 @@ DEPENDENCIES
   minitest-reporters
   pg (~> 1.5)
   phony_rails
-  puma (~> 6.4)
+  puma (~> 6.5)
   rack-mini-profiler
   rails (~> 7.1.2)
   rails-i18n (~> 7.0.8)
