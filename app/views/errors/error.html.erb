@@ -1,0 +1,14 @@
+<div class="cm-page">
+  <div class="Errors cm-container">
+    <div class="Errors__body cm-column">
+      <% @error_type ||= error_type_from_status(response.status) %>
+      <%= image_tag "cm-logo--small.svg", class: "SiteIntro__logo", alt: t("errors.#{@error_type}.logo-alt") %>
+      <h2><%= t("errors.#{@error_type}.title") %></h2>
+      <p class="Errors__text">
+        <%= t("errors.#{@error_type}.message_1") %><br/>
+        <%= t("errors.#{@error_type}.message_2") %>
+      </p>
+    </div>
+  </div>
+</div>
+<%= render partial: "footer" %>
