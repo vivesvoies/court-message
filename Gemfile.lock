@@ -125,7 +125,7 @@ GEM
     bigdecimal (3.1.8)
     binding_of_caller (1.0.1)
       debug_inspector (>= 1.2.0)
-    bootsnap (1.18.3)
+    bootsnap (1.18.4)
       msgpack (~> 1.2)
     brakeman (6.1.2)
       racc
@@ -229,7 +229,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    msgpack (1.7.2)
+    msgpack (1.7.5)
     multi_xml (0.6.0)
     multipart-post (2.4.0)
     mutex_m (0.3.0)
