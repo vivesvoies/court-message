@@ -196,7 +196,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.7.1)
-    jwt (2.8.1)
+    jwt (2.9.3)
       base64
     language_server-protocol (3.17.0.3)
     listen (3.9.0)
@@ -230,8 +230,8 @@ GEM
       ruby-progressbar
     msgpack (1.7.5)
     multi_xml (0.6.0)
-    multipart-post (2.4.0)
-    net-http-persistent (4.0.2)
+    multipart-post (2.4.1)
+    net-http-persistent (4.0.5)
       connection_pool (~> 2.2)
     net-imap (0.5.1)
       date
@@ -258,7 +258,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.9)
-    phonelib (0.8.8)
+    phonelib (0.10.1)
     phony (2.20.12)
     phony_rails (0.15.0)
       activesupport (>= 3.0)
@@ -384,7 +384,7 @@ GEM
     sentry-ruby (5.17.3)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sorbet-runtime (0.5.11305)
+    sorbet-runtime (0.5.11690)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -413,7 +413,7 @@ GEM
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
-    vonage (7.23.0)
+    vonage (7.28.0)
       multipart-post (~> 2.0)
       net-http-persistent (~> 4.0, >= 4.0.2)
       phonelib
@@ -484,7 +484,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
-  vonage (~> 7.19)
+  vonage (~> 7.28)
   webdrivers
 
 RUBY VERSION
