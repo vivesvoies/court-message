@@ -13,6 +13,8 @@
             data: { turbo_frame: dom_id(User.new) },
             class: "cm-btn cm-btn--secondary cm-btn--icon-left cm-icon-plus" %>
         </div>
+      <% else %>
+        <div class="TeamShow__actions"></div>
       <% end %>
       <div class="TeamShow__members-list">
         <%= turbo_frame_tag "team_members" do %>
