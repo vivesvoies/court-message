@@ -7,7 +7,7 @@ gem "rails", "~> 7.2.2"
 
 gem "pg", "~> 1.5"
 gem "puma", "~> 6.5"
-gem "redis", "~> 5.0"
+gem "redis", "~> 5.3"
 gem "sprockets-rails"
 
 gem "bootsnap", require: false
@@ -29,7 +29,7 @@ gem "devise-i18n"
 gem "devise_invitable", git: "https://github.com/scambra/devise_invitable.git", ref: "d2b93edb8bf6e4ac81fa15ff4b948eafe1d456fc"
 gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
-gem "rails-i18n", "~> 7.0.8"
+gem "rails-i18n", "~> 7.0.10"
 
 gem "vonage", "~> 7.28"
 
