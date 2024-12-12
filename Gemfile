@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.3.0"
 
-gem "rails", "~> 7.1.2"
+gem "rails", "~> 7.2.2"
 
 gem "pg", "~> 1.5"
 gem "puma", "~> 6.5"
@@ -31,7 +31,7 @@ gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
 gem "rails-i18n", "~> 7.0.8"
 
-gem "vonage", "~> 7.19"
+gem "vonage", "~> 7.28"
 
 gem "avo", ">= 3.2.1"
 
