@@ -2,17 +2,17 @@
 #
 # Table name: contacts
 #
-#  id                   :bigint           not null, primary key
-#  email                :string
+#  id                   :integer          not null, primary key
 #  name                 :string
-#  notes                :text
-#  notes_updated_at     :datetime
+#  email                :string
 #  phone                :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  created_by_id        :bigint
-#  notes_last_editor_id :bigint
-#  team_id              :bigint           not null
+#  team_id              :integer          not null
+#  notes                :text
+#  notes_updated_at     :datetime
+#  notes_last_editor_id :integer
+#  created_by_id        :integer
 #
 # Indexes
 #
@@ -22,12 +22,7 @@
 #  index_contacts_on_team_id               (team_id)
 #  index_contacts_on_team_id_and_phone     (team_id,phone) UNIQUE
 #
-# Foreign Keys
-#
-#  fk_rails_...  (created_by_id => users.id)
-#  fk_rails_...  (notes_last_editor_id => users.id)
-#  fk_rails_...  (team_id => teams.id)
-#
+
 require "test_helper"
 
 class ContactTest < ActiveSupport::TestCase

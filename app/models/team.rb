@@ -2,11 +2,11 @@
 #
 # Table name: teams
 #
-#  id         :bigint           not null, primary key
-#  address    :text
-#  desc       :text
+#  id         :integer          not null, primary key
 #  name       :text             not null
 #  slug       :text             not null
+#  address    :text
+#  desc       :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
@@ -15,6 +15,7 @@
 #  index_teams_on_name  (name) UNIQUE
 #  index_teams_on_slug  (slug) UNIQUE
 #
+
 class Team < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships

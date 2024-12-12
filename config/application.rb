@@ -17,16 +17,26 @@ module CourtMessage
     config.action_dispatch.rescue_responses.merge!(
       "ForbiddenError" => :forbidden
     )
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
+    # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.i18n.default_locale = :fr
     config.time_zone = "Europe/Paris"
     PhonyRails.default_country_code = "FR"
+
+    # Add this line for Rails 8.1 deprecation warning
+    config.active_support.to_time_preserves_timezone = :zone
 
     config.eager_load_paths << Rails.root.join("app", "providers")
 
