@@ -4,6 +4,7 @@ require "rails/test_help"
 require_relative "support/capybara"
 require "minitest/mock"
 require "minitest/reporters"
+require "ostruct"
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 DatabaseCleaner.strategy = :transaction
 
