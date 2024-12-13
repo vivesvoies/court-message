@@ -15,6 +15,7 @@
 #  index_teams_on_name  (name) UNIQUE
 #  index_teams_on_slug  (slug) UNIQUE
 #
+
 require "test_helper"
 
 class TeamTest < ActiveSupport::TestCase

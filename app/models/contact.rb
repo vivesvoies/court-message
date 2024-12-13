@@ -28,6 +28,7 @@
 #  fk_rails_...  (notes_last_editor_id => users.id)
 #  fk_rails_...  (team_id => teams.id)
 #
+
 class Contact < ApplicationRecord
   include Conversationalist
   has_one :conversation, dependent: :destroy, touch: true

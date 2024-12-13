@@ -19,6 +19,7 @@
 #  fk_rails_...  (team_id => teams.id)
 #  fk_rails_...  (user_id => users.id)
 #
+
 FactoryBot.define do
   factory :membership do
     team

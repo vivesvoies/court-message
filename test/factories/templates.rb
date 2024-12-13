@@ -17,6 +17,7 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
+
 FactoryBot.define do
   factory :template do
     title { Faker::TvShows::BojackHorseman.tongue_twister }
