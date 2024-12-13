@@ -28,6 +28,8 @@ module CourtMessage
     config.time_zone = "Europe/Paris"
     PhonyRails.default_country_code = "FR"
 
+    config.active_support.to_time_preserves_timezone = :zone
+
     config.eager_load_paths << Rails.root.join("app", "providers")
 
     # From https://docs.sendgrid.com/for-developers/sending-email/rubyonrails

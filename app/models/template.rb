@@ -17,6 +17,7 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
+
 class Template < ApplicationRecord
   belongs_to :user
 

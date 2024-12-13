@@ -15,6 +15,7 @@
 #  index_teams_on_name  (name) UNIQUE
 #  index_teams_on_slug  (slug) UNIQUE
 #
+
 FactoryBot.define do
   factory :team do
     name { Faker::Company.name }

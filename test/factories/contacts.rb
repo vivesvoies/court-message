@@ -28,6 +28,7 @@
 #  fk_rails_...  (notes_last_editor_id => users.id)
 #  fk_rails_...  (team_id => teams.id)
 #
+
 FactoryBot.define do
   factory :contact do
     email { Faker::Internet.email }
