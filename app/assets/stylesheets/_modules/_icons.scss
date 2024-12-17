@@ -101,6 +101,7 @@ $icon-names: (
 
   .cm-icon-#{$icon-name}::before,
   .cm-icon-#{$icon-name}::after {
+    -webkit-mask-image: image-url("icons/#{$icon-name}.svg");
     mask-image: image-url("icons/#{$icon-name}.svg");
   }
 }
