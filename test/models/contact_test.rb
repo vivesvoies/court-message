@@ -28,6 +28,7 @@
 #  fk_rails_...  (notes_last_editor_id => users.id)
 #  fk_rails_...  (team_id => teams.id)
 #
+
 require "test_helper"
 
 class ContactTest < ActiveSupport::TestCase

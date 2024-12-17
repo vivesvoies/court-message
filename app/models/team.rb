@@ -15,6 +15,7 @@
 #  index_teams_on_name  (name) UNIQUE
 #  index_teams_on_slug  (slug) UNIQUE
 #
+
 class Team < ApplicationRecord
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships

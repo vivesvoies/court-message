@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.3.0"
 
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.0.0"
 
 gem "pg", "~> 1.5"
 gem "puma", "~> 6.5"
@@ -29,7 +29,7 @@ gem "devise-i18n"
 gem "devise_invitable", git: "https://github.com/scambra/devise_invitable.git", ref: "d2b93edb8bf6e4ac81fa15ff4b948eafe1d456fc"
 gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
-gem "rails-i18n", "~> 7.0.10"
+gem "rails-i18n"
 
 gem "vonage", "~> 7.28"
 
@@ -47,7 +47,7 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate"
+  gem "annotate", git: "https://github.com/tnir/annotate_models/", branch: "rails-8"
   gem "rack-mini-profiler"
   gem "rubocop-minitest", require: false
   gem "rubocop-rails", require: false
