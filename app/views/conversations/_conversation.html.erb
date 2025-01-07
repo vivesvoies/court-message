@@ -19,10 +19,10 @@
     <div class="Conversation__agents"></div>
   <% end %>
   <%= turbo_frame_tag "read" do %>
-    <%= button_to read_status_team_conversation_path(conversation.team, conversation.id,read_status: { status: "unread" }), 
-              method: :patch, 
-              data: { turbo_frame: "read" } do %>
-      <span class="font-bold">READ ?</span>
-    <% end %>
+    <button 
+      class="toggle-read-status" 
+      data-action="conversation-list#toggleReadStatus">
+      <%= conversation.unread? ? "Read" : "Unread" %>
+    </button>
   <% end %>
 </li>
