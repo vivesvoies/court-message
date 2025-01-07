@@ -17,10 +17,10 @@
   <%= turbo_stream_from turbo_stream_name %>
   <div class="ConversationSwitcher__header">
     <h3 class="<%= "active" if params[:show] == "mine" %>">
-      <%= button_to t(".my_conversations"), team_conversations_path(), params: { show: "mine" }, method: :get %>
+      <%= button_to t(".my_conversations"), team_conversations_path(conversation_id: @conversation_id.presence), params: { show: "mine" }, method: :get %>
     </h3>
     <h3 class="<%= "active" if params[:show] == "all"|| params[:show].nil? %>">
-      <%= button_to t(".all_conversations"), team_conversations_path(), params: { show: "all" }, method: :get %>
+      <%= button_to t(".all_conversations"), team_conversations_path(conversation_id: @conversation_id.presence), params: { show: "all" }, method: :get %>
     </h3>
   </div>
   <ol id="conversations"

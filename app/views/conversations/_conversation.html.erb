@@ -18,4 +18,11 @@
     </div>
     <div class="Conversation__agents"></div>
   <% end %>
+  <%= turbo_frame_tag "read" do %>
+    <button 
+      class="toggle-read-status" 
+      data-action="conversation-list#toggleReadStatus">
+      <%= conversation.unread? ? "Read" : "Unread" %>
+    </button>
+  <% end %>
 </li>
