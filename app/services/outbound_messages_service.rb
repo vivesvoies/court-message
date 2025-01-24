@@ -35,15 +35,19 @@ class OutboundMessagesService
 
   private
 
+  def raspisms_provider
+    @raspisms_provider ||= RaspiSMSProvider.new
+  end
+
   def default_provider
     unless Rails.env.test?
-      vonage_provider
+      raspisms_provider
     else
       DummyProvider.new
     end
   end
 
-  def vonage_provider
-    @vonage_provider ||= VonageProvider.new
-  end
+  # def vonage_provider
+  #   @vonage_provider ||= VonageProvider.new
+  # end
 end
