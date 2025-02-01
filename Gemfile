@@ -13,7 +13,7 @@ gem "sprockets-rails"
 gem "bootsnap", require: false
 
 gem "hotwire-livereload", "~> 1.4"
-gem "importmap-rails", "~> 2.0"
+gem "importmap-rails", "~> 2.1"
 gem "sass-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
