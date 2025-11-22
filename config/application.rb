@@ -33,11 +33,12 @@ module CourtMessage
     config.eager_load_paths << Rails.root.join("app", "providers")
 
     # From https://docs.sendgrid.com/for-developers/sending-email/rubyonrails
+
     config.action_mailer.smtp_settings = {
-      user_name: "apikey", # This is the string literal "apikey", NOT the ID of your API key
-      password: Rails.application.credentials.sendgrid_api_key, # This is the secret sendgrid API key which was issued during API key creation
+      user_name: Rails.application.credentials.brevo_smtp_login,
+      password: Rails.application.credentials.brevo_smtp_key,
       domain: "court-message.fr",
-      address: "smtp.sendgrid.net",
+      address: "smtp-relay.brevo.com",
       port: 587,
       authentication: :plain,
       enable_starttls_auto: true
