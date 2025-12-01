@@ -260,7 +260,10 @@ GEM
     parser (3.3.6.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.6.2-aarch64-linux)
+    pg (1.6.2-arm64-darwin)
+    pg (1.6.2-x86_64-darwin)
+    pg (1.6.2-x86_64-linux)
     phonelib (0.10.1)
     phony (2.20.12)
     phony_rails (0.15.0)
@@ -473,7 +476,7 @@ DEPENDENCIES
   importmap-rails (~> 2.0)
   lograge
   minitest-reporters
-  pg (~> 1.5)
+  pg (~> 1.6)
   phony_rails
   puma (~> 6.5)
   rack-mini-profiler
