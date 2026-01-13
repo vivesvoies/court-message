@@ -17,16 +17,14 @@ export default class extends Controller {
 
   activate(event) {
     const target = event.target.closest(`.${this.itemClass}`);
+  
     this.select(target);
     sessionStorage.setItem('activeConversation', target.id);
   }
 
   conversationTargetConnected(target) {
-    if (this.selection === target.id) {
+    if (this.selection && this.selection === target.id) {
       this.select(target);
-      if (target.classList.contains(this.unreadClass)) {
-        this.markAsRead(target);
-      }
     }
   }
 
@@ -36,24 +34,47 @@ export default class extends Controller {
   }
 
   select(target) {
+    JSON. stringify(target)
     this.deselect();
     target.classList.add(this.activeClass);
     this.selection = target.id;
   }
 
-  markAsRead(target) {
-    if (!target.classList.contains(this.unreadClass)) {
+  toggleReadStatus(event) {
+    const target = event.target.closest(`.${this.itemClass}`);
+    const isUnread = target.classList.contains(this.unreadClass);
+    const newStatus = isUnread ? "read" : "unread";
+  
+    this.updateReadStatus(target, newStatus);
+  
+    // TODO: Change for toggle switch
+    event.target.textContent = isUnread ? "Unread" : "Read";
+  }
+
+  updateReadStatus(target, status) {
+    const url = target.dataset.conversationStatusUrl;
+  
+    if (!target.classList.contains(this.unreadClass) && status === "read") {
       return;
     }
-    const url = target.dataset.conversationStatusUrl;
     fetch(url, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": document.querySelector("meta[name=\"csrf-token\"]").content
       },
-      body: JSON.stringify({ status: "read" })
+      body: JSON.stringify({ status })
     })
-    .catch((error) => console.error("Error:", error));
+      .then(() => {
+        if (status === "read") {
+          this.select(target);
+          sessionStorage.setItem('activeConversation', target.id);
+        } else {
+          this.deselect();
+          sessionStorage.removeItem('activeConversation');
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+      console.log("session : " + sessionStorage.getItem('activeConversation'))
   }
 }
