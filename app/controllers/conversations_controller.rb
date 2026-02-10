@@ -46,6 +46,7 @@ class ConversationsController < ApplicationController
 
   def all_conversations
     @conversations = Conversation.for_team(@team)
+    @turbo_stream_name ||= "team_conversations_list_#{@team.id}"
     paginate_conversations
   end
 
