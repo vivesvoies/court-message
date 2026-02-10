@@ -1,4 +1,4 @@
-FROM ruby:3.3.0-slim
+FROM ruby:4.0.1-slim
 
 LABEL maintainer="ljt@meidosem.com"
 
@@ -8,6 +8,7 @@ RUN apt-get update -yqq && \
     ruby-dev \
     libjemalloc2 \
     libpq-dev \
+    libyaml-dev \
     vim \
     git && \
     apt-get clean && \
