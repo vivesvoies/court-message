@@ -1,6 +1,8 @@
 class ConversationsController < ApplicationController
   layout "viewer"
 
+  PAGE_SIZE = 25
+
   before_action :set_team, only: %i[ index show create ]
   before_action :all_conversations, only: %i[ index ]
   before_action :set_conversation, only: %i[ show ]
@@ -17,6 +19,12 @@ class ConversationsController < ApplicationController
     else
       @conversations = Conversation.for_team(@team)
       @turbo_stream_name = "team_conversations_list_#{@team.id}"
+    end
+
+    paginate_conversations
+
+    if @page > 1 && turbo_frame_request?
+      render partial: "conversations/page", locals: { conversations: @conversations }
     end
   end
 
@@ -38,6 +46,15 @@ class ConversationsController < ApplicationController
 
   def all_conversations
     @conversations = Conversation.for_team(@team)
+    paginate_conversations
+  end
+
+  def paginate_conversations
+    @page = (params[:page] || 1).to_i
+    offset = (@page - 1) * PAGE_SIZE
+    @conversations = @conversations.limit(PAGE_SIZE + 1).offset(offset)
+    @has_next_page = @conversations.size > PAGE_SIZE
+    @conversations = @conversations.first(PAGE_SIZE)
   end
 
   def set_conversation

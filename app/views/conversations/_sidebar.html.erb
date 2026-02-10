@@ -31,5 +31,10 @@
       data-conversation-list-unread-class="Conversation--unread"
       data-conversation-list-link-class="Conversation__link">
     <%= render conversations %>
+    <% if @has_next_page %>
+      <%= turbo_frame_tag "next_page", src: team_conversations_path(team, show: params[:show], page: @page + 1), loading: :lazy do %>
+        <li class="ConversationList__loading"></li>
+      <% end %>
+    <% end %>
   </ol>
 </div>

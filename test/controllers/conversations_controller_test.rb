@@ -7,6 +7,61 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     sign_in @user
   end
 
+  # Pagination
+
+  test "should paginate conversations" do
+    create_conversations(30)
+
+    get team_conversations_url(@team)
+    assert_response :success
+    assert_select ".Conversation", count: ConversationsController::PAGE_SIZE
+  end
+
+  test "should load next page of conversations" do
+    create_conversations(30)
+
+    get team_conversations_url(@team, page: 2)
+    assert_response :success
+    assert_select ".Conversation", count: 30 - ConversationsController::PAGE_SIZE
+  end
+
+  test "should not show load more link on last page" do
+    create_conversations(3)
+
+    get team_conversations_url(@team)
+    assert_response :success
+    assert_select "turbo-frame#next_page", false
+  end
+
+  test "should show load more link when there are more conversations" do
+    create_conversations(30)
+
+    get team_conversations_url(@team)
+    assert_response :success
+    assert_select "turbo-frame#next_page"
+  end
+
+  test "should paginate my conversations" do
+    conversations = create_conversations(30)
+    conversations.each { |c| c.agents << @user }
+
+    get team_conversations_url(@team, show: "mine")
+    assert_response :success
+    assert_select ".Conversation", count: ConversationsController::PAGE_SIZE
+  end
+
+  test "pages should not overlap" do
+    create_conversations(30)
+
+    get team_conversations_url(@team)
+    page_1_ids = css_select(".Conversation").map { |el| el["id"] }
+
+    get team_conversations_url(@team, page: 2)
+    page_2_ids = css_select(".Conversation").map { |el| el["id"] }
+
+    assert_empty page_1_ids & page_2_ids, "Page 1 and page 2 should not share any conversations"
+  end
+
   test "should get index" do
     @conversation = create(:conversation, contact: @contact)
 
@@ -90,5 +145,14 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
 
     assert_select ".Conversation__contact", text: @other_contact.identifier, count: 0
+  end
+
+  private
+
+  def create_conversations(count)
+    count.times.map do |i|
+      contact = create(:contact, team: @team, phone: "+3360000#{i.to_s.rjust(4, '0')}")
+      create(:conversation, contact: contact)
+    end
   end
 end
