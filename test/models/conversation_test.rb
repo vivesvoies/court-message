@@ -193,6 +193,58 @@ class ConversationTest < ActiveSupport::TestCase
     assert_not_includes(result, team_2_conversations[1])
   end
 
+  def test_broadcast_to_team_conversations_on_new_inbound_message
+    team = create(:team)
+    contact = create(:contact, team: team)
+    conversation = create(:conversation, contact: contact)
+    message = build(:inbound_message, sender: contact, conversation: conversation)
+
+    # Replicate InboundMessagesController#create flow
+    assert_turbo_stream_broadcasts "team_conversations_list_#{team.id}" do
+      ActiveRecord::Base.transaction do
+        message.save!
+        conversation.mark_as_unread!
+        conversation.messages << message
+      end
+    end
+  end
+
+  def test_inbound_message_does_not_broadcast_to_individual_conversation_stream
+    # When remove and prepend go to different ActionCable streams, delivery
+    # order is not guaranteed. The prepend can arrive before the remove,
+    # causing the new conversation to be removed by the dedup logic instead
+    # of the old one. The fix: broadcast remove through the team stream, not
+    # the individual conversation stream.
+    team = create(:team)
+    contact = create(:contact, team: team)
+    conversation = create(:conversation, contact: contact)
+    message = build(:inbound_message, sender: contact, conversation: conversation)
+
+    assert_no_turbo_stream_broadcasts "conversation_list_item_#{conversation.id}" do
+      ActiveRecord::Base.transaction do
+        message.save!
+        conversation.mark_as_unread!
+        conversation.messages << message
+      end
+    end
+  end
+
+  def test_no_broadcast_to_other_team_conversations
+    team = create(:team)
+    other_team = create(:team)
+    contact = create(:contact, team: team)
+    conversation = create(:conversation, contact: contact)
+    message = build(:inbound_message, sender: contact, conversation: conversation)
+
+    assert_no_turbo_stream_broadcasts "team_conversations_list_#{other_team.id}" do
+      ActiveRecord::Base.transaction do
+        message.save!
+        conversation.mark_as_unread!
+        conversation.messages << message
+      end
+    end
+  end
+
   def test_broadcast_to_user_conversations_on_new_message
     team = create(:team)
     user = create(:user)

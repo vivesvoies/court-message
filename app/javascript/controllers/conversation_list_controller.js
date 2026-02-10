@@ -22,6 +22,16 @@ export default class extends Controller {
   }
 
   conversationTargetConnected(target) {
+    // Deduplicate: if a conversation was already prepended by a broadcast,
+    // remove the older copy (keep the newly connected target at the top)
+    const duplicates = this.element.querySelectorAll(`#${target.id}`);
+    if (duplicates.length > 1) {
+      for (const dup of duplicates) {
+        if (dup !== target) dup.remove();
+      }
+      return;
+    }
+
     if (this.selection === target.id) {
       this.select(target);
       if (target.classList.contains(this.unreadClass)) {
