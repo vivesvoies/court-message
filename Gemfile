@@ -22,7 +22,7 @@ gem "bcrypt", "~> 3.1.20"
 gem "brakeman" # Look for security vulnerabilities
 gem "bundler-audit" # Check dependencies for vulnerabilities
 gem "cancancan"
-gem "devise", "~> 4.9"
+gem "devise", "~> 5.0"
 gem "devise-i18n"
 gem "devise_invitable", "~> 2.0"
 gem "lograge" # One-line-per-event format logs
