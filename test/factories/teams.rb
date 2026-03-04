@@ -18,7 +18,7 @@
 
 FactoryBot.define do
   factory :team do
-    name { Faker::Company.name }
+    sequence(:name) { |n| "#{Faker::Company.name} #{n}" }
     slug { name.parameterize }
     address { "Address" }
     desc { "Description" }
