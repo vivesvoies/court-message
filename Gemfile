@@ -18,7 +18,7 @@ gem "sass-rails"
 gem "stimulus-rails"
 gem "turbo-rails"
 
-gem "bcrypt", "~> 3.1.20"
+gem "bcrypt", "~> 3.1.22"
 gem "brakeman" # Look for security vulnerabilities
 gem "bundler-audit" # Check dependencies for vulnerabilities
 gem "cancancan"
