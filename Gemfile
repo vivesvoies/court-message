@@ -6,7 +6,7 @@ ruby "4.0.1"
 gem "rails", "~> 8.1.0"
 
 gem "pg", "~> 1.5"
-gem "puma", "~> 6.5"
+gem "puma", "~> 7.2"
 gem "redis", "~> 5.3"
 gem "sprockets-rails"
 
