@@ -3,16 +3,16 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "4.0.1"
 
-gem "rails", "~> 8.1.0"
+gem "rails", "~> 8.1.3"
 
 gem "pg", "~> 1.5"
-gem "puma", "~> 6.5"
+gem "puma", "~> 8.0"
 gem "redis", "~> 5.3"
 gem "sprockets-rails"
 
 gem "bootsnap", require: false
 
-gem "hotwire-livereload", "~> 1.4"
+gem "hotwire-livereload", "~> 2.1"
 gem "importmap-rails", "~> 2.0"
 gem "sass-rails"
 gem "stimulus-rails"
