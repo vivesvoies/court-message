@@ -16,8 +16,12 @@ class MessagesController < ApplicationController
     @conversation = @message.conversation
 
     if @message.save
+<<<<<<< HEAD
       @conversation.messages << @message
       MessageDeliveryJob.perform_later(@message)
+=======
+      outbound = OutboundMessagesService.new(@message)
+>>>>>>> origin/claude/app-code-review-2dp38n-data-integrity
 
       respond_to do |format|
         format.turbo_stream

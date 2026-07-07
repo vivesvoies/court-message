@@ -22,7 +22,7 @@
 class Conversation < ApplicationRecord
   belongs_to :contact
   has_one :team, through: :contact
-  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, after_add: :set_last_message
+  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy
   has_and_belongs_to_many :agents, class_name: "User"
 
   belongs_to :last_message, class_name: "Message", optional: true
@@ -61,23 +61,21 @@ class Conversation < ApplicationRecord
 
   private
 
-  def set_last_message(message)
-    self.last_message = message
-    save!
-  end
-
+  # The _later variants render and deliver outside the request cycle: with
+  # several agents on a conversation, rendering a partial per subscriber
+  # inline would block the response.
   def broadcast_conversation_update
     if unread? # broadcast a new message
       broadcast_remove_to "team_conversations_list_#{team.id}"
-      broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
+      broadcast_prepend_later_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
       agents.each do |agent|
         broadcast_remove_to "user_conversations_list_#{agent.id}"
-        broadcast_prepend_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
+        broadcast_prepend_later_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
       end
     else # broadcast another update (such as change in read / unread status)
-      broadcast_replace_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
+      broadcast_replace_later_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
       agents.each do |agent|
-        broadcast_replace_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
+        broadcast_replace_later_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
       end
     end
   end

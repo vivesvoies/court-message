@@ -40,7 +40,8 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true
   delegate :team, to: :conversation
   after_create :associate_user_with_conversation
-  before_destroy :nullify_last_message
+  after_save :update_conversation_last_message, if: :saved_change_to_conversation_id?
+  before_destroy :reassign_conversation_last_message
 
   validates_presence_of :content
 
@@ -50,16 +51,36 @@ class Message < ApplicationRecord
     inbound_status? ? :inbound : :outbound
   end
 
-  def nullify_last_message
-    self.conversation.update_column(:last_message_id, nil)
-    save!
-  end
-
   private
 
   def associate_user_with_conversation
     if sender_type == "User"
       conversation.agents << sender unless conversation.agents.include?(sender)
     end
+  end
+
+  # Runs when the message is created or moved into a conversation. When it
+  # was moved, the previous conversation must stop pointing at it too.
+  def update_conversation_last_message
+    old_conversation_id, _new_id = saved_change_to_conversation_id
+    detach_last_message_from(Conversation.find_by(id: old_conversation_id)) if old_conversation_id
+
+    conversation.update!(last_message: self)
+  end
+
+  # Point the conversation to the previous message (or nothing) before the
+  # database sees the delete; destroying a non-last message used to clear
+  # Conversation#last_message unconditionally.
+  def reassign_conversation_last_message
+    detach_last_message_from(conversation)
+  end
+
+  def detach_last_message_from(other_conversation)
+    return unless other_conversation
+    # Check the database, not the possibly stale in-memory attribute.
+    return unless Conversation.where(id: other_conversation.id).pick(:last_message_id) == id
+
+    previous = other_conversation.messages.where.not(id: id).reorder(created_at: :desc, id: :desc).first
+    other_conversation.update_column(:last_message_id, previous&.id)
   end
 end

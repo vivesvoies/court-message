@@ -30,10 +30,9 @@ class ConversationsController < ApplicationController
 
   # POST team/:team_slug/conversations
   def create
-    contact = Contact.find(params[:contact])
-    contact.build_conversation
-    contact.save
-    redirect_to team_conversation_path(@team, contact.conversation), notice: I18n.t(".conversations.create.success")
+    contact = @team.contacts.find(params[:contact])
+    conversation = contact.conversation || contact.create_conversation!
+    redirect_to team_conversation_path(@team, conversation), notice: I18n.t(".conversations.create.success")
   end
 
   # GET team/:team_slug/conversations/1
