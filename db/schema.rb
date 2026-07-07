@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_12_162919) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_053501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -20,16 +20,16 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_12_162919) do
   create_enum "user_role", ["user", "team_admin", "site_admin", "super_admin"]
 
   create_table "contacts", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "phone"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "team_id", null: false
-    t.text "notes"
-    t.datetime "notes_updated_at"
-    t.bigint "notes_last_editor_id"
     t.bigint "created_by_id"
+    t.string "email"
+    t.string "name"
+    t.text "notes"
+    t.bigint "notes_last_editor_id"
+    t.datetime "notes_updated_at"
+    t.string "phone"
+    t.bigint "team_id", null: false
+    t.datetime "updated_at", null: false
     t.index ["created_by_id"], name: "index_contacts_on_created_by_id"
     t.index ["notes_last_editor_id"], name: "index_contacts_on_notes_last_editor_id"
     t.index ["phone"], name: "index_contacts_on_phone"
@@ -40,25 +40,25 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_12_162919) do
   create_table "conversations", force: :cascade do |t|
     t.bigint "contact_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "read", default: true
     t.bigint "last_message_id"
+    t.boolean "read", default: true
+    t.datetime "updated_at", null: false
     t.index ["contact_id"], name: "index_conversations_on_contact_id"
     t.index ["last_message_id"], name: "index_conversations_on_last_message_id"
   end
 
   create_table "conversations_users", id: false, force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.bigint "conversation_id", null: false
+    t.bigint "user_id", null: false
     t.index ["conversation_id", "user_id"], name: "index_conversations_users_on_conversation_id_and_user_id", unique: true
     t.index ["user_id", "conversation_id"], name: "index_conversations_users_on_user_id_and_conversation_id", unique: true
   end
 
   create_table "memberships", force: :cascade do |t|
-    t.bigint "team_id", null: false
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "team_id", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["team_id", "user_id"], name: "index_memberships_on_team_id_and_user_id", unique: true
     t.index ["team_id"], name: "index_memberships_on_team_id"
     t.index ["user_id"], name: "index_memberships_on_user_id"
@@ -66,62 +66,83 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_12_162919) do
 
   create_table "messages", force: :cascade do |t|
     t.string "content"
-    t.jsonb "provider_info"
     t.bigint "conversation_id", null: false
-    t.string "sender_type", null: false
-    t.bigint "sender_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.enum "status", default: "unsent", null: false, enum_type: "message_status"
     t.uuid "outbound_uuid"
+    t.jsonb "provider_info"
+    t.bigint "sender_id", null: false
+    t.string "sender_type", null: false
+    t.enum "status", default: "unsent", null: false, enum_type: "message_status"
+    t.datetime "updated_at", null: false
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
 
+  create_table "solid_cable_messages", force: :cascade do |t|
+    t.binary "channel", null: false
+    t.bigint "channel_hash", null: false
+    t.datetime "created_at", null: false
+    t.binary "payload", null: false
+    t.index ["channel"], name: "index_solid_cable_messages_on_channel"
+    t.index ["channel_hash"], name: "index_solid_cable_messages_on_channel_hash"
+    t.index ["created_at"], name: "index_solid_cable_messages_on_created_at"
+  end
+
+  create_table "solid_cache_entries", force: :cascade do |t|
+    t.integer "byte_size", null: false
+    t.datetime "created_at", null: false
+    t.binary "key", null: false
+    t.bigint "key_hash", null: false
+    t.binary "value", null: false
+    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
+    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
+  end
+
   create_table "teams", force: :cascade do |t|
+    t.text "address"
+    t.datetime "created_at", null: false
+    t.text "desc"
     t.text "name", null: false
     t.text "slug", null: false
-    t.text "address"
-    t.text "desc"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_teams_on_name", unique: true
     t.index ["slug"], name: "index_teams_on_slug", unique: true
   end
 
   create_table "templates", force: :cascade do |t|
-    t.string "title"
     t.text "content"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_templates_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
+    t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.enum "role", default: "user", null: false, enum_type: "user_role"
-    t.string "phone"
-    t.string "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_sent_at"
+    t.datetime "created_at", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
     t.datetime "invitation_accepted_at"
+    t.datetime "invitation_created_at"
     t.integer "invitation_limit"
-    t.string "invited_by_type"
-    t.bigint "invited_by_id"
+    t.datetime "invitation_sent_at"
+    t.string "invitation_token"
     t.integer "invitations_count", default: 0
+    t.bigint "invited_by_id"
+    t.string "invited_by_type"
+    t.string "name"
+    t.string "phone"
+    t.datetime "remember_created_at"
+    t.datetime "reset_password_sent_at"
+    t.string "reset_password_token"
+    t.enum "role", default: "user", null: false, enum_type: "user_role"
+    t.string "unconfirmed_email"
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"

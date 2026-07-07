@@ -327,10 +327,6 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis (5.4.1)
-      redis-client (>= 0.22.0)
-    redis-client (0.28.0)
-      connection_pool
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -400,6 +396,15 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
+    solid_cable (4.0.0)
+      actioncable (>= 7.2)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
+    solid_cache (1.0.10)
+      activejob (>= 7.2)
+      activerecord (>= 7.2)
+      railties (>= 7.2)
     sorbet-runtime (0.6.13051)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
@@ -490,7 +495,6 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 8.1.3)
   rails-i18n
-  redis (~> 5.3)
   rubocop-minitest
   rubocop-rails
   rubocop-rails-omakase
@@ -498,6 +502,8 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
+  solid_cable
+  solid_cache
   sprockets-rails
   stackprof
   stimulus-rails
