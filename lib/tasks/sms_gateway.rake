@@ -23,6 +23,34 @@ namespace :sms_gateway do
     puts "  #{token}"
   end
 
+  desc "Report gateway/modem/queue health issues to the logs and Sentry (run from cron)"
+  task check_health: :environment do
+    issues = SmsGatewayHealthService.new.issues
+
+    if issues.empty?
+      puts "sms_gateway: all healthy"
+    else
+      issues.each do |issue|
+        puts issue
+        Rails.logger.warn("[sms_gateway] #{issue}")
+        Sentry.capture_message("[sms_gateway] #{issue}", level: issue.severity)
+      end
+    end
+  end
+
+  desc "Re-route stuck or modem-failed messages to their line's fallback (run from cron)"
+  task failover: :environment do
+    results = MessageFallbackService.new.run!
+
+    if results.empty?
+      puts "sms_gateway: nothing to fail over"
+    else
+      results.each do |result|
+        puts "message #{result.message.id} -> #{result.message.phone_line.phone} (#{result.submitted ? 'submitted' : 'FAILED'})"
+      end
+    end
+  end
+
   desc "Add a phone line (SIM number) to a gateway: rake sms_gateway:add_line[gateway_name,phone]"
   task :add_line, [ :name, :phone ] => :environment do |_task, args|
     abort "Usage: rake sms_gateway:add_line[gateway_name,phone]" if args[:name].blank? || args[:phone].blank?

@@ -1,0 +1,10 @@
+{
+  "jobs": [
+    {
+      "command": "*/10 * * * * bundle exec rake sms_gateway:check_health"
+    },
+    {
+      "command": "*/10 * * * * bundle exec rake sms_gateway:failover"
+    }
+  ]
+}

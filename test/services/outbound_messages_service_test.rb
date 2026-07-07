@@ -3,12 +3,12 @@ require "test_helper"
 class OutboundMessagesServiceTest < ActiveSupport::TestCase
   def setup
     Current.user = create(:user)
-    Current.phone_number = fake_number
-    Current.phone_line = nil
 
     c = create(:conversation)
     @message = Message.new({ content: "Lorem Ipsum", conversation_id: c.id, sender: Current.user })
     @contact = c.contact
+    # With no PhoneLine configured, sends fall back to the legacy number.
+    @from = PhoneLine.legacy_number
     @provider = Minitest::Mock.new
     @outbound_message = OutboundMessagesService.new(@message, @provider)
   end
@@ -22,7 +22,7 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.expect(
       :send,
       ProviderResult.new(success: true, message_uuid: SecureRandom.uuid),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert(@outbound_message.submit!)
@@ -37,7 +37,7 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.expect(
       :send,
       ProviderResult.new(success: false, error: "HTTP Status: 503, Response Body: Service Unavailable."),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert_not(@outbound_message.submit!)
@@ -51,7 +51,7 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.expect(
       :send,
       ProviderResult.new(success: false),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert_not(@outbound_message.submit!)
@@ -65,7 +65,7 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.expect(
       :send,
       ProviderResult.new(success: true, queued: true, message_uuid: SecureRandom.uuid),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert(@outbound_message.submit!)
@@ -75,13 +75,33 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.verify
   end
 
-  def test_assigns_current_phone_line_to_message
+  def test_routes_through_the_team_phone_line
     line = create(:phone_line)
-    Current.phone_line = line
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
 
-    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation: @message.conversation, sender: Current.user), @provider)
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation:, sender: Current.user), @provider)
 
     assert_equal(line, service.message.phone_line)
+  end
+
+  def test_routes_through_the_fallback_line_when_the_team_line_is_inactive
+    fallback = create(:phone_line)
+    line = create(:phone_line, active: false, fallback_phone_line: fallback)
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
+
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation:, sender: Current.user), @provider)
+
+    assert_equal(fallback, service.message.phone_line)
+  end
+
+  def test_routes_through_the_default_line_without_a_team_line
+    default = create(:phone_line, default: true)
+
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation: create(:conversation), sender: Current.user), @provider)
+
+    assert_equal(default, service.message.phone_line)
   end
 
   def test_selects_sms_gateway_provider_for_gateway_lines

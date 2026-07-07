@@ -76,8 +76,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.datetime "updated_at", null: false
     t.bigint "phone_line_id"
     t.datetime "claimed_at"
+    t.index "((provider_info ->> 'modem_message_id'::text))", name: "index_messages_on_modem_message_id", where: "((provider_info ->> 'modem_message_id'::text) IS NOT NULL)"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
+    t.index ["phone_line_id", "created_at"], name: "index_messages_on_unsent_claimable", where: "(status = 'unsent'::message_status)"
     t.index ["phone_line_id"], name: "index_messages_on_phone_line_id"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
@@ -89,7 +91,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.boolean "default", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true, null: false
+    t.bigint "fallback_phone_line_id"
+    t.integer "fallback_after_minutes"
+    t.datetime "last_modem_check_at"
+    t.boolean "modem_ok"
+    t.jsonb "modem_details"
     t.index ["default"], name: "index_phone_lines_on_single_default", unique: true, where: "(\"default\" = true)"
+    t.index ["fallback_phone_line_id"], name: "index_phone_lines_on_fallback_phone_line_id"
     t.index ["phone"], name: "index_phone_lines_on_phone", unique: true
     t.index ["sms_gateway_id"], name: "index_phone_lines_on_sms_gateway_id"
   end
@@ -165,6 +174,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "phone_lines"
+  add_foreign_key "phone_lines", "phone_lines", column: "fallback_phone_line_id"
   add_foreign_key "phone_lines", "sms_gateways"
   add_foreign_key "teams", "phone_lines"
   add_foreign_key "templates", "users"
