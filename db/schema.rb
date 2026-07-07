@@ -74,9 +74,34 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.string "sender_type", null: false
     t.enum "status", default: "unsent", null: false, enum_type: "message_status"
     t.datetime "updated_at", null: false
+    t.bigint "phone_line_id"
+    t.datetime "claimed_at"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
+    t.index ["phone_line_id"], name: "index_messages_on_phone_line_id"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
+  end
+
+  create_table "phone_lines", force: :cascade do |t|
+    t.string "phone", null: false
+    t.string "provider", default: "vonage", null: false
+    t.bigint "sms_gateway_id"
+    t.boolean "default", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["default"], name: "index_phone_lines_on_single_default", unique: true, where: "(\"default\" = true)"
+    t.index ["phone"], name: "index_phone_lines_on_phone", unique: true
+    t.index ["sms_gateway_id"], name: "index_phone_lines_on_sms_gateway_id"
+  end
+
+  create_table "sms_gateways", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "token_digest", null: false
+    t.datetime "last_seen_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_sms_gateways_on_name", unique: true
+    t.index ["token_digest"], name: "index_sms_gateways_on_token_digest", unique: true
   end
 
   create_table "teams", force: :cascade do |t|
@@ -86,7 +111,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.text "name", null: false
     t.text "slug", null: false
     t.datetime "updated_at", null: false
+    t.bigint "phone_line_id"
     t.index ["name"], name: "index_teams_on_name", unique: true
+    t.index ["phone_line_id"], name: "index_teams_on_phone_line_id"
     t.index ["slug"], name: "index_teams_on_slug", unique: true
   end
 
@@ -137,5 +164,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "phone_lines"
+  add_foreign_key "phone_lines", "sms_gateways"
+  add_foreign_key "teams", "phone_lines"
   add_foreign_key "templates", "users"
 end

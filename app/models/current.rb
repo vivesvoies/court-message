@@ -2,5 +2,6 @@
 class Current < ActiveSupport::CurrentAttributes
   attribute :user
   attribute :phone_number
+  attribute :phone_line
   attribute :team
 end

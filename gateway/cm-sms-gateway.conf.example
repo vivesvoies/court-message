@@ -1,0 +1,26 @@
+# Configuration du gateway SMS CM. Copier vers /etc/cm-sms-gateway.conf
+# et restreindre les droits : chmod 600, chown root:root (le fichier
+# contient le token d'API).
+
+[app]
+# URL publique de l'application (ou URL Tailscale si l'app y est joignable).
+url = https://cm.example.org
+# Token émis par `rake sms_gateway:provision[nom-du-gateway]`, affiché une
+# seule fois. En cas de fuite : `rake sms_gateway:rotate_token[nom]`.
+token = CHANGEZ-MOI
+# Numéro de la ligne (SIM) pilotée par cette instance, déclaré côté app via
+# `rake sms_gateway:add_line[nom-du-gateway,numero]`.
+line_phone = +33612345678
+# Intervalle entre deux cycles (secondes).
+poll_interval = 10
+# Nombre maximum de messages réclamés par cycle.
+claim_limit = 5
+
+[modem]
+# Configuration gammu (créée avec `gammu-config` ou à la main).
+gammu_config = /etc/gammurc
+# Section de /etc/gammurc à utiliser (0 = [gammu], 1 = [gammu1], ...).
+# Utile quand plusieurs modems sont branchés sur le même appareil.
+gammu_section = 0
+# Pause entre deux envois (secondes) — les modems SIM sont lents.
+send_pause = 2
