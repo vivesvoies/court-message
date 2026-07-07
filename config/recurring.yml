@@ -5,6 +5,9 @@ shared_tasks: &shared_tasks
   expire_stale_messages:
     class: ExpireStaleMessagesJob
     schedule: every hour at minute 27
+  prune_stale_invitations:
+    class: PruneStaleInvitationsJob
+    schedule: every day at 4am
 
 production:
   <<: *shared_tasks
