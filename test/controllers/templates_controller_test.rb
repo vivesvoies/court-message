@@ -86,4 +86,80 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     assert_not_equal "hacked", other_template.reload.content
   end
+
+  test "should round-trip a title through create and update" do
+    post team_user_templates_path(@team, @user), params: { template: { title: "Salutations", content: "Bonjour" } }
+    template = Template.order(:created_at).last
+    assert_equal "Salutations", template.title
+
+    patch team_user_template_path(@team, @user, template), params: { template: { title: "Salutations chaleureuses" } }
+    assert_equal "Salutations chaleureuses", template.reload.title
+  end
+
+  test "a team member can create a template shared with the team" do
+    assert_difference("Template.count") do
+      post team_user_templates_path(@team, @user), params: { template: { title: "Modèle commun", content: "Contenu partagé", shared: "1" } }
+    end
+
+    template = Template.order(:created_at).last
+    assert template.shared?
+    assert_equal @team.id, template.team_id
+    assert_equal @user.id, template.user_id
+  end
+
+  test "another member of the same team can edit a shared template" do
+    shared = create(:template, :shared, user: @user, team: @team)
+    other_user = create(:user, teams: [ @team ])
+    sign_in other_user
+
+    get edit_team_user_template_path(@team, other_user, shared)
+    assert_response :success
+
+    patch team_user_template_path(@team, other_user, shared), params: { template: { content: "Mis à jour par un collègue" } }
+    assert_redirected_to team_user_templates_path
+    assert_equal "Mis à jour par un collègue", shared.reload.content
+  end
+
+  test "another member of the same team can destroy a shared template" do
+    shared = create(:template, :shared, user: @user, team: @team)
+    other_user = create(:user, teams: [ @team ])
+    sign_in other_user
+
+    assert_difference("Template.count", -1) do
+      delete team_user_template_path(@team, other_user, shared)
+    end
+  end
+
+  test "a member of another team cannot edit a shared template" do
+    shared = create(:template, :shared, user: @user, team: @team)
+    outsider = create(:user)
+    sign_in outsider
+
+    patch team_user_template_path(@team, outsider, shared), params: { template: { content: "hacked" } }
+
+    assert_response :forbidden
+    assert_not_equal "hacked", shared.reload.content
+  end
+
+  test "a member of another team cannot destroy a shared template" do
+    shared = create(:template, :shared, user: @user, team: @team)
+    outsider = create(:user)
+    sign_in outsider
+
+    assert_no_difference("Template.count") do
+      delete team_user_template_path(@team, outsider, shared)
+    end
+
+    assert_response :forbidden
+  end
+
+  test "index exposes both personal and team templates" do
+    shared = create(:template, :shared, title: "Modèle partagé", user: @user, team: @team)
+
+    get team_user_templates_path(@team, @user)
+
+    assert_response :success
+    assert_match ERB::Util.html_escape(@template.content), response.body
+    assert_match "Modèle partagé", response.body
+  end
 end

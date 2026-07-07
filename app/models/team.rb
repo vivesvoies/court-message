@@ -21,6 +21,7 @@ class Team < ApplicationRecord
   has_many :users, through: :memberships
   has_many :contacts
   has_many :conversations, through: :contacts
+  has_many :templates
   delegate :include?, to: :users
 
   before_validation :set_slug, if: -> { slug.blank? }

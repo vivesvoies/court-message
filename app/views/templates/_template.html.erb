@@ -1,13 +1,17 @@
 <%= turbo_frame_tag template do %>
   <div class="Template" id="<%= dom_id template %>">
     <div data-controller="clipboard">
+      <% if template.title.present? %>
+        <p class="Template__title"><%= template.title %></p>
+      <% end %>
+
       <div class="cm-tile Template__content" data-clipboard-target="source">
         <%= template.content %>
       </div>
 
       <div class="Template__actions">
         <div class="Template__remove">
-          <%= link_to "", team_user_template_path(@team, user_id: template.user.id, id: template.id),
+          <%= link_to "", team_user_template_path(@team, user_id: Current.user.id, id: template.id),
               data: {
                 turbo_method: :delete,
                 turbo_confirm: t(:confirm),
@@ -23,7 +27,7 @@
         </div>
 
         <div class="Template__edit">
-          <%= link_to "", edit_team_user_template_path(@team, user_id: template.user.id, id: template.id),
+          <%= link_to "", edit_team_user_template_path(@team, user_id: Current.user.id, id: template.id),
               class: "cm-btn cm-icon-pencil cm-btn--validate",
               aria_label: t(".edit"), title: t(".edit") %>
         </div>

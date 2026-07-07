@@ -15,6 +15,7 @@ class Ability
     can :create, Message, belongs_to_team
     can :manage, Contact, belongs_to_team
     can :manage, Template, user_id: user.id
+    can :manage, Template, team_id: user.team_ids
     return unless user.at_least?(:team_admin)
 
     # Rules for team admins -> create teams, add members, manage members

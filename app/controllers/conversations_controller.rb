@@ -66,7 +66,10 @@ class ConversationsController < ApplicationController
   end
 
   def set_templates
-    @templates = Current.user.templates if !turbo_frame_request?
+    return if turbo_frame_request?
+
+    @personal_templates = Current.user.templates.personal
+    @team_templates = @team.templates
   end
 
   # # Only allow a list of trusted parameters through.

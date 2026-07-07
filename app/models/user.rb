@@ -64,6 +64,10 @@ class User < ApplicationRecord
   validates :phone, phony_plausible: true, allow_blank: true
 
   after_create :add_default_template
+  # Team-shared templates must outlive their creator: release them before the
+  # `dependent: :destroy` on :templates runs, so only personal templates are
+  # actually destroyed.
+  before_destroy :release_shared_templates, prepend: true
 
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
@@ -100,6 +104,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def release_shared_templates
+    templates.shared.update_all(user_id: nil)
+  end
 
   def add_default_template
     default_template = Template.create(

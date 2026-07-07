@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_142000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -235,9 +235,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   create_table "templates", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
+    t.bigint "team_id"
     t.string "title"
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
+    t.index ["team_id"], name: "index_templates_on_team_id"
     t.index ["user_id"], name: "index_templates_on_user_id"
   end
 
@@ -285,5 +287,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "templates", "teams"
   add_foreign_key "templates", "users"
 end

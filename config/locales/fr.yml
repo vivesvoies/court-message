@@ -310,6 +310,7 @@ fr:
   templates:
     templates_list:
       my_templates: "Mes modèles"
+      team_templates: "Modèles de l'équipe"
       new_template: "Nouveau modèle"
     create:
       success: "Nouveau template enregistré."
@@ -317,6 +318,8 @@ fr:
     update:
       template_updated: ""
     form:
+      title: "Titre"
+      shared: "Partager avec l'équipe"
       update: "Enregistrer"
       confirm_delete: "Voulez-vous vraiment supprimer le modèle ?"
       delete: "Supprimer"

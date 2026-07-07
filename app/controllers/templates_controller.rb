@@ -3,7 +3,7 @@ class TemplatesController < ApplicationController
 
   before_action :set_team
   before_action :set_user
-  before_action :authorize_templates_owner!
+  before_action :authorize_templates_owner!, only: %i[ index new create ]
   before_action :set_templates
   before_action :set_template, only: %i[ edit update destroy ]
 
@@ -18,7 +18,9 @@ class TemplatesController < ApplicationController
 
   # POST team/:team_slug/users/:id/templates
   def create
-    @template = @user.templates.build(template_params)
+    @template = @user.templates.build(template_params.except(:shared))
+    @template.team = @team if template_params[:shared] == "1"
+    authorize! :manage, @template
 
     if @template.save
       respond_to do |format|
@@ -39,7 +41,7 @@ class TemplatesController < ApplicationController
   # PATCH/PUT team/:team_slug/users/:id/templates/:id
   def update
     respond_to do |format|
-      if @template.update(template_params)
+      if @template.update(template_params.except(:shared))
         format.html { redirect_to team_user_templates_path, notice: I18n.t("templates.update.template_updated") }
         format.turbo_stream
       else
@@ -62,18 +64,26 @@ class TemplatesController < ApplicationController
 
   private
 
-  # Templates are personal: only their owner (or a super admin) may list,
-  # create, or change the templates of the user in the route.
+  # Listing, creating a new personal template, or getting a form only make
+  # sense for the user in the route (or a super admin) -- own it or beat it.
   def authorize_templates_owner!
     authorize! :manage, Template.new(user: @user)
   end
 
   def set_templates
-    @templates = @user.templates
+    @personal_templates = @user.templates.personal
+    @team_templates = @team.templates
   end
 
+  # Editing/updating/destroying a template can target either a personal
+  # template of the user in the route, or any template shared with the
+  # team -- team templates are editable by every team member. Authorize
+  # the found instance rather than just the route-level owner gate, so
+  # that any team member (not just @user) can act on a shared template.
   def set_template
-    @template = @user.templates.find(params[:id])
+    scope = @user.templates.personal.or(Template.shared.where(team: @team))
+    @template = scope.find(params[:id])
+    authorize! :manage, @template
   end
 
   def set_user
@@ -86,6 +96,6 @@ class TemplatesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def template_params
-    params.fetch(:template, {}).permit(:content)
+    params.fetch(:template, {}).permit(:title, :content, :shared)
   end
 end

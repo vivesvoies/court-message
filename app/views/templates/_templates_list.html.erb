@@ -1,4 +1,4 @@
-<%# locals: (user:, templates:) %>
+<%# locals: (user:, personal_templates:, team_templates:) %>
 <div class="Templates">
   <header class="Templates__header">
     <h3>
@@ -17,7 +17,19 @@
     <%= turbo_frame_tag "new_template" %>
 
     <%= turbo_frame_tag "templates" do %>
-      <%= render templates %>
+      <%= render personal_templates %>
+    <% end %>
+  </div>
+
+  <header class="Templates__header">
+    <h3>
+      <i class="cm-icon-team cm-icon"></i>
+      <%= t(".team_templates") %>
+    </h3>
+  </header>
+  <div class="TemplateList">
+    <%= turbo_frame_tag "team_templates" do %>
+      <%= render team_templates %>
     <% end %>
   </div>
 </div>
