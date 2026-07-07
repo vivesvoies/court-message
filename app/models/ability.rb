@@ -15,13 +15,19 @@ class Ability
     can :create, Message, belongs_to_team
     can :manage, Contact, belongs_to_team
     can :manage, Template, user_id: user.id
-    return unless user.at_least?(:team_admin)
 
-    # Rules for team admins -> create teams, add members, manage members
-    can [ :create, :update, :destroy ], User, memberships: belongs_to_team
-    can [ :read, :create, :update ], Team, belongs_to_team
-    can :manage, Membership, belongs_to_team
-    cannot :destroy, User, id: user.id
+    # Rules for team admins -> scoped to the teams where the membership is admin.
+    # Team administration is now per-team (see #130): a user may be admin of one
+    # team and a plain member of another.
+    admin_team_ids = user.admin_team_ids
+    if admin_team_ids.any?
+      admin_of_team = { team: { id: admin_team_ids } }
+      # Create teams, add members, manage members -> only for admin teams
+      can [ :create, :update, :destroy ], User, memberships: admin_of_team
+      can [ :read, :create, :update ], Team, admin_of_team
+      can :manage, Membership, admin_of_team
+      cannot :destroy, User, id: user.id
+    end
     return unless user.at_least?(:site_admin)
 
     # Rules for site admins -> manage every user and team

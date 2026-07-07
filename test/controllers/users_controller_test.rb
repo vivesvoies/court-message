@@ -7,7 +7,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user = create(:user, role: :user, teams: [ @team ])
     @other_user = create(:user, role: :user, teams: [ @other_team ])
     @other_team_user = create(:user, role: :user, teams: [ @team ])
-    @team_admin = create(:user, role: :team_admin, teams: [ @team ])
+    @team_admin = create_team_admin(teams: [ @team ])
     @site_admin = create(:user, role: :site_admin, teams: [ @team ])
   end
 
@@ -123,5 +123,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     patch team_user_url(@team, @other_team_user), params: { user: { role: :team_admin } }
     assert_redirected_to team_url(@team)
     assert_equal "user", @other_team_user.reload.role
+  end
+
+  # Per-team roles (#130): admin of team A, plain member of team B.
+  test "team admin who is only a member of another team cannot edit its users" do
+    # @team_admin is admin of @team; make them a plain member of @other_team.
+    create(:membership, team: @other_team, user: @team_admin, role: "member")
+
+    sign_in @team_admin
+    # Can still edit users in the team they administer.
+    get edit_team_user_url(@team, @user)
+    assert_response :success
+
+    # Cannot edit users in the team where they are only a member.
+    get edit_team_user_url(@other_team, @other_user)
+    assert_response :forbidden
+    sign_out @team_admin
   end
 end

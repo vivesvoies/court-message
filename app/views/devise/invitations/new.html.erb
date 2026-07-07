@@ -16,6 +16,13 @@
           </div>
         <% end -%>
 
+        <% if Current.user.team_admin_of?(@team) || Current.user.at_least?(:site_admin) %>
+          <div class="cm-fieldset__element cm-input-group">
+            <%= label_tag :role, t(".role"), class: "cm-label" %>
+            <%= select_tag :role, options_for_select(membership_roles_collection), class: "cm-input" %>
+          </div>
+        <% end %>
+
         <div class="InvitationNew__actions">
           <%= button_tag t(".new"), type: "submit", class: "cm-btn cm-btn--validate cm-btn--icon-left cm-icon-checkmark", data: {turbo_frame: "_top"} %>
           <%= link_to t(:cancel), team_path(Team.find_by(slug: params[:team])), class: "cm-btn cm-btn--secondary" %> 

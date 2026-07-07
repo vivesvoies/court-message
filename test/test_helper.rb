@@ -20,6 +20,16 @@ class ActiveSupport::TestCase
 
   def fake_number = Faker::PhoneNumber.cell_phone_in_e164
 
+  # Creates a user who is an admin of every team they belong to. Team
+  # administration is per-membership now (see #130): there is no global
+  # `team_admin` role, so tests express it through the membership role.
+  def create_team_admin(**attrs)
+    user = create(:user, **attrs)
+    user.memberships.update_all(role: "admin")
+    user.reload
+    user
+  end
+
   def before_setup
     super
     DatabaseCleaner.start

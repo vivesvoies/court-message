@@ -71,6 +71,22 @@ class UserTest < ActiveSupport::TestCase
     assert(super_admin.at_least?(:super_admin))
   end
 
+  def test_team_admin_of_and_admin_team_ids
+    team_a = create(:team)
+    team_b = create(:team)
+    user = create(:user, teams: [])
+    create(:membership, :admin, user:, team: team_a)
+    create(:membership, user:, team: team_b) # plain member
+
+    assert(user.team_admin_of?(team_a))
+    assert_not(user.team_admin_of?(team_b))
+    assert_equal([ team_a.id ], user.admin_team_ids)
+
+    # A user with no memberships administers nothing.
+    plain = create(:user, teams: [])
+    assert_empty(plain.admin_team_ids)
+  end
+
   def test_awaiting_invitation_reply
     user_without_invitation = create(:user)
     assert_not(user_without_invitation.awaiting_invitation_reply?)

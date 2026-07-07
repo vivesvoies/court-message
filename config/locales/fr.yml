@@ -125,6 +125,7 @@ fr:
       user_already_in_the_team: "Cet utilisateur fait déjà partie de votre équipe."
       new:
         new: "Ajouter à l’équipe"
+        role: "Rôle"
       edit:
         title: "Mon compte Court-Message"
         email_format: "Format attendu : nom@domaine.fr"
@@ -215,6 +216,9 @@ fr:
       placeholder: "Rechercher votre contact"
 
   memberships:
+    roles:
+      member: "Membre"
+      admin: "Administrateur d’équipe"
     membership:
       remove_member: "Retirer de l’équipe"
     destroy:

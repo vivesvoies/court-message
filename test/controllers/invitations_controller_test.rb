@@ -152,4 +152,38 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     get welcome_url(invitation_token: "invalid_token")
     assert_redirected_to new_user_session_path
   end
+
+  # Per-team roles (#130): the invitation form's role selector sets the
+  # created membership's role, and only team admins may grant `admin`.
+  test "team admin can invite a user as a team admin" do
+    admin = create_team_admin(teams: [ @team ])
+    sign_in admin
+
+    post user_invitation_path(team: @team),
+      params: { user: { name: "Jane Doe", email: "jane@example.com" }, role: "admin" }
+
+    membership = User.find_by(email: "jane@example.com").memberships.find_by(team: @team)
+    assert membership.admin_role?
+  end
+
+  test "plain member inviting cannot grant the admin role" do
+    sign_in @user # plain member of @team
+
+    post user_invitation_path(team: @team),
+      params: { user: { name: "Bob Doe", email: "bob@example.com" }, role: "admin" }
+
+    membership = User.find_by(email: "bob@example.com").memberships.find_by(team: @team)
+    assert membership.member_role?
+  end
+
+  test "invited existing user is added with the requested membership role" do
+    admin = create_team_admin(teams: [ @team ])
+    sign_in admin
+
+    post user_invitation_path(team: @team),
+      params: { user: { name: "Whatever", email: @other_user.email }, role: "admin" }
+
+    membership = @other_user.memberships.find_by(team: @team)
+    assert membership.admin_role?
+  end
 end

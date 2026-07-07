@@ -4,6 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
+#  role       :enum             default("member"), not null
 #  updated_at :datetime         not null
 #  team_id    :bigint           not null
 #  user_id    :bigint           not null
@@ -24,5 +25,10 @@ FactoryBot.define do
   factory :membership do
     team
     user
+    role { "member" }
+
+    trait :admin do
+      role { "admin" }
+    end
   end
 end

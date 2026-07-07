@@ -1,5 +1,6 @@
 module UsersHelper
-  def roles_collection
-    Current.user.bestowable_roles.map { |role| [ I18n.t("roles." + role), role ] }
+  # Options for the invitation form's membership-role selector.
+  def membership_roles_collection
+    Membership.roles.keys.map { |role| [ I18n.t("memberships.roles.#{role}"), role ] }
   end
 end

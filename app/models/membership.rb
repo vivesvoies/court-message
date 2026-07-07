@@ -4,6 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
+#  role       :enum             default("member"), not null
 #  updated_at :datetime         not null
 #  team_id    :bigint           not null
 #  user_id    :bigint           not null
@@ -23,6 +24,8 @@
 class Membership < ApplicationRecord
   belongs_to :team
   belongs_to :user
+
+  enum :role, { member: "member", admin: "admin" }, suffix: true
 
   delegate :identifier, to: :user
 end

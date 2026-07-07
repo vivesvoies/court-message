@@ -4,7 +4,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @team = create(:team)
     @other_team = create(:team)
-    @admin = create(:user, role: :team_admin, teams: [ @team ])
+    @admin = create_team_admin(teams: [ @team ])
     sign_in @admin
   end
 
@@ -83,5 +83,38 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Membership.count") do
       post memberships_url, params: { membership: { user_id: user.id, team_id: @other_team.id } }
     end
+  end
+
+  # Per-team roles (#130): admin of team A, plain member of team B.
+  test "team admin can create membership in the team they administer" do
+    user = create(:user)
+    assert_difference("Membership.count") do
+      post memberships_url, params: { membership: { user_id: user.id, team_id: @team.id } }
+    end
+    assert_redirected_to team_path(@team)
+  end
+
+  test "team admin cannot create membership in a team where they are only a member" do
+    create(:membership, team: @other_team, user: @admin, role: "member")
+    user = create(:user)
+    assert_no_difference("Membership.count") do
+      post memberships_url, params: { membership: { user_id: user.id, team_id: @other_team.id } }
+    end
+    assert_response :forbidden
+  end
+
+  test "team admin cannot destroy membership in a team where they are only a member" do
+    create(:membership, team: @other_team, user: @admin, role: "member")
+    membership = create(:membership, team: @other_team)
+    assert_no_difference("Membership.count") do
+      delete membership_url(membership)
+    end
+    assert_response :forbidden
+  end
+
+  test "membership is created with the admin role when requested by a team admin" do
+    user = create(:user)
+    post memberships_url, params: { membership: { user_id: user.id, team_id: @team.id, role: "admin" } }
+    assert Membership.find_by(user: user, team: @team).admin_role?
   end
 end

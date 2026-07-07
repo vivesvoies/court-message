@@ -65,12 +65,20 @@ class User < ApplicationRecord
 
   after_create :add_default_template
 
+  # Global-role check (site_admin / super_admin). Team-level administration is
+  # no longer a global role: use `team_admin_of?` / `admin_team_ids` instead.
   def at_least?(role)
     ROLES.index(role.to_s) <= ROLES.index(self.role)
   end
 
-  def bestowable_roles
-    ROLES[0..ROLES.index(role)]
+  # Ids of the teams where this user's membership grants admin rights.
+  def admin_team_ids
+    memberships.admin_role.pluck(:team_id)
+  end
+
+  # True when the user is an admin of the given team (per-team, not global).
+  def team_admin_of?(team)
+    memberships.admin_role.exists?(team_id: team.id)
   end
 
   def is_authorize_on_avo

@@ -9,7 +9,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   def with_team_admin
-    @user = create(:user, role: :team_admin)
+    @user = create_team_admin
     @team = @user.teams.first
     sign_in @user
   end
@@ -143,7 +143,7 @@ class TeamsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not how every team to team admins" do
-    user = create(:user, role: :team_admin)
+    user = create_team_admin
     other_teams = create_list(:team, 3)
     sign_in user
 

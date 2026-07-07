@@ -49,7 +49,7 @@ users = [
     phone: "06 10 34 37 96",
     password: "fakePassw0rd",
     confirmed_at: DateTime.now.utc,
-    role: "team_admin"
+    role: "user"
   },
   {
     id: 4,
@@ -116,11 +116,13 @@ memberships = [
   },
   {
     team_id: 1,
-    user_id: 3
+    user_id: 3,
+    role: "admin"
   },
   {
     team_id: 2,
-    user_id: 3
+    user_id: 3,
+    role: "admin"
   },
   {
     team_id: 2,
@@ -138,7 +140,7 @@ memberships = [
 
 Rails.logger.info("Creating membership:")
 memberships.each do |membership|
-  Membership.create(team: Team.find(membership[:team_id]), user: User.find(membership[:user_id]))
+  Membership.create(team: Team.find(membership[:team_id]), user: User.find(membership[:user_id]), role: membership.fetch(:role, "member"))
 end
 
 # Contacts and Conversation

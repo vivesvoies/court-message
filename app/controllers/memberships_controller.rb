@@ -49,6 +49,9 @@ class MembershipsController < ApplicationController
   end
 
   def membership_params
-    params.fetch(:membership, {}).permit(:user_id, :team_id)
+    # `:role` is safe to permit here because the create action authorises the
+    # membership (`authorize! :create, @membership`); only a user who may manage
+    # the target team's memberships reaches the save. Defaults to member.
+    params.fetch(:membership, {}).permit(:user_id, :team_id, :role)
   end
 end

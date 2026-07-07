@@ -7,6 +7,7 @@ class Avo::Resources::Membership < Avo::BaseResource
     field :team_id, as: :id
     field :user, as: :belongs_to
     field :user_id, as: :id
+    field :role, as: :select, enum: ::Membership.roles, display_with_value: true, sortable: true
     field :created_at,
       as: :date,
       format: "yyyy-LL-dd"
