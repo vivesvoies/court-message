@@ -1,49 +1,37 @@
-# This class is responsible for sending outbound messages.
-# It will create a Message instance with a status of not-yet-delivered.
+# This class is responsible for submitting outbound messages to the provider.
 # Currently only supports SMS through Vonage.
 class OutboundMessagesService
+  # Raised when the provider does not accept the message, so the caller
+  # (MessageDeliveryJob) can retry with backoff.
+  class DeliveryError < StandardError; end
+
   attr_reader :message
 
   def initialize(message, provider = nil)
     @message = message
-    @message.status = :unsent
-
     @provider = provider || default_provider
   end
 
+  # Submits the message to the provider. On success the message becomes
+  # "submitted"; on refusal a DeliveryError is raised and the message keeps
+  # its current status so a retry can pick it up.
   def submit!
-    # TODO: Optimization / preloading?
     to = @message.conversation.contact.phone
-    result = @provider.send(from: Current.phone_number, to:, content: @message.content)
+    from = Rails.configuration.x.outbound_phone_number
+    result = @provider.send(from:, to:, content: @message.content)
 
-    @message.status = result.http_response.is_a?(Net::HTTPSuccess) ? :submitted : :failed
-    @message.outbound_uuid = result.message_uuid
-    @message.save
-
-    if result.http_response.is_a?(Net::HTTPSuccess)
-      true
-    else
-      if result.http_response?
-        Sentry.capture_message(
-          "Outbound message failed in OutboundMessagesService: Message UUID #{result.message_uuid}, " \
-          "HTTP Status: #{result.http_response.code}, Response Body: #{result.http_response.body}."
-        )
-      end
-      false
+    unless result.http_response.is_a?(Net::HTTPSuccess)
+      raise DeliveryError, "Provider refused message #{@message.id}: " \
+        "HTTP #{result.http_response&.code} #{result.http_response&.message}"
     end
+
+    @message.update!(status: :submitted, outbound_uuid: result.message_uuid)
+    true
   end
 
   private
 
   def default_provider
-    unless Rails.env.test?
-      vonage_provider
-    else
-      DummyProvider.new
-    end
-  end
-
-  def vonage_provider
-    @vonage_provider ||= VonageProvider.new
+    Rails.env.test? ? DummyProvider.new : VonageProvider.new
   end
 end

@@ -16,16 +16,12 @@ class MessagesController < ApplicationController
     @conversation = @message.conversation
 
     if @message.save
-      outbound = OutboundMessagesService.new(@message)
       @conversation.messages << @message
+      MessageDeliveryJob.perform_later(@message)
 
-      if outbound.submit!
-        respond_to do |format|
-          format.turbo_stream
-          format.html { redirect_to [ @conversation.team, @conversation ] }
-        end
-      else
-        handle_response_with_errors
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to [ @conversation.team, @conversation ] }
       end
     else
       handle_response_with_errors
