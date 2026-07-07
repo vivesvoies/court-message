@@ -17,10 +17,12 @@
 #
 # Indexes
 #
-#  index_messages_on_conversation_id  (conversation_id)
-#  index_messages_on_outbound_uuid    (outbound_uuid)
-#  index_messages_on_phone_line_id    (phone_line_id)
-#  index_messages_on_sender           (sender_type,sender_id)
+#  index_messages_on_conversation_id   (conversation_id)
+#  index_messages_on_modem_message_id  (((provider_info ->> 'modem_message_id'::text))) WHERE ((provider_info ->> 'modem_message_id'::text) IS NOT NULL)
+#  index_messages_on_outbound_uuid     (outbound_uuid)
+#  index_messages_on_phone_line_id     (phone_line_id)
+#  index_messages_on_sender            (sender_type,sender_id)
+#  index_messages_on_unsent_claimable  (phone_line_id,created_at) WHERE (status = 'unsent'::message_status)
 #
 # Foreign Keys
 #

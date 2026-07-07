@@ -5,6 +5,10 @@ module Gateway
   module V1
     class InboundMessagesController < BaseController
       def create
+        # Idempotency: the daemon retries until it gets a definitive answer,
+        # so a 201 lost to a network timeout must not create a duplicate.
+        return head :created if already_received?
+
         service = InboundMessagesService.new(inbound_params, phone_line: receiving_line)
         @message = service.message
 
@@ -33,6 +37,11 @@ module Gateway
 
         params.permit(:to, :from, :text, :received_at, :modem_message_id)
           .merge(channel: "sms", sms_gateway: current_gateway.name)
+      end
+
+      def already_received?
+        params[:modem_message_id].present? &&
+          Message.inbound_status.where("provider_info->>'modem_message_id' = ?", params[:modem_message_id]).exists?
       end
 
       # The SIM/line the SMS arrived on, matched by the "to" number when the

@@ -9,6 +9,8 @@ class Avo::Resources::Team < Avo::BaseResource
     field :name, as: :text
     field :address, as: :text
     field :slug, as: :text, name: "Identifiant unique"
+    field :phone_line, as: :belongs_to, name: "Ligne d'envoi",
+      help: "Ligne (Vonage ou SIM) utilisée pour les messages sortants de l'équipe. Vide = ligne par défaut."
     field :created_at,
       as: :date,
       format: "yyyy-LL-dd"
