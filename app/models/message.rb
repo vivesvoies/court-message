@@ -40,6 +40,7 @@ class Message < ApplicationRecord
   belongs_to :sender, polymorphic: true
   delegate :team, to: :conversation
   after_create :associate_user_with_conversation
+  after_create :count_unread_inbound, if: :inbound_status?
   after_save :update_conversation_last_message, if: :saved_change_to_conversation_id?
   before_destroy :reassign_conversation_last_message
 
@@ -57,6 +58,12 @@ class Message < ApplicationRecord
     if sender_type == "User"
       conversation.agents << sender unless conversation.agents.include?(sender)
     end
+  end
+
+  # No callbacks/broadcast here: the inbound flow marks the conversation
+  # unread right after, which broadcasts once with the fresh count.
+  def count_unread_inbound
+    conversation.increment!(:unread_count)
   end
 
   # Runs when the message is created or moved into a conversation. When it

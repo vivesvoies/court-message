@@ -8,6 +8,13 @@ module ConversationsHelper
     (content.length > 113) ? "#{content[0...110]}..." : content
   end
 
+  def unread_badge_for(conversation)
+    count = conversation.unread_count
+    return if count.zero?
+
+    tag.span((count > 9) ? "9+" : count.to_s, class: "Conversation__unread-count")
+  end
+
   def last_message_class_for(conversation)
     direction = conversation.last_message&.direction
     direction ? "Conversation__sub--#{direction}" : "Conversation__sub--empty"

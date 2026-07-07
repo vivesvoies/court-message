@@ -42,11 +42,21 @@ class Conversation < ApplicationRecord
   end
 
   def mark_as_read!
-    update!(read: true)
+    update!(read: true, unread_count: 0)
   end
 
+  # Read state is shared by the whole team: one member reading a conversation
+  # marks it read (and resets the count) for everyone.
   def mark_as_unread!
-    update!(read: false)
+    update!(read: false, unread_count: [ unread_count, 1 ].max)
+  end
+
+  # The last outbound message could not be delivered; the list shows a
+  # warning instead of the unread badge.
+  def delivery_failed?
+    last_message.present? && !last_message.inbound_status? &&
+      (last_message.failed_status? || last_message.expired_status? ||
+       last_message.rejected_status? || last_message.undeliverable_status?)
   end
 
   def timestamp

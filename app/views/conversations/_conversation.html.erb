@@ -7,7 +7,13 @@
     <div class="Conversation__latest">
       <%= time_stamp_for conversation.timestamp %>
     </div>
-    <div class="Conversation__status"></div>
+    <div class="Conversation__status <%= "Conversation__status--warning" if conversation.delivery_failed? %>">
+      <% if conversation.delivery_failed? %>
+        <i class="cm-icon-warning" title="<%= t("conversations.conversation.delivery_failed") %>"></i>
+      <% elsif conversation.unread? %>
+        <%= unread_badge_for conversation %>
+      <% end %>
+    </div>
     <div class="Conversation__preview">
       <div class="Conversation__contact">
         <%= conversation.title %>

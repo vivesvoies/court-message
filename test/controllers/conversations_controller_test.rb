@@ -174,6 +174,30 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+
+  test "should show the unread count badge in the conversation list" do
+    conversation = create(:conversation, contact: @contact)
+    ActiveRecord::Base.transaction do
+      2.times { create(:inbound_message, conversation: conversation) }
+      conversation.reload.mark_as_unread!
+    end
+
+    get team_conversations_url(@team)
+
+    assert_select "#conversation_#{conversation.id} .Conversation__unread-count", text: "2"
+  end
+
+  test "should show a warning instead of the unread badge when delivery failed" do
+    conversation = create(:conversation, contact: @contact)
+    create(:outbound_message, conversation: conversation, status: :failed)
+    conversation.reload.mark_as_unread!
+
+    get team_conversations_url(@team)
+
+    assert_select "#conversation_#{conversation.id} .Conversation__status--warning i.cm-icon-warning"
+    assert_select "#conversation_#{conversation.id} .Conversation__unread-count", count: 0
+  end
+
   private
 
   def create_conversations(count)

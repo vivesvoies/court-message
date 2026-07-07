@@ -160,6 +160,8 @@ fr:
 
 
   conversations:
+    conversation:
+      delivery_failed: "Le dernier message n’a pas pu être envoyé"
     sidebar:
       search: "Rechercher dans tous les messages"
       new: "Écrire un message"

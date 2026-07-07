@@ -363,4 +363,49 @@ class ConversationTest < ActiveSupport::TestCase
       create(:conversation, contact: contact)
     end
   end
+
+  def test_unread_count_increments_on_inbound_messages_only
+    conversation = create(:conversation)
+    assert_equal(0, conversation.unread_count)
+
+    create(:inbound_message, conversation: conversation)
+    create(:inbound_message, conversation: conversation)
+    assert_equal(2, conversation.reload.unread_count)
+
+    create(:outbound_message, conversation: conversation)
+    assert_equal(2, conversation.reload.unread_count)
+  end
+
+  def test_mark_as_read_resets_unread_count
+    conversation = create(:conversation)
+    create(:inbound_message, conversation: conversation)
+    conversation.reload.mark_as_unread!
+
+    conversation.mark_as_read!
+
+    assert(conversation.read?)
+    assert_equal(0, conversation.unread_count)
+  end
+
+  def test_manual_mark_as_unread_counts_at_least_one
+    conversation = create(:conversation)
+    conversation.mark_as_unread!
+
+    assert(conversation.unread?)
+    assert_equal(1, conversation.unread_count)
+  end
+
+  def test_delivery_failed_reflects_last_outbound_message_status
+    conversation = create(:conversation)
+    assert_not(conversation.delivery_failed?)
+
+    create(:outbound_message, conversation: conversation, status: :failed)
+    assert(conversation.reload.delivery_failed?)
+
+    create(:outbound_message, conversation: conversation, status: :delivered)
+    assert_not(conversation.reload.delivery_failed?)
+
+    create(:inbound_message, conversation: conversation)
+    assert_not(conversation.reload.delivery_failed?)
+  end
 end
