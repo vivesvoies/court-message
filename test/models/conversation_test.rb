@@ -125,7 +125,7 @@ class ConversationTest < ActiveSupport::TestCase
     user = create(:user)
     other_user = create(:user)
 
-    team_conversations = create_list(:conversation, 3, contact: create(:contact, team: team))
+    team_conversations = Array.new(3) { create(:conversation, contact: create(:contact, team: team)) }
 
     user_conversations = team_conversations[0..1]
     user.conversations << user_conversations
@@ -139,7 +139,7 @@ class ConversationTest < ActiveSupport::TestCase
     team = create(:team)
     user = create(:user)
 
-    convos = create_list(:conversation, 3, contact: create(:contact, team: team))
+    convos = Array.new(3) { create(:conversation, contact: create(:contact, team: team)) }
     user.conversations << convos
 
     convos.each { |convo| convo.messages << create(:inbound_message) }
@@ -181,8 +181,8 @@ class ConversationTest < ActiveSupport::TestCase
     team_2 = create(:team)
     user = create(:user)
 
-    team_1_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_1))
-    team_2_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_2))
+    team_1_conversations = Array.new(2) { create(:conversation, contact: create(:contact, team: team_1)) }
+    team_2_conversations = Array.new(2) { create(:conversation, contact: create(:contact, team: team_2)) }
 
     user.conversations << team_1_conversations
     user.conversations << team_2_conversations
@@ -204,7 +204,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -224,7 +223,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -240,7 +238,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -256,16 +253,20 @@ class ConversationTest < ActiveSupport::TestCase
     user.conversations << conversation_1
     other_user.conversations << conversation_2
 
-    inbound_message = create(:inbound_message, conversation: conversation_1)
-
     # Add a message to conversation_1 and check broadcast for user
     assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
-      conversation_1.messages << inbound_message
+      ActiveRecord::Base.transaction do
+        create(:inbound_message, conversation: conversation_1)
+        conversation_1.mark_as_unread!
+      end
     end
 
-    # Verify that conversation_2 does not broadcast to user
+    # Verify that conversation_1 does not broadcast to other_user
     assert_no_turbo_stream_broadcasts("user_conversations_list_#{other_user.id}") do
-      conversation_1.messages << create(:inbound_message)
+      ActiveRecord::Base.transaction do
+        create(:inbound_message, conversation: conversation_1)
+        conversation_1.mark_as_unread!
+      end
     end
   end
 
@@ -280,7 +281,10 @@ class ConversationTest < ActiveSupport::TestCase
 
     assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
       assert_turbo_stream_broadcasts "user_conversations_list_#{other_user.id}" do
-        conversation.messages << create(:inbound_message)
+        ActiveRecord::Base.transaction do
+          create(:inbound_message, conversation: conversation)
+          conversation.mark_as_unread!
+        end
       end
     end
   end
@@ -350,5 +354,13 @@ class ConversationTest < ActiveSupport::TestCase
 
     @new_conversation = create(:conversation)
     assert_equal(@new_conversation.updated_at, @new_conversation.timestamp)
+  end
+
+  def test_contact_cannot_have_two_conversations
+    contact = create(:contact, :with_conversation)
+
+    assert_raises(ActiveRecord::RecordNotUnique) do
+      create(:conversation, contact: contact)
+    end
   end
 end

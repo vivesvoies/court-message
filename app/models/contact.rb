@@ -51,8 +51,10 @@ class Contact < ApplicationRecord
 
   private
 
+  # Assign (rather than update_columns) so the values ride along with the
+  # UPDATE that is already being written.
   def update_notes_information
-    self.update_columns(notes_updated_at: Time.current)
-    self.update_columns(notes_last_editor_id: Current.user.id) if Current.user
+    self.notes_updated_at = Time.current
+    self.notes_last_editor_id = Current.user.id if Current.user
   end
 end
