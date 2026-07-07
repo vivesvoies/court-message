@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   layout :set_layout
 
-  before_action :set_team, only: %i[ index show new edit update destroy search ]
+  before_action :set_team
   before_action :set_contact, only: %i[ show edit update destroy ]
   authorize_resource :team
   authorize_resource
@@ -37,14 +37,15 @@ class ContactsController < ApplicationController
 
   # POST team/:team_slug/contacts
   def create
-    @contact = Contact.new(new_contact_params)
+    @contact = Contact.new(contact_params)
+    @contact.team = @team
     @contact.created_by = Current.user
+    authorize! :create, @contact
     # INFO: Parts of the app will break if the conversation is not created.
     # See _viewer_detail_tab_bar.html.erb for instance.
     if params[:create_conversation]
       @contact.build_conversation
     end
-    @team = @contact.team
 
     if @contact.save
       redirect_to team_contact_path(@team, @contact), notice: I18n.t(".contacts.create.success")
@@ -64,7 +65,6 @@ class ContactsController < ApplicationController
 
   # DELETE team/:team_slug/contacts/:id
   def destroy
-    @team = @contact.team
     @contact.destroy
     redirect_to team_contacts_path(@team), notice: I18n.t(".contacts.destroy.success")
   end
@@ -76,20 +76,17 @@ class ContactsController < ApplicationController
   end
 
   # Use callbacks to share common setup or constraints between actions.
+  # Contacts are only reachable through their own team's routes.
   def set_contact
-    @contact = Contact.find(params[:id])
+    @contact = @team.contacts.find(params[:id])
   end
 
   def set_team
-    @team = Current.team || Team.find_by(slug: params[:team_id])
+    @team = Current.team || Team.find_by!(slug: params[:team_id])
   end
 
   # Only allow a list of trusted parameters through.
   def contact_params
     params.fetch(:contact, {}).permit(:name, :email, :phone, :notes)
-  end
-
-  def new_contact_params
-    params.fetch(:contact, {}).permit(:name, :email, :phone, :notes, :team_id)
   end
 end
