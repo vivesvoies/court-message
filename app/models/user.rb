@@ -60,6 +60,9 @@ class User < ApplicationRecord
   has_many :contacts
   has_many :templates, dependent: :destroy
 
+  phony_normalize :phone
+  validates :phone, phony_plausible: true, allow_blank: true
+
   after_create :add_default_template
 
   def at_least?(role)

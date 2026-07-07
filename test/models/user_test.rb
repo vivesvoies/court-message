@@ -108,4 +108,24 @@ class UserTest < ActiveSupport::TestCase
     new_message = Message.new({ content: "...", status: "unsent", sender_id: user.id })
     assert_not(user.can_be_deleted?)
   end
+
+  def test_phone_number_plausibility_and_normalization
+    user = build(:user)
+
+    # French national format gets normalized to E.164
+    user.phone = "06 12 34 56 78"
+    assert user.valid?
+    assert_equal user.phone, "+33612345678"
+
+    # Implausible phone is rejected
+    user.phone = "061234567"
+    assert user.invalid?
+
+    # Phone stays optional
+    user.phone = nil
+    assert user.valid?
+
+    user.phone = ""
+    assert user.valid?
+  end
 end
