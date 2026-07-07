@@ -72,11 +72,6 @@ rails db:migrate # Appliquer les migrations
 rails db:seed # Optionel: À lancer si vous souhaitez sourcer votre base de données avec le fichier db/seeds.rb
 ```
 
-**Redis**
-```bash
-docker run -p 6379:6379 --name redis redis:7.2.4-alpine
-```
-
 **App**
 Maintenant vous pouvez lancer votre app à l'aide de cette commande:
 
@@ -144,7 +139,6 @@ Les instructions qui suivent sont optimisées pour un hébergeur PaaS comme Scal
    - Créez une nouvelle application sur la plateforme cloud choisie.
    - Ajoutez les addons nécessaires à votre application
       - Postgres
-      - Redis
 
 4. **Configurer les variables d'environnement :**
    - Une fois que votre application est créée, accédez à son tableau de bord sur le fournisseur de services cloud.

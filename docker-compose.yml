@@ -17,11 +17,6 @@ services:
         aliases:
           - web
   
-  redis:
-    image: redis
-    networks:
-      - default
-    
   database:
     image: postgres
     volumes:
