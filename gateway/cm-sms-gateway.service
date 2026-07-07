@@ -1,0 +1,21 @@
+[Unit]
+Description=CM SMS gateway (SIM modem <-> court-message)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/cm-sms-gateway/cm_sms_gateway.py /etc/cm-sms-gateway.conf
+Restart=always
+RestartSec=10
+# L'accès au modem série requiert le groupe dialout.
+User=cm-gateway
+SupplementaryGroups=dialout
+# Durcissement.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

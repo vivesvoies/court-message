@@ -16,7 +16,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     @provider_success = Minitest::Mock.new
     @provider_success.expect(
       :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
+      ProviderResult.new(success: true, message_uuid: @expected_uuid),
       from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
     )
 
@@ -148,7 +148,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     @provider_fail.expect(
       :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPServiceUnavailable.new(1.1, "503", "Service Unavailable")),
+      ProviderResult.new(success: false, error: "HTTP Status: 503, Response Body: Service Unavailable."),
       from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
     )
 

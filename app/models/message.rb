@@ -38,6 +38,7 @@ class Message < ApplicationRecord
 
   belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
+  belongs_to :phone_line, optional: true
   delegate :team, to: :conversation
   after_create :associate_user_with_conversation
   before_destroy :nullify_last_message

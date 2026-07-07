@@ -40,3 +40,4 @@
 
 # Ignore Vonage API private key
 /config/cm-vonage-private.key
+__pycache__/

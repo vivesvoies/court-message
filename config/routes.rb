@@ -46,4 +46,13 @@ Rails.application.routes.draw do
   # Messaging services routes
   resources :inbound_messages, only: [ :create ]
   resources :outbound_messages, only: [ :create ]
+
+  # API polled by our own SMS gateways (SIM modems), token-authenticated.
+  namespace :gateway do
+    namespace :v1 do
+      post "messages/claims", to: "message_claims#create", as: :message_claims
+      resources :messages, only: [ :update ]
+      resources :inbound_messages, only: [ :create ]
+    end
+  end
 end

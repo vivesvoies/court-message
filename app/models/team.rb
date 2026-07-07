@@ -17,6 +17,7 @@
 #
 
 class Team < ApplicationRecord
+  belongs_to :phone_line, optional: true
   has_many :memberships, dependent: :destroy
   has_many :users, through: :memberships
   has_many :contacts
