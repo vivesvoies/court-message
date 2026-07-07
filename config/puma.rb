@@ -41,3 +41,10 @@ preload_app!
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# Run Solid Queue inside the web process on deployed environments, so no
+# dedicated worker process is needed. Set SOLID_QUEUE_IN_PUMA=false when
+# scaling out to a dedicated worker process (bin/jobs).
+if %w[production staging].include?(ENV["RAILS_ENV"].to_s) && ENV["SOLID_QUEUE_IN_PUMA"] != "false"
+  plugin :solid_queue
+end

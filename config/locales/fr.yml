@@ -298,6 +298,7 @@ fr:
       rejected: *message_error
       failed: *message_error
       expired: *message_error
+      unsent: "Envoi en cours..."
       submitted: "Envoi en cours..."
       delivered: "Envoyé"
 

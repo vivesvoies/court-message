@@ -78,4 +78,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  # Number the SMS are sent from.
+  config.x.outbound_phone_number = "33644630057"
 end

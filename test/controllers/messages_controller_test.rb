@@ -1,6 +1,8 @@
 require "test_helper"
 
 class MessagesControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper
+
   setup do
     @user = create(:user)
     @team = @user.teams.first
@@ -8,17 +10,6 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     @conversation = @contact.conversation
 
     @message = create(:outbound_message, conversation: @conversation)
-
-    Current.phone_number = "33644630057"
-
-    @expected_uuid = SecureRandom.uuid
-
-    @provider_success = Minitest::Mock.new
-    @provider_success.expect(
-      :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
-    )
 
     sign_in(@user)
   end
@@ -47,16 +38,25 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test "should create message" do
-    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
-      assert_difference("Message.count", 1) do
+  test "should create message and enqueue its delivery" do
+    assert_difference("Message.count", 1) do
+      assert_enqueued_with(job: MessageDeliveryJob) do
         post messages_url, params: { message: { conversation_id: @conversation.id, content: @message.content } }
       end
-
-      assert_redirected_to team_conversation_url(@team, @conversation)
     end
 
-    @provider_success.verify
+    assert Message.last.unsent_status?
+    assert_redirected_to team_conversation_url(@team, @conversation)
+  end
+
+  test "should submit the message to the provider when the delivery job runs" do
+    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Bonjour" } }
+
+    perform_enqueued_jobs
+
+    message = Message.last
+    assert message.submitted_status?
+    assert_not_nil message.outbound_uuid
   end
 
   test "should not create message in conversations the user does not have access to" do
@@ -121,46 +121,28 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should set Conversation#last_message on create" do
-    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
-      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
-      assert_equal("Heya", @conversation.reload.last_message.content)
-      assert_equal(Message.last, @conversation.last_message)
+    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Heya" } }
+    assert_equal("Heya", @conversation.reload.last_message.content)
+    assert_equal(Message.last, @conversation.last_message)
 
-      assert_redirected_to team_conversation_url(@team, @conversation)
-    end
-
-    @provider_success.verify
+    assert_redirected_to team_conversation_url(@team, @conversation)
   end
 
   test "should associate message with conversation and update last_message" do
-    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_success)) do
-      post messages_url, params: { message: { conversation_id: @conversation.id, content: "Test message" } }
+    post messages_url, params: { message: { conversation_id: @conversation.id, content: "Test message" } }
 
-      assert_equal("Test message", @conversation.reload.last_message.content)
-      assert_equal(Message.last, @conversation.last_message)
-    end
-
-    @provider_success.verify
+    assert_equal("Test message", @conversation.reload.last_message.content)
+    assert_equal(Message.last, @conversation.last_message)
   end
 
-  test "should create message if provider fails" do
-    @provider_fail = Minitest::Mock.new
-
-    @provider_fail.expect(
-      :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPServiceUnavailable.new(1.1, "503", "Service Unavailable")),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
-    )
-
-    OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_fail)) do
-      assert_difference("Message.count", 1) do
-        post messages_url, params: { message: { conversation_id: @conversation.id, content: @message.content } }
-      end
-
-      assert_response :unprocessable_entity
+  test "should create message even if the provider will fail" do
+    # Delivery happens asynchronously: a provider failure no longer blocks
+    # message creation. See MessageDeliveryJobTest for the failure path.
+    assert_difference("Message.count", 1) do
+      post messages_url, params: { message: { conversation_id: @conversation.id, content: @message.content } }
     end
 
-    @provider_fail.verify
+    assert_redirected_to team_conversation_url(@team, @conversation)
   end
 
   test "should handle failed outbound message submission" do
