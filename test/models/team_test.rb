@@ -2,18 +2,24 @@
 #
 # Table name: teams
 #
-#  id         :bigint           not null, primary key
-#  address    :text
-#  desc       :text
-#  name       :text             not null
-#  slug       :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :bigint           not null, primary key
+#  address         :text
+#  desc            :text
+#  name            :text             not null
+#  slug            :text             not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  phone_number_id :bigint
 #
 # Indexes
 #
-#  index_teams_on_name  (name) UNIQUE
-#  index_teams_on_slug  (slug) UNIQUE
+#  index_teams_on_name             (name) UNIQUE
+#  index_teams_on_phone_number_id  (phone_number_id)
+#  index_teams_on_slug             (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (phone_number_id => phone_numbers.id)
 #
 
 require "test_helper"
@@ -73,5 +79,19 @@ class TeamTest < ActiveSupport::TestCase
     assert(team.include? user)
     assert_not(other_user.in? team)
     assert_not(team.include? other_user)
+  end
+
+  def test_outbound_number_uses_assigned_phone_number
+    number = create(:phone_number, number: "33612345678")
+    team = create(:team, phone_number: number)
+
+    assert_equal("33612345678", team.outbound_number)
+  end
+
+  def test_outbound_number_falls_back_to_configured_number
+    team = create(:team)
+
+    assert_nil(team.phone_number)
+    assert_equal(Rails.configuration.x.outbound_phone_number, team.outbound_number)
   end
 end

@@ -8,6 +8,7 @@ class Avo::Resources::Team < Avo::BaseResource
     field :id, as: :id, link_to_record: true
     field :name, as: :text
     field :address, as: :text
+    field :phone_number, as: :belongs_to
     field :slug, as: :text, name: "Identifiant unique"
     field :created_at,
       as: :date,

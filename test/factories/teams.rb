@@ -2,18 +2,24 @@
 #
 # Table name: teams
 #
-#  id         :bigint           not null, primary key
-#  address    :text
-#  desc       :text
-#  name       :text             not null
-#  slug       :text             not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :bigint           not null, primary key
+#  address         :text
+#  desc            :text
+#  name            :text             not null
+#  slug            :text             not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  phone_number_id :bigint
 #
 # Indexes
 #
-#  index_teams_on_name  (name) UNIQUE
-#  index_teams_on_slug  (slug) UNIQUE
+#  index_teams_on_name             (name) UNIQUE
+#  index_teams_on_phone_number_id  (phone_number_id)
+#  index_teams_on_slug             (slug) UNIQUE
+#
+# Foreign Keys
+#
+#  fk_rails_...  (phone_number_id => phone_numbers.id)
 #
 
 FactoryBot.define do

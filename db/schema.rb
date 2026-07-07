@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_143000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -77,6 +77,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
+  end
+
+  create_table "phone_numbers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "label"
+    t.string "number", null: false
+    t.datetime "updated_at", null: false
+    t.index ["number"], name: "index_phone_numbers_on_number", unique: true
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -226,9 +234,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
     t.datetime "created_at", null: false
     t.text "desc"
     t.text "name", null: false
+    t.bigint "phone_number_id"
     t.text "slug", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_teams_on_name", unique: true
+    t.index ["phone_number_id"], name: "index_teams_on_phone_number_id"
     t.index ["slug"], name: "index_teams_on_slug", unique: true
   end
 
@@ -285,5 +295,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_130000) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "teams", "phone_numbers"
   add_foreign_key "templates", "users"
 end

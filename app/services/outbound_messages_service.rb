@@ -17,7 +17,7 @@ class OutboundMessagesService
   # its current status so a retry can pick it up.
   def submit!
     to = @message.conversation.contact.phone
-    from = Rails.configuration.x.outbound_phone_number
+    from = @message.team.outbound_number
     result = @provider.send(from:, to:, content: @message.content)
 
     unless result.http_response.is_a?(Net::HTTPSuccess)
