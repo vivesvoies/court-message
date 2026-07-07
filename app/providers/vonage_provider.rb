@@ -9,6 +9,17 @@ class VonageProvider
 
   def send(from:, to:, content:)
     message = Vonage::Messaging::Message.sms(message: content)
-    @client.messaging.send(from:, to:, **message)
+    response = @client.messaging.send(from:, to:, **message)
+
+    if response.http_response.is_a?(Net::HTTPSuccess)
+      ProviderResult.new(success: true, message_uuid: response.message_uuid, raw: response)
+    else
+      error = if response.http_response?
+        "HTTP Status: #{response.http_response.code}, Response Body: #{response.http_response.body}."
+      end
+      ProviderResult.new(success: false, error:, raw: response)
+    end
+  rescue Vonage::Error => e
+    ProviderResult.new(success: false, error: "#{e.class}: #{e.message}")
   end
 end
