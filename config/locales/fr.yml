@@ -292,6 +292,7 @@ fr:
       photo: "Prendre une photo"
       audio: "Enregistrer un message audio"
       send: "Envoyer"
+    retry: "Réessayer"
     status:
       inbound: "Reçu"
       undeliverable: &message_error "Message non distribué"

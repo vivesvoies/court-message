@@ -151,4 +151,47 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "failed", @message.reload.status
     assert_response :ok
   end
+
+  test "should retry a failed outbound message" do
+    @message.update!(status: :failed)
+
+    assert_enqueued_with(job: MessageDeliveryJob, args: [ @message ]) do
+      post retry_message_url(@message)
+    end
+
+    assert @message.reload.unsent_status?
+    assert_redirected_to team_conversation_url(@team, @conversation)
+  end
+
+  test "should not retry a delivered message" do
+    @message.update!(status: :delivered)
+
+    assert_no_enqueued_jobs do
+      post retry_message_url(@message)
+    end
+
+    assert_response :unprocessable_entity
+    assert @message.reload.delivered_status?
+  end
+
+  test "should not retry an inbound message" do
+    inbound_message = create(:inbound_message, conversation: @conversation)
+
+    assert_no_enqueued_jobs do
+      post retry_message_url(inbound_message)
+    end
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should not retry a message in a conversation the user does not have access to" do
+    other_message = create(:outbound_message, status: :failed)
+
+    assert_no_enqueued_jobs do
+      post retry_message_url(other_message)
+    end
+
+    assert_response :forbidden
+    assert other_message.reload.failed_status?
+  end
 end

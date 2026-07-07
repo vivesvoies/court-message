@@ -1,5 +1,7 @@
 class MessagesController < ApplicationController
-  authorize_resource
+  RETRYABLE_STATUSES = %i[ failed expired rejected undeliverable ].freeze
+
+  authorize_resource only: [ :new, :create ]
 
   def new
     @message = Message.new
@@ -24,6 +26,23 @@ class MessagesController < ApplicationController
       end
     else
       handle_response_with_errors
+    end
+  end
+
+  def retry
+    @message = Message.find(params[:id])
+    authorize! :create, @message
+
+    unless @message.direction == :outbound && RETRYABLE_STATUSES.include?(@message.status.to_sym)
+      return head :unprocessable_entity
+    end
+
+    @message.update!(status: :unsent)
+    MessageDeliveryJob.perform_later(@message)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_back fallback_location: [ @message.conversation.team, @message.conversation ] }
     end
   end
 

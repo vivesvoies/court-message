@@ -15,5 +15,8 @@
     <div class="Message__status">
       <%= t("messages.status.#{message.status}") %>
     </div>
+    <% if message.direction == :outbound && message.status.to_sym.in?(MessagesController::RETRYABLE_STATUSES) %>
+      <%= button_to t("messages.retry"), retry_message_path(message), method: :post, class: "Message__retry" %>
+    <% end %>
   </div>
 <% end %>

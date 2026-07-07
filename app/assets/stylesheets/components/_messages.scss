@@ -100,3 +100,20 @@
     }
   }
 }
+
+.Message__retry {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-style: italic;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+
+  &::before {
+    content: " · ";
+    text-decoration: none;
+  }
+}
