@@ -478,6 +478,7 @@ DEPENDENCIES
   faker
   hotwire-livereload (~> 2.1)
   importmap-rails (~> 2.0)
+  jwt
   lograge
   minitest
   minitest-mock
