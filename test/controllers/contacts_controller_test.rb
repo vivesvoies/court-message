@@ -112,8 +112,11 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not show contact from another team" do
     other_contact = create(:contact)
-    get team_contact_url(@team, other_contact)
-    assert_response :forbidden
+    # Scoped lookup: a contact outside the route's team is a 404, so the
+    # response doesn't reveal whether the id exists.
+    assert_raises(ActiveRecord::RecordNotFound) do
+      get team_contact_url(@team, other_contact)
+    end
   end
 
   test "should get edit" do
@@ -229,5 +232,25 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "li.ContactSearchResult__name", count: 0
     assert_select "li.ContactSearchResult__no-contact", count: 1
+  end
+
+  test "should ignore a forged team_id param on create" do
+    other_team = create(:team)
+
+    assert_difference("Contact.count", 1) do
+      post team_contacts_url(@team), params: { contact: { name: "Forged", phone: "+33611223344", team_id: other_team.id } }
+    end
+
+    assert_equal @team, Contact.last.team
+  end
+
+  test "should not create contact in a team the user does not belong to" do
+    other_team = create(:team)
+
+    assert_no_difference("Contact.count") do
+      post team_contacts_url(other_team), params: { contact: { name: "Intrus", phone: "+33611223345" } }
+    end
+
+    assert_response :forbidden
   end
 end
