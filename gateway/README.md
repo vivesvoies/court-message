@@ -15,12 +15,15 @@ remplacement de Vonage.
 │ (ce démon)   │                                                 │              │
 │              │ ── PATCH /gateway/v1/messages/:uuid (statut) ─▶ │              │
 │              │ ── POST  /gateway/v1/inbound_messages (reçus) ▶ │              │
+│              │ ── POST  /gateway/v1/heartbeat (santé modem)  ▶ │              │
 └─────────────┘                                                 └──────────────┘
 ```
 
 Le gateway **n'ouvre aucun port** : c'est lui qui interroge l'application
 (*pull*). Il fonctionne donc derrière n'importe quelle box/NAT/4G, sans
-redirection de port ni IP fixe.
+redirection de port ni IP fixe. À chaque cycle il envoie aussi un
+*heartbeat* (`POST /gateway/v1/heartbeat`) qui rapporte l'état du modem
+(joignable ou non, force du signal, état réseau) pour la ligne qu'il pilote.
 
 Côté application :
 
@@ -34,7 +37,13 @@ Côté application :
 - les messages sortants d'une ligne `sms_gateway` restent en statut
   `unsent` jusqu'à ce que le gateway les réclame (*claim*) puis confirme
   l'envoi (`submitted`/`failed`). Un message réclamé mais jamais confirmé
-  redevient réclamable après 10 minutes.
+  redevient réclamable après 10 minutes ;
+- une `PhoneLine` peut être désactivée (`active: false`, par exemple depuis
+  Avo) et désigner une **ligne de secours** (`fallback_phone_line`, elle
+  aussi une `PhoneLine`, donc Vonage ou une autre SIM). Un délai optionnel
+  (`fallback_after_minutes`) déclenche une **bascule automatique** des
+  messages restés en attente trop longtemps vers cette ligne de secours,
+  même quand la ligne d'origine reste active (voir plus bas).
 
 ## Sécurité
 
@@ -55,6 +64,10 @@ Côté application :
   liste blanche.
 - **Messages entrants** : ils ne sont supprimés de la SIM qu'une fois que
   l'application les a acceptés — une panne réseau ne perd aucun SMS.
+- **Rejets définitifs** : quand l'application refuse un SMS entrant de façon
+  définitive (par exemple expéditeur inconnu), son contenu complet est
+  d'abord journalisé dans journald, avant suppression de la SIM — c'est la
+  seule copie qui en subsiste.
 
 ## Matériel
 
@@ -119,7 +132,76 @@ journalctl -u cm-sms-gateway -f
 
 ## Supervision
 
-- `SmsGateway#last_seen_at` (visible dans Avo) est mis à jour à chaque
-  requête du gateway : une valeur ancienne signale un Pi injoignable.
+- **Heartbeat modem** : à chaque cycle, le démon rapporte l'état du modem
+  (`modem_ok`, force du signal, état réseau, ou le message d'erreur gammu le
+  cas échéant) via `POST /gateway/v1/heartbeat`. Ces informations sont
+  stockées sur la `PhoneLine` (`modem_ok`, `modem_details`,
+  `last_modem_check_at`) et visibles directement dans Avo sur la fiche de la
+  ligne. `SmsGateway#last_seen_at` (aussi visible dans Avo) est mis à jour à
+  chaque requête du gateway, quel que soit son type : une valeur ancienne
+  signale un Pi injoignable (réseau coupé, daemon arrêté), à distinguer d'un
+  Pi vivant mais dont le modem est en panne (`modem_ok` à `false`).
+- **Tâche cron `sms_gateway:check_health`** (Scalingo, toutes les 10 minutes,
+  voir `cron.json`) : exécute `SmsGatewayHealthService`, qui détecte et
+  envoie une alerte Sentry (+ log) pour chacun des cas suivants :
+  - un Pi injoignable (`last_seen_at` trop ancien sur un gateway qui porte
+    une ligne active) ;
+  - un modem en panne sur une ligne dont le Pi répond pourtant (`modem_ok`
+    à `false`, ou heartbeat modem trop ancien) ;
+  - des messages en attente jamais réclamés par un gateway au-delà d'un
+    certain délai (la ligne est bloquée côté Pi) ;
+  - des messages réclamés mais jamais confirmés (le modem a peut-être déjà
+    envoyé le SMS : risque de doublon, une intervention manuelle est
+    nécessaire — ces messages ne sont jamais basculés automatiquement) ;
+  - des rafales d'échecs d'envoi récents sur une ligne ;
+  - des lignes `sms_gateway` actives sans gateway rattaché (lignes
+    orphelines : les messages qui y sont déposés ne seront jamais envoyés).
+- **Dead-man's switch optionnel (`healthcheck_url`)** : si le fichier de
+  configuration du Pi renseigne `healthcheck_url` (ex. un endpoint
+  healthchecks.io), le démon le ping après chaque cycle réussi. Cela permet
+  de surveiller que le service tourne toujours indépendamment du reporting
+  applicatif (utile si l'app elle-même est injoignable).
+- **Journal des envois (`state_file`)** : le démon tient un journal local
+  (par défaut `/var/lib/cm-sms-gateway/state.json`) des messages déjà remis
+  au modem mais pas encore confirmés à l'application. En cas de crash ou de
+  redémarrage entre l'envoi et l'accusé de réception, ce journal évite de
+  renvoyer deux fois le même SMS : au redémarrage, le démon retente
+  uniquement l'accusé de réception pour les entrées en attente.
 - Les statuts des messages (`unsent` → `submitted` → `delivered`/`failed`)
   suivent le cycle habituel, alimenté ici par le démon.
+
+## Bascule vers une autre ligne (fallback)
+
+Une `PhoneLine` peut désigner une ligne de secours (`fallback_phone_line`),
+qui peut être Vonage **ou** la SIM d'un autre Raspberry Pi. Cela permet de
+continuer à envoyer les messages d'une équipe même quand sa ligne habituelle
+est en panne ou désactivée.
+
+- **Configuration** : dans Avo, sur la fiche de la `PhoneLine`, renseigner
+  le champ « Ligne de secours » (`fallback_phone_line`) et, pour activer la
+  bascule automatique, un délai « Bascule auto après (minutes) »
+  (`fallback_after_minutes`). Sans délai renseigné, seule la bascule
+  manuelle (désactivation) déclenche un renvoi.
+- **Bascule automatique** : la tâche cron Scalingo `sms_gateway:failover`
+  (toutes les 10 minutes, voir `cron.json`) exécute
+  `MessageFallbackService`, qui ne re-route que les messages pour lesquels
+  un double envoi est impossible :
+  - les messages en attente **jamais réclamés** par un gateway, restés
+    dans la file au-delà du délai configuré (ou immédiatement si la ligne a
+    été désactivée) ;
+  - les messages dont l'envoi a été **rapporté en échec** par le modem (le
+    SMS n'est pas parti), dans les 24 heures suivant l'échec.
+
+  Les messages **réclamés mais jamais confirmés** ne sont volontairement
+  jamais basculés : le SMS a peut-être déjà quitté le modem, et le renvoyer
+  risquerait un doublon. Ce cas déclenche une alerte via
+  `sms_gateway:check_health` pour qu'un humain tranche.
+- **Bascule manuelle** : depuis Avo, l'action « Désactiver et basculer vers
+  la ligne de secours » (`Avo::Actions::FailOverPhoneLine`) désactive la
+  ligne et bascule immédiatement ses messages en attente et ses échecs vers
+  la ligne de secours. On peut aussi se contenter de désactiver la ligne
+  (champ « Active ») et laisser la tâche cron `sms_gateway:failover`
+  s'en charger au prochain passage.
+- Tant qu'une ligne est désactivée, `PhoneLine.route_for` dirige
+  directement les nouveaux messages de ses équipes vers sa ligne de secours
+  (à défaut, vers la ligne par défaut).

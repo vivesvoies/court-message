@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_07_100003) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_07_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,20 +76,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100003) do
     t.string "sender_type", null: false
     t.enum "status", default: "unsent", null: false, enum_type: "message_status"
     t.datetime "updated_at", null: false
+    t.index "((provider_info ->> 'modem_message_id'::text))", name: "index_messages_on_modem_message_id", where: "((provider_info ->> 'modem_message_id'::text) IS NOT NULL)"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["outbound_uuid"], name: "index_messages_on_outbound_uuid"
+    t.index ["phone_line_id", "created_at"], name: "index_messages_on_unsent_claimable", where: "(status = 'unsent'::message_status)"
     t.index ["phone_line_id"], name: "index_messages_on_phone_line_id"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
 
   create_table "phone_lines", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.boolean "default", default: false, null: false
+    t.integer "fallback_after_minutes"
+    t.bigint "fallback_phone_line_id"
+    t.datetime "last_modem_check_at"
+    t.jsonb "modem_details"
+    t.boolean "modem_ok"
     t.string "phone", null: false
     t.string "provider", default: "vonage", null: false
     t.bigint "sms_gateway_id"
     t.datetime "updated_at", null: false
     t.index ["default"], name: "index_phone_lines_on_single_default", unique: true, where: "(\"default\" = true)"
+    t.index ["fallback_phone_line_id"], name: "index_phone_lines_on_fallback_phone_line_id"
     t.index ["phone"], name: "index_phone_lines_on_phone", unique: true
     t.index ["sms_gateway_id"], name: "index_phone_lines_on_sms_gateway_id"
   end
@@ -165,6 +174,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_07_100003) do
   add_foreign_key "memberships", "users"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "phone_lines"
+  add_foreign_key "phone_lines", "phone_lines", column: "fallback_phone_line_id"
   add_foreign_key "phone_lines", "sms_gateways"
   add_foreign_key "teams", "phone_lines"
   add_foreign_key "templates", "users"

@@ -8,7 +8,9 @@ class OutboundMessagesService
   def initialize(message, provider = nil)
     @message = message
     @message.status = :unsent
-    @message.phone_line ||= Current.phone_line
+    # Routed from the message's own team so sends work identically from
+    # requests, rake tasks (fallback re-routing) and the console.
+    @message.phone_line ||= PhoneLine.route_for(@message.conversation&.team)
 
     @provider = provider || provider_for(@message.phone_line)
   end
@@ -43,7 +45,7 @@ class OutboundMessagesService
   private
 
   def from_number
-    @message.phone_line&.phone || Current.phone_number
+    @message.phone_line&.phone || PhoneLine.legacy_number
   end
 
   def provider_for(phone_line)

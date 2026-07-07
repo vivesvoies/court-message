@@ -43,6 +43,21 @@ class Gateway::V1::InboundMessagesControllerTest < ActionDispatch::IntegrationTe
     DatabaseCleaner.strategy = @previous_strategy
   end
 
+  test "should not create duplicates when the gateway retries a delivered SMS" do
+    DatabaseCleaner.strategy = :truncation
+    params = { to: @line.phone, from: @contact.phone, text: "abc", modem_message_id: "cafe1234" }
+
+    post gateway_v1_inbound_messages_path, params:, headers: auth_header
+    assert_response :created
+
+    assert_no_difference([ "Message.count" ]) do
+      post gateway_v1_inbound_messages_path, params:, headers: auth_header
+    end
+    assert_response :created
+  ensure
+    DatabaseCleaner.strategy = @previous_strategy
+  end
+
   test "should refuse SMS from unknown numbers" do
     post gateway_v1_inbound_messages_path, params: { to: @line.phone, from: fake_number, text: "abc" },
          headers: auth_header

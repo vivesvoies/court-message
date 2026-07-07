@@ -23,7 +23,10 @@ class SmsGateway < ApplicationRecord
   # claimable again (e.g. the gateway crashed mid-send).
   CLAIM_TIMEOUT = 10.minutes
 
-  has_many :phone_lines, dependent: :nullify
+  # Restrict: destroying a gateway with lines would silently strand their
+  # queued messages (nothing would ever claim them). Reassign or delete the
+  # lines first.
+  has_many :phone_lines, dependent: :restrict_with_error
 
   validates :name, presence: true, uniqueness: true
   validates :token_digest, presence: true, uniqueness: true
@@ -61,18 +64,21 @@ class SmsGateway < ApplicationRecord
   end
 
   # Atomically claims up to `limit` outbound messages queued on this
-  # gateway's phone lines. Uses FOR UPDATE SKIP LOCKED so several gateways
-  # (or concurrent polls) never claim the same message twice. Messages
-  # claimed longer than CLAIM_TIMEOUT ago but never acknowledged are
-  # re-claimed. When the gateway drives several SIM modems (one polling
-  # process per modem), `phone` restricts the claim to a single line.
+  # gateway's active phone lines. Uses FOR UPDATE SKIP LOCKED so several
+  # gateways (or concurrent polls) never claim the same message twice.
+  # Messages claimed longer than CLAIM_TIMEOUT ago but never acknowledged
+  # are re-claimed. Only messages that finished dispatch (outbound_uuid set)
+  # are claimable: a message persisted mid-request has no UUID yet and could
+  # never be acknowledged. When the gateway drives several SIM modems (one
+  # polling process per modem), `phone` restricts the claim to a single line.
   def claim_messages!(limit: 10, phone: nil)
-    scope = Message.joins(:phone_line).where(phone_lines: { sms_gateway_id: id })
+    scope = messages.merge(PhoneLine.active)
     scope = scope.where(phone_lines: { phone: PhonyRails.normalize_number(phone) }) if phone.present?
 
     Message.transaction do
       ids = scope
         .unsent_status
+        .where.not(outbound_uuid: nil)
         .where("messages.claimed_at IS NULL OR messages.claimed_at < ?", CLAIM_TIMEOUT.ago)
         .order(:created_at)
         .limit(limit)

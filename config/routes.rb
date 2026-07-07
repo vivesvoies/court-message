@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   namespace :gateway do
     namespace :v1 do
       post "messages/claims", to: "message_claims#create", as: :message_claims
+      post "heartbeat", to: "heartbeats#create", as: :heartbeat
       resources :messages, only: [ :update ]
       resources :inbound_messages, only: [ :create ]
     end

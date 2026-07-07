@@ -26,20 +26,10 @@ class ApplicationController < ActionController::Base
 
     # A team can be attached to a specific phone line (Vonage or one of our
     # SMS gateways). Otherwise use the default line, and as a last resort the
-    # legacy env-based Vonage number.
-    Current.phone_line = Current.team&.phone_line || PhoneLine.default_line
-    Current.phone_number = Current.phone_line&.phone || legacy_phone_number
-  end
-
-  def legacy_phone_number
-    case Rails.env.to_sym
-    when :staging
-      "33644639777"
-    when :production
-      "33644635900"
-    else
-      "33644630057"
-    end
+    # legacy env-based Vonage number. Display only — outbound routing derives
+    # the line from the message's own team in OutboundMessagesService.
+    Current.phone_line = PhoneLine.route_for(Current.team)
+    Current.phone_number = Current.phone_line&.phone || PhoneLine.legacy_number
   end
 
   def current_frame

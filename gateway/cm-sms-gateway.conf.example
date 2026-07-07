@@ -15,6 +15,14 @@ line_phone = +33612345678
 poll_interval = 10
 # Nombre maximum de messages réclamés par cycle.
 claim_limit = 5
+# Fichier d'état (journal des envois en attente d'accusé de réception côté
+# app). Permet de reprendre proprement après un crash ou un redémarrage sans
+# renvoyer un SMS déjà transmis au modem. Le répertoire est créé si besoin.
+state_file = /var/lib/cm-sms-gateway/state.json
+# URL optionnelle pingée après chaque cycle réussi (style healthchecks.io),
+# pour surveiller que le service tourne toujours indépendamment du modem.
+# Laisser vide/commenté pour désactiver.
+# healthcheck_url = https://hc-ping.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 [modem]
 # Configuration gammu (créée avec `gammu-config` ou à la main).

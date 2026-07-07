@@ -76,6 +76,33 @@ class SmsGatewayTest < ActiveSupport::TestCase
     assert_not_includes(claimed, fresh)
   end
 
+  test "claim_messages! skips messages still missing their outbound uuid" do
+    gateway = create(:sms_gateway)
+    line = create(:gateway_phone_line, sms_gateway: gateway)
+    conversation = create(:conversation)
+    # Persisted mid-request, before submit! assigned the uuid: not claimable.
+    create(:outbound_message, conversation:, phone_line: line, outbound_uuid: nil)
+
+    assert_empty(gateway.claim_messages!)
+  end
+
+  test "claim_messages! skips inactive lines" do
+    gateway = create(:sms_gateway)
+    line = create(:gateway_phone_line, sms_gateway: gateway, active: false)
+    conversation = create(:conversation)
+    create(:outbound_message, conversation:, phone_line: line, outbound_uuid: SecureRandom.uuid)
+
+    assert_empty(gateway.claim_messages!)
+  end
+
+  test "cannot be destroyed while it still has phone lines" do
+    gateway = create(:sms_gateway)
+    create(:gateway_phone_line, sms_gateway: gateway)
+
+    assert_not(gateway.destroy)
+    assert(gateway.persisted?)
+  end
+
   test "claim_messages! respects the limit" do
     gateway = create(:sms_gateway)
     line = create(:gateway_phone_line, sms_gateway: gateway)

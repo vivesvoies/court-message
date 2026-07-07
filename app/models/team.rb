@@ -32,6 +32,11 @@ class Team < ApplicationRecord
     slug
   end
 
+  # The sender number this team's outbound messages currently use.
+  def outbound_number
+    PhoneLine.route_for(self)&.phone || PhoneLine.legacy_number
+  end
+
   # Sugar for CanCanCan
   def team = self
 

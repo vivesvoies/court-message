@@ -16,6 +16,9 @@ NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=true
 PrivateTmp=true
+# Crée /var/lib/cm-sms-gateway (accessible en écriture) pour le journal
+# d'envois en attente d'accusé de réception, malgré ProtectSystem=strict.
+StateDirectory=cm-sms-gateway
 
 [Install]
 WantedBy=multi-user.target

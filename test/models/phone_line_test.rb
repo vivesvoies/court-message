@@ -45,4 +45,50 @@ class PhoneLineTest < ActiveSupport::TestCase
 
     assert_equal(default, PhoneLine.default_line)
   end
+
+  test "fallback line cannot be the line itself" do
+    line = create(:phone_line)
+    line.fallback_phone_line = line
+
+    assert_not(line.valid?)
+  end
+
+  test "route_for prefers the team's line" do
+    create(:phone_line, default: true)
+    line = create(:phone_line)
+    team = create(:team, phone_line: line)
+
+    assert_equal(line, PhoneLine.route_for(team))
+  end
+
+  test "route_for falls back to the default line" do
+    default = create(:phone_line, default: true)
+
+    assert_equal(default, PhoneLine.route_for(create(:team)))
+    assert_equal(default, PhoneLine.route_for(nil))
+  end
+
+  test "route_for uses the fallback line when the preferred line is inactive" do
+    fallback = create(:phone_line)
+    line = create(:phone_line, active: false, fallback_phone_line: fallback)
+    team = create(:team, phone_line: line)
+
+    assert_equal(fallback, PhoneLine.route_for(team))
+  end
+
+  test "route_for uses the default line when line and fallback are inactive" do
+    default = create(:phone_line, default: true)
+    fallback = create(:phone_line, active: false)
+    line = create(:phone_line, active: false, fallback_phone_line: fallback)
+    team = create(:team, phone_line: line)
+
+    assert_equal(default, PhoneLine.route_for(team))
+  end
+
+  test "route_for returns nil when nothing is active" do
+    line = create(:phone_line, active: false)
+    team = create(:team, phone_line: line)
+
+    assert_nil(PhoneLine.route_for(team))
+  end
 end
