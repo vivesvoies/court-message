@@ -31,7 +31,7 @@ gem "rails-i18n"
 
 gem "vonage", "~> 7.28"
 
-gem "avo", ">= 3.2.1"
+gem "avo", "~> 3.32"
 
 gem "stackprof"
 gem "sentry-ruby"
