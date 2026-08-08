@@ -1,0 +1,27 @@
+#cloud-config
+package_update: true
+packages:
+  - gammu
+  - python3-gammu
+  - python3-requests
+  - usbutils
+  - minicom
+
+write_files:
+  - path: /etc/gammurc
+    permissions: '0644'
+    content: |
+      [gammu]
+      device = /dev/ttyUSB2
+      connection = at
+
+  - path: /etc/udev/rules.d/99-cm-modem.rules
+    permissions: '0644'
+    content: |
+      SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", \
+        ENV{ID_USB_INTERFACE_NUM}=="02", SYMLINK+="modem-at", GROUP="dialout", MODE="0660"
+
+runcmd:
+  - [ usermod, -aG, dialout, cm ]
+  - [ udevadm, control, --reload-rules ]
+  - [ udevadm, trigger ]
