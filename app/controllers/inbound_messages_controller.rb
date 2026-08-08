@@ -1,5 +1,7 @@
 # Provide a webhook for inbound SMS and messages services.
 class InboundMessagesController < ApplicationController
+  include VonageWebhookAuthentication
+
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate_user!
   skip_before_action :set_current
@@ -7,12 +9,7 @@ class InboundMessagesController < ApplicationController
 
   wrap_parameters false
 
-  # TODO
-  # Verify JWT token from request.headers["HTTP_AUTHORIZATION"]
-  # perhaps using https://github.com/jwt/ruby-jwt
-
   def create
-    authenticate_message!
     service = InboundMessagesService.new(vonage_params)
     @message = service.message
 
@@ -32,10 +29,6 @@ class InboundMessagesController < ApplicationController
   end
 
   private
-
-  def authenticate_message!
-    Rails.logger.warn "TODO / Missing authentication of inbound messages."
-  end
 
   def vonage_params
     # Raise ActionController::ParameterMissing if any of those is missing.

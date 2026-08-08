@@ -29,6 +29,7 @@ gem "lograge" # One-line-per-event format logs
 gem "phony_rails"
 gem "rails-i18n"
 
+gem "jwt"
 gem "vonage", "~> 7.28"
 
 gem "avo", "~> 3.32"
