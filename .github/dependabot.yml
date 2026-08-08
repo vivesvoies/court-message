@@ -9,6 +9,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-    target-branch: "staging"
+    # No target-branch: version updates go to the default branch, like security
+    # updates already do. Targeting "staging" split the two streams apart, and an
+    # open staging PR would suppress the equivalent security PR against main
+    # (this hid two high-severity puma advisories). staging is a deploy mirror of
+    # main, not an independent development line.
     labels:
       - dependencies
