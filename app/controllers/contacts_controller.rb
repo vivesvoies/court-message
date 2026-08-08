@@ -19,7 +19,7 @@ class ContactsController < ApplicationController
   # GET team/:team_slug/contacts/search?query=:query
   def search
     @query = params[:query]
-    @results = @query.blank? ? [] : Contact.search_team(@team, @query)
+    @results = @query.blank? ? [] : Contact.search_team(@team, @query).includes(:conversation)
   end
 
   # GET team/:team_slug/contacts/new

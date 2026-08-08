@@ -11,6 +11,7 @@ DatabaseCleaner.strategy = :transaction
 class ActiveSupport::TestCase
   self.use_transactional_tests = false
   include FactoryBot::Syntax::Methods
+  include ActiveRecord::Assertions::QueryAssertions
 
   # Run tests in parallel with specified workers
   parallelize(workers: :number_of_processors)

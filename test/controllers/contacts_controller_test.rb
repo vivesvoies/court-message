@@ -222,6 +222,17 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_select "li.ContactSearchResult__no-contact", count: 1
   end
 
+  test "should load search results' conversations in a single query" do
+    3.times { |i| create(:contact, :with_conversation, team: @team, name: "Ambroise Deschamps #{i}") }
+
+    # team lookup, contact search, conversation preload
+    assert_queries_count(3) do
+      get search_team_contacts_url(@team), params: { query: "Ambroise Deschamps" }
+    end
+
+    assert_select "li.ContactSearchResult__name", count: 3
+  end
+
   test "should return no contacts if contact is not in the team" do
     contact = create(:contact, :with_conversation)
     build(:contact)
