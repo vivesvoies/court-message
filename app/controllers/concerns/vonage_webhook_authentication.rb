@@ -7,6 +7,11 @@
 module VonageWebhookAuthentication
   extend ActiveSupport::Concern
 
+  # All rejections share one fingerprint so they group into a single Sentry
+  # issue: this endpoint is public and collects unauthenticated scanner traffic,
+  # which would otherwise drown the signal in one issue per request.
+  REJECTION_FINGERPRINT = [ "vonage-webhook-signature-rejected" ].freeze
+
   included do
     before_action :authenticate_webhook!
   end
@@ -24,34 +29,39 @@ module VonageWebhookAuthentication
       return
     end
 
-    head :unauthorized unless valid_webhook_signature?(secret)
+    reason = webhook_signature_failure(secret)
+    reject_webhook!(reason) if reason
   end
 
-  def valid_webhook_signature?(secret)
+  # Returns nil when the request is authentic, otherwise a short reason.
+  def webhook_signature_failure(secret)
     scheme, token = request.authorization&.split(" ", 2)
-    return false unless scheme == "Bearer" && token.present?
+    return "no bearer token" unless scheme == "Bearer" && token.present?
 
     claims, _header = JWT.decode(token, secret, true, algorithm: "HS256")
-    valid_webhook_payload_hash?(claims)
-  rescue JWT::DecodeError
-    false
-  end
 
-  # Vonage includes a payload_hash claim (SHA-256 of the raw JSON body) so the
-  # payload can't be swapped under a valid token.
-  #
-  # The claim is required, not optional: treating a missing claim as valid would
-  # make the binding bypassable, and a captured token would then authenticate any
-  # body. Vonage always sends it, so a token without one is anomalous enough to
-  # report rather than reject silently.
-  def valid_webhook_payload_hash?(claims)
-    if claims["payload_hash"].blank?
-      Sentry.capture_message("Vonage webhook token carried no payload_hash claim; request rejected")
-      return false
-    end
+    # Vonage binds the token to the body with a payload_hash claim (SHA-256 of
+    # the raw JSON). Accepting a token without one would make that binding
+    # bypassable, so it is required rather than optional.
+    return "no payload_hash claim" if claims["payload_hash"].blank?
 
     expected = Digest::SHA256.hexdigest(request.raw_post)
-    ActiveSupport::SecurityUtils.secure_compare(claims["payload_hash"].to_s, expected)
+    return "payload_hash mismatch" unless ActiveSupport::SecurityUtils.secure_compare(claims["payload_hash"].to_s, expected)
+
+    nil
+  rescue JWT::DecodeError => e
+    "invalid token (#{e.class})"
+  end
+
+  def reject_webhook!(reason)
+    Rails.logger.warn("Vonage webhook rejected: #{reason}")
+    Sentry.capture_message(
+      "Vonage webhook signature rejected",
+      level: :warning,
+      fingerprint: REJECTION_FINGERPRINT,
+      extra: { reason:, path: request.path }
+    )
+    head :unauthorized
   end
 
   def vonage_signature_secret
