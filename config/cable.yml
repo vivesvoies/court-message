@@ -4,7 +4,7 @@ development:
   channel_prefix: court_message_development
 
 test:
-  adapter: test
+  adapter: async
 
 staging:
   adapter: redis
