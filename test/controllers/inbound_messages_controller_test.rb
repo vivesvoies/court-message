@@ -107,6 +107,23 @@ class InboundMessagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "should report rejected webhooks to Sentry at warning level" do
+    reported = []
+
+    with_signature_secret do
+      Sentry.stub(:capture_message, ->(message, **opts) { reported << [ message, opts ] }) do
+        post inbound_messages_path, params: { to: fake_number, from: @contact.phone, text: "abc" }
+      end
+    end
+
+    assert_response :unauthorized
+    message, opts = reported.sole
+    assert_match(/signature rejected/, message)
+    assert_equal :warning, opts[:level]
+    assert_equal VonageWebhookAuthentication::REJECTION_FINGERPRINT, opts[:fingerprint]
+    assert_equal "no bearer token", opts.dig(:extra, :reason)
+  end
+
   test "should refuse tokens carrying no payload_hash claim" do
     with_signature_secret do
       body = { to: fake_number, from: @contact.phone, text: "unbound" }.to_json
