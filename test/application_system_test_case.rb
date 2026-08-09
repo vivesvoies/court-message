@@ -3,19 +3,26 @@ require "test_helper"
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Devise::Test::IntegrationHelpers
 
-  if ENV["HEADLESS_CHROME"] != "true"
-    driven_by :selenium_chrome_in_container
+  if ENV["CI"]
+    # CI runs the browser alongside the tests, so Selenium Manager can resolve
+    # the driver itself and the default localhost app host applies.
+    driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ]
   else
-    driven_by :headless_selenium_chrome_in_container
+    if ENV["HEADLESS_CHROME"] != "true"
+      driven_by :selenium_chrome_in_container
+    else
+      driven_by :headless_selenium_chrome_in_container
+    end
+
+    # Bind every interface rather than the "web" alias: `docker compose run`
+    # only applies service aliases with --use-aliases, and without it Capybara
+    # fails to bind at all. The browser runs in another container, so it is
+    # given this container's address on the compose network.
+    Capybara.server_host = "0.0.0.0"
+    Capybara.server_port = 3001
+    Capybara.app_host = "http://#{Socket.ip_address_list.find { |a| a.ipv4? && !a.ipv4_loopback? }.ip_address}:#{Capybara.server_port}"
   end
 
-  # Bind every interface rather than the "web" alias: `docker compose run`
-  # only applies service aliases with --use-aliases, and without it Capybara
-  # fails to bind at all. The browser runs in another container, so it is
-  # given this container's address on the compose network.
-  Capybara.server_host = "0.0.0.0"
-  Capybara.server_port = 3001
-  Capybara.app_host = "http://#{Socket.ip_address_list.find { |a| a.ipv4? && !a.ipv4_loopback? }.ip_address}:#{Capybara.server_port}"
   Capybara.always_include_port = true
 
   # Turbo broadcasts go through broadcast_later, so the default :test queue

@@ -127,3 +127,44 @@ jobs:
         run: |
           bundle exec rails db:migrate
           git diff --exit-code db/schema.rb
+
+  system-tests:
+    name: system tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Run system tests
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          CI: true
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+          bundle exec rails test:system
+      - name: Upload failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: system-test-screenshots
+          path: tmp/screenshots
+          if-no-files-found: ignore
