@@ -28,7 +28,6 @@ class WritingToAContactTest < ApplicationSystemTestCase
   end
 
   test "writing to a contact on mobile" do
-    skip "the search loads into a collapsed pane on mobile, see #448"
     resize_to_mobile
 
     visit team_conversations_url(@team)
