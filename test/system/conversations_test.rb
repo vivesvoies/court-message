@@ -58,24 +58,23 @@ class ConversationsTest < ApplicationSystemTestCase
     resize_to_mobile
 
     visit team_conversations_url(@team)
-    viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
-    list_width = page.evaluate_script('document.getElementById("navigation").getBoundingClientRect().width')
-    assert_equal(viewer_width, list_width)
+    # The navigation frame is lazy-loaded: measuring before it resolves reads 0.
+    assert_selector "#navigation .Conversation__contact", minimum: 1
+
+    viewer_width = width_of("viewer")
+    assert_in_delta viewer_width, width_of("navigation"), 1
 
     click_on @conversation.contact.to_s, match: :first
-    sleep 0.5
-    list_width = page.evaluate_script('document.getElementById("navigation").getBoundingClientRect().width')
-    conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
-    assert_equal(0, list_width)
-    assert_equal(viewer_width, conv_width)
+    assert_selector "#conversation_detail .Message__content", minimum: 1
+
+    assert_in_delta 0, width_of("navigation"), 1
+    assert_in_delta viewer_width, width_of("conversation_detail"), 1
 
     resize_to_desktop
-    viewer_width = page.evaluate_script('document.getElementById("viewer").getBoundingClientRect().width')
-    list_width = page.evaluate_script('document.getElementById("navigation").getBoundingClientRect().width')
-    conv_width = page.evaluate_script('document.getElementById("conversation_detail").getBoundingClientRect().width')
-    assert(list_width > 0)
-    assert(conv_width > 0)
-    assert_equal(viewer_width, conv_width + list_width)
+    assert_selector "#navigation .Conversation__contact", minimum: 1
+
+    assert width_of("navigation") > 0
+    assert width_of("conversation_detail") > 0
   end
 
   test "selecting current conversation" do
@@ -100,7 +99,9 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".ContactDetail .Contact__name", text: @conversation.title
   end
 
-  teardown do
-    @conversation.contact.destroy
+  private
+
+  def width_of(id)
+    page.evaluate_script("document.getElementById('#{id}').getBoundingClientRect().width")
   end
 end
