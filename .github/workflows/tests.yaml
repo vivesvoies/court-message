@@ -6,6 +6,13 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 env:
   POSTGRES_DB: cm_test
   POSTGRES_USER: postgres
@@ -15,9 +22,10 @@ jobs:
   linter:
     name: linter
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -29,10 +37,11 @@ jobs:
   tests:
     name: tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       postgres:
-        image: postgres:16.1-alpine
+        image: postgres:16-alpine
         env:
           POSTGRES_PASSWORD: password
         ports:
@@ -43,27 +52,14 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      redis:
-        image: redis:7.2.4-alpine
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - name: Install dependencies
-        run: |
-          bundle install --jobs 4 --retry 3
       - name: Run Tests
         env:
           RAILS_ENV: test
@@ -72,3 +68,62 @@ jobs:
           bundle exec rails db:create
           bundle exec rails db:migrate
           bundle exec rake
+
+  security:
+    name: security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Known vulnerabilities in gems
+        run: bundle exec bundler-audit check --update
+      - name: Static analysis
+        run: bundle exec brakeman -q --no-pager
+      - name: Known vulnerabilities in pinned JS
+        run: bin/importmap audit
+
+  consistency:
+    name: consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+      - name: Autoloading is correct
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:schema:load
+          bundle exec rails zeitwerk:check
+      - name: schema.rb matches the migrations
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+        run: |
+          bundle exec rails db:migrate
+          git diff --exit-code db/schema.rb
