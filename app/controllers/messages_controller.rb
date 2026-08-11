@@ -17,7 +17,6 @@ class MessagesController < ApplicationController
 
     if @message.save
       outbound = OutboundMessagesService.new(@message)
-      @conversation.messages << @message
 
       if outbound.submit!
         respond_to do |format|

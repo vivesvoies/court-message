@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       get :menu, to: "teams#menu"
     end
 
-    resources :conversations, only: [ :index, :show, :new ] do
+    resources :conversations, only: [ :index, :show, :new, :create ] do
       member do
         patch :status, to: "read_status#update", as: :read_status
        end

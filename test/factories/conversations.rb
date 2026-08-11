@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_conversations_on_contact_id       (contact_id)
+#  index_conversations_on_contact_id       (contact_id) UNIQUE
 #  index_conversations_on_last_message_id  (last_message_id)
 #
 # Foreign Keys

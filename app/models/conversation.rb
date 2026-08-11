@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_conversations_on_contact_id       (contact_id)
+#  index_conversations_on_contact_id       (contact_id) UNIQUE
 #  index_conversations_on_last_message_id  (last_message_id)
 #
 # Foreign Keys
@@ -22,7 +22,7 @@
 class Conversation < ApplicationRecord
   belongs_to :contact
   has_one :team, through: :contact
-  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, after_add: :set_last_message
+  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy
   has_and_belongs_to_many :agents, class_name: "User"
 
   belongs_to :last_message, class_name: "Message", optional: true
@@ -60,11 +60,6 @@ class Conversation < ApplicationRecord
   def status = read? ? "read" : "unread"
 
   private
-
-  def set_last_message(message)
-    self.last_message = message
-    save!
-  end
 
   def broadcast_conversation_update
     if unread? # broadcast a new message
