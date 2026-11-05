@@ -24,6 +24,23 @@ class InboundMessagesServiceTest < ActiveSupport::TestCase
     assert_not(message.persisted?)
   end
 
+  def test_save_persists_and_marks_the_conversation_unread
+    contact = create(:contact, :with_conversation)
+    contact.conversation.update!(read: true)
+    service = InboundMessagesService.new({ to: "our phone number", from: contact.phone, text: "Hello" })
+
+    assert(service.save)
+    assert(service.message.persisted?)
+    assert_not(contact.conversation.reload.read)
+  end
+
+  def test_save_returns_false_for_an_unknown_sender
+    service = InboundMessagesService.new({ to: "our phone number", from: fake_number, text: "Hello" })
+
+    assert_not(service.save)
+    assert_not(service.message.persisted?)
+  end
+
   def test_finds_the_correct_contact
     contact = create(:contact)
     phone = contact.phone.phony_formatted(national: true)

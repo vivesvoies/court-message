@@ -10,17 +10,7 @@ class InboundMessagesController < ApplicationController
   wrap_parameters false
 
   def create
-    service = InboundMessagesService.new(vonage_params)
-    @message = service.message
-
-    if @message.valid?
-      ActiveRecord::Base.transaction do
-        @message.save!
-        @message.conversation.mark_as_unread!
-      end
-    end
-
-    if @message.persisted?
+    if InboundMessagesService.new(vonage_params).save
       head :created
     else
       head :bad_request
