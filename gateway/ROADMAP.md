@@ -55,12 +55,14 @@ Mécanismes :
 | Élément | État |
 |---|---|
 | Suite de tests applicative (+ tests système) | ✅ 313 + 12, 0 échec |
-| Tests unitaires du démon (sans modem) | ✅ 8, en CI |
+| Tests unitaires du démon (sans modem) | ✅ 11, en CI |
 | Pi 4 `cm-gateway` provisionné (Debian 13, gammu, udev, Tailscale) | ✅ |
 | Enregistrement réseau (Orange, itinérance nationale de la SIM Free) | ✅ |
 | Envoi + réception SMS réels avec gammu sur le Pi | ✅ (29/08, 05/11) |
-| Démon ↔ application (bout en bout) | ❌ jamais lancé |
-| Bascule Vonage observée en conditions réelles | ❌ |
+| Démon ↔ application (bout en bout) : envoi + réponse réels | ✅ 05/11, Pi → app de dev sur le LAN, ~5 s par envoi |
+| Bascule Vonage observée en conditions réelles | ✅ 05/11, les deux voies : file re-routée par `failover` après `fallback_after_minutes`, et routage direct après 2 min de silence du Pi |
+| Réinitialisation USB automatique | ✅ 05/11, modem dés-autorisé : de retour en 35 s sans intervention |
+| `install.sh` (installation puis mise à jour) | ✅ 05/11, config conservée |
 
 ---
 
@@ -68,14 +70,13 @@ Mécanismes :
 
 | # | Tâche | Effort |
 |---|---|---|
-| B4 | **Bout en bout** : démon installé sur le Pi (`install.sh`) contre une app (dev locale ou staging), envoi + réception réels, puis arrêt du démon pour observer la bascule Vonage. | M |
 | B6 | **Vérifier que `cron.json` est pris en compte** par le scheduler Scalingo après déploiement (`scalingo cron-tasks`), sinon ni supervision ni bascule après coup. | S |
 | B7 | **Fusionner** dans `main` et jouer les migrations (staging puis production). | S |
-| B8 | **Configurer la production** : `rake sms_gateway:provision` + `add_line` (numéro de la SIM), ligne de secours = ligne Vonage par défaut, `fallback_after_minutes`, rattacher l'équipe. | S |
+| B8 | **Configurer la production** : `rake sms_gateway:provision` + `add_line` (SIM `+33743782865`), ligne de secours = ligne Vonage par défaut, `fallback_after_minutes`, rattacher l'équipe ; puis `url` et `token` de prod dans `/etc/cm-sms-gateway.conf` sur le Pi. | S |
 
 Fait depuis le cadrage d'août : B1 (pas d'envoi sans enregistrement), B2
-(réinitialisation USB), B3 (ligne Vonage par défaut en base), B5 (SMS réels
-sur le Pi).
+(réinitialisation USB), B3 (ligne Vonage par défaut en base), B4 (bout en
+bout, bascule comprise), B5 (SMS réels sur le Pi).
 
 ---
 
