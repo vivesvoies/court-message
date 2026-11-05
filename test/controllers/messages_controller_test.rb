@@ -9,7 +9,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     @message = create(:outbound_message, conversation: @conversation)
 
-    Current.phone_number = "33644630057"
+    @from = PhoneLine.legacy_number
 
     @expected_uuid = SecureRandom.uuid
 
@@ -17,7 +17,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     @provider_success.expect(
       :send,
       ProviderResult.new(success: true, message_uuid: @expected_uuid),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+      from: @from, to: @conversation.contact.phone, content: @message.content
     )
 
     sign_in(@user)
@@ -149,7 +149,7 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     @provider_fail.expect(
       :send,
       ProviderResult.new(success: false, error: "HTTP Status: 503, Response Body: Service Unavailable."),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+      from: @from, to: @conversation.contact.phone, content: @message.content
     )
 
     OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_fail)) do

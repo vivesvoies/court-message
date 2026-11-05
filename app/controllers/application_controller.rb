@@ -23,13 +23,6 @@ class ApplicationController < ActionController::Base
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
     Current.team = Team.find_by(slug:) if slug
-
-    # A team can be attached to a specific phone line (Vonage or one of our
-    # SMS gateways). Otherwise use the default line, and as a last resort the
-    # legacy env-based Vonage number. Display only — outbound routing derives
-    # the line from the message's own team in OutboundMessagesService.
-    Current.phone_line = PhoneLine.route_for(Current.team)
-    Current.phone_number = Current.phone_line&.phone || PhoneLine.legacy_number
   end
 
   def current_frame
