@@ -67,6 +67,16 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test "a super admin viewing another user's templates gets that user's new template link" do
+    admin = create(:user, role: "super_admin", teams: [ @team ])
+    sign_in admin
+
+    get team_user_templates_path(@team, @user)
+
+    assert_response :success
+    assert_select "a[href=?]", new_team_user_template_path(@team, @user)
+  end
+
   test "should not show templates under a team the user does not belong to" do
     get team_user_templates_path(create(:team), @user)
 
