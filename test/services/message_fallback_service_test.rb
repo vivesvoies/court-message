@@ -24,6 +24,21 @@ class MessageFallbackServiceTest < ActiveSupport::TestCase
     assert_equal(@fallback.phone, message.provider_info.dig("fallback", "to"))
   end
 
+  def test_leaves_a_message_claimed_by_a_gateway_during_the_failover
+    message = create(:outbound_message, conversation: @conversation, phone_line: @line,
+                     outbound_uuid: SecureRandom.uuid, created_at: 20.minutes.ago)
+    service = MessageFallbackService.new
+    stale = Message.find(message.id)
+    # The gateway claims it between the failover's query and its send.
+    @gateway.claim_messages!
+
+    assert_nil(service.send(:fail_over!, stale, from: @line, to: @fallback))
+    message.reload
+    assert_equal(@line, message.phone_line)
+    assert(message.unsent_status?)
+    assert(message.claimed_at.present?)
+  end
+
   def test_ignores_messages_within_the_deadline
     create(:outbound_message, conversation: @conversation, phone_line: @line,
            outbound_uuid: SecureRandom.uuid, created_at: 5.minutes.ago)
