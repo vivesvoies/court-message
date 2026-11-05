@@ -147,6 +147,33 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".Conversation__contact", text: @other_contact.identifier, count: 0
   end
 
+
+  test "should create a conversation for a contact" do
+    assert_difference("Conversation.count", 1) do
+      post team_conversations_url(@team), params: { contact: @contact.id }
+    end
+
+    assert_redirected_to team_conversation_url(@team, @contact.reload.conversation)
+  end
+
+  test "should reuse the existing conversation instead of creating a duplicate" do
+    existing = create(:conversation, contact: @contact)
+
+    assert_no_difference("Conversation.count") do
+      post team_conversations_url(@team), params: { contact: @contact.id }
+    end
+
+    assert_redirected_to team_conversation_url(@team, existing)
+  end
+
+  test "should not create a conversation for a contact of another team" do
+    other_contact = create(:contact)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      post team_conversations_url(@team), params: { contact: other_contact.id }
+    end
+  end
+
   private
 
   def create_conversations(count)
