@@ -3,6 +3,7 @@ class TemplatesController < ApplicationController
 
   before_action :set_team
   before_action :set_user
+  before_action :authorize_team!
   before_action :authorize_templates_owner!
   before_action :set_templates
   before_action :set_template, only: %i[ edit update destroy ]
@@ -61,6 +62,11 @@ class TemplatesController < ApplicationController
   end
 
   private
+
+  # The templates pages render inside the team's navigation.
+  def authorize_team!
+    authorize! :read, @team
+  end
 
   # Templates are personal: only their owner (or a super admin) may list,
   # create, or change the templates of the user in the route.

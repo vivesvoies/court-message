@@ -67,6 +67,12 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test "should not show templates under a team the user does not belong to" do
+    get team_user_templates_path(create(:team), @user)
+
+    assert_response :forbidden
+  end
+
   test "should not create a template for another user" do
     other_user = create(:user, teams: [ @team ])
 
