@@ -36,9 +36,11 @@ import cm_sms_gateway as gateway  # noqa: E402
 
 
 class FakeModem:
-    def __init__(self, state="HomeNetwork"):
+    def __init__(self, state="HomeNetwork", inbox=None):
         self.state = state
         self.sent = []
+        self.inbox = inbox or []
+        self.deleted = []
 
     def network_state(self):
         return self.state
@@ -50,7 +52,21 @@ class FakeModem:
         self.sent.append((number, text))
 
     def read_inbox(self):
-        return []
+        return list(self.inbox)
+
+    def delete(self, linked_message):
+        self.deleted.append(linked_message)
+        self.inbox.remove(linked_message)
+
+
+def sms_part(text, part=-1, of=-1):
+    """A raw gammu SMS dict; part/of describe a concatenated (long) SMS."""
+    return {
+        "Number": "+33611111111",
+        "Text": text,
+        "DateTime": None,
+        "UDH": {"ID8bit": 42 if of > 0 else -1, "ID16bit": -1, "PartNumber": part, "AllParts": of},
+    }
 
 
 def unreachable_modem(*_args):
@@ -82,7 +98,15 @@ class DaemonTestCase(unittest.TestCase):
             "send_pause": "0",
             **modem_options,
         }
-        patcher = mock.patch.object(gateway, "Modem", side_effect=modem_factory)
+        # Replaces Modem construction only: its static helpers stay real.
+        real = gateway.Modem
+        patcher = mock.patch.object(
+            gateway,
+            "Modem",
+            side_effect=modem_factory,
+            decode=real.decode,
+            missing_parts=real.missing_parts,
+        )
         patcher.start()
         self.addCleanup(patcher.stop)
         daemon = gateway.Daemon(config)
@@ -127,6 +151,50 @@ class RegistrationTest(DaemonTestCase):
         daemon.client.report_status.assert_called_once_with("u1", "submitted")
         self.assertTrue(modem_ok)
         self.assertIsNone(details["error"])
+
+
+class MultipartTest(DaemonTestCase):
+    def setUp(self):
+        super().setUp()
+        # Incomplete groups are not decodable: gammu returns None for them.
+        decode = mock.patch.object(gateway.gammu, "DecodeSMS", return_value=None, create=True)
+        decode.start()
+        self.addCleanup(decode.stop)
+
+    def pushed_texts(self, daemon):
+        return [call.args[1] for call in daemon.client.push_inbound.call_args_list]
+
+    def test_holds_a_long_sms_back_until_all_its_parts_arrived(self):
+        modem = FakeModem(inbox=[[sms_part("Bon", 1, 2)]])
+        daemon = self.build_daemon(lambda *_args: modem)
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+        self.assertEqual([], self.pushed_texts(daemon))
+        self.assertEqual([], modem.deleted)
+
+        modem.inbox = [[sms_part("Bon", 1, 2), sms_part("jour", 2, 2)]]
+        daemon.deliver_inbound()
+        self.assertEqual(["Bonjour"], self.pushed_texts(daemon))
+        self.assertEqual(1, len(modem.deleted))
+
+    def test_forwards_an_incomplete_sms_after_the_grace_period(self):
+        modem = FakeModem(inbox=[[sms_part("Bon", 1, 2)]])
+        daemon = self.build_daemon(lambda *_args: modem, multipart_grace="0")
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+
+        self.assertEqual(["Bon"], self.pushed_texts(daemon))
+
+    def test_forwards_a_single_part_sms_right_away(self):
+        modem = FakeModem(inbox=[[sms_part("Oui")]])
+        daemon = self.build_daemon(lambda *_args: modem)
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+
+        self.assertEqual(["Oui"], self.pushed_texts(daemon))
 
 
 class JournalFailureTest(DaemonTestCase):
