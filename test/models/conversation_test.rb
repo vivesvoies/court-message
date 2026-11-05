@@ -204,7 +204,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -224,7 +223,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -240,7 +238,6 @@ class ConversationTest < ActiveSupport::TestCase
       ActiveRecord::Base.transaction do
         message.save!
         conversation.mark_as_unread!
-        conversation.messages << message
       end
     end
   end
@@ -256,16 +253,20 @@ class ConversationTest < ActiveSupport::TestCase
     user.conversations << conversation_1
     other_user.conversations << conversation_2
 
-    inbound_message = create(:inbound_message, conversation: conversation_1)
-
     # Add a message to conversation_1 and check broadcast for user
     assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
-      conversation_1.messages << inbound_message
+      ActiveRecord::Base.transaction do
+        create(:inbound_message, conversation: conversation_1)
+        conversation_1.mark_as_unread!
+      end
     end
 
-    # Verify that conversation_2 does not broadcast to user
+    # Verify that conversation_1 does not broadcast to other_user
     assert_no_turbo_stream_broadcasts("user_conversations_list_#{other_user.id}") do
-      conversation_1.messages << create(:inbound_message)
+      ActiveRecord::Base.transaction do
+        create(:inbound_message, conversation: conversation_1)
+        conversation_1.mark_as_unread!
+      end
     end
   end
 
@@ -280,7 +281,10 @@ class ConversationTest < ActiveSupport::TestCase
 
     assert_turbo_stream_broadcasts "user_conversations_list_#{user.id}" do
       assert_turbo_stream_broadcasts "user_conversations_list_#{other_user.id}" do
-        conversation.messages << create(:inbound_message)
+        ActiveRecord::Base.transaction do
+          create(:inbound_message, conversation: conversation)
+          conversation.mark_as_unread!
+        end
       end
     end
   end
