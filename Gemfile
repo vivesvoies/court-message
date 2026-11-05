@@ -7,7 +7,7 @@ gem "rails", "~> 8.1.3"
 
 gem "pg", "~> 1.5"
 gem "puma", "~> 8.0"
-gem "redis", "~> 5.3"
+gem "redis", "~> 6.0"
 gem "sprockets-rails"
 
 gem "bootsnap", require: false
