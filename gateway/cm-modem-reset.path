@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for SIM modem USB reset requests from cm-sms-gateway
+
+[Path]
+PathExists=/run/cm-sms-gateway/modem-reset
+Unit=cm-modem-reset.service
+
+[Install]
+WantedBy=multi-user.target

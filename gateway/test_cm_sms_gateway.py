@@ -1,0 +1,326 @@
+"""Unit tests for the gateway daemon. They stub out gammu, so they run
+without a modem (and without python3-gammu installed):
+
+    python3 -m unittest discover -s gateway
+"""
+
+import configparser
+import os
+import socket
+import sys
+import tempfile
+import types
+import unittest
+from unittest import mock
+
+# Stand-in for python3-gammu, which needs libgammu and a modem. Installed
+# unconditionally so the tests behave the same on a Pi that has the real one.
+fake_gammu = types.ModuleType("gammu")
+
+
+class GSMError(Exception):
+    pass
+
+
+class ERR_EMPTY(GSMError):
+    pass
+
+
+fake_gammu.GSMError = GSMError
+fake_gammu.ERR_EMPTY = ERR_EMPTY
+fake_gammu.StateMachine = mock.MagicMock
+sys.modules["gammu"] = fake_gammu
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import cm_sms_gateway as gateway  # noqa: E402
+import requests  # noqa: E402
+
+
+class FakeModem:
+    def __init__(self, state="HomeNetwork", inbox=None):
+        self.state = state
+        self.sent = []
+        self.inbox = inbox or []
+        self.deleted = []
+
+    def network_state(self):
+        return self.state
+
+    def health(self):
+        return {"signal_percent": 60, "network_state": self.state}
+
+    def send(self, number, text):
+        self.sent.append((number, text))
+
+    def read_inbox(self):
+        return list(self.inbox)
+
+    def delete(self, linked_message):
+        self.deleted.append(linked_message)
+        self.inbox.remove(linked_message)
+
+
+def sms_part(text, part=-1, of=-1):
+    """A raw gammu SMS dict; part/of describe a concatenated (long) SMS."""
+    return {
+        "Number": "+33611111111",
+        "Text": text,
+        "DateTime": None,
+        "UDH": {"ID8bit": 42 if of > 0 else -1, "ID16bit": -1, "PartNumber": part, "AllParts": of},
+    }
+
+
+def unreachable_modem(*_args):
+    raise GSMError("Error opening device, it doesn't exist")
+
+
+class DaemonTestCase(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.reset_flag = os.path.join(tmp.name, "modem-reset")
+        self.state_file = os.path.join(tmp.name, "state.json")
+        # Not under systemd: sd_notify must stay a no-op.
+        environ = mock.patch.dict(os.environ)
+        environ.start()
+        self.addCleanup(environ.stop)
+        os.environ.pop("NOTIFY_SOCKET", None)
+
+    def build_daemon(self, modem_factory, **modem_options):
+        config = configparser.ConfigParser()
+        config["app"] = {
+            "url": "https://cm.test",
+            "token": "token",
+            "line_phone": "+33600000000",
+            "state_file": self.state_file,
+        }
+        config["modem"] = {
+            "reset_flag": self.reset_flag,
+            "send_pause": "0",
+            **modem_options,
+        }
+        # Replaces Modem construction only: its static helpers stay real.
+        real = gateway.Modem
+        patcher = mock.patch.object(
+            gateway,
+            "Modem",
+            side_effect=modem_factory,
+            decode=real.decode,
+            missing_parts=real.missing_parts,
+        )
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        daemon = gateway.Daemon(config)
+        daemon.client = mock.Mock()
+        return daemon
+
+    def heartbeat(self, daemon):
+        daemon._report_heartbeat()
+        return daemon.client.report_heartbeat.call_args.args
+
+
+class RegistrationTest(DaemonTestCase):
+    def test_does_not_claim_messages_while_not_registered(self):
+        daemon = self.build_daemon(lambda *_args: FakeModem(state="NoNetwork"))
+
+        daemon.send_outbound()
+
+        daemon.client.claim_messages.assert_not_called()
+
+    def test_reports_the_modem_unhealthy_while_not_registered(self):
+        daemon = self.build_daemon(lambda *_args: FakeModem(state="NoNetwork"))
+
+        daemon.send_outbound()
+        modem_ok, details = self.heartbeat(daemon)
+
+        self.assertFalse(modem_ok)
+        self.assertIn("not registered", details["error"])
+        self.assertEqual("NoNetwork", details["network_state"])
+        self.assertEqual(60, details["signal_percent"])
+
+    def test_sends_claimed_messages_once_registered(self):
+        modem = FakeModem(state="RoamingNetwork")
+        daemon = self.build_daemon(lambda *_args: modem)
+        daemon.client.claim_messages.return_value = [
+            {"uuid": "u1", "to": "+33611111111", "content": "Bonjour"}
+        ]
+
+        daemon.send_outbound()
+        modem_ok, details = self.heartbeat(daemon)
+
+        self.assertEqual([("+33611111111", "Bonjour")], modem.sent)
+        daemon.client.report_status.assert_called_once_with("u1", "submitted")
+        self.assertTrue(modem_ok)
+        self.assertIsNone(details["error"])
+
+
+class MultipartTest(DaemonTestCase):
+    def setUp(self):
+        super().setUp()
+        # Incomplete groups are not decodable: gammu returns None for them.
+        decode = mock.patch.object(gateway.gammu, "DecodeSMS", return_value=None, create=True)
+        decode.start()
+        self.addCleanup(decode.stop)
+
+    def pushed_texts(self, daemon):
+        return [call.args[1] for call in daemon.client.push_inbound.call_args_list]
+
+    def test_holds_a_long_sms_back_until_all_its_parts_arrived(self):
+        modem = FakeModem(inbox=[[sms_part("Bon", 1, 2)]])
+        daemon = self.build_daemon(lambda *_args: modem)
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+        self.assertEqual([], self.pushed_texts(daemon))
+        self.assertEqual([], modem.deleted)
+
+        modem.inbox = [[sms_part("Bon", 1, 2), sms_part("jour", 2, 2)]]
+        daemon.deliver_inbound()
+        self.assertEqual(["Bonjour"], self.pushed_texts(daemon))
+        self.assertEqual(1, len(modem.deleted))
+
+    def test_forwards_an_incomplete_sms_after_the_grace_period(self):
+        modem = FakeModem(inbox=[[sms_part("Bon", 1, 2)]])
+        daemon = self.build_daemon(lambda *_args: modem, multipart_grace="0")
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+
+        self.assertEqual(["Bon"], self.pushed_texts(daemon))
+
+    def test_forwards_a_single_part_sms_right_away(self):
+        modem = FakeModem(inbox=[[sms_part("Oui")]])
+        daemon = self.build_daemon(lambda *_args: modem)
+        daemon.client.push_inbound.return_value = True
+
+        daemon.deliver_inbound()
+
+        self.assertEqual(["Oui"], self.pushed_texts(daemon))
+
+
+class JournalFailureTest(DaemonTestCase):
+    def test_still_acknowledges_a_sent_message_when_the_journal_cannot_be_written(self):
+        modem = FakeModem()
+        daemon = self.build_daemon(lambda *_args: modem)
+        # A full or read-only SD card: the journal's directory is unusable.
+        blocker = os.path.join(os.path.dirname(self.state_file), "not-a-directory")
+        open(blocker, "w").close()
+        daemon.journal.path = os.path.join(blocker, "state.json")
+        daemon.client.claim_messages.return_value = [
+            {"uuid": "u1", "to": "+33611111111", "content": "Bonjour"}
+        ]
+
+        daemon.send_outbound()
+
+        self.assertEqual(1, len(modem.sent))
+        daemon.client.report_status.assert_called_once_with("u1", "submitted")
+
+
+class ModemResetTest(DaemonTestCase):
+    def test_requests_a_usb_reset_after_repeated_open_failures(self):
+        daemon = self.build_daemon(unreachable_modem, reset_after_failures="3")
+
+        daemon._ensure_modem()
+        self.assertFalse(os.path.exists(self.reset_flag))
+
+        daemon._ensure_modem()
+        self.assertTrue(os.path.exists(self.reset_flag))
+        self.assertEqual(0, daemon.init_failures)
+
+    def test_a_successful_open_clears_the_failure_count(self):
+        attempts = iter([GSMError("gone"), FakeModem(), GSMError("gone")])
+
+        def flaky(*_args):
+            attempt = next(attempts)
+            if isinstance(attempt, Exception):
+                raise attempt
+            return attempt
+
+        daemon = self.build_daemon(flaky, reset_after_failures="2")
+        self.assertIsNotNone(daemon._ensure_modem())
+        self.assertIsNone(daemon._ensure_modem())
+
+        self.assertFalse(os.path.exists(self.reset_flag))
+
+    def test_a_missing_reset_directory_does_not_crash_the_daemon(self):
+        daemon = self.build_daemon(unreachable_modem, reset_after_failures="1")
+        daemon.reset_flag = os.path.join(self.reset_flag, "missing", "flag")
+
+        self.assertIsNone(daemon._ensure_modem())
+
+
+class DecodeTest(unittest.TestCase):
+    def part(self, text):
+        return {"Number": "+33611111111", "Text": text, "DateTime": None}
+
+    def test_joins_the_decoded_entries(self):
+        decoded = {"Entries": [{"Buffer": "Bonjour "}, {"Buffer": "à vous"}]}
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=decoded, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("Bonjour "), self.part("à vous")])
+
+        self.assertEqual("Bonjour à vous", text)
+
+    def test_falls_back_to_the_raw_text_when_decoding_yields_none(self):
+        # Seen on the Pi with an SMS carrying a user-defined header: gammu
+        # decodes it to entries without text.
+        decoded = {"Entries": [{"ID": "UserUDH", "Buffer": None}]}
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=decoded, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("STATE?state=Active")])
+
+        self.assertEqual("STATE?state=Active", text)
+
+    def test_uses_the_raw_text_of_every_part_when_not_decodable(self):
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=None, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("Bon"), self.part("jour")])
+
+        self.assertEqual("Bonjour", text)
+
+
+class PushInboundTest(unittest.TestCase):
+    """push_inbound decides whether an SMS may leave the SIM: only when the
+    app has it, or has refused that SMS for good."""
+
+    def push(self, status_code):
+        client = gateway.AppClient("https://cm.test", "token", "+33600000000")
+        response = requests.Response()
+        response.status_code = status_code
+        response.reason = "test"
+        response.url = "https://cm.test/gateway/v1/inbound_messages"
+        client.session = mock.Mock(post=mock.Mock(return_value=response))
+        return client.push_inbound("+33611111111", "Bonjour", None, "id")
+
+    def test_delivered_messages_can_leave_the_sim(self):
+        self.assertTrue(self.push(201))
+
+    def test_messages_the_app_refuses_for_good_can_leave_the_sim(self):
+        self.assertTrue(self.push(422))  # unknown sender
+        self.assertTrue(self.push(400))  # invalid payload
+
+    def test_messages_stay_on_the_sim_when_the_app_cannot_take_them_yet(self):
+        # Bad or rotated token, an app without the gateway API (or a wrong
+        # url), throttling, server errors: the SMS is fine, retry later.
+        for status_code in (401, 403, 404, 429, 500, 503):
+            with self.assertRaises(requests.RequestException, msg=status_code):
+                self.push(status_code)
+
+
+class SdNotifyTest(unittest.TestCase):
+    def test_sends_the_message_to_the_notify_socket(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "notify")
+            with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as server:
+                server.bind(path)
+                with mock.patch.dict(os.environ, {"NOTIFY_SOCKET": path}):
+                    gateway.sd_notify("WATCHDOG=1")
+
+                self.assertEqual(b"WATCHDOG=1", server.recv(64))
+
+    def test_is_a_no_op_outside_systemd(self):
+        with mock.patch.dict(os.environ):
+            os.environ.pop("NOTIFY_SOCKET", None)
+
+            gateway.sd_notify("READY=1")
+
+
+if __name__ == "__main__":
+    unittest.main()

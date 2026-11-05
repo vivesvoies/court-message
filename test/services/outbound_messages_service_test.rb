@@ -3,13 +3,14 @@ require "test_helper"
 class OutboundMessagesServiceTest < ActiveSupport::TestCase
   def setup
     Current.user = create(:user)
-    Current.phone_number = fake_number
 
     c = create(:conversation)
-    message = Message.new({ content: "Lorem Ipsum", conversation_id: c.id, sender: Current.user })
+    @message = Message.new({ content: "Lorem Ipsum", conversation_id: c.id, sender: Current.user })
     @contact = c.contact
+    # With no PhoneLine configured, sends fall back to the legacy number.
+    @from = PhoneLine.legacy_number
     @provider = Minitest::Mock.new
-    @outbound_message = OutboundMessagesService.new(message, @provider)
+    @outbound_message = OutboundMessagesService.new(@message, @provider)
   end
 
   def test_creates_message_instance
@@ -20,12 +21,13 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
   def test_submits_message_to_service
     @provider.expect(
       :send,
-      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      ProviderResult.new(success: true, message_uuid: SecureRandom.uuid),
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert(@outbound_message.submit!)
     assert(@outbound_message.message.submitted_status?)
+    assert(@outbound_message.message.outbound_uuid.present?)
     assert(@outbound_message.message.valid?)
 
     @provider.verify
@@ -34,8 +36,8 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
   def test_submits_message_to_service_unavailable
     @provider.expect(
       :send,
-      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPServiceUnavailable.new(1.1, "503", "Service Unavailable")),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      ProviderResult.new(success: false, error: "HTTP Status: 503, Response Body: Service Unavailable."),
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert_not(@outbound_message.submit!)
@@ -45,11 +47,11 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.verify
   end
 
-  def test_submits_message_to_service_bad_request
+  def test_submits_message_to_service_failure_without_error_details
     @provider.expect(
       :send,
-      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPBadRequest.new(1.1, "400", "Bad Request")),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      ProviderResult.new(success: false),
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
     assert_not(@outbound_message.submit!)
@@ -59,31 +61,75 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     @provider.verify
   end
 
-  def test_submits_message_to_service_unauthorized
+  def test_queued_result_keeps_message_unsent
     @provider.expect(
       :send,
-      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPUnauthorized.new(1.1, "401", "Unauthorized")),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
+      ProviderResult.new(success: true, queued: true, message_uuid: SecureRandom.uuid),
+      from: @from, to: @contact.phone, content: "Lorem Ipsum"
     )
 
-    assert_not(@outbound_message.submit!)
-    assert(@outbound_message.message.failed_status?)
-    assert(@outbound_message.message.save!)
+    assert(@outbound_message.submit!)
+    assert(@outbound_message.message.unsent_status?)
+    assert(@outbound_message.message.outbound_uuid.present?)
 
     @provider.verify
   end
 
-  def test_submits_message_to_service_server_error
-    @provider.expect(
-      :send,
-      OpenStruct.new(message_uuid: :message_uuid, http_response: Net::HTTPInternalServerError.new(1.1, "500", "Internal Server Error")),
-      from: Current.phone_number, to: @contact.phone, content: "Lorem Ipsum"
-    )
+  def test_routes_through_the_team_phone_line
+    line = create(:phone_line)
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
 
-    assert_not(@outbound_message.submit!)
-    assert(@outbound_message.message.failed_status?)
-    assert(@outbound_message.message.save!)
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation:, sender: Current.user), @provider)
 
-    @provider.verify
+    assert_equal(line, service.message.phone_line)
+  end
+
+  def test_routes_through_the_fallback_line_when_the_team_line_is_inactive
+    fallback = create(:phone_line)
+    line = create(:phone_line, active: false, fallback_phone_line: fallback)
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
+
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation:, sender: Current.user), @provider)
+
+    assert_equal(fallback, service.message.phone_line)
+  end
+
+  def test_sends_through_vonage_fallback_while_the_team_gateway_is_offline
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback)
+    line.sms_gateway.update!(last_seen_at: 1.hour.ago)
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
+    message = Message.new(content: "Hi", conversation:, sender: Current.user)
+
+    service = OutboundMessagesService.new(message)
+
+    assert(service.submit!)
+    assert_equal(fallback, message.phone_line)
+    assert(message.submitted_status?, "sent right away, not queued on the offline gateway")
+  end
+
+  def test_routes_through_the_default_line_without_a_team_line
+    default = create(:phone_line, default: true)
+
+    service = OutboundMessagesService.new(Message.new(content: "Hi", conversation: create(:conversation), sender: Current.user), @provider)
+
+    assert_equal(default, service.message.phone_line)
+  end
+
+  def test_selects_sms_gateway_provider_for_gateway_lines
+    line = create(:gateway_phone_line)
+    message = Message.new(content: "Lorem Ipsum", conversation: @message.conversation, sender: Current.user, phone_line: line)
+
+    service = OutboundMessagesService.new(message)
+
+    assert(service.submit!)
+    # Queued for the gateway: stays unsent until the gateway claims it and
+    # reports the outcome, but already has an outbound UUID.
+    assert(message.unsent_status?)
+    assert(message.outbound_uuid.present?)
+    assert(message.persisted?)
   end
 end

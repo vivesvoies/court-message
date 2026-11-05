@@ -20,14 +20,6 @@ class ApplicationController < ActionController::Base
 
   def set_current
     Current.user = current_user
-    Current.phone_number = case Rails.env.to_sym
-    when :staging
-      "33644639777"
-    when :production
-      "33644635900"
-    else
-      "33644630057"
-    end
 
     slug = params[:team_id] || (params[:controller] == "teams" && params[:id])
     Current.team = Team.find_by(slug:) if slug

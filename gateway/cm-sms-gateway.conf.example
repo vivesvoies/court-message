@@ -1,0 +1,44 @@
+# Configuration du gateway SMS CM, installée par install.sh dans
+# /etc/cm-sms-gateway.conf avec les droits 640 root:cm-gateway : le fichier
+# contient le token d'API, et le démon (utilisateur cm-gateway) doit pouvoir
+# le lire.
+
+[app]
+# URL publique de l'application (ou URL Tailscale si l'app y est joignable).
+url = https://cm.example.org
+# Token émis par `rake sms_gateway:provision[nom-du-gateway]`, affiché une
+# seule fois. En cas de fuite : `rake sms_gateway:rotate_token[nom]`.
+token = CHANGEZ-MOI
+# Numéro de la ligne (SIM) pilotée par cette instance, déclaré côté app via
+# `rake sms_gateway:add_line[nom-du-gateway,numero]`.
+line_phone = +33612345678
+# Intervalle entre deux cycles (secondes).
+poll_interval = 10
+# Nombre maximum de messages réclamés par cycle.
+claim_limit = 5
+# Fichier d'état (journal des envois en attente d'accusé de réception côté
+# app). Permet de reprendre proprement après un crash ou un redémarrage sans
+# renvoyer un SMS déjà transmis au modem. Le répertoire est créé si besoin.
+state_file = /var/lib/cm-sms-gateway/state.json
+# URL optionnelle pingée après chaque cycle réussi (style healthchecks.io),
+# pour surveiller que le service tourne toujours indépendamment du modem.
+# Laisser vide/commenté pour désactiver.
+# healthcheck_url = https://hc-ping.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
+[modem]
+# Configuration gammu (créée avec `gammu-config` ou à la main).
+gammu_config = /etc/gammurc
+# Section de /etc/gammurc à utiliser (0 = [gammu], 1 = [gammu1], ...).
+# Utile quand plusieurs modems sont branchés sur le même appareil.
+gammu_section = 0
+# Pause entre deux envois (secondes) — les modems SIM sont lents.
+send_pause = 2
+# Un SMS long arrive en plusieurs parties, parfois à quelques secondes
+# d'intervalle : il reste sur la SIM jusqu'à ce qu'elles soient toutes là, au
+# plus ce délai (secondes), puis il est transmis tel quel.
+multipart_grace = 600
+# Après ce nombre d'échecs consécutifs d'ouverture du modem, le démon
+# demande une réinitialisation USB (cm-modem-reset, exécuté en root).
+reset_after_failures = 3
+# Fichier de demande surveillé par cm-modem-reset.path. Vide = désactivé.
+# reset_flag = /run/cm-sms-gateway/modem-reset

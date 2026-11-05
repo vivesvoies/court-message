@@ -1,0 +1,31 @@
+[Unit]
+Description=CM SMS gateway (SIM modem <-> court-message)
+After=network-online.target
+Wants=network-online.target cm-modem-reset.path
+
+[Service]
+# Le démon signale READY puis WATCHDOG à chaque cycle : un appel gammu figé
+# (modem planté en plein envoi) le fait tuer puis relancer par systemd.
+Type=notify
+NotifyAccess=main
+WatchdogSec=300
+ExecStart=/usr/bin/python3 /opt/cm-sms-gateway/cm_sms_gateway.py /etc/cm-sms-gateway.conf
+Restart=always
+RestartSec=10
+# L'accès au modem série requiert le groupe dialout.
+User=cm-gateway
+SupplementaryGroups=dialout
+# Durcissement.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+# Crée /var/lib/cm-sms-gateway (accessible en écriture) pour le journal
+# d'envois en attente d'accusé de réception, malgré ProtectSystem=strict.
+StateDirectory=cm-sms-gateway
+# /run/cm-sms-gateway : le démon y dépose la demande de réinitialisation USB
+# du modem, traitée par cm-modem-reset.path / .service (root).
+RuntimeDirectory=cm-sms-gateway
+
+[Install]
+WantedBy=multi-user.target

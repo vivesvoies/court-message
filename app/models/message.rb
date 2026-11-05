@@ -3,6 +3,7 @@
 # Table name: messages
 #
 #  id              :bigint           not null, primary key
+#  claimed_at      :datetime
 #  content         :string
 #  outbound_uuid   :uuid
 #  provider_info   :jsonb
@@ -11,17 +12,22 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  conversation_id :bigint           not null
+#  phone_line_id   :bigint
 #  sender_id       :bigint           not null
 #
 # Indexes
 #
-#  index_messages_on_conversation_id  (conversation_id)
-#  index_messages_on_outbound_uuid    (outbound_uuid)
-#  index_messages_on_sender           (sender_type,sender_id)
+#  index_messages_on_conversation_id   (conversation_id)
+#  index_messages_on_modem_message_id  (((provider_info ->> 'modem_message_id'::text))) WHERE ((provider_info ->> 'modem_message_id'::text) IS NOT NULL)
+#  index_messages_on_outbound_uuid     (outbound_uuid)
+#  index_messages_on_phone_line_id     (phone_line_id)
+#  index_messages_on_sender            (sender_type,sender_id)
+#  index_messages_on_unsent_claimable  (phone_line_id,created_at) WHERE (status = 'unsent'::message_status)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (conversation_id => conversations.id)
+#  fk_rails_...  (phone_line_id => phone_lines.id)
 #
 class Message < ApplicationRecord
   enum :status, {
@@ -38,6 +44,7 @@ class Message < ApplicationRecord
 
   belongs_to :conversation, touch: true
   belongs_to :sender, polymorphic: true
+  belongs_to :phone_line, optional: true
   delegate :team, to: :conversation
   after_create :associate_user_with_conversation
   after_save :update_conversation_last_message, if: :saved_change_to_conversation_id?

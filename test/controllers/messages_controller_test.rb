@@ -9,15 +9,15 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     @message = create(:outbound_message, conversation: @conversation)
 
-    Current.phone_number = "33644630057"
+    @from = PhoneLine.legacy_number
 
     @expected_uuid = SecureRandom.uuid
 
     @provider_success = Minitest::Mock.new
     @provider_success.expect(
       :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPSuccess.new(1.0, "200", "OK")),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+      ProviderResult.new(success: true, message_uuid: @expected_uuid),
+      from: @from, to: @conversation.contact.phone, content: @message.content
     )
 
     sign_in(@user)
@@ -148,8 +148,8 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
 
     @provider_fail.expect(
       :send,
-      OpenStruct.new(message_uuid: @expected_uuid, http_response: Net::HTTPServiceUnavailable.new(1.1, "503", "Service Unavailable")),
-      from: Current.phone_number, to: @conversation.contact.phone, content: @message.content
+      ProviderResult.new(success: false, error: "HTTP Status: 503, Response Body: Service Unavailable."),
+      from: @from, to: @conversation.contact.phone, content: @message.content
     )
 
     OutboundMessagesService.stub(:new, OutboundMessagesService.new(@message, @provider_fail)) do

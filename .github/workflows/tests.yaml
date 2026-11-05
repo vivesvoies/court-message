@@ -168,3 +168,16 @@ jobs:
           name: system-test-screenshots
           path: tmp/screenshots
           if-no-files-found: ignore
+
+  gateway:
+    name: gateway daemon
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Run the daemon's unit tests
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --quiet requests
+          .venv/bin/python -m unittest discover -s gateway

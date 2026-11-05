@@ -121,7 +121,7 @@ Les instructions qui suivent sont optimisées pour un hébergeur PaaS comme Scal
 ### Prérequis
 
 - Une clé d'API SendGrid.
-- Une clé d'API Vonage ou d'un autre opérateur, à noter que ce projet utilise Vonage et ne prend pour l'instant pas en charge d'autres opérateurs.
+- Une clé d'API Vonage ou d'un autre opérateur, à noter que ce projet utilise Vonage. Les SMS peuvent aussi transiter par un modem SIM auto-hébergé (par exemple sur un Raspberry Pi), voir [gateway/README.md](gateway/README.md).
    Une fois votre clé crée ajouter la à vos credentials rails sous le nom `vonage_private_key` via la command:
    ```
    EDITOR=vim rails credentials:edit
