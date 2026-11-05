@@ -162,6 +162,33 @@ class ModemResetTest(DaemonTestCase):
         self.assertIsNone(daemon._ensure_modem())
 
 
+class DecodeTest(unittest.TestCase):
+    def part(self, text):
+        return {"Number": "+33611111111", "Text": text, "DateTime": None}
+
+    def test_joins_the_decoded_entries(self):
+        decoded = {"Entries": [{"Buffer": "Bonjour "}, {"Buffer": "à vous"}]}
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=decoded, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("Bonjour "), self.part("à vous")])
+
+        self.assertEqual("Bonjour à vous", text)
+
+    def test_falls_back_to_the_raw_text_when_decoding_yields_none(self):
+        # Seen on the Pi with an SMS carrying a user-defined header: gammu
+        # decodes it to entries without text.
+        decoded = {"Entries": [{"ID": "UserUDH", "Buffer": None}]}
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=decoded, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("STATE?state=Active")])
+
+        self.assertEqual("STATE?state=Active", text)
+
+    def test_uses_the_raw_text_of_every_part_when_not_decodable(self):
+        with mock.patch.object(gateway.gammu, "DecodeSMS", return_value=None, create=True):
+            _sender, text, _received_at = gateway.Modem.decode([self.part("Bon"), self.part("jour")])
+
+        self.assertEqual("Bonjour", text)
+
+
 class SdNotifyTest(unittest.TestCase):
     def test_sends_the_message_to_the_notify_socket(self):
         with tempfile.TemporaryDirectory() as tmp:
