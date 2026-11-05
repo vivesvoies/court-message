@@ -71,19 +71,37 @@ class PhoneLine < ApplicationRecord
     end
   end
 
-  # The line an outbound message for this team should use:
-  # the team's line, or the default line; when that line is deactivated,
-  # its fallback line (one hop), then the default line. May return nil
-  # (callers fall back to legacy_number over Vonage).
+  # The line an outbound message for this team should use: the team's line,
+  # or the default line. When that line is deactivated or currently
+  # unreachable (gateway offline, modem down), its fallback line (one hop)
+  # if that one is usable. An active line with no usable fallback keeps its
+  # messages queued until it recovers; a deactivated one hands over to the
+  # default line. May return nil (callers fall back to legacy_number over
+  # Vonage).
   def self.route_for(team)
     preferred = team&.phone_line || default_line
-    return preferred if preferred.nil? || preferred.active?
+    return preferred if preferred.nil? || preferred.usable?
 
     fallback = preferred.fallback_phone_line
-    return fallback if fallback&.active?
+    return fallback if fallback&.usable?
+    return preferred if preferred.active?
 
     default = default_line
     default&.active? ? default : nil
+  end
+
+  def usable?
+    active? && reachable?
+  end
+
+  # Whether a message sent now can be expected to leave promptly. Vonage is
+  # assumed reachable; a gateway line needs its gateway polling and its modem
+  # reporting healthy (registered on the network) recently.
+  def reachable?
+    return true unless sms_gateway_provider?
+
+    sms_gateway.present? && sms_gateway.online? && modem_ok == true &&
+      last_modem_check_at.present? && last_modem_check_at > SmsGateway::ONLINE_WITHIN.ago
   end
 
   def vonage_provider?

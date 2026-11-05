@@ -26,6 +26,17 @@ class SmsGatewayTest < ActiveSupport::TestCase
     assert_equal(gateway, SmsGateway.authenticate_by_token(token))
   end
 
+  test "online? reflects recent polling" do
+    gateway = build(:sms_gateway, last_seen_at: nil)
+    assert_not(gateway.online?)
+
+    gateway.last_seen_at = 30.seconds.ago
+    assert(gateway.online?)
+
+    gateway.last_seen_at = (SmsGateway::ONLINE_WITHIN + 1.minute).ago
+    assert_not(gateway.online?)
+  end
+
   test "authenticate_by_token rejects unknown and blank tokens" do
     SmsGateway.provision!(name: "raspi-mediation")
 

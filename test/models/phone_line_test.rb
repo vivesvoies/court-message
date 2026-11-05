@@ -115,6 +115,43 @@ class PhoneLineTest < ActiveSupport::TestCase
     assert_equal(default, PhoneLine.route_for(team))
   end
 
+  test "route_for keeps a reachable gateway line" do
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback)
+
+    assert_equal(line, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
+  test "route_for uses the fallback line when the gateway is offline" do
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback)
+    line.sms_gateway.update!(last_seen_at: 3.minutes.ago)
+
+    assert_equal(fallback, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
+  test "route_for uses the fallback line when the modem reports trouble" do
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback)
+    line.record_modem_check!(ok: false, details: { "error" => "not registered" })
+
+    assert_equal(fallback, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
+  test "route_for uses the fallback line when the modem stopped reporting" do
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback, last_modem_check_at: 3.minutes.ago)
+
+    assert_equal(fallback, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
+  test "route_for queues on an unreachable gateway line without a usable fallback" do
+    fallback = create(:gateway_phone_line, fallback_phone_line: nil)
+    line = create(:gateway_phone_line, fallback_phone_line: fallback)
+
+    assert_equal(line, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
   test "route_for returns nil when nothing is active" do
     line = create(:phone_line, active: false)
     team = create(:team, phone_line: line)
