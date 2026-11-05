@@ -84,5 +84,33 @@ class MessageTest
 
       assert_nil conversation.reload.last_message_id
     end
+
+    def test_destroying_last_message_reassigns_to_previous_message
+      conversation = create(:conversation)
+      older = create(:outbound_message, conversation:, created_at: 2.hours.ago)
+      newer = create(:outbound_message, conversation:, created_at: 1.hour.ago)
+
+      assert_equal(newer, conversation.reload.last_message)
+      newer.destroy
+
+      assert_equal(older, conversation.reload.last_message)
+    end
+
+    def test_destroying_another_message_keeps_last_message
+      conversation = create(:conversation)
+      older = create(:outbound_message, conversation:, created_at: 2.hours.ago)
+      newer = create(:outbound_message, conversation:, created_at: 1.hour.ago)
+
+      older.destroy
+
+      assert_equal(newer, conversation.reload.last_message)
+    end
+
+    def test_creating_a_message_sets_conversation_last_message
+      conversation = create(:conversation)
+      message = create(:outbound_message, conversation:)
+
+      assert_equal(message, conversation.reload.last_message)
+    end
   end
 end
