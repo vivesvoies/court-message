@@ -234,6 +234,14 @@ class Modem:
             return str(error)
 
     @staticmethod
+    def missing_parts(linked_message):
+        """How many parts of a long (concatenated) SMS have not arrived yet;
+        0 for a complete or single-part SMS."""
+        udh = linked_message[0].get("UDH") or {}
+        expected = udh.get("AllParts") or -1
+        return max(expected - len(linked_message), 0)
+
+    @staticmethod
     def decode(linked_message):
         """Returns (sender, text, received_at ISO 8601) for a linked group."""
         decoded = gammu.DecodeSMS(linked_message)
@@ -317,6 +325,8 @@ class Daemon:
         self.poll_interval = app.getint("poll_interval", fallback=10)
         self.claim_limit = app.getint("claim_limit", fallback=5)
         self.send_pause = modem.getfloat("send_pause", fallback=2.0)
+        self.multipart_grace = modem.getint("multipart_grace", fallback=600)
+        self.incomplete_since = {}
         self.healthcheck_url = app.get("healthcheck_url", fallback=None)
         self.client = AppClient(app["url"], app["token"], app["line_phone"])
         self.gammu_config = modem.get("gammu_config", "/etc/gammurc")
@@ -473,6 +483,8 @@ class Daemon:
         if self.modem is None:
             return
         for linked_message in self.modem.read_inbox():
+            if self._waiting_for_parts(linked_message):
+                continue
             sender, text, received_at = Modem.decode(linked_message)
             if not text or not text.strip():
                 # The app rejects blank text; forwarding it would just be a
@@ -501,6 +513,31 @@ class Daemon:
                 continue
             if delivered:
                 self.modem.delete(linked_message)
+
+    def _waiting_for_parts(self, linked_message):
+        """True while a long SMS misses parts: they can arrive seconds apart,
+        across two cycles, and pushing early would split the message. Held on
+        the SIM for multipart_grace seconds at most, then forwarded as is (a
+        part may never come)."""
+        udh = linked_message[0].get("UDH") or {}
+        key = (linked_message[0].get("Number"), udh.get("ID8bit"), udh.get("ID16bit"))
+        missing = Modem.missing_parts(linked_message)
+        if not missing:
+            self.incomplete_since.pop(key, None)
+            return False
+        if key not in self.incomplete_since:
+            self.incomplete_since[key] = time.monotonic()
+            log.info("waiting for %d more part(s) of an SMS from %s", missing, key[0])
+        if time.monotonic() - self.incomplete_since[key] < self.multipart_grace:
+            return True
+        log.warning(
+            "forwarding an SMS from %s with %d part(s) still missing after %ds",
+            key[0],
+            missing,
+            self.multipart_grace,
+        )
+        del self.incomplete_since[key]
+        return False
 
     def _report_heartbeat(self):
         details = {"signal_percent": None, "network_state": None, "error": None}

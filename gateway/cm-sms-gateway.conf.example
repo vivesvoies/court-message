@@ -33,6 +33,10 @@ gammu_config = /etc/gammurc
 gammu_section = 0
 # Pause entre deux envois (secondes) — les modems SIM sont lents.
 send_pause = 2
+# Un SMS long arrive en plusieurs parties, parfois à quelques secondes
+# d'intervalle : il reste sur la SIM jusqu'à ce qu'elles soient toutes là, au
+# plus ce délai (secondes), puis il est transmis tel quel.
+multipart_grace = 600
 # Après ce nombre d'échecs consécutifs d'ouverture du modem, le démon
 # demande une réinitialisation USB (cm-modem-reset, exécuté en root).
 reset_after_failures = 3
