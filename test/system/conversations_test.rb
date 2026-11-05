@@ -96,6 +96,23 @@ class ConversationsTest < ApplicationSystemTestCase
     assert_selector ".Conversation--active .Conversation__contact", text: last.title
   end
 
+  test "a reply arriving in the open conversation is marked read, CSRF token included" do
+    allow_forgery_protection = ActionController::Base.allow_forgery_protection
+    ActionController::Base.allow_forgery_protection = true
+
+    visit team_conversations_url(@team)
+    click_on @conversation.contact.to_s, match: :first
+    assert_selector ".Message__content", text: @message.content
+
+    # The reply re-renders the conversation as unread in the open list; the
+    # browser then PATCHes its read status, with the page's CSRF token.
+    InboundMessagesService.new({ to: "our phone number", from: @contact.phone, text: "Une réponse" }).message.save!
+    @conversation.mark_as_unread!
+    assert(eventually { @conversation.reload.read? }, "the browser did not mark the conversation read")
+  ensure
+    ActionController::Base.allow_forgery_protection = allow_forgery_protection
+  end
+
   test "toggling between conversation and contact" do
     visit team_conversation_url(@team, @conversation)
     assert_selector "#messages .Message__content", text: @message.content
@@ -115,6 +132,16 @@ class ConversationsTest < ApplicationSystemTestCase
   end
 
   private
+
+  def eventually(timeout: Capybara.default_max_wait_time)
+    deadline = Time.current + timeout
+    until (result = yield)
+      return false if Time.current > deadline
+
+      sleep 0.1
+    end
+    result
+  end
 
   def width_of(id)
     page.evaluate_script("document.getElementById('#{id}').getBoundingClientRect().width")
