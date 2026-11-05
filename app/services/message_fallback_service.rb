@@ -30,7 +30,7 @@ class MessageFallbackService
       fallback = line.fallback_phone_line
       next [] unless fallback&.active?
 
-      (stuck_messages(line) + failed_messages(line)).map do |message|
+      (stuck_messages(line) + failed_messages(line)).filter_map do |message|
         fail_over!(message, from: line, to: fallback)
       end
     end
@@ -69,7 +69,11 @@ class MessageFallbackService
     message.provider_info&.key?("fallback")
   end
 
+  # Returns nil when the message changed since it was loaded (typically: a
+  # gateway claimed it meanwhile), in which case it is left alone.
   def fail_over!(message, from:, to:)
+    return nil unless take_over(message, from:, to:)
+
     message.provider_info = (message.provider_info || {}).merge(
       "fallback" => { "from" => from.phone, "to" => to.phone, "at" => Time.current.iso8601 }
     )
@@ -86,5 +90,14 @@ class MessageFallbackService
     end
 
     Result.new(message, submitted)
+  end
+
+  # Moves the message to the fallback line only if it is still exactly as
+  # loaded. A gateway claim running concurrently either commits first (the
+  # row no longer matches: nothing is moved, the gateway sends it) or finds
+  # the message gone from its lines. Either way it is sent once.
+  def take_over(message, from:, to:)
+    Message.where(id: message.id, phone_line_id: from.id, status: message.status, claimed_at: message.claimed_at)
+      .update_all(phone_line_id: to.id, claimed_at: nil, updated_at: Time.current) == 1
   end
 end
