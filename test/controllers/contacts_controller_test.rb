@@ -110,6 +110,24 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should not update a contact from another team" do
+    other_contact = create(:contact, name: "Hors équipe")
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      patch team_contact_url(@team, other_contact), params: { contact: { name: "Modifié" } }
+    end
+    assert_equal("Hors équipe", other_contact.reload.name)
+  end
+
+  test "should not destroy a contact from another team" do
+    other_contact = create(:contact)
+
+    assert_raises(ActiveRecord::RecordNotFound) do
+      delete team_contact_url(@team, other_contact)
+    end
+    assert(Contact.exists?(other_contact.id))
+  end
+
   test "should not show contact from another team" do
     other_contact = create(:contact)
     # Scoped lookup: a contact outside the route's team is a 404, so the
