@@ -279,13 +279,19 @@ class Journal:
             return {}
 
     def _save(self):
-        directory = os.path.dirname(self.path)
-        if directory:
-            os.makedirs(directory, exist_ok=True)
-        tmp_path = f"{self.path}.tmp"
-        with open(tmp_path, "w", encoding="utf-8") as handle:
-            json.dump({"sent": self.sent}, handle)
-        os.replace(tmp_path, self.path)
+        try:
+            directory = os.path.dirname(self.path)
+            if directory:
+                os.makedirs(directory, exist_ok=True)
+            tmp_path = f"{self.path}.tmp"
+            with open(tmp_path, "w", encoding="utf-8") as handle:
+                json.dump({"sent": self.sent}, handle)
+            os.replace(tmp_path, self.path)
+        except OSError as error:
+            # Full or read-only SD card. Crashing here, right after a send,
+            # would skip its ack and get the SMS claimed and sent again: keep
+            # the entry in memory and let the ack go through.
+            log.error("could not save state file %s: %s", self.path, error)
 
     def record(self, uuid, status):
         self.sent[uuid] = {

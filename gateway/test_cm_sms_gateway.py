@@ -129,6 +129,24 @@ class RegistrationTest(DaemonTestCase):
         self.assertIsNone(details["error"])
 
 
+class JournalFailureTest(DaemonTestCase):
+    def test_still_acknowledges_a_sent_message_when_the_journal_cannot_be_written(self):
+        modem = FakeModem()
+        daemon = self.build_daemon(lambda *_args: modem)
+        # A full or read-only SD card: the journal's directory is unusable.
+        blocker = os.path.join(os.path.dirname(self.state_file), "not-a-directory")
+        open(blocker, "w").close()
+        daemon.journal.path = os.path.join(blocker, "state.json")
+        daemon.client.claim_messages.return_value = [
+            {"uuid": "u1", "to": "+33611111111", "content": "Bonjour"}
+        ]
+
+        daemon.send_outbound()
+
+        self.assertEqual(1, len(modem.sent))
+        daemon.client.report_status.assert_called_once_with("u1", "submitted")
+
+
 class ModemResetTest(DaemonTestCase):
     def test_requests_a_usb_reset_after_repeated_open_failures(self):
         daemon = self.build_daemon(unreachable_modem, reset_after_failures="3")
