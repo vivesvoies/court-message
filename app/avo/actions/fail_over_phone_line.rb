@@ -11,6 +11,13 @@ class Avo::Actions::FailOverPhoneLine < Avo::BaseAction
         next
       end
 
+      # Deactivating anyway would strand the queued messages: no gateway
+      # claims them on an inactive line, and the fallback would not take them.
+      unless line.fallback_phone_line.active?
+        error "#{line.phone} : la ligne de secours #{line.fallback_phone_line.phone} est désactivée, rien n'a été changé."
+        next
+      end
+
       line.update!(active: false)
       results = MessageFallbackService.new([ line ]).run!
       succeed "#{line.phone} désactivée, #{results.count(&:submitted)}/#{results.size} message(s) basculé(s) vers #{line.fallback_phone_line.phone}."
