@@ -20,7 +20,17 @@ module SmsGatewayStress
       $stdout.sync = true
     end
 
+    # rails runner runs the whole script inside the executor, which keeps the
+    # ActiveRecord query cache on for its entire life: without uncached, the
+    # worker would see the gateway's last_seen_at (and whether an event was
+    # already sent) frozen at their first read.
     def run
+      ActiveRecord::Base.uncached { loop_until_the_end }
+      log("end of the stress test")
+      sleep # keep the container idle rather than crash-looping
+    end
+
+    def loop_until_the_end
       log("start: #{@events.size} events until #{ENDS_AT}, #{@events.count { |e| e.at > Time.current }} still ahead")
       while Time.current < ENDS_AT
         track_gateway
@@ -29,8 +39,6 @@ module SmsGatewayStress
         sleep(seconds_to_next_event)
       end
       summary
-      log("end of the stress test")
-      sleep # keep the container idle rather than crash-looping
     end
 
     private
@@ -101,8 +109,11 @@ module SmsGatewayStress
       log("summary error: #{e.class}: #{e.message}")
     end
 
+    # Flushed line by line: under rails runner, $stdout.sync is not enough and
+    # the output only reached the logs when the container stopped.
     def log(text)
-      puts "[stress] #{Time.current.in_time_zone(ZONE).strftime('%a %T')} #{text}"
+      $stdout.puts "[stress] #{Time.current.in_time_zone(ZONE).strftime('%a %T')} #{text}"
+      $stdout.flush
     end
   end
 
