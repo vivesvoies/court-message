@@ -87,6 +87,20 @@ sudo gammu-config     # device: /dev/ttyUSB0 (par ex.), connection: at
 sudo gammu identify   # vérifie que le modem répond
 ```
 
+Pour un Quectel EC25, le port AT est le troisième (`ttyUSB2`) ; une règle
+udev lui donne un nom stable, indépendant du port USB utilisé :
+
+```
+# /etc/udev/rules.d/99-cm-modem.rules
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", ENV{ID_USB_INTERFACE_NUM}=="02", SYMLINK+="modem-at", GROUP="dialout", MODE="0660"
+```
+
+et `/etc/gammurc` pointe sur `device = /dev/modem-at`, `connection = at`.
+
+Le démon et `gammu` en ligne de commande ne peuvent pas partager le modem :
+arrêter le service (`sudo systemctl stop cm-sms-gateway`) avant tout
+diagnostic manuel.
+
 ### 1. Provisionner le gateway côté app (une fois)
 
 Sur Scalingo :
@@ -103,19 +117,19 @@ Avo) ou la marquer `default` pour qu'elle serve de ligne par défaut.
 
 ### 2. Installer le démon
 
-```bash
-sudo mkdir -p /opt/cm-sms-gateway
-sudo cp cm_sms_gateway.py /opt/cm-sms-gateway/
-sudo cp cm-sms-gateway.conf.example /etc/cm-sms-gateway.conf
-sudo chmod 600 /etc/cm-sms-gateway.conf
-sudo nano /etc/cm-sms-gateway.conf   # url, token, line_phone
+Copier le dossier `gateway/` sur le Pi, puis :
 
-sudo useradd --system --no-create-home cm-gateway
-sudo cp cm-sms-gateway.service /etc/systemd/system/
-sudo systemctl daemon-reload
+```bash
+sudo ./install.sh                     # crée l'utilisateur, installe démon et unités
+sudo nano /etc/cm-sms-gateway.conf    # url, token, line_phone
 sudo systemctl enable --now cm-sms-gateway
 journalctl -u cm-sms-gateway -f
 ```
+
+`install.sh` est idempotent : le relancer après avoir copié une nouvelle
+version met à jour le démon et redémarre le service, sans toucher à
+`/etc/cm-sms-gateway.conf`. Ce fichier contient le token : il est en
+`640 root:cm-gateway`, lisible par le démon seul.
 
 ## Plusieurs Raspberry Pi, plusieurs SIM
 
@@ -132,6 +146,25 @@ journalctl -u cm-sms-gateway -f
 
 ## Supervision
 
+- **Enregistrement réseau** : le démon ne réclame aucun message tant que le
+  modem n'est pas enregistré sur un réseau (`HomeNetwork` ou
+  `RoamingNetwork`) — sans quoi gammu peut bloquer indéfiniment. Il le
+  signale dans son heartbeat (`modem_ok: false`), ce qui suffit à faire
+  partir les nouveaux messages par la ligne de secours (voir plus bas).
+- **Watchdog systemd** : le démon notifie systemd à chaque cycle
+  (`WatchdogSec=300`). Un appel au modem figé au-delà fait tuer et relancer
+  le service.
+- **Réinitialisation USB du modem** : après un choc électrique, le noyau
+  peut abandonner un port USB pour de bon (`Cannot enable. Maybe the USB
+  cable is bad?` puis `unable to enumerate`) ; le modem disparaît et aucune
+  relance de gammu ne le ramène. Après `reset_after_failures` échecs
+  d'ouverture consécutifs, le démon dépose
+  `/run/cm-sms-gateway/modem-reset` ; `cm-modem-reset.path` déclenche alors
+  `cm-modem-reset` (root), qui dés-autorise puis ré-autorise le hub USB du
+  modem (`1-1`, le hub interne du Pi 4, par défaut ; réglable dans
+  `/etc/default/cm-modem-reset` via `CM_MODEM_HUB`). Au plus une
+  réinitialisation toutes les deux minutes. Historique :
+  `journalctl -u cm-modem-reset`.
 - **Heartbeat modem** : à chaque cycle, le démon rapporte l'état du modem
   (`modem_ok`, force du signal, état réseau, ou le message d'erreur gammu le
   cas échéant) via `POST /gateway/v1/heartbeat`. Ces informations sont
@@ -202,6 +235,14 @@ est en panne ou désactivée.
   la ligne de secours. On peut aussi se contenter de désactiver la ligne
   (champ « Active ») et laisser la tâche cron `sms_gateway:failover`
   s'en charger au prochain passage.
-- Tant qu'une ligne est désactivée, `PhoneLine.route_for` dirige
-  directement les nouveaux messages de ses équipes vers sa ligne de secours
-  (à défaut, vers la ligne par défaut).
+- **Routage des nouveaux messages** : `PhoneLine.route_for` dirige
+  directement les nouveaux messages d'une équipe vers la ligne de secours
+  tant que sa ligne est désactivée **ou injoignable** : gateway silencieux
+  depuis plus de deux minutes (`SmsGateway::ONLINE_WITHIN`), ou modem qui
+  ne se déclare pas sain (non enregistré, en erreur, ou sans heartbeat
+  récent). Sans ligne de secours utilisable, une ligne active garde ses
+  messages en file jusqu'à son retour ; une ligne désactivée passe la main
+  à la ligne par défaut.
+- **Ligne par défaut** : une migration crée, dans chaque environnement, la
+  ligne Vonage historique (`+33644635900` en production, `+33644639777` en
+  staging) marquée `default`. C'est la ligne de secours naturelle d'une SIM.
