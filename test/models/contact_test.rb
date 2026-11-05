@@ -161,4 +161,22 @@ class ContactTest < ActiveSupport::TestCase
 
     assert_equal user, contact.created_by
   end
+
+  def test_find_or_create_conversation_creates_the_missing_conversation
+    contact = create(:contact)
+
+    conversation = contact.find_or_create_conversation!
+
+    assert(conversation.persisted?)
+    assert_equal(conversation, contact.reload.conversation)
+  end
+
+  def test_find_or_create_conversation_reuses_one_created_by_a_concurrent_request
+    contact = create(:contact)
+    assert_nil(contact.conversation) # this request checked first...
+    concurrent = Conversation.create!(contact_id: contact.id) # ...another one created it meanwhile
+
+    assert_equal(concurrent, contact.find_or_create_conversation!)
+    assert_equal(1, Conversation.where(contact_id: contact.id).count)
+  end
 end

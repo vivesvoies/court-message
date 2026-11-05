@@ -45,6 +45,14 @@ class Contact < ApplicationRecord
 
   scope :search_team, ->(team, query) { where(team:).where("name ILIKE :query OR phone ILIKE :query OR email ILIKE :query", query: "%#{query}%") }
 
+  # The contact's conversation, created when missing. Safe when two requests
+  # race for it (double submit, simultaneous inbound SMS): the unique index on
+  # conversations.contact_id lets a single INSERT through, and the other
+  # request picks up that conversation instead of failing.
+  def find_or_create_conversation!
+    conversation || Conversation.create_or_find_by!(contact: self).tap { reset_conversation }
+  end
+
   def formatted_phone
     phone.phony_formatted(format: :national)
   end

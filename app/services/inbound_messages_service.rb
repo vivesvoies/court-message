@@ -13,7 +13,7 @@ class InboundMessagesService
     phone = PhonyRails.normalize_number(params[:from])
     sender = Contact.find_by(phone:) # TODO: handle contacts that belong to multiple Teams
 
-    conversation = sender&.conversation || sender&.build_conversation
+    conversation = sender&.find_or_create_conversation!
     content = params[:text]
 
     @message = Message.new(sender:, conversation:, content:, provider_info: params, status: :inbound)
