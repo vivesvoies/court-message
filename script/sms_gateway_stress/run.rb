@@ -70,7 +70,6 @@ module SmsGatewayStress
       message = Message.new(conversation:, content:, sender: conversation.team.users.first)
       message.save!
       service = OutboundMessagesService.new(message)
-      conversation.messages << message
       service.submit!
       message
     end
