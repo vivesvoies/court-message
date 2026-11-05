@@ -4,7 +4,11 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-Type=simple
+# Le démon signale READY puis WATCHDOG à chaque cycle : un appel gammu figé
+# (modem planté en plein envoi) le fait tuer puis relancer par systemd.
+Type=notify
+NotifyAccess=main
+WatchdogSec=300
 ExecStart=/usr/bin/python3 /opt/cm-sms-gateway/cm_sms_gateway.py /etc/cm-sms-gateway.conf
 Restart=always
 RestartSec=10
