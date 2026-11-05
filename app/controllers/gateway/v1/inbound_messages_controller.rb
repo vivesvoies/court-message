@@ -1,6 +1,7 @@
-# Gateways push SMS received on their SIM cards here. Mirrors the public
-# InboundMessagesController (Vonage webhook) but is authenticated and uses a
-# gateway-shaped payload.
+# Gateways push SMS received on their SIM cards here. Same persistence as the
+# public InboundMessagesController (Vonage webhook), through
+# InboundMessagesService, but token-authenticated and with a gateway-shaped
+# payload.
 module Gateway
   module V1
     class InboundMessagesController < BaseController
@@ -9,18 +10,7 @@ module Gateway
         # so a 201 lost to a network timeout must not create a duplicate.
         return head :created if already_received?
 
-        service = InboundMessagesService.new(inbound_params, phone_line: receiving_line)
-        @message = service.message
-
-        if @message.valid?
-          ActiveRecord::Base.transaction do
-            @message.save
-            @message.conversation.mark_as_unread!
-            @message.conversation.messages << @message
-          end
-        end
-
-        if @message.persisted?
+        if InboundMessagesService.new(inbound_params, phone_line: receiving_line).save
           head :created
         else
           # The sender does not match any Contact (or the payload is invalid):
