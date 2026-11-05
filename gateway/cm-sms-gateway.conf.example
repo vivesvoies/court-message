@@ -1,6 +1,7 @@
-# Configuration du gateway SMS CM. Copier vers /etc/cm-sms-gateway.conf
-# et restreindre les droits : chmod 600, chown root:root (le fichier
-# contient le token d'API).
+# Configuration du gateway SMS CM, installée par install.sh dans
+# /etc/cm-sms-gateway.conf avec les droits 640 root:cm-gateway : le fichier
+# contient le token d'API, et le démon (utilisateur cm-gateway) doit pouvoir
+# le lire.
 
 [app]
 # URL publique de l'application (ou URL Tailscale si l'app y est joignable).
