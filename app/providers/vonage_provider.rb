@@ -1,5 +1,10 @@
 # This class provides access to the Vonage client.
 class VonageProvider
+  # The Vonage SDK lets transport errors through unwrapped. Reported as a
+  # failed send like any API error, so callers (a user's send, the fallback
+  # run) handle them instead of crashing.
+  NETWORK_ERRORS = [ Timeout::Error, SocketError, SystemCallError, IOError, OpenSSL::SSL::SSLError ].freeze
+
   def initialize
     @client = Vonage::Client.new(
       application_id: ENV["VONAGE_APPLICATION_ID"],
@@ -19,7 +24,7 @@ class VonageProvider
       end
       ProviderResult.new(success: false, error:, raw: response)
     end
-  rescue Vonage::Error => e
+  rescue Vonage::Error, *NETWORK_ERRORS => e
     ProviderResult.new(success: false, error: "#{e.class}: #{e.message}")
   end
 end
