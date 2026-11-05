@@ -100,7 +100,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should select current conversation" do
-    create_list(:conversation, 3, contact: @contact)
+    create_conversations(3)
     @conversation = create(:conversation, contact: @contact)
 
     get team_conversation_url(@team, @conversation)
@@ -108,7 +108,7 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should select conversation marked as :selected" do
-    create_list(:conversation, 3, contact: @contact)
+    create_conversations(3)
     @conversation = create(:conversation, contact: @contact)
 
     get team_conversations_url(@team, selected: @conversation.id)

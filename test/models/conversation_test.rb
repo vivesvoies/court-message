@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_conversations_on_contact_id       (contact_id)
+#  index_conversations_on_contact_id       (contact_id) UNIQUE
 #  index_conversations_on_last_message_id  (last_message_id)
 #
 # Foreign Keys
@@ -125,7 +125,7 @@ class ConversationTest < ActiveSupport::TestCase
     user = create(:user)
     other_user = create(:user)
 
-    team_conversations = create_list(:conversation, 3, contact: create(:contact, team: team))
+    team_conversations = Array.new(3) { create(:conversation, contact: create(:contact, team: team)) }
 
     user_conversations = team_conversations[0..1]
     user.conversations << user_conversations
@@ -139,7 +139,7 @@ class ConversationTest < ActiveSupport::TestCase
     team = create(:team)
     user = create(:user)
 
-    convos = create_list(:conversation, 3, contact: create(:contact, team: team))
+    convos = Array.new(3) { create(:conversation, contact: create(:contact, team: team)) }
     user.conversations << convos
 
     convos.each { |convo| convo.messages << create(:inbound_message) }
@@ -181,8 +181,8 @@ class ConversationTest < ActiveSupport::TestCase
     team_2 = create(:team)
     user = create(:user)
 
-    team_1_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_1))
-    team_2_conversations = create_list(:conversation, 2, contact: create(:contact, team: team_2))
+    team_1_conversations = Array.new(2) { create(:conversation, contact: create(:contact, team: team_1)) }
+    team_2_conversations = Array.new(2) { create(:conversation, contact: create(:contact, team: team_2)) }
 
     user.conversations << team_1_conversations
     user.conversations << team_2_conversations
@@ -354,5 +354,13 @@ class ConversationTest < ActiveSupport::TestCase
 
     @new_conversation = create(:conversation)
     assert_equal(@new_conversation.updated_at, @new_conversation.timestamp)
+  end
+
+  def test_contact_cannot_have_two_conversations
+    contact = create(:contact, :with_conversation)
+
+    assert_raises(ActiveRecord::RecordNotUnique) do
+      create(:conversation, contact: contact)
+    end
   end
 end
