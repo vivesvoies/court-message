@@ -1,11 +1,11 @@
 class TemplatesController < ApplicationController
   layout "viewer"
 
-  before_action :set_templates, only: %i[ new create edit update destroy ]
+  before_action :set_team
+  before_action :set_user
+  before_action :authorize_templates_owner!
+  before_action :set_templates
   before_action :set_template, only: %i[ edit update destroy ]
-  before_action :set_team, only: %i[ index new create edit update ]
-  before_action :set_user, only: %i[ new create edit update ]
-  load_and_authorize_resource
 
   # GET /teams/:team_slug/users/:id/templates
   def index
@@ -13,13 +13,12 @@ class TemplatesController < ApplicationController
 
   # GET /teams/:team_slug/users/:id/templates/new
   def new
-    @template = Template.new(user_id: @user.id)
+    @template = Template.new(user: @user)
   end
 
   # POST team/:team_slug/users/:id/templates
   def create
-    @template = Template.new(new_template_params)
-    @user.templates << @template
+    @template = @user.templates.build(template_params)
 
     if @template.save
       respond_to do |format|
@@ -28,10 +27,8 @@ class TemplatesController < ApplicationController
           flash.now[:notice] = I18n.t("templates.create.success")
         }
       end
-    elsif !@template.valid?
-      redirect_to team_user_templates_path(@team, @user), notice: I18n.t("templates.create.not_blank")
     else
-      render :new, status: :unprocessable_entity
+      redirect_to team_user_templates_path(@team, @user), notice: I18n.t("templates.create.not_blank")
     end
   end
 
@@ -65,12 +62,18 @@ class TemplatesController < ApplicationController
 
   private
 
+  # Templates are personal: only their owner (or a super admin) may list,
+  # create, or change the templates of the user in the route.
+  def authorize_templates_owner!
+    authorize! :manage, Template.new(user: @user)
+  end
+
   def set_templates
-    @templates = User.find(params[:user_id]).templates
+    @templates = @user.templates
   end
 
   def set_template
-    @template = Template.find(params[:id])
+    @template = @user.templates.find(params[:id])
   end
 
   def set_user
@@ -78,15 +81,11 @@ class TemplatesController < ApplicationController
   end
 
   def set_team
-    @team = Current.team || Team.find_by(slug: params[:team_id])
+    @team = Current.team || Team.find_by!(slug: params[:team_id])
   end
 
   # Only allow a list of trusted parameters through.
   def template_params
     params.fetch(:template, {}).permit(:content)
-  end
-
-  def new_template_params
-    params.fetch(:template, {}).permit(:content, :user_id)
   end
 end
