@@ -343,6 +343,7 @@ class Daemon:
                 self._request_modem_reset()
                 self.init_failures = 0
             return None
+        log.info("modem ready")
         self.init_failures = 0
         self.last_error = None
         return modem
@@ -397,9 +398,11 @@ class Daemon:
                 log.error("cycle failed, will retry: %s", error)
                 cycle_ok = False
                 if isinstance(error, gammu.GSMError):
-                    # Looks like a dead link: force a fresh Init() next cycle.
+                    # Looks like a dead link: force a fresh Init() next cycle,
+                    # and log the registration state again once it is back.
                     self.last_error = str(error)
                     self.modem = None
+                    self.registered = None
             self._report_heartbeat()
             if cycle_ok:
                 self._ping_healthcheck()
