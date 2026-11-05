@@ -1,0 +1,52 @@
+#!/bin/sh
+# Re-enumerates the SIM modem on USB. Run as root by cm-modem-reset.service
+# when cm-sms-gateway asks for it (it cannot open the modem anymore).
+#
+# After an electrical glitch the kernel can give up on a USB port for good
+# ("Cannot enable. Maybe the USB cable is bad?" then "unable to enumerate"):
+# the modem vanishes and no amount of gammu retries brings it back.
+# De-authorizing then re-authorizing the hub it hangs from makes the kernel
+# probe its ports again. A modem still listed on USB is re-enumerated
+# through its own parent hub; a vanished one through CM_MODEM_HUB ("1-1", the
+# Raspberry Pi 4's built-in hub, by default).
+#
+# Settings (optional) in /etc/default/cm-modem-reset.
+set -u
+
+FLAG=/run/cm-sms-gateway/modem-reset
+STAMP=/run/cm-modem-reset.last
+VENDOR=${CM_MODEM_VENDOR:-2c7c}
+HUB=${CM_MODEM_HUB:-1-1}
+MIN_INTERVAL=${CM_MODEM_RESET_MIN_INTERVAL:-120}
+
+rm -f "$FLAG"
+
+now=$(date +%s)
+if [ -r "$STAMP" ] && [ $((now - $(cat "$STAMP"))) -lt "$MIN_INTERVAL" ]; then
+  echo "last reset less than ${MIN_INTERVAL}s ago, skipping"
+  exit 0
+fi
+echo "$now" > "$STAMP"
+
+target=$HUB
+for device in /sys/bus/usb/devices/*; do
+  if [ "$(cat "$device/idVendor" 2>/dev/null)" = "$VENDOR" ]; then
+    name=$(basename "$device")
+    case "$name" in
+      *.*) target=${name%.*} ;;
+      *) target=$name ;;
+    esac
+    break
+  fi
+done
+
+node=/sys/bus/usb/devices/$target/authorized
+if [ ! -w "$node" ]; then
+  echo "cannot reset: $node not found" >&2
+  exit 1
+fi
+
+echo "re-authorizing USB device $target"
+echo 0 > "$node"
+sleep 2
+echo 1 > "$node"

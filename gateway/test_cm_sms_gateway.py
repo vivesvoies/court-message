@@ -53,6 +53,10 @@ class FakeModem:
         return []
 
 
+def unreachable_modem(*_args):
+    raise GSMError("Error opening device, it doesn't exist")
+
+
 class DaemonTestCase(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
@@ -123,6 +127,39 @@ class RegistrationTest(DaemonTestCase):
         daemon.client.report_status.assert_called_once_with("u1", "submitted")
         self.assertTrue(modem_ok)
         self.assertIsNone(details["error"])
+
+
+class ModemResetTest(DaemonTestCase):
+    def test_requests_a_usb_reset_after_repeated_open_failures(self):
+        daemon = self.build_daemon(unreachable_modem, reset_after_failures="3")
+
+        daemon._ensure_modem()
+        self.assertFalse(os.path.exists(self.reset_flag))
+
+        daemon._ensure_modem()
+        self.assertTrue(os.path.exists(self.reset_flag))
+        self.assertEqual(0, daemon.init_failures)
+
+    def test_a_successful_open_clears_the_failure_count(self):
+        attempts = iter([GSMError("gone"), FakeModem(), GSMError("gone")])
+
+        def flaky(*_args):
+            attempt = next(attempts)
+            if isinstance(attempt, Exception):
+                raise attempt
+            return attempt
+
+        daemon = self.build_daemon(flaky, reset_after_failures="2")
+        self.assertIsNotNone(daemon._ensure_modem())
+        self.assertIsNone(daemon._ensure_modem())
+
+        self.assertFalse(os.path.exists(self.reset_flag))
+
+    def test_a_missing_reset_directory_does_not_crash_the_daemon(self):
+        daemon = self.build_daemon(unreachable_modem, reset_after_failures="1")
+        daemon.reset_flag = os.path.join(self.reset_flag, "missing", "flag")
+
+        self.assertIsNone(daemon._ensure_modem())
 
 
 class SdNotifyTest(unittest.TestCase):
