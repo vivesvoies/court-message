@@ -112,9 +112,9 @@ class AppClient:
         response.raise_for_status()
 
     def push_inbound(self, sender, text, received_at, modem_message_id):
-        """Returns True when the SMS can be removed from the SIM (delivered,
-        or permanently rejected by the app), False when it should be kept
-        and retried later (network trouble or a transient server error)."""
+        """Returns True when the SMS can be removed from the SIM: the app has
+        it, or refused this very SMS for good (400, 422). Raises (a
+        RequestException) when it must stay on the SIM and be retried."""
         response = self.session.post(
             f"{self.base_url}/gateway/v1/inbound_messages",
             json={
@@ -137,19 +137,21 @@ class AppClient:
                 text,
             )
             return True
-        if 400 <= response.status_code < 500:
-            # Any other 4xx means the payload itself is permanently invalid.
-            # Keeping it on the SIM would just wedge every future cycle, so
-            # log it in full and let it go.
+        if response.status_code == 400:
+            # The payload itself is invalid: retrying cannot help. Log it in
+            # full before letting it go.
             log.error(
-                "app rejected inbound SMS from %s as invalid (HTTP %s): %r",
+                "app rejected inbound SMS from %s as invalid (HTTP 400): %r",
                 sender,
-                response.status_code,
                 text,
             )
             return True
-        # Network errors and 5xx: keep the SMS on the SIM, retry next cycle.
+        # Anything else says nothing about this SMS: a bad or rotated token
+        # (401), an app without the gateway API or a wrong url (404),
+        # throttling, server errors. Keep it on the SIM and retry next cycle
+        # (deliver_inbound moves on to the next message meanwhile).
         response.raise_for_status()
+        log.error("unexpected HTTP %s pushing inbound SMS from %s, keeping it", response.status_code, sender)
         return False
 
     def report_heartbeat(self, modem_ok, details):

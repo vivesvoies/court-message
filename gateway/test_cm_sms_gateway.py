@@ -33,6 +33,7 @@ sys.modules["gammu"] = fake_gammu
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cm_sms_gateway as gateway  # noqa: E402
+import requests  # noqa: E402
 
 
 class FakeModem:
@@ -273,6 +274,34 @@ class DecodeTest(unittest.TestCase):
             _sender, text, _received_at = gateway.Modem.decode([self.part("Bon"), self.part("jour")])
 
         self.assertEqual("Bonjour", text)
+
+
+class PushInboundTest(unittest.TestCase):
+    """push_inbound decides whether an SMS may leave the SIM: only when the
+    app has it, or has refused that SMS for good."""
+
+    def push(self, status_code):
+        client = gateway.AppClient("https://cm.test", "token", "+33600000000")
+        response = requests.Response()
+        response.status_code = status_code
+        response.reason = "test"
+        response.url = "https://cm.test/gateway/v1/inbound_messages"
+        client.session = mock.Mock(post=mock.Mock(return_value=response))
+        return client.push_inbound("+33611111111", "Bonjour", None, "id")
+
+    def test_delivered_messages_can_leave_the_sim(self):
+        self.assertTrue(self.push(201))
+
+    def test_messages_the_app_refuses_for_good_can_leave_the_sim(self):
+        self.assertTrue(self.push(422))  # unknown sender
+        self.assertTrue(self.push(400))  # invalid payload
+
+    def test_messages_stay_on_the_sim_when_the_app_cannot_take_them_yet(self):
+        # Bad or rotated token, an app without the gateway API (or a wrong
+        # url), throttling, server errors: the SMS is fine, retry later.
+        for status_code in (401, 403, 404, 429, 500, 503):
+            with self.assertRaises(requests.RequestException, msg=status_code):
+                self.push(status_code)
 
 
 class SdNotifyTest(unittest.TestCase):
