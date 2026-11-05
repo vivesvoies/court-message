@@ -37,6 +37,11 @@ class PhoneLine < ApplicationRecord
 
   # A modem report older than this is treated as unknown/unhealthy.
   MODEM_CHECK_TIMEOUT = 15.minutes
+  # Routing stops trusting a modem report sooner. A dead modem is reported
+  # right away (modem_ok false); this only catches a daemon that keeps
+  # polling but stopped reporting, without flapping during a long batch of
+  # sends between two heartbeats.
+  MODEM_REPORT_WITHIN = 5.minutes
 
   belongs_to :sms_gateway, optional: true
   belongs_to :fallback_phone_line, class_name: "PhoneLine", optional: true
@@ -101,7 +106,7 @@ class PhoneLine < ApplicationRecord
     return true unless sms_gateway_provider?
 
     sms_gateway.present? && sms_gateway.online? && modem_ok == true &&
-      last_modem_check_at.present? && last_modem_check_at > SmsGateway::ONLINE_WITHIN.ago
+      last_modem_check_at.present? && last_modem_check_at > MODEM_REPORT_WITHIN.ago
   end
 
   def vonage_provider?

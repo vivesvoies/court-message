@@ -140,9 +140,16 @@ class PhoneLineTest < ActiveSupport::TestCase
 
   test "route_for uses the fallback line when the modem stopped reporting" do
     fallback = create(:phone_line)
-    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback, last_modem_check_at: 3.minutes.ago)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback,
+      last_modem_check_at: (PhoneLine::MODEM_REPORT_WITHIN + 1.minute).ago)
 
     assert_equal(fallback, PhoneLine.route_for(create(:team, phone_line: line)))
+  end
+
+  test "route_for tolerates a modem report delayed by a batch of sends" do
+    line = create(:gateway_phone_line, :online, fallback_phone_line: create(:phone_line), last_modem_check_at: 3.minutes.ago)
+
+    assert_equal(line, PhoneLine.route_for(create(:team, phone_line: line)))
   end
 
   test "route_for queues on an unreachable gateway line without a usable fallback" do
