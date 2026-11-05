@@ -12,7 +12,9 @@ Bridges a SIM modem (driven through gammu) and the court-message app:
   * never sends while the modem is not registered on a network, so the app
     routes new messages to the line's fallback instead;
   * notifies the systemd watchdog every cycle, so a hung modem call gets the
-    daemon restarted.
+    daemon restarted;
+  * asks for a USB reset of the modem when it cannot be opened anymore (see
+    cm-modem-reset).
 
 All communication is outbound HTTPS from this device to the app,
 authenticated with a bearer token issued by `rake sms_gateway:provision`.
@@ -49,6 +51,8 @@ GSM_BASIC = set(
 GSM_EXTENSION = set("^{}\\[~]|€")
 
 DEFAULT_STATE_FILE = "/var/lib/cm-sms-gateway/state.json"
+# Watched by cm-modem-reset.path, which runs the (root) USB reset script.
+DEFAULT_RESET_FLAG = "/run/cm-sms-gateway/modem-reset"
 
 # gammu GetNetworkInfo() states in which the modem can send SMS.
 REGISTERED_STATES = {"HomeNetwork", "RoamingNetwork"}
@@ -308,6 +312,9 @@ class Daemon:
         self.gammu_config = modem.get("gammu_config", "/etc/gammurc")
         self.gammu_section = modem.getint("gammu_section", fallback=0)
         self.journal = Journal(app.get("state_file", fallback=DEFAULT_STATE_FILE))
+        self.reset_flag = modem.get("reset_flag", fallback=DEFAULT_RESET_FLAG)
+        self.reset_after_failures = modem.getint("reset_after_failures", fallback=3)
+        self.init_failures = 0
         self.last_error = None
         self.registered = None
         self.modem = self._ensure_modem()
@@ -327,9 +334,31 @@ class Daemon:
         except gammu.GSMError as error:
             log.error("modem initialization failed: %s", error)
             self.last_error = str(error)
+            self.init_failures += 1
+            if self.init_failures >= self.reset_after_failures:
+                self._request_modem_reset()
+                self.init_failures = 0
             return None
+        self.init_failures = 0
         self.last_error = None
         return modem
+
+    def _request_modem_reset(self):
+        """Asks the root-owned cm-modem-reset service to re-enumerate the
+        modem on USB: after an electrical glitch the kernel may give up on
+        the device for good, which no gammu Init() can recover from."""
+        if not self.reset_flag:
+            return
+        try:
+            with open(self.reset_flag, "w", encoding="utf-8") as handle:
+                handle.write(datetime.now(timezone.utc).isoformat())
+        except OSError as error:
+            log.error("could not request a modem reset via %s: %s", self.reset_flag, error)
+            return
+        log.warning(
+            "modem unreachable after %d attempts, requested a USB reset",
+            self.reset_after_failures,
+        )
 
     def _check_registration(self):
         """True when the modem is registered on a network. Sending without

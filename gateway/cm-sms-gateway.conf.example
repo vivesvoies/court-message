@@ -32,3 +32,8 @@ gammu_config = /etc/gammurc
 gammu_section = 0
 # Pause entre deux envois (secondes) — les modems SIM sont lents.
 send_pause = 2
+# Après ce nombre d'échecs consécutifs d'ouverture du modem, le démon
+# demande une réinitialisation USB (cm-modem-reset, exécuté en root).
+reset_after_failures = 3
+# Fichier de demande surveillé par cm-modem-reset.path. Vide = désactivé.
+# reset_flag = /run/cm-sms-gateway/modem-reset

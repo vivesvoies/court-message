@@ -1,0 +1,9 @@
+[Unit]
+Description=Re-enumerate the SIM modem on USB (requested by cm-sms-gateway)
+
+[Service]
+# Root: writing to /sys/bus/usb/devices/*/authorized requires it, which is
+# why this is a separate unit and not part of the (unprivileged) daemon.
+Type=oneshot
+EnvironmentFile=-/etc/default/cm-modem-reset
+ExecStart=/opt/cm-sms-gateway/cm-modem-reset
