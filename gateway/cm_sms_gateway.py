@@ -8,7 +8,9 @@ Bridges a SIM modem (driven through gammu) and the court-message app:
   * reads SMS received by the modem and pushes them to the app;
   * reports send outcomes back to the app;
   * reports modem health (signal, network state) through a heartbeat, and
-    pings an optional external dead-man's switch.
+    pings an optional external dead-man's switch;
+  * never sends while the modem is not registered on a network, so the app
+    routes new messages to the line's fallback instead.
 
 All communication is outbound HTTPS from this device to the app,
 authenticated with a bearer token issued by `rake sms_gateway:provision`.
@@ -44,6 +46,9 @@ GSM_BASIC = set(
 GSM_EXTENSION = set("^{}\\[~]|€")
 
 DEFAULT_STATE_FILE = "/var/lib/cm-sms-gateway/state.json"
+
+# gammu GetNetworkInfo() states in which the modem can send SMS.
+REGISTERED_STATES = {"HomeNetwork", "RoamingNetwork"}
 
 
 def is_gsm_compatible(text):
@@ -188,6 +193,10 @@ class Modem:
             except gammu.ERR_EMPTY:
                 pass
 
+    def network_state(self):
+        """gammu's registration state, e.g. "HomeNetwork" or "NoNetwork"."""
+        return self.state_machine.GetNetworkInfo().get("State")
+
     def health(self):
         """Returns {"signal_percent": int, "network_state": str} when the
         modem answers, or the gammu error message (str) when it does not."""
@@ -281,6 +290,7 @@ class Daemon:
         self.gammu_section = modem.getint("gammu_section", fallback=0)
         self.journal = Journal(app.get("state_file", fallback=DEFAULT_STATE_FILE))
         self.last_error = None
+        self.registered = None
         self.modem = self._ensure_modem()
         self.running = True
 
@@ -301,6 +311,23 @@ class Daemon:
             return None
         self.last_error = None
         return modem
+
+    def _check_registration(self):
+        """True when the modem is registered on a network. Sending without
+        registration can block gammu indefinitely, and the app should route
+        new messages to the fallback line meanwhile (it does so as soon as
+        the heartbeat reports the modem unhealthy)."""
+        state = self.modem.network_state()
+        registered = state in REGISTERED_STATES
+        if registered != self.registered:
+            if registered:
+                log.info("modem registered on the network (%s)", state)
+            else:
+                log.warning("modem not registered on the network (%s), not sending", state)
+            self.registered = registered
+        if not registered:
+            self.last_error = f"not registered on the network ({state})"
+        return registered
 
     def run(self):
         log.info("gateway started for line %s", self.client.line_phone)
@@ -332,7 +359,7 @@ class Daemon:
         # of the daemon) first, so they eventually get through even when no
         # new messages are claimed.
         self._retry_journal_acks()
-        if self.modem is None:
+        if self.modem is None or not self._check_registration():
             return
         messages = self.client.claim_messages(self.claim_limit)
         for message in messages:
@@ -414,14 +441,23 @@ class Daemon:
     def _report_heartbeat(self):
         details = {"signal_percent": None, "network_state": None, "error": None}
         modem_ok = False
-        if self.modem is not None and self.last_error is None:
+        if self.modem is not None:
+            # Queried even after an error this cycle (e.g. not registered):
+            # signal and network state are what tell a coverage problem from
+            # a SIM or operator one.
             health = self.modem.health()
             if isinstance(health, str):
-                self.last_error = health
+                self.last_error = self.last_error or health
             else:
                 details["signal_percent"] = health["signal_percent"]
                 details["network_state"] = health["network_state"]
-                modem_ok = True
+                if self.last_error is None:
+                    if health["network_state"] in REGISTERED_STATES:
+                        modem_ok = True
+                    else:
+                        self.last_error = (
+                            f"not registered on the network ({health['network_state']})"
+                        )
         if not modem_ok:
             details["error"] = self.last_error or "modem not initialized"
         try:
