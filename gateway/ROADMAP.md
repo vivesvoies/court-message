@@ -99,6 +99,9 @@ S1 (webhooks Vonage non authentifiés) est réglé sur `main` (#440).
 | Q4 | `ProviderResult#raw` n'est jamais lu : à supprimer. | XS |
 | Q5 | `formatted_phone` est identique dans `Contact` et `PhoneLine` : à mutualiser. | XS |
 | Q6 | Retirer `PhoneLine.legacy_number` maintenant que la ligne par défaut existe en base (deux sources de vérité pour le numéro d'envoi). | S |
+| Q7 | **Idempotence des entrants** : la clé `sha256(expéditeur, horodatage, texte)` confond deux SMS identiques envoyés dans la même seconde (le second est ignoré), et l'absence d'index unique laisse une fenêtre de doublon si une requête expire côté Pi pendant que l'app l'enregistre. Risque accepté (revue du 05/11). | M |
+| Q8 | `Gateway::V1::MessagesController#update` accepte toute transition de statut. Sans effet avec le démon actuel (un seul statut par message, via le journal), à verrouiller si le démon remonte un jour des accusés de livraison. | S |
+| Q9 | `team.outbound_number` dans `teams/_team` : 2 à 4 requêtes par équipe affichée (N+1), négligeable à une ou deux équipes par utilisateur. | S |
 
 Q1 (persistance des entrants dupliquée) est fait : tout passe par
 `InboundMessagesService#save`.
@@ -124,3 +127,5 @@ Q1 (persistance des entrants dupliquée) est fait : tout passe par
 | F2 | **Messages entrants orphelins.** Un SMS d'un expéditeur inconnu n'est persisté nulle part : l'app répond 422 et le démon journalise le contenu puis efface de la SIM. Vrai aussi côté Vonage (400). |
 | F3 | **Contact présent dans plusieurs équipes** : non géré (TODO antérieur). |
 | F4 | **Coupure d'alimentation du port USB** (`uhubctl`) en dernier recours, si un jour le modem se fige sans disparaître du bus. |
+| F5 | **Plusieurs modems sur un même Pi.** Côté app, rien à faire (une ligne par SIM, réclamation filtrée par numéro). Côté Pi : unité systemd gabarit `cm-sms-gateway@.service` (config, journal, demande de reset par modem) ; règle udev par **port USB physique** (les EC25 partagent le numéro de série factice `0123456789ABCDEF`) ; reset USB ciblé sur le modem fautif plutôt que sur tout le hub. **Alimentation : hub USB alimenté obligatoire** (budget USB du Pi 4 ≈ 1,2 A pour tous les ports, pics ≈ 2 A par EC25). |
+| F6 | **Bascule en chaîne.** La bascule ne fait qu'un saut : avec SIM A → SIM B → Vonage, si les deux SIM tombent, les messages de A restent en file au lieu de partir par Vonage. À généraliser dans `route_for` et `MessageFallbackService` avant d'enchaîner deux SIM. |
