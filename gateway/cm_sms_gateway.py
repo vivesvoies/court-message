@@ -10,7 +10,9 @@ Bridges a SIM modem (driven through gammu) and the court-message app:
   * reports modem health (signal, network state) through a heartbeat, and
     pings an optional external dead-man's switch;
   * never sends while the modem is not registered on a network, so the app
-    routes new messages to the line's fallback instead.
+    routes new messages to the line's fallback instead;
+  * notifies the systemd watchdog every cycle, so a hung modem call gets the
+    daemon restarted.
 
 All communication is outbound HTTPS from this device to the app,
 authenticated with a bearer token issued by `rake sms_gateway:provision`.
@@ -28,6 +30,7 @@ import json
 import logging
 import os
 import signal
+import socket
 import sys
 import time
 from datetime import datetime, timezone
@@ -49,6 +52,22 @@ DEFAULT_STATE_FILE = "/var/lib/cm-sms-gateway/state.json"
 
 # gammu GetNetworkInfo() states in which the modem can send SMS.
 REGISTERED_STATES = {"HomeNetwork", "RoamingNetwork"}
+
+
+def sd_notify(message):
+    """Minimal sd_notify(3), without the python3-systemd dependency. Does
+    nothing when not run by systemd (NOTIFY_SOCKET unset)."""
+    address = os.environ.get("NOTIFY_SOCKET")
+    if not address:
+        return
+    if address.startswith("@"):
+        address = "\0" + address[1:]
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as sock:
+            sock.connect(address)
+            sock.sendall(message.encode())
+    except OSError as error:
+        log.debug("sd_notify(%s) failed: %s", message, error)
 
 
 def is_gsm_compatible(text):
@@ -331,7 +350,9 @@ class Daemon:
 
     def run(self):
         log.info("gateway started for line %s", self.client.line_phone)
+        sd_notify("READY=1")
         while self.running:
+            sd_notify("WATCHDOG=1")
             self.last_error = None
             cycle_ok = True
             try:
@@ -388,6 +409,7 @@ class Daemon:
                 break
             self.journal.record(uuid, status)
             self._ack(uuid, status)
+            sd_notify("WATCHDOG=1")
             # SIM modems are slow; pace outbound traffic.
             time.sleep(self.send_pause)
 

@@ -6,6 +6,7 @@ without a modem (and without python3-gammu installed):
 
 import configparser
 import os
+import socket
 import sys
 import tempfile
 import types
@@ -58,6 +59,11 @@ class DaemonTestCase(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         self.reset_flag = os.path.join(tmp.name, "modem-reset")
         self.state_file = os.path.join(tmp.name, "state.json")
+        # Not under systemd: sd_notify must stay a no-op.
+        environ = mock.patch.dict(os.environ)
+        environ.start()
+        self.addCleanup(environ.stop)
+        os.environ.pop("NOTIFY_SOCKET", None)
 
     def build_daemon(self, modem_factory, **modem_options):
         config = configparser.ConfigParser()
@@ -117,6 +123,24 @@ class RegistrationTest(DaemonTestCase):
         daemon.client.report_status.assert_called_once_with("u1", "submitted")
         self.assertTrue(modem_ok)
         self.assertIsNone(details["error"])
+
+
+class SdNotifyTest(unittest.TestCase):
+    def test_sends_the_message_to_the_notify_socket(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "notify")
+            with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as server:
+                server.bind(path)
+                with mock.patch.dict(os.environ, {"NOTIFY_SOCKET": path}):
+                    gateway.sd_notify("WATCHDOG=1")
+
+                self.assertEqual(b"WATCHDOG=1", server.recv(64))
+
+    def test_is_a_no_op_outside_systemd(self):
+        with mock.patch.dict(os.environ):
+            os.environ.pop("NOTIFY_SOCKET", None)
+
+            gateway.sd_notify("READY=1")
 
 
 if __name__ == "__main__":
