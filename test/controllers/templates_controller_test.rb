@@ -58,4 +58,32 @@ class TemplatesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to team_user_templates_path(@team, @user)
   end
+
+  test "should not list another user's templates" do
+    other_user = create(:user, teams: [ @team ])
+
+    get team_user_templates_path(@team, other_user)
+
+    assert_response :forbidden
+  end
+
+  test "should not create a template for another user" do
+    other_user = create(:user, teams: [ @team ])
+
+    assert_no_difference("Template.count") do
+      post team_user_templates_path(@team, other_user), params: { template: { content: "Pas chez moi" } }
+    end
+
+    assert_response :forbidden
+  end
+
+  test "should not update another user's template" do
+    other_user = create(:user, teams: [ @team ])
+    other_template = other_user.templates.first
+
+    patch team_user_template_path(@team, other_user, other_template), params: { template: { content: "hacked" } }
+
+    assert_response :forbidden
+    assert_not_equal "hacked", other_template.reload.content
+  end
 end
