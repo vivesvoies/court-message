@@ -237,12 +237,16 @@ class Modem:
     def decode(linked_message):
         """Returns (sender, text, received_at ISO 8601) for a linked group."""
         decoded = gammu.DecodeSMS(linked_message)
-        if decoded is None:
-            text = linked_message[0]["Text"]
-        else:
+        text = ""
+        if decoded is not None:
             text = "".join(
                 entry["Buffer"] for entry in decoded["Entries"] if entry.get("Buffer")
             )
+        if not text:
+            # Not a multipart message, or one whose header gammu cannot turn
+            # into text (e.g. a user-defined UDH): the raw parts still carry
+            # it, and a blank result would get the SMS deleted unread.
+            text = "".join(part.get("Text") or "" for part in linked_message)
         sender = linked_message[0]["Number"]
         received_at = linked_message[0]["DateTime"]
         return sender, text, received_at.isoformat() if received_at else None
