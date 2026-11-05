@@ -35,8 +35,8 @@ gem "vonage", "~> 7.28"
 gem "avo", "~> 3.33.4"
 
 gem "stackprof"
-gem "sentry-ruby"
-gem "sentry-rails"
+gem "sentry-ruby", "~> 6.7"
+gem "sentry-rails", "~> 6.7"
 
 group :development, :test do
   gem "debug", platforms: %i[mri mingw x64_mingw]

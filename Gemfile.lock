@@ -491,8 +491,8 @@ DEPENDENCIES
   rubocop-rails-omakase
   sass-rails
   selenium-webdriver
-  sentry-rails
-  sentry-ruby
+  sentry-rails (~> 6.7)
+  sentry-ruby (~> 6.7)
   sprockets-rails
   stackprof
   stimulus-rails
