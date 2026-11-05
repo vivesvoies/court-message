@@ -36,6 +36,13 @@ FactoryBot.define do
     factory :gateway_phone_line do
       provider { "sms_gateway" }
       sms_gateway
+
+      # Gateway polling and modem registered, as reported by a live daemon.
+      trait :online do
+        sms_gateway { association :sms_gateway, last_seen_at: Time.current }
+        modem_ok { true }
+        last_modem_check_at { Time.current }
+      end
     end
   end
 end

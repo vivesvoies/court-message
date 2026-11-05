@@ -22,6 +22,9 @@ class SmsGateway < ApplicationRecord
   # A claimed message that was not acknowledged within this window becomes
   # claimable again (e.g. the gateway crashed mid-send).
   CLAIM_TIMEOUT = 10.minutes
+  # Gateways poll every few seconds; one silent for longer than this is
+  # treated as offline and new messages are routed around it.
+  ONLINE_WITHIN = 2.minutes
 
   # Restrict: destroying a gateway with lines would silently strand their
   # queued messages (nothing would ever claim them). Reassign or delete the
@@ -57,6 +60,10 @@ class SmsGateway < ApplicationRecord
     token = self.class.generate_token
     update!(token_digest: self.class.digest(token))
     token
+  end
+
+  def online?
+    last_seen_at.present? && last_seen_at > ONLINE_WITHIN.ago
   end
 
   def touch_last_seen!

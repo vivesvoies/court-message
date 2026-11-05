@@ -96,6 +96,21 @@ class OutboundMessagesServiceTest < ActiveSupport::TestCase
     assert_equal(fallback, service.message.phone_line)
   end
 
+  def test_sends_through_vonage_fallback_while_the_team_gateway_is_offline
+    fallback = create(:phone_line)
+    line = create(:gateway_phone_line, :online, fallback_phone_line: fallback)
+    line.sms_gateway.update!(last_seen_at: 1.hour.ago)
+    conversation = create(:conversation)
+    conversation.contact.team.update!(phone_line: line)
+    message = Message.new(content: "Hi", conversation:, sender: Current.user)
+
+    service = OutboundMessagesService.new(message)
+
+    assert(service.submit!)
+    assert_equal(fallback, message.phone_line)
+    assert(message.submitted_status?, "sent right away, not queued on the offline gateway")
+  end
+
   def test_routes_through_the_default_line_without_a_team_line
     default = create(:phone_line, default: true)
 
