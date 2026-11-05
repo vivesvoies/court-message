@@ -45,6 +45,9 @@ class PhoneLine < ApplicationRecord
 
   belongs_to :sms_gateway, optional: true
   belongs_to :fallback_phone_line, class_name: "PhoneLine", optional: true
+  # Lines relying on this one as their fallback: point them elsewhere first.
+  has_many :fallback_for_lines, class_name: "PhoneLine", foreign_key: :fallback_phone_line_id,
+    inverse_of: :fallback_phone_line, dependent: :restrict_with_error
   has_many :teams, dependent: :nullify
   has_many :messages, dependent: :nullify
 

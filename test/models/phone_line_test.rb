@@ -76,6 +76,15 @@ class PhoneLineTest < ActiveSupport::TestCase
     assert_equal(default, PhoneLine.default_line)
   end
 
+  test "a line serving as another line's fallback cannot be deleted" do
+    fallback = create(:phone_line)
+    create(:gateway_phone_line, fallback_phone_line: fallback)
+
+    assert_not(fallback.destroy)
+    assert(fallback.errors[:base].present?)
+    assert(PhoneLine.exists?(fallback.id))
+  end
+
   test "fallback line cannot be the line itself" do
     line = create(:phone_line)
     line.fallback_phone_line = line
