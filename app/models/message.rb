@@ -77,10 +77,10 @@ class Message < ApplicationRecord
 
   def detach_last_message_from(other_conversation)
     return unless other_conversation
-    # Check the database, not the possibly stale in-memory attribute.
-    return unless Conversation.where(id: other_conversation.id).pick(:last_message_id) == id
 
-    previous = other_conversation.messages.where.not(id: id).reorder(created_at: :desc, id: :desc).first
-    other_conversation.update_column(:last_message_id, previous&.id)
+    previous_id = other_conversation.messages.where.not(id: id).reorder(created_at: :desc, id: :desc).pick(:id)
+    # One conditional UPDATE: only while the conversation still points at this
+    # message, so a message arriving meanwhile is never replaced by an older one.
+    Conversation.where(id: other_conversation.id, last_message_id: id).update_all(last_message_id: previous_id)
   end
 end
