@@ -225,7 +225,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    msgpack (1.8.4)
+    msgpack (1.8.7)
     multipart-post (2.4.1)
     net-http-persistent (4.0.8)
       connection_pool (>= 2.2.4, < 4)
