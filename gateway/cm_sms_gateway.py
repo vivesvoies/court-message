@@ -53,6 +53,9 @@ GSM_EXTENSION = set("^{}\\[~]|€")
 DEFAULT_STATE_FILE = "/var/lib/cm-sms-gateway/state.json"
 # Watched by cm-modem-reset.path, which runs the (root) USB reset script.
 DEFAULT_RESET_FLAG = "/run/cm-sms-gateway/modem-reset"
+# Cycles run every ~10 s, but healthchecks.io asks for at most 5 pings per
+# minute per check (and may block clients that ping more).
+HEALTHCHECK_INTERVAL = 60
 
 # gammu GetNetworkInfo() states in which the modem can send SMS.
 REGISTERED_STATES = {"HomeNetwork", "RoamingNetwork"}
@@ -330,6 +333,7 @@ class Daemon:
         self.multipart_grace = modem.getint("multipart_grace", fallback=600)
         self.incomplete_since = {}
         self.healthcheck_url = app.get("healthcheck_url", fallback=None)
+        self.last_healthcheck_ping = None
         self.client = AppClient(app["url"], app["token"], app["line_phone"])
         self.gammu_config = modem.get("gammu_config", "/etc/gammurc")
         self.gammu_section = modem.getint("gammu_section", fallback=0)
@@ -572,6 +576,10 @@ class Daemon:
         """Optional external dead-man's switch (e.g. healthchecks.io)."""
         if not self.healthcheck_url:
             return
+        now = time.monotonic()
+        if self.last_healthcheck_ping is not None and now - self.last_healthcheck_ping < HEALTHCHECK_INTERVAL:
+            return
+        self.last_healthcheck_ping = now
         try:
             requests.get(self.healthcheck_url, timeout=10)
         except Exception as error:  # noqa: BLE001 - this must never raise

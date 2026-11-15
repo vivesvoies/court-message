@@ -20,7 +20,8 @@ claim_limit = 5
 # app). Permet de reprendre proprement après un crash ou un redémarrage sans
 # renvoyer un SMS déjà transmis au modem. Le répertoire est créé si besoin.
 state_file = /var/lib/cm-sms-gateway/state.json
-# URL optionnelle pingée après chaque cycle réussi (style healthchecks.io),
+# URL optionnelle pingée après un cycle réussi, au plus une fois par minute
+# (style healthchecks.io, qui limite à 5 pings par minute et par check),
 # pour surveiller que le service tourne toujours indépendamment du modem.
 # Laisser vide/commenté pour désactiver.
 # healthcheck_url = https://hc-ping.com/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
