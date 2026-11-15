@@ -191,9 +191,12 @@ version met à jour le démon et redémarre le service, sans toucher à
     orphelines : les messages qui y sont déposés ne seront jamais envoyés).
 - **Dead-man's switch optionnel (`healthcheck_url`)** : si le fichier de
   configuration du Pi renseigne `healthcheck_url` (ex. un endpoint
-  healthchecks.io), le démon le ping après chaque cycle réussi. Cela permet
-  de surveiller que le service tourne toujours indépendamment du reporting
-  applicatif (utile si l'app elle-même est injoignable).
+  healthchecks.io), le démon le ping après un cycle réussi, au plus une fois
+  par minute (healthchecks.io limite à 5 pings par minute et par check).
+  Cela permet de surveiller que le service tourne toujours indépendamment du
+  reporting applicatif (utile si l'app elle-même est injoignable). Un cycle
+  n'est réussi que si l'app a répondu : le check tombe donc aussi quand l'app
+  est injoignable, pas seulement quand le Pi l'est.
 - **Journal des envois (`state_file`)** : le démon tient un journal local
   (par défaut `/var/lib/cm-sms-gateway/state.json`) des messages déjà remis
   au modem mais pas encore confirmés à l'application. En cas de crash ou de

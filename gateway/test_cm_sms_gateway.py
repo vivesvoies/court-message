@@ -249,6 +249,20 @@ class ModemResetTest(DaemonTestCase):
         self.assertIsNone(daemon._ensure_modem())
 
 
+class HealthcheckPingTest(DaemonTestCase):
+    def test_pings_the_healthcheck_url_at_most_once_a_minute(self):
+        daemon = self.build_daemon(lambda *_args: FakeModem())
+        daemon.healthcheck_url = "https://hc-ping.test/check"
+
+        with mock.patch.object(gateway.requests, "get") as get, \
+                mock.patch.object(gateway.time, "monotonic") as monotonic:
+            for now in (1000, 1010, 1050, 1060, 1070):
+                monotonic.return_value = now
+                daemon._ping_healthcheck()
+
+        self.assertEqual(2, get.call_count)
+
+
 class DecodeTest(unittest.TestCase):
     def part(self, text):
         return {"Number": "+33611111111", "Text": text, "DateTime": None}
