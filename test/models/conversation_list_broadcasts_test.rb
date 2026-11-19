@@ -9,7 +9,9 @@ require "test_helper"
 #   (remove, then prepend, on the same stream so they cannot swap);
 # - anything else (read, unread, a delivery receipt touching the conversation)
 #   refreshes it in place: it must not move, or a manual "unread" would jump to
-#   the top and the open list would disagree with a reload.
+#   the top and the open list would disagree with a reload;
+# - both go through the list streams only, so they reach a browser in the order
+#   they happened.
 class ConversationListBroadcastsTest < ActiveSupport::TestCase
   include Turbo::Broadcastable::TestHelper
 
@@ -39,6 +41,7 @@ class ConversationListBroadcastsTest < ActiveSupport::TestCase
 
     # Then the send itself saves the message again, which only refreshes.
     assert_moved_to_top(received[:team])
+    assert_empty(received[:item])
     assert_moved_to_top(received[:agent])
     assert_moved_to_top(received[author], "the author just became an agent of the conversation")
     assert_rendered_as(:read, received[:team].second)
@@ -50,14 +53,14 @@ class ConversationListBroadcastsTest < ActiveSupport::TestCase
     received = list_broadcasts { @conversation.mark_as_read! }
 
     assert_refreshed_in_place(received)
-    assert_rendered_as(:read, received[:item].last)
+    assert_rendered_as(:read, received[:team].last)
   end
 
   test "marking a conversation unread refreshes it in place, without moving it to the top" do
     received = list_broadcasts { @conversation.mark_as_unread! }
 
     assert_refreshed_in_place(received)
-    assert_rendered_as(:unread, received[:item].last)
+    assert_rendered_as(:unread, received[:team].last)
   end
 
   test "a delivery receipt on an unread conversation does not move it" do
@@ -125,12 +128,10 @@ class ConversationListBroadcastsTest < ActiveSupport::TestCase
   end
 
   def assert_refreshed_in_place(received)
-    [ :team, :item, :agent ].each do |list|
-      assert_not_includes(actions(received[list]), "prepend", "#{list} list: the conversation moved")
-      assert_not_includes(actions(received[list]), "remove", "#{list} list: the conversation was removed")
+    [ :team, :agent ].each do |list|
+      assert_equal([ "replace" ], actions(received[list]).uniq, "#{list} list: not refreshed in place")
     end
-    assert_includes(actions(received[:item] + received[:team]), "replace", "the open lists were not refreshed")
-    assert_includes(actions(received[:agent]), "replace", "the agent's list was not refreshed")
+    assert_empty(received[:item], "items follow their list's stream, not one of their own")
   end
 
   def assert_rendered_as(status, stream_element)

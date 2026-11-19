@@ -85,22 +85,24 @@ class Conversation < ApplicationRecord
     new_last_message ? broadcast_move_to_top : broadcast_refresh
   end
 
+  # Every update of a conversation goes through the streams its lists already
+  # follow, the team's and each agent's: one stream keeps its messages in
+  # order, so a refresh cannot overtake the move before it (or the reverse),
+  # and a remove cannot overtake its prepend and delete the new copy.
   def broadcast_move_to_top
-    # Remove and prepend share a stream: across streams, the prepend could
-    # arrive first and its copy be the one removed.
-    agent_list_streams.unshift("team_conversations_list_#{team.id}").each do |stream|
+    list_streams.each do |stream|
       broadcast_remove_to stream
       broadcast_prepend_to stream, partial: "conversations/conversation", locals: { conversation: self }
     end
   end
 
   def broadcast_refresh
-    [ "conversation_list_item_#{id}", *agent_list_streams ].each do |stream|
+    list_streams.each do |stream|
       broadcast_replace_to stream, partial: "conversations/conversation", locals: { conversation: self }
     end
   end
 
-  def agent_list_streams
-    agents.map { |agent| "user_conversations_list_#{agent.id}" }
+  def list_streams
+    [ "team_conversations_list_#{team.id}", *agents.map { |agent| "user_conversations_list_#{agent.id}" } ]
   end
 end
