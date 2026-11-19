@@ -32,8 +32,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   # System tests need committed data: Capybara serves the app from another
   # thread on its own connection, which cannot see an open transaction.
+  #
+  # Ids keep counting across tests: stream names carry them (the team's list
+  # is "team_conversations_list_1" in every test otherwise), and a broadcast
+  # still in flight from the previous test would land in this test's page.
   def before_setup
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :truncation, { reset_ids: false }
     super
   end
 
