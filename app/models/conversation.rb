@@ -27,7 +27,9 @@ class Conversation < ApplicationRecord
 
   belongs_to :last_message, class_name: "Message", optional: true
 
-  after_update_commit :broadcast_conversation_update
+  before_update :remember_new_last_message
+  after_update_commit :broadcast_list_update
+  after_rollback :forget_new_last_message
 
   scope :for_team, ->(team) {
                      includes({ contact: :team }, :last_message).where(contacts: { team_id: team.id }).order(Arel.sql("COALESCE(messages.updated_at, conversations.updated_at) DESC"))
@@ -61,19 +63,44 @@ class Conversation < ApplicationRecord
 
   private
 
-  def broadcast_conversation_update
-    if unread? # broadcast a new message
-      broadcast_remove_to "team_conversations_list_#{team.id}"
-      broadcast_prepend_to "team_conversations_list_#{team.id}", partial: "conversations/conversation", locals: { conversation: self }
-      agents.each do |agent|
-        broadcast_remove_to "user_conversations_list_#{agent.id}"
-        broadcast_prepend_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
-      end
-    else # broadcast another update (such as change in read / unread status)
-      broadcast_replace_to "conversation_list_item_#{id}", partial: "conversations/conversation", locals: { conversation: self }
-      agents.each do |agent|
-        broadcast_replace_to "user_conversations_list_#{agent.id}", partial: "conversations/conversation", locals: { conversation: self }
-      end
+  # Only a new message moves a conversation to the top of the lists. Anything
+  # else (read, unread, a delivery receipt touching it) refreshes it in place.
+  # Deciding on read? instead made a manual "unread" jump to the top, where the
+  # open conversation's list marked it read again.
+  #
+  # A transaction can save the conversation several times before its single
+  # commit callback (an inbound SMS sets the last message, then unread), so the
+  # new message is remembered until the commit.
+  def remember_new_last_message
+    @new_last_message = true if last_message_id_changed? && last_message_id.present?
+  end
+
+  def forget_new_last_message
+    @new_last_message = false
+  end
+
+  def broadcast_list_update
+    new_last_message = @new_last_message
+    forget_new_last_message
+    new_last_message ? broadcast_move_to_top : broadcast_refresh
+  end
+
+  def broadcast_move_to_top
+    # Remove and prepend share a stream: across streams, the prepend could
+    # arrive first and its copy be the one removed.
+    agent_list_streams.unshift("team_conversations_list_#{team.id}").each do |stream|
+      broadcast_remove_to stream
+      broadcast_prepend_to stream, partial: "conversations/conversation", locals: { conversation: self }
     end
+  end
+
+  def broadcast_refresh
+    [ "conversation_list_item_#{id}", *agent_list_streams ].each do |stream|
+      broadcast_replace_to stream, partial: "conversations/conversation", locals: { conversation: self }
+    end
+  end
+
+  def agent_list_streams
+    agents.map { |agent| "user_conversations_list_#{agent.id}" }
   end
 end
