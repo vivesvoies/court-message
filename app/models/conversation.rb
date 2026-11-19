@@ -82,8 +82,18 @@ class Conversation < ApplicationRecord
   def broadcast_list_update
     new_last_message = @new_last_message
     forget_new_last_message
-    new_last_message ? broadcast_move_to_top : broadcast_refresh
+
+    # Render what the database holds now, not this copy: it may predate
+    # another request's change (an agent marked it unread while a colleague's
+    # message was being saved), and would show the lists a status the
+    # conversation no longer has.
+    current = self.class.uncached { self.class.find_by(id:) }
+    return unless current
+
+    new_last_message ? current.broadcast_move_to_top : current.broadcast_refresh
   end
+
+  protected
 
   # Every update of a conversation goes through the streams its lists already
   # follow, the team's and each agent's: one stream keeps its messages in
@@ -101,6 +111,8 @@ class Conversation < ApplicationRecord
       broadcast_replace_to stream, partial: "conversations/conversation", locals: { conversation: self }
     end
   end
+
+  private
 
   def list_streams
     [ "team_conversations_list_#{team.id}", *agents.map { |agent| "user_conversations_list_#{agent.id}" } ]

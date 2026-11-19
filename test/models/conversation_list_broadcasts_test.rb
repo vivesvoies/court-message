@@ -89,6 +89,16 @@ class ConversationListBroadcastsTest < ActiveSupport::TestCase
     assert_refreshed_in_place(received)
   end
 
+  test "a request holding an older copy broadcasts what the database holds" do
+    colleagues_copy = Conversation.find(@conversation.id)
+    @conversation.mark_as_unread! # meanwhile, in another request
+
+    received = list_broadcasts { create(:outbound_message, conversation: colleagues_copy, sender: @agent) }
+
+    assert_equal(MOVE, actions(received[:team]))
+    assert_rendered_as(:unread, received[:team].last)
+  end
+
   test "items carry their last message, so the browser can tell a new message from a status change" do
     received = list_broadcasts { receive_sms }
 
