@@ -160,6 +160,10 @@ fr:
 
 
   conversations:
+    conversation:
+      unread: "Non lu"
+      mark_as_read: "Marquer comme lu"
+      mark_as_unread: "Marquer comme non lu"
     sidebar:
       search: "Rechercher dans tous les messages"
       new: "Écrire un message"

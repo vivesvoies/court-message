@@ -104,10 +104,10 @@ class ConversationsTest < ApplicationSystemTestCase
     click_on @conversation.contact.to_s, match: :first
     assert_selector ".Message__content", text: @message.content
 
-    # The reply re-renders the conversation as unread in the open list; the
-    # browser then PATCHes its read status, with the page's CSRF token.
-    InboundMessagesService.new({ to: "our phone number", from: @contact.phone, text: "Une réponse" }).message.save!
-    @conversation.mark_as_unread!
+    # The reply moves the conversation, unread, to the top of the open list; the
+    # browser then PATCHes its read status, with the page's CSRF token. Saved
+    # the way SMS arrive: the message and the unread status in one transaction.
+    InboundMessagesService.new({ to: "our phone number", from: @contact.phone, text: "Une réponse" }).save
     assert(eventually { @conversation.reload.read? }, "the browser did not mark the conversation read")
   ensure
     ActionController::Base.allow_forgery_protection = allow_forgery_protection

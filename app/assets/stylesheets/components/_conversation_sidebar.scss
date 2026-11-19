@@ -107,6 +107,7 @@
   list-style: none;
   border-bottom: 1px solid var(--list-separator);
   padding: 0; // override dsfr style for <li>
+  position: relative;
 }
 .Conversation__link {
   padding: .5rem 1rem;
@@ -160,13 +161,51 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+// Keeps the status cell in the link's grid; the read toggle is drawn over it.
 .Conversation__status {
   grid-area: status;
   height: 1.25rem;
   width: 1.25rem;
-  border-radius: 100%;
   justify-self: end;
-  .Conversation--unread & {
+}
+
+// The unread dot, which also marks the conversation read or unread. It sits
+// over the status cell (centered on it: the link's right padding is 1rem).
+.Conversation__read-toggle {
+  position: absolute;
+  top: 50%;
+  right: .5rem;
+  transform: translateY(-50%);
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 100%;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  &::before {
+    content: "";
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 100%;
+    box-shadow: inset 0 0 0 2px var(--notif-conversation-unread);
+    opacity: 0;
+    transition: opacity .1s ease;
+  }
+  .Conversation--unread &::before {
     background: var(--notif-conversation-unread);
+    opacity: 1;
+  }
+  .Conversation:hover &::before,
+  &:focus-visible::before {
+    opacity: 1;
+  }
+  // No hover on touch screens: hint at the toggle on read conversations too.
+  @media (hover: none) {
+    &::before {
+      opacity: .4;
+    }
   }
 }

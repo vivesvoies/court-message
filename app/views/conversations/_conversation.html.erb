@@ -18,4 +18,13 @@
     </div>
     <div class="Conversation__agents"></div>
   <% end %>
+  <%# Outside the link: a button cannot nest in one. Drawn over the status cell. %>
+  <button type="button" class="Conversation__read-toggle"
+          aria-label="<%= t(".unread") %>"
+          aria-pressed="<%= conversation.unread? %>"
+          title="<%= conversation.unread? ? t(".mark_as_read") : t(".mark_as_unread") %>"
+          data-read-toggle
+          data-mark-read-label="<%= t(".mark_as_read") %>"
+          data-mark-unread-label="<%= t(".mark_as_unread") %>"
+          data-action="conversation-list#toggleRead"></button>
 </li>
