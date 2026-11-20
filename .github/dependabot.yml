@@ -16,3 +16,15 @@ updates:
     # main, not an independent development line.
     labels:
       - dependencies
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - dependencies
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - dependencies
