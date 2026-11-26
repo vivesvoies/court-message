@@ -29,4 +29,26 @@ class ReadStatusControllerTest < ActionDispatch::IntegrationTest
       patch read_status_team_conversation_url(@team, @conversation)
     end
   end
+
+  test "the status changes the conversation" do
+    patch read_status_team_conversation_url(@team, @conversation, read_status: { status: "unread" })
+    assert @conversation.reload.unread?
+
+    patch read_status_team_conversation_url(@team, @conversation, read_status: { status: "read" })
+    assert @conversation.reload.read?
+  end
+
+  # The conversation is found by id alone: the team in the URL is not trusted.
+  test "an agent outside the conversation's team cannot change its status" do
+    outsider = create(:user)
+    sign_in outsider
+
+    patch read_status_team_conversation_url(outsider.teams.first, @conversation, read_status: { status: "unread" })
+    assert_response :forbidden
+
+    patch read_status_team_conversation_url(@team, @conversation, read_status: { status: "unread" })
+    assert_response :forbidden
+
+    assert @conversation.reload.read?
+  end
 end
