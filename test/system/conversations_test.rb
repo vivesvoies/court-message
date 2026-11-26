@@ -42,7 +42,7 @@ class ConversationsTest < ApplicationSystemTestCase
     contact = build(:contact)
 
     visit team_conversations_url(@team)
-    click_on "Écrire un message"
+    click_on_and_wait_for_frame "Écrire un message", frame: "primary"
 
     fill_in "query", with: contact.name
     assert_selector ".ContactSearchResult__no-contact"

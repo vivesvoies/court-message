@@ -54,6 +54,21 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     resize_window_to(1080, 1024)
   end
 
+  # Clicks a link that loads a Turbo frame, then waits until the frame shows
+  # the response. A frame can already hold what the response brings back (the
+  # conversations page opens on the contact search, and "Écrire un message"
+  # loads it again), so without the wait the test may type into the old
+  # content, which the response then replaces.
+  def click_on_and_wait_for_frame(locator, frame:)
+    page.execute_script(<<~JS, frame)
+      const frame = document.getElementById(arguments[0])
+      frame.removeAttribute("data-test-loaded")
+      frame.addEventListener("turbo:frame-load", () => frame.setAttribute("data-test-loaded", ""), { once: true })
+    JS
+    click_on locator
+    assert_selector "turbo-frame##{frame}[data-test-loaded]"
+  end
+
   private
 
   def resize_window_to(w, h)

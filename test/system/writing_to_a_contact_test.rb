@@ -17,7 +17,7 @@ class WritingToAContactTest < ApplicationSystemTestCase
     resize_to_desktop
 
     visit team_conversations_url(@team)
-    click_on "Écrire un message"
+    click_on_and_wait_for_frame "Écrire un message", frame: "primary"
 
     fill_in "query", with: "Ambroise"
     assert_selector ".ContactSearchResult__name", text: @contact.name
@@ -31,7 +31,7 @@ class WritingToAContactTest < ApplicationSystemTestCase
     resize_to_mobile
 
     visit team_conversations_url(@team)
-    click_on "Écrire un message"
+    click_on_and_wait_for_frame "Écrire un message", frame: "primary"
 
     fill_in "query", with: "Ambroise"
     assert_selector ".ContactSearchResult__name", text: @contact.name
