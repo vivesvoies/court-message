@@ -12,8 +12,10 @@
     <div class="Message__timestamp">
       <%= time_stamp_for message.created_at %>
     </div>
-    <div class="Message__status">
-      <%= t("messages.status.#{message.status}") %>
-    </div>
+    <% if (status = message_status_label(message)) %>
+      <div class="Message__status">
+        <%= status %>
+      </div>
+    <% end %>
   </div>
 <% end %>
