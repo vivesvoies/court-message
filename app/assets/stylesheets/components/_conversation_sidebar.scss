@@ -198,14 +198,25 @@
     background: var(--notif-conversation-unread);
     opacity: 1;
   }
-  .Conversation:hover &::before,
   &:focus-visible::before {
     opacity: 1;
   }
-  // No hover on touch screens: hint at the toggle on read conversations too.
-  @media (hover: none) {
-    &::before {
-      opacity: .4;
+  // Touch screens keep :hover on the last tapped spot, so only real hover counts.
+  @media (hover: hover) {
+    .Conversation:hover &::before {
+      opacity: 1;
+    }
+  }
+  // No hover on touch screens: show the toggle on the selected conversation,
+  // and keep the hidden one on the other read conversations from catching taps.
+  // `pointer: coarse` spares browsers with no pointer at all (headless test
+  // Chrome), which also report no hover.
+  @media (hover: none) and (pointer: coarse) {
+    .Conversation--active &::before {
+      opacity: 1;
+    }
+    .Conversation:not(.Conversation--unread, .Conversation--active) & {
+      pointer-events: none;
     }
   }
 }
