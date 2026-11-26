@@ -30,6 +30,26 @@ class Gateway::V1::MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal("delivered", @message.reload.status)
   end
 
+  # The daemon holds a delivery report back until "submitted" is acked, but a
+  # retried "submitted" must still never undo what the network reported.
+  test "should keep a final status when a late submitted arrives" do
+    @message.update!(status: :delivered)
+
+    patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "submitted" }, headers: auth_header
+
+    assert_response :ok
+    assert_equal("delivered", @message.reload.status)
+  end
+
+  test "should record a failed delivery after submitted" do
+    @message.update!(status: :submitted)
+
+    patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "undeliverable" }, headers: auth_header
+
+    assert_response :ok
+    assert_equal("undeliverable", @message.reload.status)
+  end
+
   test "should reject statuses outside the whitelist" do
     patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "deleted" }, headers: auth_header
 

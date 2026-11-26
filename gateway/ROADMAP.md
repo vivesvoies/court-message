@@ -100,8 +100,10 @@ S1 (webhooks Vonage non authentifiés) est réglé sur `main` (#440).
 | Q5 | `formatted_phone` est identique dans `Contact` et `PhoneLine` : à mutualiser. | XS |
 | Q6 | Retirer `PhoneLine.legacy_number` maintenant que la ligne par défaut existe en base (deux sources de vérité pour le numéro d'envoi). | S |
 | Q7 | **Idempotence des entrants** : la clé `sha256(expéditeur, horodatage, texte)` confond deux SMS identiques envoyés dans la même seconde (le second est ignoré), et l'absence d'index unique laisse une fenêtre de doublon si une requête expire côté Pi pendant que l'app l'enregistre. Risque accepté (revue du 05/11). | M |
-| Q8 | `Gateway::V1::MessagesController#update` accepte toute transition de statut. Sans effet avec le démon actuel (un seul statut par message, via le journal), à verrouiller si le démon remonte un jour des accusés de livraison. | S |
 | Q9 | `team.outbound_number` dans `teams/_team` : 2 à 4 requêtes par équipe affichée (N+1), négligeable à une ou deux équipes par utilisateur. | S |
+
+Q8 (transitions de statut) est fait avec les accusés de réception : un
+`submitted` reçu après un statut final est ignoré.
 
 Q1 (persistance des entrants dupliquée) est fait : tout passe par
 `InboundMessagesService#save`.
