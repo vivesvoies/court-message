@@ -32,7 +32,7 @@ gem "rails-i18n"
 gem "jwt"
 gem "vonage", "~> 7.28"
 
-gem "avo", "~> 3.33.4"
+gem "avo", "~> 4.4.5"
 
 gem "stackprof"
 gem "sentry-ruby", "~> 6.7"
