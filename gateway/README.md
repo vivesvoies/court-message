@@ -37,7 +37,9 @@ Côté application :
 - les messages sortants d'une ligne `sms_gateway` restent en statut
   `unsent` jusqu'à ce que le gateway les réclame (*claim*) puis confirme
   l'envoi (`submitted`/`failed`). Un message réclamé mais jamais confirmé
-  redevient réclamable après 10 minutes ;
+  redevient réclamable après 10 minutes. Si le démon lit les accusés de
+  réception du réseau (`status_port`), le message passe ensuite à
+  `delivered`, `undeliverable` ou `expired` ;
 - une `PhoneLine` peut être désactivée (`active: false`, par exemple depuis
   Avo) et désigner une **ligne de secours** (`fallback_phone_line`, elle
   aussi une `PhoneLine`, donc Vonage ou une autre SIM). Un délai optionnel
@@ -96,6 +98,18 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", ENV{ID_USB_
 ```
 
 et `/etc/gammurc` pointe sur `device = /dev/modem-at`, `connection = at`.
+
+Les accusés de réception passent par un second port AT de l'EC25
+(`ttyUSB3`), que le démon pilote lui-même : le modem range ces accusés dans
+sa mémoire « SR » (5 places), que gammu ne lit pas. Une seconde règle lui
+donne aussi un nom stable :
+
+```
+SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", ENV{ID_USB_INTERFACE_NUM}=="03", SYMLINK+="modem-status", GROUP="dialout", MODE="0660"
+```
+
+puis `status_port = /dev/modem-status` dans la section `[modem]` de la
+configuration du démon.
 
 Le démon et `gammu` en ligne de commande ne peuvent pas partager le modem :
 arrêter le service (`sudo systemctl stop cm-sms-gateway`) avant tout
@@ -205,6 +219,17 @@ version met à jour le démon et redémarre le service, sans toucher à
   uniquement l'accusé de réception pour les entrées en attente.
 - Les statuts des messages (`unsent` → `submitted` → `delivered`/`failed`)
   suivent le cycle habituel, alimenté ici par le démon.
+- **Accusés de réception (`status_port`)** : chaque SMS part avec une
+  demande d'accusé. Le réseau répond par un *status report* portant la
+  référence de chaque partie ; le démon les lit à chaque cycle, les rattache
+  au message par cette référence (elle tourne sur 256 : la plus récente
+  gagne) et remonte `delivered` quand toutes les parties sont arrivées,
+  `undeliverable` ou `expired` dès qu'une partie échoue. Un statut final
+  n'est envoyé qu'une fois `submitted` confirmé, pour ne pas être écrasé, et
+  l'app ignore de toute façon un `submitted` tardif. Les références en
+  attente vivent dans le journal (`awaiting`) et sont abandonnées après
+  3 jours. Sans `status_port`, rien ne change : pas de demande d'accusé, et
+  les messages restent `submitted`.
 
 ## Bascule vers une autre ligne (fallback)
 

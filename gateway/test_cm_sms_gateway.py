@@ -49,8 +49,11 @@ class FakeModem:
     def health(self):
         return {"signal_percent": 60, "network_state": self.state}
 
-    def send(self, number, text):
+    def send(self, number, text, report=False):
         self.sent.append((number, text))
+        self.report_requested = report
+        # One network reference per SMS part; tests send single-part texts.
+        return [len(self.sent) % 256]
 
     def read_inbox(self):
         return list(self.inbox)
@@ -316,6 +319,285 @@ class PushInboundTest(unittest.TestCase):
         for status_code in (401, 403, 404, 429, 500, 503):
             with self.assertRaises(requests.RequestException, msg=status_code):
                 self.push(status_code)
+
+
+# A status report captured from the EC25's "SR" memory on 2026-11-26: message
+# reference 246 delivered to +33645505205 (TP-ST 0x00).
+REAL_STATUS_REPORT = "0693050066F0F006F60B913346555002F562116291854440621162918524400000FFFFFF"
+
+
+def status_report(reference, status, number="33645505205"):
+    """Builds a status report PDU like the one above, for another reference
+    and status."""
+    pdu = bytearray.fromhex(REAL_STATUS_REPORT)
+    smsc = pdu[0] + 1
+    pdu[smsc + 1] = reference
+    address_octets = (pdu[smsc + 2] + 1) // 2
+    pdu[smsc + 4 + address_octets + 14] = status
+    return pdu.hex().upper()
+
+
+class FakeStatusPort:
+    def __init__(self, reports=None):
+        self.reports = list(reports or [])
+        self.enabled = 0
+        self.fail = None
+
+    def enable(self):
+        self.enabled += 1
+
+    def drain(self, handler):
+        if self.fail:
+            raise self.fail
+        for pdu in list(self.reports):
+            if handler(pdu):
+                self.reports.remove(pdu)
+
+
+class StatusReportParsingTest(unittest.TestCase):
+    def test_reads_the_reference_recipient_and_status_of_a_real_report(self):
+        report = gateway.parse_status_report(REAL_STATUS_REPORT)
+        self.assertEqual(report, {"reference": 246, "number": "+33645505205", "status": 0})
+
+    def test_rejects_a_pdu_that_is_not_a_status_report(self):
+        deliver = "07913396050036F0040B913346555002F50000621162918544400474747A0E"
+        with self.assertRaises(ValueError):
+            gateway.parse_status_report(deliver)
+
+    def test_rejects_a_truncated_pdu(self):
+        with self.assertRaises(ValueError):
+            gateway.parse_status_report(REAL_STATUS_REPORT[:30])
+
+    def test_maps_network_statuses_to_app_statuses(self):
+        outcome = gateway.delivery_outcome
+        self.assertEqual(outcome(0x00), "delivered")
+        self.assertEqual(outcome(0x01), "delivered")
+        self.assertIsNone(outcome(0x20), "the service centre is still trying")
+        self.assertIsNone(outcome(0x3F))
+        self.assertEqual(outcome(0x46), "expired")
+        self.assertEqual(outcome(0x41), "undeliverable")
+        self.assertEqual(outcome(0x62), "undeliverable", "temporary error, no more attempts")
+
+
+class FakeAtSession:
+    def __init__(self, listing, fail_on=None):
+        self.listing = listing
+        self.fail_on = fail_on
+        self.commands = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_exc):
+        return False
+
+    def command(self, command):
+        self.commands.append(command)
+        if command == self.fail_on:
+            raise gateway.StatusPortError(f"{command}: ERROR")
+        if command == "AT+CMGL=4":
+            return self.listing
+        return []
+
+
+class StatusPortTest(unittest.TestCase):
+    def drain(self, session, handler):
+        port = gateway.StatusPort("/dev/null")
+        with mock.patch.object(port, "_open", return_value=session):
+            port.drain(handler)
+
+    def test_reads_the_status_report_memory_and_deletes_what_was_handled(self):
+        # As the EC25 answered on 2026-11-26.
+        session = FakeAtSession(["+CMGL: 0,,29", "PDU-A", "+CMGL: 1,,29", "PDU-B"])
+        self.drain(session, lambda pdu: pdu == "PDU-B")
+        self.assertEqual(
+            session.commands,
+            ['AT+CPMS="SR","ME","ME"', "AT+CMGF=0", "AT+CMGL=4", "AT+CMGD=1", 'AT+CPMS="ME","ME","ME"'],
+        )
+
+    def test_gives_gammu_its_memory_back_even_when_listing_fails(self):
+        session = FakeAtSession([], fail_on="AT+CMGL=4")
+        with self.assertRaises(gateway.StatusPortError):
+            self.drain(session, lambda pdu: True)
+        self.assertEqual(session.commands[-1], 'AT+CPMS="ME","ME","ME"')
+
+
+class DeliveryReportTest(DaemonTestCase):
+    def build(self, reports=None):
+        self.modem = FakeModem()
+        self.port = FakeStatusPort(reports)
+        patcher = mock.patch.object(gateway, "StatusPort", return_value=self.port)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        daemon = self.build_daemon(lambda *_: self.modem, status_port="/dev/ttyUSB3")
+        daemon.client.claim_messages.return_value = []
+        return daemon
+
+    def send(self, daemon, uuid):
+        daemon.client.claim_messages.return_value = [{"uuid": uuid, "to": "+33645505205", "content": "Bonjour"}]
+        daemon.send_outbound()
+        daemon.client.claim_messages.return_value = []
+
+    def test_turns_reports_on_in_the_modem_and_asks_for_one_with_each_sms(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        self.assertEqual(self.port.enabled, 1)
+        self.assertTrue(self.modem.report_requested)
+
+    def test_reports_delivery_once_the_network_confirms_it(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        daemon.client.report_status.reset_mock()
+        self.port.reports.append(status_report(1, 0x00))
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_called_once_with("u1", "delivered")
+        self.assertEqual(self.port.reports, [], "the report leaves the modem's 5-slot memory")
+        self.assertEqual(daemon.journal.awaiting, {})
+
+    def test_reports_a_permanent_failure_as_undeliverable(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        daemon.client.report_status.reset_mock()
+        self.port.reports.append(status_report(1, 0x41))
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_called_once_with("u1", "undeliverable")
+
+    def test_waits_for_a_final_report_while_the_service_centre_keeps_trying(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        daemon.client.report_status.reset_mock()
+        self.port.reports.append(status_report(1, 0x20))
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_not_called()
+        self.assertEqual(self.port.reports, [])
+        self.assertIn("u1", daemon.journal.awaiting)
+
+    def test_a_long_sms_is_delivered_only_when_every_part_is(self):
+        daemon = self.build()
+        self.modem.send = lambda *_args, **_kwargs: [10, 11]
+        self.send(daemon, "u1")
+        daemon.client.report_status.reset_mock()
+
+        self.port.reports.append(status_report(10, 0x00))
+        daemon.collect_reports()
+        daemon.client.report_status.assert_not_called()
+
+        self.port.reports.append(status_report(11, 0x00))
+        daemon.collect_reports()
+        daemon.client.report_status.assert_called_once_with("u1", "delivered")
+
+    def test_a_long_sms_fails_as_soon_as_one_part_does(self):
+        daemon = self.build()
+        self.modem.send = lambda *_args, **_kwargs: [10, 11]
+        self.send(daemon, "u1")
+        daemon.client.report_status.reset_mock()
+        self.port.reports.append(status_report(11, 0x46))
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_called_once_with("u1", "expired")
+
+    def test_a_reused_reference_goes_to_the_latest_message_sent_with_it(self):
+        daemon = self.build()
+        self.modem.send = lambda *_args, **_kwargs: [7]
+        self.send(daemon, "old")
+        self.send(daemon, "new")
+        daemon.client.report_status.reset_mock()
+        self.port.reports.append(status_report(7, 0x00))
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_called_once_with("new", "delivered")
+
+    def test_holds_the_outcome_back_until_submitted_is_acknowledged(self):
+        daemon = self.build()
+        daemon.client.report_status.side_effect = requests.ConnectionError("app down")
+        self.send(daemon, "u1")
+        self.port.reports.append(status_report(1, 0x00))
+
+        daemon.collect_reports()
+        self.assertEqual(
+            [c.args for c in daemon.client.report_status.call_args_list], [("u1", "submitted")],
+            "delivered must not reach the app before submitted, or submitted would overwrite it",
+        )
+
+        daemon.client.report_status.side_effect = None
+        daemon.client.report_status.reset_mock()
+        daemon.send_outbound()
+        daemon.collect_reports()
+        self.assertEqual(
+            [c.args for c in daemon.client.report_status.call_args_list], [("u1", "submitted"), ("u1", "delivered")]
+        )
+
+    def test_keeps_the_outcome_when_the_app_cannot_take_it_yet(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        daemon.client.report_status.side_effect = requests.ConnectionError("app down")
+        self.port.reports.append(status_report(1, 0x00))
+
+        daemon.collect_reports()
+
+        self.assertEqual(self.port.reports, [], "recorded in the journal, so it can leave the modem")
+        self.assertEqual(daemon.journal.awaiting["u1"]["results"], {"1": "delivered"})
+        daemon.client.report_status.side_effect = None
+        daemon.collect_reports()
+        daemon.client.report_status.assert_called_with("u1", "delivered")
+
+    def test_outcomes_survive_a_restart(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        restarted = self.build([status_report(1, 0x00)])
+
+        restarted.collect_reports()
+
+        restarted.client.report_status.assert_called_once_with("u1", "delivered")
+
+    def test_drops_reports_nobody_waits_for_and_unreadable_ones(self):
+        daemon = self.build([status_report(99, 0x00), "00"])
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_not_called()
+        self.assertEqual(self.port.reports, [])
+
+    def test_gives_up_waiting_after_a_few_days(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        daemon.journal.awaiting["u1"]["at"] = "2026-01-01T00:00:00+00:00"
+
+        daemon.collect_reports()
+
+        self.assertEqual(daemon.journal.awaiting, {})
+
+    def test_a_failing_status_port_does_not_stop_the_gateway(self):
+        daemon = self.build()
+        self.port.fail = OSError("device busy")
+
+        daemon.collect_reports()  # must not raise
+
+    def test_leaves_the_status_port_alone_while_the_modem_is_gone(self):
+        daemon = self.build()
+        daemon.modem = None
+        self.port.fail = AssertionError("must not be read")
+
+        daemon.collect_reports()
+
+    def test_without_a_status_port_nothing_changes(self):
+        self.modem = FakeModem()
+        daemon = self.build_daemon(lambda *_: self.modem)
+        daemon.client.claim_messages.return_value = [{"uuid": "u1", "to": "+33645505205", "content": "Bonjour"}]
+
+        daemon.send_outbound()
+        daemon.collect_reports()
+
+        self.assertFalse(self.modem.report_requested)
+        self.assertEqual(daemon.journal.awaiting, {})
 
 
 class SdNotifyTest(unittest.TestCase):

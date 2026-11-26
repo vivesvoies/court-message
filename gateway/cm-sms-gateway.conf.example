@@ -32,6 +32,10 @@ gammu_config = /etc/gammurc
 # Section de /etc/gammurc à utiliser (0 = [gammu], 1 = [gammu1], ...).
 # Utile quand plusieurs modems sont branchés sur le même appareil.
 gammu_section = 0
+# Second port AT du modem, pour les accusés de réception du réseau (voir le
+# README). Sans cette ligne, les SMS partent sans demande d'accusé et restent
+# « Envoi en cours » dans l'app.
+status_port = /dev/modem-status
 # Pause entre deux envois (secondes) — les modems SIM sont lents.
 send_pause = 2
 # Un SMS long arrive en plusieurs parties, parfois à quelques secondes

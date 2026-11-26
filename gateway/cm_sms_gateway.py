@@ -6,7 +6,8 @@ Bridges a SIM modem (driven through gammu) and the court-message app:
   * polls the app to claim outbound messages queued on this gateway's
     phone line and sends them through the modem;
   * reads SMS received by the modem and pushes them to the app;
-  * reports send outcomes back to the app;
+  * reports send outcomes back to the app, and delivery to the recipient's
+    phone when the network sends a status report (see StatusPort);
   * reports modem health (signal, network state) through a heartbeat, and
     pings an optional external dead-man's switch;
   * never sends while the modem is not registered on a network, so the app
@@ -34,8 +35,9 @@ import os
 import signal
 import socket
 import sys
+import termios
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import gammu
 import requests
@@ -56,6 +58,10 @@ DEFAULT_RESET_FLAG = "/run/cm-sms-gateway/modem-reset"
 # Cycles run every ~10 s, but healthchecks.io asks for at most 5 pings per
 # minute per check (and may block clients that ping more).
 HEALTHCHECK_INTERVAL = 60
+# Status reports normally come within seconds, but the service centre keeps
+# retrying an unreachable phone for its validity period (a day by default).
+# Past this, nobody waits for them anymore.
+REPORT_WAIT = timedelta(days=3)
 
 # gammu GetNetworkInfo() states in which the modem can send SMS.
 REGISTERED_STATES = {"HomeNetwork", "RoamingNetwork"}
@@ -79,6 +85,140 @@ def sd_notify(message):
 
 def is_gsm_compatible(text):
     return all(char in GSM_BASIC or char in GSM_EXTENSION for char in text)
+
+
+def parse_status_report(pdu_hex):
+    """Decodes an SMS-STATUS-REPORT PDU (3GPP TS 23.040, 9.2.2.3), as listed
+    by AT+CMGL in PDU mode. Returns {"reference", "number", "status"}; raises
+    ValueError for anything else."""
+    try:
+        pdu = bytes.fromhex(pdu_hex)
+        i = pdu[0] + 1  # service centre address
+        first_octet = pdu[i]
+        if first_octet & 0x03 != 0x02:
+            raise ValueError(f"not a status report (first octet {first_octet:#04x})")
+        reference = pdu[i + 1]
+        digits, address_type = pdu[i + 2], pdu[i + 3]
+        address_octets = (digits + 1) // 2
+        i += 4
+        semi_octets = pdu[i : i + address_octets].hex()
+        number = "".join(semi_octets[k + 1] + semi_octets[k] for k in range(0, len(semi_octets), 2))
+        number = number.rstrip("fF")
+        if address_type & 0x70 == 0x10:  # international
+            number = "+" + number
+        i += address_octets + 7 + 7  # service centre time stamp, discharge time
+        status = pdu[i]
+    except (IndexError, ValueError) as error:
+        raise ValueError(f"unreadable status report {pdu_hex!r}: {error}") from error
+    return {"reference": reference, "number": number, "status": status}
+
+
+def delivery_outcome(status):
+    """The app status for a status report's TP-ST value, or None while the
+    service centre is still trying (a final report follows)."""
+    if status < 0x20:
+        return "delivered"
+    if status < 0x40:
+        return None
+    if status == 0x46:  # validity period expired
+        return "expired"
+    return "undeliverable"
+
+
+class StatusPortError(Exception):
+    pass
+
+
+class StatusPort:
+    """Status reports, read over the modem's second AT port.
+
+    The network answers each SMS sent with a report request by an
+    SMS-STATUS-REPORT. The EC25 files them in its own "SR" memory, which
+    gammu never reads, and that memory holds only 5: they are read and
+    deleted every cycle. gammu keeps the main port (/dev/modem-at); this one
+    is only used between gammu calls, as the daemon is single-threaded.
+    """
+
+    def __init__(self, path, timeout=5):
+        self.path = path
+        self.timeout = timeout
+
+    def enable(self):
+        """Stores status reports in memory (CNMI <ds>=2). Lost when the modem
+        restarts: called after every modem initialisation."""
+        with self._open() as port:
+            port.command("AT+CNMI=2,1,0,2,0")
+
+    def drain(self, handler):
+        """Calls handler(pdu_hex) for each stored report and deletes those
+        for which it returns True."""
+        with self._open() as port:
+            port.command('AT+CPMS="SR","ME","ME"')
+            try:
+                port.command("AT+CMGF=0")
+                lines = port.command("AT+CMGL=4")
+                for index, pdu in self._listed(lines):
+                    if handler(pdu):
+                        port.command(f"AT+CMGD={index}")
+            finally:
+                # The preferred memory is the modem's, not this port's: put
+                # back what gammu expects before it reads the inbox again.
+                port.command('AT+CPMS="ME","ME","ME"')
+
+    @staticmethod
+    def _listed(lines):
+        for k, line in enumerate(lines):
+            if line.startswith("+CMGL:") and k + 1 < len(lines):
+                yield int(line.split(":")[1].split(",")[0]), lines[k + 1]
+
+    def _open(self):
+        return _AtSession(self.path, self.timeout)
+
+
+class _AtSession:
+    def __init__(self, path, timeout):
+        self.path = path
+        self.timeout = timeout
+
+    def __enter__(self):
+        self.fd = os.open(self.path, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+        attrs = termios.tcgetattr(self.fd)
+        attrs[0] = attrs[1] = attrs[3] = 0
+        attrs[2] = termios.CS8 | termios.CREAD | termios.CLOCAL
+        attrs[4] = attrs[5] = termios.B115200
+        termios.tcsetattr(self.fd, termios.TCSANOW, attrs)
+        return self
+
+    def __exit__(self, *_exc):
+        os.close(self.fd)
+
+    def command(self, command):
+        """Sends one AT command; returns its response lines without the echo
+        and the final OK. Raises StatusPortError on ERROR or timeout."""
+        self._read_available()
+        os.write(self.fd, (command + "\r").encode())
+        deadline = time.monotonic() + self.timeout
+        output = b""
+        while time.monotonic() < deadline:
+            output += self._read_available()
+            lines = [line for line in output.decode(errors="replace").split("\r\n") if line]
+            if lines and lines[-1] == "OK":
+                return [line for line in lines[:-1] if line != command]
+            if lines and "ERROR" in lines[-1]:
+                raise StatusPortError(f"{command}: {lines[-1]}")
+            time.sleep(0.05)
+        raise StatusPortError(f"{command}: no answer within {self.timeout}s")
+
+    def _read_available(self):
+        data = b""
+        while True:
+            try:
+                chunk = os.read(self.fd, 65536)
+            except BlockingIOError:
+                return data
+            if not chunk:
+                return data
+            data += chunk
 
 
 class AppClient:
@@ -183,16 +323,23 @@ class Modem:
         self.state_machine.ReadConfig(Section=gammu_section, Filename=gammu_config)
         self.state_machine.Init()
 
-    def send(self, number, text):
+    def send(self, number, text, report=False):
+        """Sends every part; returns the network's message reference for each
+        (0-255, they wrap), which its status report will carry."""
         smsinfo = {
             "Class": -1,
             "Unicode": not is_gsm_compatible(text),
             "Entries": [{"ID": "ConcatenatedTextLong", "Buffer": text}],
         }
+        references = []
         for part in gammu.EncodeSMS(smsinfo):
             part["SMSC"] = {"Location": 1}
             part["Number"] = number
-            self.state_machine.SendSMS(part)
+            if report:
+                # gammu's name for "status report requested" (TP-SRR).
+                part["Type"] = "Status_Report"
+            references.append(self.state_machine.SendSMS(part))
+        return references
 
     def read_inbox(self):
         """Returns received messages as a list of multipart groups (lists of
@@ -274,13 +421,16 @@ class Journal:
 
     def __init__(self, path):
         self.path = path
-        self.sent = self._load()
+        data = self._load()
+        self.sent = dict(data.get("sent", {}))
+        # Messages waiting for status reports: uuid -> {"refs": [...],
+        # "at": ISO time sent, "results": {ref: outcome}}.
+        self.awaiting = dict(data.get("awaiting", {}))
 
     def _load(self):
         try:
             with open(self.path, "r", encoding="utf-8") as handle:
-                data = json.load(handle)
-            return dict(data.get("sent", {}))
+                return json.load(handle)
         except FileNotFoundError:
             return {}
         except (OSError, ValueError) as error:
@@ -298,7 +448,7 @@ class Journal:
                 os.makedirs(directory, exist_ok=True)
             tmp_path = f"{self.path}.tmp"
             with open(tmp_path, "w", encoding="utf-8") as handle:
-                json.dump({"sent": self.sent}, handle)
+                json.dump({"sent": self.sent, "awaiting": self.awaiting}, handle)
             os.replace(tmp_path, self.path)
         except OSError as error:
             # Full or read-only SD card. Crashing here, right after a send,
@@ -322,6 +472,60 @@ class Journal:
         """Returns a snapshot list of (uuid, entry) still awaiting ack."""
         return list(self.sent.items())
 
+    def await_reports(self, uuid, references):
+        # Re-inserted at the end: entries stay in the order they were sent.
+        self.awaiting.pop(uuid, None)
+        self.awaiting[uuid] = {
+            "refs": [str(reference) for reference in references],
+            "at": datetime.now(timezone.utc).isoformat(),
+            "results": {},
+        }
+        self._save()
+
+    def record_report(self, reference, outcome):
+        """Files a final outcome under the latest message sent with this
+        reference (references wrap after 256 parts). Returns its uuid, or
+        None when nobody waits for this reference."""
+        reference = str(reference)
+        candidates = [
+            uuid
+            for uuid, entry in self.awaiting.items()
+            if reference in entry["refs"] and reference not in entry["results"]
+        ]
+        if not candidates:
+            return None
+        uuid = candidates[-1]
+        self.awaiting[uuid]["results"][reference] = outcome
+        self._save()
+        return uuid
+
+    def outcomes(self):
+        """(uuid, status) for each message whose fate is known: delivered once
+        every part is, or the first failure of any part."""
+        known = []
+        for uuid, entry in self.awaiting.items():
+            failures = [r for r in entry["results"].values() if r != "delivered"]
+            if failures:
+                known.append((uuid, failures[0]))
+            elif len(entry["results"]) == len(entry["refs"]):
+                known.append((uuid, "delivered"))
+        return known
+
+    def finish(self, uuid):
+        if self.awaiting.pop(uuid, None) is not None:
+            self._save()
+
+    def expire(self, older_than):
+        expired = [
+            uuid for uuid, entry in self.awaiting.items()
+            if datetime.fromisoformat(entry["at"]) < older_than
+        ]
+        for uuid in expired:
+            del self.awaiting[uuid]
+        if expired:
+            self._save()
+        return expired
+
 
 class Daemon:
     def __init__(self, config):
@@ -343,6 +547,8 @@ class Daemon:
         self.init_failures = 0
         self.last_error = None
         self.registered = None
+        status_port = modem.get("status_port", fallback=None)
+        self.status_port = StatusPort(status_port) if status_port else None
         self.modem = self._ensure_modem()
         self.running = True
 
@@ -368,6 +574,12 @@ class Daemon:
         log.info("modem ready")
         self.init_failures = 0
         self.last_error = None
+        if self.status_port is not None:
+            try:
+                self.status_port.enable()
+            except (StatusPortError, OSError) as error:
+                # Sending still works; reports just won't be stored.
+                log.warning("could not turn status reports on: %s", error)
         return modem
 
     def _request_modem_reset(self):
@@ -415,6 +627,7 @@ class Daemon:
                 if self.modem is None:
                     self.modem = self._ensure_modem()
                 self.deliver_inbound()
+                self.collect_reports()
                 self.send_outbound()
             except (requests.RequestException, gammu.GSMError) as error:
                 log.error("cycle failed, will retry: %s", error)
@@ -452,7 +665,7 @@ class Daemon:
                 continue
             log.info("sending message %s to %s", uuid, to)
             try:
-                self.modem.send(to, content)
+                references = self.modem.send(to, content, report=self.status_port is not None)
                 status = "submitted"
             except gammu.GSMError as error:
                 log.error("modem failed to send %s: %s", uuid, error)
@@ -466,10 +679,62 @@ class Daemon:
                 self.modem = None
                 break
             self.journal.record(uuid, status)
+            if self.status_port is not None:
+                self.journal.await_reports(uuid, references)
             self._ack(uuid, status)
             sd_notify("WATCHDOG=1")
             # SIM modems are slow; pace outbound traffic.
             time.sleep(self.send_pause)
+
+    def collect_reports(self):
+        """Files the status reports the network sent back, then tells the
+        app the fate of each message known by now."""
+        if self.status_port is None or self.modem is None:
+            # No modem (e.g. off USB): its second port is gone too.
+            return
+        try:
+            self.status_port.drain(self._file_report)
+        except (StatusPortError, OSError) as error:
+            # Never a reason to stop sending: the reports wait in the modem.
+            log.warning("could not read status reports: %s", error)
+        for uuid in self.journal.expire(datetime.now(timezone.utc) - REPORT_WAIT):
+            log.info("no final status report for message %s, giving up", uuid)
+        for uuid, status in self.journal.outcomes():
+            if uuid in self.journal.sent:
+                # "submitted" is not acknowledged yet: sent after this, it
+                # would overwrite the final status.
+                continue
+            try:
+                self.client.report_status(uuid, status)
+            except requests.RequestException as error:
+                log.error("failed to report %s for %s, will retry later: %s", status, uuid, error)
+                continue
+            log.info("message %s %s", uuid, status)
+            self.journal.finish(uuid)
+
+    def _file_report(self, pdu):
+        """Records one status report; True when it can leave the modem."""
+        try:
+            report = parse_status_report(pdu)
+        except ValueError as error:
+            log.warning("%s; deleting it", error)
+            return True
+        outcome = delivery_outcome(report["status"])
+        if outcome is None:
+            log.info(
+                "network still trying reference %s (status %#04x)",
+                report["reference"],
+                report["status"],
+            )
+            return True
+        uuid = self.journal.record_report(report["reference"], outcome)
+        if uuid is None:
+            log.info(
+                "status report for reference %s (%s) matches no message waiting for one",
+                report["reference"],
+                outcome,
+            )
+        return True
 
     def _retry_journal_acks(self):
         for uuid, entry in self.journal.pending():
