@@ -53,6 +53,9 @@ class ConversationsTest < ApplicationSystemTestCase
     fill_in "contact_email", with: contact.email
     click_on "Enregistrer le contact"
 
+    # Wait for the save to land: checking only for the absence of errors
+    # passes at once, and leaving now can cancel the request.
+    assert_text I18n.t("contacts.create.success")
     assert_no_selector "#error_explanation"
 
     visit team_conversations_url(@team)
