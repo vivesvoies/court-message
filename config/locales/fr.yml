@@ -304,6 +304,7 @@ fr:
       expired: *message_error
       submitted: "Envoi en cours..."
       delivered: "Envoyé"
+    retry: "↺ Réessayer"
 
   invitations:
     notice:

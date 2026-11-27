@@ -100,3 +100,12 @@
     }
   }
 }
+
+// "↺ Réessayer" next to "Message non distribué": a quiet link that keeps
+// its words together.
+.Message__retry {
+  margin-left: .5em;
+  font-style: normal;
+  white-space: nowrap;
+  color: inherit;
+}

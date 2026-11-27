@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  authorize_resource
+  authorize_resource except: :retry
 
   def new
     @message = Message.new
@@ -28,6 +28,31 @@ class MessagesController < ApplicationController
       end
     else
       handle_response_with_errors
+    end
+  end
+
+  # Sends an undelivered message again (the "↺ Réessayer" link under it).
+  def retry
+    @message = Message.find(params[:id])
+    authorize! :create, @message
+
+    # Two clicks at once (or two agents) would both see "undeliverable" and
+    # send twice through Vonage. The row lock makes the second wait, then
+    # find the message queued. The provider is called after the lock.
+    retrying = @message.with_lock do
+      next false unless @message.retryable?
+
+      @message.prepare_retry
+      @message.status = :unsent
+      @message.save!
+    end
+    return head :unprocessable_entity unless retrying
+
+    OutboundMessagesService.new(@message).submit!
+
+    respond_to do |format|
+      format.turbo_stream { render turbo_stream: turbo_stream.replace(@message, partial: "messages/message", locals: { message: @message }) }
+      format.html { redirect_to [ @message.conversation.team, @message.conversation ] }
     end
   end
 
