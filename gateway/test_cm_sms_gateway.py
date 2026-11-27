@@ -293,6 +293,24 @@ class DecodeTest(unittest.TestCase):
         self.assertEqual("Bonjour", text)
 
 
+class ReportStatusTest(unittest.TestCase):
+    def client(self):
+        client = gateway.AppClient("https://cm.test", "token", "+33600000000")
+        client.session = mock.Mock()
+        client.session.patch.return_value = mock.Mock(status_code=200)
+        return client
+
+    def test_sends_the_network_code_with_a_final_status(self):
+        client = self.client()
+        client.report_status("u1", "undeliverable", code=0x41)
+        self.assertEqual(client.session.patch.call_args.kwargs["json"], {"status": "undeliverable", "code": 65})
+
+    def test_sends_no_code_for_submitted(self):
+        client = self.client()
+        client.report_status("u1", "submitted")
+        self.assertEqual(client.session.patch.call_args.kwargs["json"], {"status": "submitted"})
+
+
 class PushInboundTest(unittest.TestCase):
     """push_inbound decides whether an SMS may leave the SIM: only when the
     app has it, or has refused that SMS for good."""
@@ -452,7 +470,7 @@ class DeliveryReportTest(DaemonTestCase):
 
         daemon.collect_reports()
 
-        daemon.client.report_status.assert_called_once_with("u1", "delivered")
+        daemon.client.report_status.assert_called_once_with("u1", "delivered", code=0)
         self.assertEqual(self.port.reports, [], "the report leaves the modem's 5-slot memory")
         self.assertEqual(daemon.journal.awaiting, {})
 
@@ -464,7 +482,7 @@ class DeliveryReportTest(DaemonTestCase):
 
         daemon.collect_reports()
 
-        daemon.client.report_status.assert_called_once_with("u1", "undeliverable")
+        daemon.client.report_status.assert_called_once_with("u1", "undeliverable", code=0x41)
 
     def test_waits_for_a_final_report_while_the_service_centre_keeps_trying(self):
         daemon = self.build()
@@ -490,7 +508,7 @@ class DeliveryReportTest(DaemonTestCase):
 
         self.port.reports.append(status_report(11, 0x00))
         daemon.collect_reports()
-        daemon.client.report_status.assert_called_once_with("u1", "delivered")
+        daemon.client.report_status.assert_called_once_with("u1", "delivered", code=0)
 
     def test_a_long_sms_fails_as_soon_as_one_part_does(self):
         daemon = self.build()
@@ -501,7 +519,7 @@ class DeliveryReportTest(DaemonTestCase):
 
         daemon.collect_reports()
 
-        daemon.client.report_status.assert_called_once_with("u1", "expired")
+        daemon.client.report_status.assert_called_once_with("u1", "expired", code=0x46)
 
     def test_a_reused_reference_goes_to_the_latest_message_sent_with_it(self):
         daemon = self.build()
@@ -513,7 +531,7 @@ class DeliveryReportTest(DaemonTestCase):
 
         daemon.collect_reports()
 
-        daemon.client.report_status.assert_called_once_with("new", "delivered")
+        daemon.client.report_status.assert_called_once_with("new", "delivered", code=0)
 
     def test_holds_the_outcome_back_until_submitted_is_acknowledged(self):
         daemon = self.build()
@@ -534,6 +552,8 @@ class DeliveryReportTest(DaemonTestCase):
         self.assertEqual(
             [c.args for c in daemon.client.report_status.call_args_list], [("u1", "submitted"), ("u1", "delivered")]
         )
+        self.assertEqual(daemon.client.report_status.call_args.kwargs, {"code": 0}
+        )
 
     def test_keeps_the_outcome_when_the_app_cannot_take_it_yet(self):
         daemon = self.build()
@@ -547,7 +567,7 @@ class DeliveryReportTest(DaemonTestCase):
         self.assertEqual(daemon.journal.awaiting["u1"]["results"], {"1": "delivered"})
         daemon.client.report_status.side_effect = None
         daemon.collect_reports()
-        daemon.client.report_status.assert_called_with("u1", "delivered")
+        daemon.client.report_status.assert_called_with("u1", "delivered", code=0)
 
     def test_outcomes_survive_a_restart(self):
         daemon = self.build()
@@ -556,7 +576,25 @@ class DeliveryReportTest(DaemonTestCase):
 
         restarted.collect_reports()
 
-        restarted.client.report_status.assert_called_once_with("u1", "delivered")
+        restarted.client.report_status.assert_called_once_with("u1", "delivered", code=0)
+
+    def test_logs_the_network_status_code_of_a_failure(self):
+        daemon = self.build()
+        self.send(daemon, "u1")
+        self.port.reports.append(status_report(1, 0x41))
+
+        with self.assertLogs("cm-sms-gateway", level="INFO") as logs:
+            daemon.collect_reports()
+
+        self.assertIn("message u1 undeliverable (network status 0x41)", "\n".join(logs.output))
+
+    def test_reads_a_journal_written_before_codes_were_kept(self):
+        daemon = self.build()
+        daemon.journal.awaiting["old"] = {"refs": ["5"], "at": "2099-01-01T00:00:00+00:00", "results": {"5": "delivered"}}
+
+        daemon.collect_reports()
+
+        daemon.client.report_status.assert_called_once_with("old", "delivered", code=None)
 
     def test_drops_reports_nobody_waits_for_and_unreadable_ones(self):
         daemon = self.build([status_report(99, 0x00), "00"])
