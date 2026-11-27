@@ -240,10 +240,15 @@ class AppClient:
         response.raise_for_status()
         return response.json()["messages"]
 
-    def report_status(self, uuid, status):
+    def report_status(self, uuid, status, code=None):
+        """code: the network's TP-ST value behind a final status, which says
+        why a message was not delivered."""
+        payload = {"status": status}
+        if code is not None:
+            payload["code"] = code
         response = self.session.patch(
             f"{self.base_url}/gateway/v1/messages/{uuid}",
-            json={"status": status},
+            json=payload,
             timeout=self.timeout,
         )
         if response.status_code == 404:
@@ -482,10 +487,10 @@ class Journal:
         }
         self._save()
 
-    def record_report(self, reference, outcome):
-        """Files a final outcome under the latest message sent with this
-        reference (references wrap after 256 parts). Returns its uuid, or
-        None when nobody waits for this reference."""
+    def record_report(self, reference, outcome, code=None):
+        """Files a final outcome (and the network's code behind it) under the
+        latest message sent with this reference (references wrap after 256
+        parts). Returns its uuid, or None when nobody waits for it."""
         reference = str(reference)
         candidates = [
             uuid
@@ -496,19 +501,23 @@ class Journal:
             return None
         uuid = candidates[-1]
         self.awaiting[uuid]["results"][reference] = outcome
+        self.awaiting[uuid].setdefault("codes", {})[reference] = code
         self._save()
         return uuid
 
     def outcomes(self):
-        """(uuid, status) for each message whose fate is known: delivered once
-        every part is, or the first failure of any part."""
+        """(uuid, status, code) for each message whose fate is known:
+        delivered once every part is, or the first failure of any part. code
+        is that part's network status (None in journals from before codes
+        were kept)."""
         known = []
         for uuid, entry in self.awaiting.items():
-            failures = [r for r in entry["results"].values() if r != "delivered"]
+            codes = entry.get("codes", {})
+            failures = [ref for ref, result in entry["results"].items() if result != "delivered"]
             if failures:
-                known.append((uuid, failures[0]))
+                known.append((uuid, entry["results"][failures[0]], codes.get(failures[0])))
             elif len(entry["results"]) == len(entry["refs"]):
-                known.append((uuid, "delivered"))
+                known.append((uuid, "delivered", codes.get(entry["refs"][-1])))
         return known
 
     def finish(self, uuid):
@@ -699,17 +708,20 @@ class Daemon:
             log.warning("could not read status reports: %s", error)
         for uuid in self.journal.expire(datetime.now(timezone.utc) - REPORT_WAIT):
             log.info("no final status report for message %s, giving up", uuid)
-        for uuid, status in self.journal.outcomes():
+        for uuid, status, code in self.journal.outcomes():
             if uuid in self.journal.sent:
                 # "submitted" is not acknowledged yet: sent after this, it
                 # would overwrite the final status.
                 continue
             try:
-                self.client.report_status(uuid, status)
+                self.client.report_status(uuid, status, code=code)
             except requests.RequestException as error:
                 log.error("failed to report %s for %s, will retry later: %s", status, uuid, error)
                 continue
-            log.info("message %s %s", uuid, status)
+            if code is None:
+                log.info("message %s %s", uuid, status)
+            else:
+                log.info("message %s %s (network status %#04x)", uuid, status, code)
             self.journal.finish(uuid)
 
     def _file_report(self, pdu):
@@ -727,7 +739,7 @@ class Daemon:
                 report["status"],
             )
             return True
-        uuid = self.journal.record_report(report["reference"], outcome)
+        uuid = self.journal.record_report(report["reference"], outcome, report["status"])
         if uuid is None:
             log.info(
                 "status report for reference %s (%s) matches no message waiting for one",
