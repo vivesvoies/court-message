@@ -17,11 +17,22 @@ module Gateway
         return head :unprocessable_entity unless ALLOWED_STATUSES.include?(status)
         return head :ok if status == "submitted" && FINAL_STATUSES.include?(message.status)
 
+        code = network_code
+        message.provider_info = (message.provider_info || {}).merge("delivery_report" => { "code" => code }) if code
         if message.update(status:)
           head :ok
         else
           head :unprocessable_entity
         end
+      end
+
+      private
+
+      # The network's TP-ST value behind a final status (0-255), which says
+      # why a message was not delivered. Kept for support, never shown.
+      def network_code
+        code = Integer(params[:code], exception: false)
+        code if code&.between?(0, 255)
       end
     end
   end
