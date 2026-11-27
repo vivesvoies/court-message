@@ -52,6 +52,28 @@ class Message < ApplicationRecord
 
   validates_presence_of :content
 
+  # What the app shows as "Message non distribué": the provider or the
+  # network gave up on it.
+  UNDELIVERED_STATUSES = %w[failed rejected undeliverable expired].freeze
+
+  def retryable?
+    UNDELIVERED_STATUSES.include?(status)
+  end
+
+  # Readies an undelivered message to go out again, as itself (no duplicate
+  # in the conversation): the failed attempt is kept in provider_info, and
+  # the next submit routes it through the team's line as it is now. The
+  # failover marker goes too, so this attempt can fail over in its turn.
+  def prepare_retry
+    info = provider_info || {}
+    attempt = { "status" => status, "outbound_uuid" => outbound_uuid, "phone" => phone_line&.phone, "at" => updated_at.iso8601 }
+    attempt["delivery_report"] = info["delivery_report"] if info.key?("delivery_report")
+    self.provider_info = info.except("delivery_report", "fallback").merge("attempts" => Array(info["attempts"]) + [ attempt ])
+    self.phone_line = nil
+    self.claimed_at = nil
+    self.outbound_uuid = nil
+  end
+
   broadcasts_to :conversation
 
   def direction

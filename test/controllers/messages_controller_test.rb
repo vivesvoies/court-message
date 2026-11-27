@@ -170,3 +170,99 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 end
+
+class MessageRetryTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = create(:user)
+    @team = @user.teams.first
+    @line = create(:gateway_phone_line, :online, modem_ok: true, last_modem_check_at: Time.current)
+    @team.update!(phone_line: @line)
+    @conversation = create(:contact, :with_conversation, team: @team).conversation
+    @old_uuid = SecureRandom.uuid
+    @failed = create(:outbound_message, conversation: @conversation, status: :undeliverable,
+                     phone_line: @line, outbound_uuid: @old_uuid, claimed_at: 1.hour.ago,
+                     provider_info: { "delivery_report" => { "code" => 65 } })
+    sign_in(@user)
+  end
+
+  test "sends an undelivered message again, keeping the failed attempt" do
+    post retry_message_url(@failed), as: :turbo_stream
+
+    assert_response :success
+    @failed.reload
+    assert_equal "unsent", @failed.status, "queued for the gateway again"
+    assert_not_nil @failed.outbound_uuid
+    assert_not_equal @old_uuid, @failed.outbound_uuid
+    assert_nil @failed.claimed_at
+    attempt = @failed.provider_info["attempts"].sole
+    assert_equal({ "status" => "undeliverable", "outbound_uuid" => @old_uuid, "phone" => @line.phone, "delivery_report" => { "code" => 65 } },
+                 attempt.except("at"))
+    assert_nil @failed.provider_info["delivery_report"]
+  end
+
+  test "routes the retry through the team's current line" do
+    vonage = create(:phone_line, provider: "vonage", default: true)
+    @failed.update!(phone_line: vonage, status: :rejected, claimed_at: nil)
+
+    post retry_message_url(@failed), as: :turbo_stream
+
+    assert_equal @line, @failed.reload.phone_line
+  end
+
+  test "a failover marker does not survive the retry, so it can fail over again" do
+    @failed.update!(provider_info: { "fallback" => { "from" => "a", "to" => "b" } })
+
+    post retry_message_url(@failed), as: :turbo_stream
+
+    assert_nil @failed.reload.provider_info["fallback"]
+  end
+
+  test "keeps every failed attempt, one per retry" do
+    post retry_message_url(@failed), as: :turbo_stream
+    @failed.reload.update!(status: :undeliverable)
+
+    post retry_message_url(@failed), as: :turbo_stream
+
+    assert_equal 2, @failed.reload.provider_info["attempts"].size
+  end
+
+  # A second click must not send twice. Clicks at the very same moment are
+  # covered by the row lock in MessagesController#retry, which a test inside
+  # one shared transaction cannot race.
+  test "a second click on the same retry sends nothing more" do
+    provider = Minitest::Mock.new
+    provider.expect(:send, ProviderResult.new(success: true, message_uuid: SecureRandom.uuid), from: String, to: String, content: String)
+    @team.update!(phone_line: create(:phone_line, provider: "vonage"))
+
+    DummyProvider.stub(:new, provider) do
+      post retry_message_url(@failed), as: :turbo_stream
+      post retry_message_url(@failed), as: :turbo_stream
+    end
+
+    assert_response :unprocessable_entity
+    provider.verify
+    assert_equal 1, @failed.reload.provider_info["attempts"].size
+  end
+
+  test "does not resend a message that was delivered or is under way" do
+    %i[delivered submitted unsent].each do |status|
+      @failed.update!(status:)
+      post retry_message_url(@failed), as: :turbo_stream
+      assert_response :unprocessable_entity
+      assert_equal status.to_s, @failed.reload.status
+    end
+  end
+
+  test "does not resend an inbound message" do
+    inbound = create(:inbound_message, conversation: @conversation)
+    post retry_message_url(inbound), as: :turbo_stream
+    assert_response :unprocessable_entity
+  end
+
+  test "agents outside the team cannot resend" do
+    sign_in create(:user)
+    post retry_message_url(@failed), as: :turbo_stream
+    assert_response :forbidden
+    assert_equal "undeliverable", @failed.reload.status
+  end
+end

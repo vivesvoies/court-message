@@ -23,7 +23,9 @@ Rails.application.routes.draw do
     get "/users/welcome", to: "invitations#welcome", as: :welcome
   end
 
-  resources :messages, only: [ :new, :create ]
+  resources :messages, only: [ :new, :create ] do
+    post :retry, on: :member
+  end
   resources :teams, only: [ :index, :show, :edit, :update ] do
     member do
       get :menu, to: "teams#menu"

@@ -18,6 +18,21 @@ class MessagesHelperTest < ActionView::TestCase
     assert_nil message_status_label(build(:outbound_message, status: :submitted, claimed_at: Time.current))
   end
 
+  test "offers a retry under a message that was not delivered" do
+    message = create(:outbound_message, status: :undeliverable)
+    html = render(partial: "messages/message", locals: { message: })
+    assert_includes html, "Message non distribué"
+    assert_includes html, retry_message_path(message)
+    assert_includes html, "↺ Réessayer"
+  end
+
+  test "offers no retry under a message on its way or delivered" do
+    %i[submitted delivered].each do |status|
+      html = render(partial: "messages/message", locals: { message: create(:outbound_message, status:) })
+      assert_not_includes html, "Réessayer"
+    end
+  end
+
   test "shows nothing for a message still waiting in the queue" do
     assert_nil message_status_label(build(:outbound_message, status: :unsent))
   end

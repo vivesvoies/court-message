@@ -15,6 +15,9 @@
     <% if (status = message_status_label(message)) %>
       <div class="Message__status">
         <%= status %>
+        <% if message.retryable? %>
+          <%= link_to t("messages.retry"), retry_message_path(message), class: "Message__retry", data: { turbo_method: :post } %>
+        <% end %>
       </div>
     <% end %>
   </div>
