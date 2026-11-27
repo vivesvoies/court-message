@@ -50,6 +50,25 @@ class Gateway::V1::MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal("undeliverable", @message.reload.status)
   end
 
+  test "should keep the network's code behind a final status" do
+    @message.update!(status: :submitted, provider_info: { "fallback" => { "from" => "x" } })
+
+    patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "undeliverable", code: 65 }, headers: auth_header
+
+    assert_response :ok
+    @message.reload
+    assert_equal("undeliverable", @message.status)
+    assert_equal(65, @message.provider_info.dig("delivery_report", "code"))
+    assert_equal({ "from" => "x" }, @message.provider_info["fallback"], "what was there stays")
+  end
+
+  test "should ignore a code that is not a number" do
+    patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "delivered", code: "x" }, headers: auth_header
+
+    assert_response :ok
+    assert_nil(@message.reload.provider_info&.dig("delivery_report"))
+  end
+
   test "should reject statuses outside the whitelist" do
     patch gateway_v1_message_path(@message.outbound_uuid), params: { status: "deleted" }, headers: auth_header
 
